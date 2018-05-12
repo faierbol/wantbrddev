@@ -18,7 +18,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 #path to templates direcory
 TEMPLATE_DIR = os.path.join(BASE_DIR, 'templates')
 #path to static folder
-STATIC_DIR = os.path.join(BASE_DIR, '../wantbrd/static')
+STATIC_DIR = os.path.join(BASE_DIR, 'static')
 #path to media/dynamic folder
 MEDIA_DIR = os.path.join(BASE_DIR, 'media')
 
