@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block title %}Settings{% endblock %}
+
+{% block body %}
+<div class="profilePush"></div>
+<h1>Settings</h1>
+
+<nav>
+	<ul>
+		<li><a href="{% url 'u:update_account' %}">Update Personal Details</a></li>
+		<li><a href="{% url 'u:password_change' %}">Change Password</a></li>
+		<li><a href="{% url 'u:logout' %}">Logout</a></li>
+		<li><a href="#">Close account</a></li>
+	</ul>
+</nav>
+
+{% endblock %}

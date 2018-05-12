@@ -1,0 +1,160 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+
+{% block title %}
+	Home
+{% endblock %}
+
+{% block body %}
+
+<div class="profilePush"></div>
+
+<div class="profileHero" style="background-image:url('{% static 'img/profile-hero.jpg' %}">
+    <div class="profileMeta">
+        <div class="profileBar">
+            <div class="container clearfix">
+                
+                <div class="profileImageDetails clearfix match">
+                    <a class="profileImage" href="home.php">
+                        {% if profile.picture %}
+                        <div class="circle" style="background-image:url('{{ profile.picture.url }}');"></div>
+                        {% else %}
+                        <div class="circle" style="background-image:url('{% static 'img/default-hero.png' %}');"></div>
+                        {% endif %}
+                    </a>
+                    <div class="profileDetails">
+                        <span>@{{ profile.user.username }}</span>
+                        <h3>{{ profile.user.first_name }} {{ profile.user.last_name }}</h3>
+                        <div class="profileStats">
+                            <p>{{ no_followers }} FOLLOWERS</p>
+                            <p>{{ no_connections }} FOLLOWING</p>                            
+                            <p>{{ boards.count }} {% if boards.count > 1 %}BOARDS{% else %}BOARD{% endif %}</p>
+                        </div>
+                        {% if profile.user != request.user %}
+                            {% if is_followed %}
+                                <form method="POST">
+                                    {% csrf_token %}
+                                    <button class="btn orange" name="unfollow"><i class="fas fa-minus"></i> Unollow</button>
+                                </form>
+                            {% else %}
+                                <form method="POST">
+                                    {% csrf_token %}
+                                    <button class="btn orange" name="follow"><i class="fas fa-plus"></i> Follow</button>
+                                </form>
+                            {% endif %}
+                            <div class="clear"></div>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="profileBio match">
+                    <div class="theBio">
+                        <p>{{ profile.bio }}</p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<section class="profileBoards">
+    <div class="container clearfix">
+
+        {% if editable %}
+
+        <div class="profileBoardItem create match"> 
+            <strong>Create a Board</strong>
+            <form method="POST" name="add_board" id="add_board">
+                {% csrf_token %}
+                <p class="error">{{ error }}</p>
+                <input type="text" placeholder="Name your board..." name="boardname" required="requred">
+                <p><button value="createwantboard" name="createwantboard" class="btn orange">Create a Want Board</button></p>
+                <p><button value="createrecboard" name="createrecboard" class="btn orange">Create a Recommended Board</button></p>
+            </form>
+        </div>
+
+        <div class="profileBoardItem saved match">
+            <div class="profileBoardSaved">
+                <a href="board.php">{{ saved_board.board_name }}</a>
+            </div>
+            <div class="trendingItems clearfix">
+<!--                 <a style="background-image:url('img/feat-pic-1.png');" href="saved.php"></a>
+                <a style="background-image:url('img/feat-pic-3.png');" href="saved.php"></a>
+                <a style="background-image:url('img/feat-pic-5.png');" href="saved.php"></a>
+                <a style="background-image:url('img/feat-pic-2.png');" href="saved.php"></a>
+                <a style="background-image:url('img/feat-pic-6.png');" href="saved.php"></a>
+                <a class="plusMore" href="#">
+                    <div class="plusMoreNumber">+44 <span>more</span></div>
+                </a> -->
+            </div>
+            <div class="trendingFooter clearfix">
+                <span>{{ saved_board_items.count }} Items</span>
+            </div>
+        </div>
+
+        {% endif %}
+
+        {% if boards %}
+	        {% for board in boards %}
+
+                {% if board.deleteable %}
+
+                    <div class="profileBoardItem match">
+                        <div class="profileBoardName">
+                            {% if not editable %}
+                            <a href="{% url 'b:view_board' board.user.username board.slug %}">{{ board.board_name }}</a>
+                            {% else %}
+                            <a href="{% url 'b:edit_board' board.id %}">{{ board.board_name }}</a>
+                            {% endif %}
+                        </div>
+                        <div class="profileBoardShare">
+                            <a href="#">Share <i class="fas fa-share-alt"></i></a>
+                        </div>
+                        <div class="clearfix"></div>
+                        <div class="boardTags">
+                            {% for tag in board.thetags %}
+                                <span>#{{ tag }} </span>
+                            {% endfor %}
+                        </div>
+                        
+                        {% if board.hero %}
+                        <div class="profileBoardHero" style="background-image:url('{{ board.hero.url }}')">
+                        {% else %}
+                        <div class="profileBoardHero" style="background-image:url('{% static 'img/default-hero.png' %}')">
+                        {% endif %}
+                        {% if editable %}
+                            <div class="profileLabel">                        
+                                <a href="#" data-featherlight="#deleteModal{{board.id}}">Delete</a>
+                            </div>
+                            <div id="deleteModal{{board.id}}" class="lightbox deletepop">
+                                <h4>Delete "{{ board.board_name }}"</h4>
+                                <p>Are you sure you would like to delete the board <em>{{ board.board_name }}</em>? The board, all it's items and all comments will be permenantly removed. Don't forget you can always make your boards private or inactive instead.</p>
+                                <form method="POST" id="deleteboard-{{board.id}}" name="deleteboard_{{board.id}}">
+                                    {% csrf_token %}                            
+                                    <input type="hidden" name="board_id" value="{{ board.id }}">
+                                    <button class="btn orange" name="deleteboard">Yes, delete this board</button>
+                                </form>
+                            </div>
+                        {% endif %}
+                        </div>
+                        
+                        <div class="trendingItems clearfix">
+                            <a style="background-image:url('img/feat-pic-1.png');" href="board.php"></a>
+                            <a style="background-image:url('img/feat-pic-2.png');" href="board.php"></a>
+                            <a style="background-image:url('img/feat-pic-3.png');" href="board.php"></a>
+                        </div>
+                        <div class="trendingFooter clearfix">
+                            <span>{{ board.items }} Items</span>
+                            <span>2876 Views</span>
+                        </div>
+
+                    </div>
+
+                {% endif %}
+	        {% endfor %}
+	    {% endif %}
+
+    </div>
+</section>
+
+{% endblock %}

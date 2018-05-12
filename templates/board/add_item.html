@@ -1,0 +1,122 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+
+{% block title %}
+	Add Item
+{% endblock %}
+
+
+{% block extra-css %}
+	<link type="text/css" href="{% static 'css/slick.css' %}" rel="stylesheet" />
+{% endblock %}
+
+
+{% block body %}
+<section id="addItem">
+	<div class="container">
+
+		<h1>Adding item to: {{ board.board_name }}</h1>
+
+		<h2>Add Item</h2>
+
+		<form method="POST">
+			{% csrf_token %}
+			<input type="text" name="targeturl" placeholder="Enter url of the item" value="{{ url }}">
+			<button name="geturl">Get item</button>
+		</form>
+
+		{% if domain %}
+			<p>Looking at {{ domain }}</p>
+		{% endif %}
+
+		{% if data %}
+		<form method="POST" enctype="multipart/form-data">
+			{% csrf_token %}
+			<div id="addItemForm">
+				<input id="tab1" type="radio" name="tabs" checked>
+				<label for="tab1">From website</label>
+
+				<input id="tab2" type="radio" name="tabs">
+				<label for="tab2">Upload own</label>
+
+				<section id="content1">
+					<div class="imageSlider" style="margin-bottom:40px;">
+						{% for item in data %}
+							<div><img src="{{ item }}" class="retimg"></div>
+						{% endfor %}
+					</div>
+				</section>
+
+				<section id="content2">
+					<input type="file" name="ownimage" id="ownimage">
+				</section>
+			</div>
+
+			<label>Item name:</label>
+			<input type="text" name="item_name" value="{{ pagetitle }}">
+			{{ form.as_p }}			
+			<label>URL:</label>
+			<input type="text" name="purchase_url" value="{{ url }}">
+			<input type="hidden" name="scrapedimg" value="" id="scrapedimg">
+			<input type="hidden" name="imgsrc" value="web" id="imgsrc">
+			<p><button class="orange submit" name="additem" id="additem" value="1">Add item</button></p>
+		</form>
+		{% endif %}
+
+	</div>
+
+</section>
+
+{% endblock %}
+
+{% block extra-js %}
+<script src="{% static 'js/slick.min.js' %}" type="text/javascript"></script>
+<script>
+    $(document).ready(function(){
+        $('.imageSlider').slick({
+            arrows:true,
+            slidesToShow: 1,
+            dots: true,
+        });
+    	$('img.retimg').click(function() {
+            var src = $(this).attr('src');
+            $('#scrapedimg').val(src);
+    	});
+		$('#tab1').click(function() {	        
+	        $('#imgsrc').val('web');
+		});
+		$('#tab2').click(function() {
+	        $('#imgsrc').val('own');
+		});
+
+		$('#additem').click(function(e){
+		    var imgsrc = $('#imgsrc').val();
+		    var scrapedimg = $('#scrapedimg').val();
+		    var ownimg = $('#ownimage').val();
+		    var postit = true
+
+	        if(imgsrc == "web"){
+	        	if(scrapedimg == ""){
+	        		console.log('scraped image is empty')
+	        		postit = false
+	        	};
+	        };
+
+	        if(imgsrc == "own"){
+	        	if(ownimg == ""){
+	        		console.log('own image is empty')
+	        		postit = false
+	        	};
+	        };
+
+	        if (postit == false) {
+		        e.preventDefault()
+		    } else {
+		    	return true
+		    }
+
+		});
+
+    });
+</script>
+{% endblock %}

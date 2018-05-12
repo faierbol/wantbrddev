@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+
+{% block title %}
+	Home
+{% endblock %}
+
+{% block body %}
+<div class="profilePush"></div>
+
+	<h1>MY BOARDS</h1>
+	{% if boards %}	
+	<div>
+		{% for board in boards %}
+		<ul>
+			<li>ID: {{ board.id }}</li>
+			<li>Name: {{ board.board_name }}</li>
+			<li>Content Type: {{ board.content_type }}</li>
+			<li>Board Type: {{ board.board_type }}</li>
+			<li>Active: {{ board.active }}</li>
+			<li>
+				{% if board.private == True %}
+					Private
+				{% else %}
+					Public
+				{% endif %}
+			</li>
+		</ul>
+		
+		<a href="{% url 'b:edit_board' board.id %}">Edit</a> | <a href="{% url 'b:delete_board' board.id %}">Delete</a>
+
+		{% endfor %}
+	</div>
+	{% else %}
+
+	<p>This user has not created any boards</p>
+
+	{% endif %}
+	<br>
+	<a href="{% url 'b:add_board' %}">Add new board</a>
+
+{% endblock %}

@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block title %}Login{% endblock %}
+
+{% block body %}
+<div class="profilePush"></div>
+
+<h1>Login</h1>
+
+<form method="post" novalidate>
+	{% csrf_token %}
+	<input type="hidden" name="next" value="{{ next }}">
+	{% include 'includes/form.html' %}
+<button type="submit" class="btn btn-primary btn-block">Log in</button>
+</form>
+
+<a href="{% url 'u:password_reset' %}" class="text-muted">Forgot your password?</a>
+
+{% endblock %}

@@ -1,0 +1,322 @@
+{% extends 'base.html' %}
+{% load comments %}
+{% load staticfiles %}
+{% load thumbnail %}
+
+{% block title %}
+	Home
+{% endblock %}
+
+{% block extra-css %}
+	<link type="text/css" href="{% static 'css/macy.css' %}" rel="stylesheet" />
+{% endblock %}
+
+{% block body %}
+
+<div class="profilePush"></div>
+
+{% if board.hero %}
+<div class="boardWrap" style="background-image:url('{{ board.hero.url }}')">
+{% else %}    
+<div class="boardWrap" style="background-image:url('{% static 'img/default-hero.png' %}')">
+{% endif %}
+    <div class="container">
+        
+        {% if editable %}
+        <div class="editBoardButtons">		            
+            <a href="#" class="btn" data-featherlight="#setBackgroundModal"><i class="far fa-image"></i> Set Background {{ bg }}</a>
+            <a href="#" class="btn" data-featherlight="#addVideoModal"><i class="fas fa-video"></i> Manage Video</a>
+            <a href="#" class="btn" data-featherlight="#boardPrivacyModal"><i class="fas fa-user-secret"></i> Board Privacy</a>
+        </div>
+
+        <div id="setBackgroundModal" class="lightbox">
+            <h4>Set Background</h4>
+            <form method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                {{ bgform }}
+                <button class="btn orange" name="changebackground" value="changebackground">Use Background</button>
+            </form>
+        </div>
+
+        <div id="addVideoModal" class="lightbox">
+            <h4>Manage Video</h4>
+            <form method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                <label>Show video:</label>
+                {% if board.show_video %}
+                    <input type="checkbox" name="show_video" id="show_video" value="yes" checked="checked">
+                {% else %}
+                    <input type="checkbox" name="show_video" id="show_video" value="yes">
+                {% endif %}
+                <br>
+                <label>Video id:</label>
+                <br>
+                <input type="text" name="videoid" id="videoid" value="{{ board.video }}">
+                <button class="btn orange" name="updatevideo" value="updatevideo">Update</button>
+            </form>
+        </div>
+
+        <div id="boardPrivacyModal" class="lightbox">
+            <h4>Board Privacy</h4>
+            <form method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                <input type="file" name="background_image">
+                <button class="btn orange" name="boardprivacy" value="boardprivacy">Update</button>
+            </form>
+        </div>
+
+        {{ show.video }}
+
+        {% endif %}
+
+        <div class="boardHeader clearfix">
+
+            <div class="boardUser">                    
+                <div class="trendingUserPic">
+                    {% if board.user.profile.picture %}
+                        <div class="circle" style="background-image:url('{{ board.user.profile.picture.url }}');"></div>
+                    {% else %}
+                        <div class="circle" style="background-image:url('{% static 'img/default-hero.png' %}');"></div>
+                    {% endif %}
+                </div>
+                <a class="trendingUserNames" href="{% url 'u:profile' board.user.username %}">
+                    <strong>@{{ board.user }}</strong>
+                    <span>{{ board.user.first_name }} {{ board.user.last_name }}</span>
+                </a>
+            </div>
+
+            <h1>{{ board.board_name }}</h1>
+            <span class="type">{{ board.board_type }} BOARD</span>
+            <div class="tags">    
+                <div id="theTags">
+                    {% if editable%}<i class="far fa-question-circle"></i> {% endif %}
+                	{% for tag in board.thetags %}
+                		<span>#{{ tag }} </span>
+                	{% endfor %}
+                </div>
+
+                {% if editable %}
+                    <div id="editTags" style="display: none;">
+                        <form method="POST">
+                            {% csrf_token %}
+                            {{ tagform }}
+                            <button class="altbtn" name="updatetags" value="1"><i class="fas fa-check"></i></button>
+                        </form>                
+                    </div>
+                    <a href="#" id="showEditTags"><i class="fas fa-pencil-alt"></i></a>
+                    <a href="#" id="hideEditTags" style="display: none;"><i class="fas fa-times"></i></a>
+                {% endif %}
+
+            </div>
+
+            <div class="boardMeta">
+                {% if not editable %}
+                <div class="followButton">
+	                {% if is_followed %}
+	                	<form method="POST">
+	                		{% csrf_token %}
+	                		<button name="unfollow">Unfollow</button>
+	                	</form>
+	                {% else %}
+	                	<form method="POST">
+	                		{% csrf_token %}
+	                		<button name="follow">Follow</button>
+	                	</form>
+	                {% endif %}
+	            </div>                
+            	<div class="boardStats">
+	                <p>Created: {{ board.created|date:'d F o' }}</p>
+	                <a href=""><i class="fas fa-share-alt"></i> Share</a> 
+	                <a href=""><i class="far fa-heart"></i> {{ board.likes }}</a> 
+	                <a href=""><i class="fas fa-eye"></i> {{ board.views }}</a> 
+	            </div>
+                {% else %}
+                YOU ARE EDITING THIS BOARD
+                {% endif %}
+            </div>
+
+        </div>
+
+        {% if board.show_video %}
+            {% if board.video %}
+        <div class="boardVideo">
+            <iframe width="100%" height="500" src="https://www.youtube.com/embed/{{ board.video }}" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+        </div>
+            {% endif %}
+        {% endif %}
+
+        {% if editable %}
+            <div class="boardDescription">
+                <span id="theDesc">
+                    {% if editable%}<i class="far fa-question-circle"></i> {% endif %}
+                    {{ board.description }}
+                </span>
+                {% if editable %}
+                    <div id="editDesc" style="display: none;">
+                        <form method="POST">
+                            {% csrf_token %}
+                            <input type="text" id="boardDesc" name="boardDesc" value="{{ board.description }}">
+                            <button class="altbtn" name="updatedescription" value="1"><i class="fas fa-check"></i></button>
+                        </form>                
+                    </div>                    
+                    <a href="#" id="showEditDesc"><i class="fas fa-pencil-alt"></i></a>
+                    <a href="#" id="hideEditDesc" style="display: none;"><i class="fas fa-times"></i></a>
+                {% endif %}
+            </div>
+        {% else %}
+            {% if board.description %}
+            <div class="boardDescription">
+                <span id="theDesc">{{ board.description }}</span>
+                {% if editable %}
+                    <div id="editDesc" style="display: none;">
+                        <form method="POST">
+                            {% csrf_token %}
+                            <input type="text" id="boardDesc" name="boardDesc" value="{{ board.description }}">
+                            <button class="altbtn" name="updatedescription" value="1"><i class="fas fa-check"></i></button>
+                        </form>                
+                    </div>
+                    <a href="#" id="showEditDesc"><i class="fas fa-pencil-alt"></i></a>
+                    <a href="#" id="hideEditDesc" style="display: none;"><i class="fas fa-times"></i></a>
+                {% endif %}
+            </div>
+            {% endif %}
+        {% endif %}
+
+        <div id="boardItems">
+            
+            {% if editable %}
+            <a class="featBox add" href="{% url 'b:add_item' board.id %}">
+                <strong>Add Item</strong>
+                <i class="far fa-smile"></i>
+            </a>
+            {% endif %}
+
+            {% for item in items %}
+
+            <div class="featBox boardPic">
+                {% if item.item_status == 'GOT' %}
+                <div class="got">Got This<span></span></div>
+                {% endif %}
+                {% if not editable %}
+                <div class="featBoxMeta">
+                    <a href="#"><i class="fas fa-share"></i> Share</a>
+                    <a href="#"><i class="far fa-bookmark"></i> Save</a>
+                    <a href="#"><i class="fas fa-plus"></i> Add to My Board</a>
+                </div>
+                {% endif %}
+                {% if editable %}
+                <div class="featBoxMeta">
+                    <a href="{% url 'b:edit_item' board.id item.id %}"><i class="fas fa-share"></i> Edit</a>
+                    <a href="#" data-featherlight="#deleteModal{{ item.id }}"><i class="far fa-bookmark"></i> Delete</a>
+                </div>
+                <div id="deleteModal{{ item.id }}" class="lightbox deletepop">
+                    <h4>Delete "{{ item.item_name }}"</h4>
+                    <p>Are you sure you would like to delete the item <em>{{ item.item_name }}</em>? The item and all it's comments will be permenantly removed. Don't forget you can always make your item inactive instead.</p>
+                    <form method="POST" id="deleteitem-{{item.id}}" name="deleteitem_{{item.id}}">
+                        {% csrf_token %}                            
+                        <input type="hidden" name="item_id" value="{{ item.id }}">
+                        <button class="btn orange" name="deleteitem">Yes, delete this item</button>
+                    </form>
+                </div>
+                {% endif %}
+                
+                <a href="#" target="#item-details_another" class="inline_html_simple ilightbox" data-type="inline">
+                    {% thumbnail item.image "300x300" as im %}
+                        <img src="{{ im.url }}">
+                    {% endthumbnail %}
+                </a>
+                
+                <a href="item.php" class="boardItemName">{{ item.item_name }}</a>
+                <div class="boardItemStats">
+                    <span><i class="far fa-comments"></i> 
+                    	{% get_comment_count for item as comment_count %}
+                    	{{ comment_count }}                    	
+                    </span>
+                    <span><i class="fas fa-eye"></i> {{ item.views }}</span>
+                    <span><i class="far fa-heart"></i> {{ item.likes }}</span>
+                </div>
+            </div>
+
+            {% endfor %}
+
+        </div>
+
+        <div class="clearfix"></div>
+
+    </div>
+</div>
+
+
+<!-- {% if item.is_liked %}
+	<form method="POST">
+		{% csrf_token %}
+		<input type="hidden" name="item_id" value="{{ item.id }}">
+		<button name="unlikeitem">UnLike</button>
+	</form>
+{% else %}
+	<form method="POST">
+		{% csrf_token %}
+		<input type="hidden" name="item_id" value="{{ item.id }}">
+		<button name="likeitem">Like</button>
+	</form>
+{% endif %}	 -->
+
+
+{% endblock %}
+
+{% block extra-js %}
+<script src="{% static 'js/macy.js' %}" type="text/javascript"></script>
+<script>
+    var masonry = new Macy({
+        container: '#boardItems',
+        trueOrder: false,
+        waitForImages: false,
+        useOwnImageLoader: false,
+        debug: true,
+        mobileFirst: true,
+        columns: 1,
+        margin: 24,
+        breakAt: {
+            1200: 3,
+            940: 2,
+            520: 2,
+            400: 2
+        }
+    });
+</script>
+<script type="text/javascript">
+    // show desc edit
+    $('#showEditDesc').click(function(e){
+        $( "#theDesc" ).hide();
+        $( "#editDesc" ).show();
+        $( "#showEditDesc" ).hide();
+        $( "#hideEditDesc" ).show();        
+        e.preventDefault();
+    });
+    // hide desc edit
+    $('#hideEditDesc').click(function(e){
+        $( "#theDesc" ).show();
+        $( "#editDesc" ).hide();
+        $( "#showEditDesc" ).show();
+        $( "#hideEditDesc" ).hide();        
+        e.preventDefault();
+    });
+    // show tag edit
+    $('#showEditTags').click(function(e){
+        $( "#theTags" ).hide();
+        $( "#editTags" ).show();
+        $( "#showEditTags" ).hide();
+        $( "#hideEditTags" ).show();
+        e.preventDefault();
+    });
+    // hide tag edit
+    $('#hideEditTags').click(function(e){
+        $( "#theTags" ).show();
+        $( "#editTags" ).hide();
+        $( "#showEditTags" ).show();
+        $( "#hideEditTags" ).hide();
+        e.preventDefault();
+    });
+
+</script>
+{% endblock %}

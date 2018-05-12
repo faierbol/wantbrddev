@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+
+{% block title %}
+	Search
+{% endblock %}
+
+{% block body %}
+
+	<div class="profilePush"></div>
+
+
+	<h1>Search</h1>
+	
+	<form method="POST">
+		{% csrf_token %}
+		<input type="search" name="search" pattern=".{3,}" required title="Please enter at least 3 characters">
+		<button>Search</button>
+	</form>
+	<br>
+
+	<h1>ITEMS</h1>
+
+	{% if item_results %}
+		{% for item in item_results %}
+		<div>
+			{{ item.item_name }}
+		</div>
+		{% endfor %}
+	{% endif %}
+
+	<h1>BOARDS</h1>
+
+	{% if board_results %}
+		{% for board in board_results %}
+		<div>
+			{{ board.board_name }}
+		</div>
+		{% endfor %}
+	{% endif %}
+
+	<h1>USERS</h1>
+
+	{% if user_results %}
+		{% for user in user_results %}
+		<div>
+			{{ user.username }}
+		</div>
+		{% endfor %}
+	{% endif %}
+
+{% endblock %}

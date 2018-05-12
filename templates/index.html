@@ -1,0 +1,213 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+
+
+{% block title %}
+	Welcome to Wantbrd
+{% endblock %}
+
+
+{% block extra-css %}
+	<link type="text/css" href="{% static 'css/slick.css' %}" rel="stylesheet" />
+	<link type="text/css" href="{% static 'css/macy.css' %}" rel="stylesheet" />
+{% endblock %}
+
+
+{% block body %}
+
+<section class="homeBanner clearfix">
+        
+    <div class="homeSlider">
+        <div><img src="{% static 'img/tmp-banner1.jpg' %}" alt=""></div>
+        <div><img src="{% static 'img/tmp-banner1.jpg' %}" alt=""></div>
+        <div><img src="{% static 'img/tmp-banner1.jpg' %}" alt=""></div>
+        <div><img src="{% static 'img/tmp-banner1.jpg' %}" alt=""></div>
+    </div>
+
+</section>
+
+
+<section class="homeBoard">
+    <div class="container">
+
+        <div class="tabNav">
+            <a href="#">Hot</a>
+            <a href="#">Trending users</a>
+            <a href="#">Trending boards</a>
+            <a href="#">Trending items</a>
+        </div>
+        
+        <div id="homeBoardItems">
+            
+            <!-- trending user example -->
+
+            <div class="featBox trendingUser">
+                <div class="trendingTop clearfix">
+                    <strong>Trending User</strong>
+                    <a href="#" class="trendingUserShare">Share <i class="fas fa-share-alt"></i></a>
+                </div>
+                <a class="trendingUserUser" href="profile.php">
+                    <div class="trendingUserUserWrap clearfix">
+                        <div class="trendingUserPic">
+                            <div class="circle" style="background-image:url('img/profile-pic.jpg');"></div>
+                        </div>
+                        <div class="trendingUserNames">
+                            <strong>@iamholdsworth</strong>
+                            <span>Luke Holdsworth</span>
+                        </div>
+                    </div>
+                </a>
+                <a class="trendingUserHero" href="profile.php" style="background-image:url(img/feat-pic-hero.png);"></a>
+                <div class="trendingItems clearfix">
+                    <a href="profile.php" style="background-image:url('img/feat-pic-4.png');" href="#"></a>
+                    <a href="profile.php" style="background-image:url('img/feat-pic-5.png');" href="#"></a>
+                    <a class="plusMore" href="#">
+                        <div class="plusMoreNumber">+44</div>
+                    </a>
+                </div>
+                <div class="trendingFooter">
+                    <span>14 Boards</span>
+                    <span>275 Items</span>
+                    <span>2467 Views</span>
+                </div>
+            </div>
+
+            <!-- trending item example -->
+
+            <div class="featBox trendingItem">
+                <div class="trendingTop clearfix">
+                    <strong>Trending Item</strong>
+                    <a href="#" class="trendingUserShare">Share <i class="fas fa-share-alt"></i></a>
+                </div>
+                <div class="trendingItemItem">
+                    <a href="#"><img src="img/feat-item.jpg" alt=""></a>
+                </div>
+                <div class="trendingItemName">
+                    <a href="#">Amazon Echo Spot</a>
+                    <div class="trendingItemMeta">
+                        Found on <a href="#">Gadgets</a> by <a href="#">Luke Holdsworth</a>
+                    </div>
+                </div>              
+                <div class="trendingFooter">
+                    <span><i class="far fa-comments"></i> 23</span>
+                    <span><i class="far fa-heart"></i> 275</span>
+                    <span><i class="fas fa-eye"></i> 2467</span>
+                </div>
+            </div>
+
+            <!-- wanatbrd recommended -->
+
+            <div class="featBox recommendedBoard">
+                <div class="featOrangeHead">
+                    <strong>Wantbrd Recommended</strong>
+                    <a href="#">Yoga</a>                      
+                </div>
+                <div class="recommendedImage" style="background-image:url(img/recommended-hero.jpg)"></div>
+                <div class="recommendedText">
+                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus pharetra porttitor arcu at vulputate. Suspendisse eget lobortis justo.</p>
+                </div>
+                <div class="recommendedMeta">
+                    <span>275 Items</span> <span>259334 Views</span>
+                </div>
+                <a href="#" class="btn grey">View Board</a>
+                <div class="clear"></div>
+            </div>
+
+            <!-- feat group -->
+
+            <div class="featBox recommendedBoard group">
+                <div class="featOrangeHead">
+                    <strong>Featured Group</strong>
+                    <a href="#">#Resorts</a>
+                </div>
+                <div class="featGroupMeta">
+                    <span>14 Boards</span> <span>365 Items</span>
+                </div>
+                <div class="featGroupText">
+                    <p>Luxury holidays, Island retreats, Private Islands, Resorts ...</p>
+                </div>
+                <a href="#" class="btn large grey">View Board</a>
+                <div class="clear"></div>
+            </div>
+
+            <!-- trending board -->
+
+            <div class="featBox trendingBoard">
+                <div class="trendingTop clearfix">
+                    <strong>Trending Board</strong>
+                    <a href="board.php" class="trendingUserShare">Share <i class="fas fa-share-alt"></i></a>
+                </div>
+                <a class="trendingBoardHero" style="background-image:url(img/feat-pic-hero.png);" href="board.php">
+                    <div class="trendingBoardMeta">
+                        <strong>Mountain Biking</strong>
+                        <span><i class="fas fa-eye"></i> 2467</span>
+                    </div>
+                </a>
+                <div class="trendingItems clearfix">
+                    <a style="background-image:url('img/feat-pic-1.png');" href="board.php"></a>
+                    <a style="background-image:url('img/feat-pic-2.png');" href="board.php"></a>
+                    <a style="background-image:url('img/feat-pic-3.png');" href="board.php"></a>
+                    <a style="background-image:url('img/feat-pic-4.png');" href="board.php"></a>
+                    <a style="background-image:url('img/feat-pic-5.png');" href="board.php"></a>
+                    <a class="plusMore" href="board.php">
+                        <div class="plusMoreNumber">+44</div>
+                    </a>
+                </div>
+                <a class="trendingUserUser" href="profile.php">
+                    <div class="trendingUserUserWrap clearfix">
+                        <div class="trendingUserPic">
+                            <div class="circle" style="background-image:url('img/profile-pic.jpg');"></div>                            
+                        </div>
+                        <div class="trendingUserNames">
+                            <strong>@iamholdsworth</strong>
+                            <span>Luke Holdsworth</span>
+                        </div>
+                    </div>
+                </a>
+                <div class="trendingFooter">
+                    <span>14 Boards</span>
+                    <span>275 Items</span>
+                    <span>2467 Views</span>
+                </div>
+            </div>
+
+        </div>
+
+    </div>  
+</section>
+
+{% endblock %}
+
+{% block extra-js %}
+<script src="{% static 'js/slick.min.js' %}" type="text/javascript"></script>
+<script src="{% static 'js/macy.js' %}" type="text/javascript"></script>
+<script>
+    var masonry = new Macy({
+        container: '#homeBoardItems',
+        trueOrder: false,
+        waitForImages: false,
+        useOwnImageLoader: false,
+        debug: true,
+        mobileFirst: true,
+        columns: 1,
+        margin: 24,
+        breakAt: {
+            1200: 3,
+            940: 2,
+            520: 2,
+            400: 2
+        }
+    });
+    $(document).ready(function(){
+        $('.homeSlider').slick({
+            centerMode: true,
+            arrows:false,
+            centerPadding: '200px',
+            slidesToShow: 1,
+            autoplay: true,
+            autoplaySpeed: 4000,
+            dots: true,
+        });
+    });
+</script>
+{% endblock %}

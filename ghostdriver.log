@@ -1,0 +1,23 @@
+[INFO  - 2018-05-08T17:27:59.481Z] GhostDriver - Main - running on port 43871
+[INFO  - 2018-05-08T17:28:00.372Z] Session [27cf3700-52e5-11e8-8814-b788f7009ecc] - page.settings - {"XSSAuditingEnabled":false,"javascriptCanCloseWindows":true,"javascriptCanOpenWindows":true,"javascriptEnabled":true,"loadImages":true,"localToRemoteUrlAccessEnabled":false,"userAgent":"Mozilla/5.0 (Unknown; Linux x86_64) AppleWebKit/538.1 (KHTML, like Gecko) PhantomJS/2.1.1 Safari/538.1","webSecurityEnabled":true}
+[INFO  - 2018-05-08T17:28:00.372Z] Session [27cf3700-52e5-11e8-8814-b788f7009ecc] - page.customHeaders:  - {}
+[INFO  - 2018-05-08T17:28:00.372Z] Session [27cf3700-52e5-11e8-8814-b788f7009ecc] - Session.negotiatedCapabilities - {"browserName":"phantomjs","version":"2.1.1","driverName":"ghostdriver","driverVersion":"1.2.0","platform":"linux-unknown-64bit","javascriptEnabled":true,"takesScreenshot":true,"handlesAlerts":false,"databaseEnabled":false,"locationContextEnabled":false,"applicationCacheEnabled":false,"browserConnectionEnabled":false,"cssSelectorsEnabled":true,"webStorageEnabled":false,"rotatable":false,"acceptSslCerts":false,"nativeEvents":true,"proxy":{"proxyType":"direct"}}
+[INFO  - 2018-05-08T17:28:00.372Z] SessionManagerReqHand - _postNewSessionCommand - New Session Created: 27cf3700-52e5-11e8-8814-b788f7009ecc
+[ERROR - 2018-05-08T17:28:17.793Z] Session [27cf3700-52e5-11e8-8814-b788f7009ecc] - page.onError - msg: InvalidStateError: DOM Exception 11: An attempt was made to use an object that is not, or is no longer, usable.
+
+  phantomjs://platform/console++.js:263 in error
+[ERROR - 2018-05-08T17:28:17.794Z] Session [27cf3700-52e5-11e8-8814-b788f7009ecc] - page.onError - stack:
+  getAllResponseHeaders (https://cdn.appdynamics.com/adrum-ext.7ee08ffc80eb95c73b3f07237ad42c17.js:83)
+  make (https://cdn.appdynamics.com/adrum-ext.7ee08ffc80eb95c73b3f07237ad42c17.js:83)
+  e (https://cdn.appdynamics.com/adrum-ext.7ee08ffc80eb95c73b3f07237ad42c17.js:88)
+  reportEvent (https://cdn.appdynamics.com/adrum-ext.7ee08ffc80eb95c73b3f07237ad42c17.js:89)
+  reportXhr (https://cdn.appdynamics.com/adrum-ext.7ee08ffc80eb95c73b3f07237ad42c17.js:91)
+  processQ (https://currys-ssl.cdn.dixons.com/js/tags/adrum.js:11)
+  (anonymous function) (https://cdn.appdynamics.com/adrum-ext.7ee08ffc80eb95c73b3f07237ad42c17.js:96)
+  (anonymous function) (https://cdn.appdynamics.com/adrum-ext.7ee08ffc80eb95c73b3f07237ad42c17.js:96)
+  (anonymous function) (https://cdn.appdynamics.com/adrum-ext.7ee08ffc80eb95c73b3f07237ad42c17.js:96)
+
+  phantomjs://platform/console++.js:263 in error
+[INFO  - 2018-05-08T17:31:08.219Z] SessionManagerReqHand - _cleanupWindowlessSessions - Asynchronous Sessions clean-up phase starting NOW
+[INFO  - 2018-05-08T17:36:08.219Z] SessionManagerReqHand - _cleanupWindowlessSessions - Asynchronous Sessions clean-up phase starting NOW
+[INFO  - 2018-05-08T17:41:08.219Z] SessionManagerReqHand - _cleanupWindowlessSessions - Asynchronous Sessions clean-up phase starting NOW

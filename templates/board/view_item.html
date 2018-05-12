@@ -1,0 +1,87 @@
+{% extends 'base.html' %}
+{% load comments %}
+{% load comments_xtd %}
+{% load staticfiles %}
+
+{% block title %}
+	View item
+{% endblock %}
+
+{% block body %}
+
+	<h1>View item</h1>
+	
+	<h1>{{ item.item_name }}</h1>
+	{% if item.image %}
+		<img src="{{ item.image.url }}">
+	{% endif %}	
+	<p>Likes: {{ item.likes }}</p>
+
+	{% if item.is_liked %}
+		<form method="POST">
+			{% csrf_token %}
+			<input type="hidden" name="item_id" value="{{ item.id }}">
+			<button name="unlikeitem">UnLike</button>
+		</form>
+	{% else %}
+		<form method="POST">
+			{% csrf_token %}
+			<input type="hidden" name="item_id" value="{{ item.id }}">
+			<button name="likeitem">Like</button>
+		</form>
+	{% endif %}
+
+	{% get_comment_count for item as comment_count %}
+	<div class="text-center" style="padding-top:20px">
+		&nbsp;&sdot;&nbsp;
+		{{ comment_count }} comments have been posted.
+	</div>
+
+	{% if user.is_authenticated %}
+		{% if item.allow_comments %}
+			<div class="comment">
+				<h4 class="text-center">Your comment</h4>
+				<div class="well">
+					{% render_comment_form for item %}
+				</div>
+			</div>
+		{% endif %}
+	{% endif %}
+
+	{% if comment_count %}
+		<hr/>
+		<ul class="media-list">
+			{% render_xtdcomment_tree for item allow_flagging allow_feedback %}
+		</ul>
+	{% endif %}
+
+	<!-- <div id="comments"></div> -->
+
+{% endblock %}
+
+{% block extra-js %}
+<!-- <script>
+  window.comments_props = {% get_commentbox_props for item %};
+  window.comments_props_override = {
+    allow_comments: {%if item.allow_comments%}true{%else%}false{%endif%},
+    allow_feedback: true,
+    show_feedback: false,
+    allow_flagging: true,
+    polling_interval: 5000  // In milliseconds.
+  };
+</script>
+<script src="https://code.jquery.com/jquery-2.2.4.min.js"
+        integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="
+        crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
+        integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+        crossorigin="anonymous"></script>
+<script type="text/javascript"
+        src="{% url 'javascript-catalog' %}"></script>
+<script src="{% static 'django_comments_xtd/js/vendor-2.1.0.js' %}"></script>
+<script src="{% static 'django_comments_xtd/js/plugin-2.1.0.js' %}"></script>
+<script>
+ $(function () {
+     $('[data-toggle="tooltip"]').tooltip({html: true})
+ })</script> -->
+{% endblock %}
