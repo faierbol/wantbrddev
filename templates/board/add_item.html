@@ -56,7 +56,15 @@
 			<input type="text" name="item_name" value="{{ pagetitle }}">
 			{{ form.as_p }}			
 			<label>URL:</label>
-			<input type="text" name="purchase_url" value="{{ url }}">
+			<br>
+			<input type="text" name="purchase_url" value="{{ url }}"><br>
+			<br>
+			<select name="item_status">
+				<option value="WANT">I Want This</option>
+				<option value="GOT">I've got this</option>
+			</select><br>
+			<textarea name="item_desc"></textarea>
+			Active <input type="checkbox" name="active" checked="checked" value="active">
 			<input type="hidden" name="scrapedimg" value="" id="scrapedimg">
 			<input type="hidden" name="imgsrc" value="web" id="imgsrc">
 			<p><button class="orange submit" name="additem" id="additem" value="1">Add item</button></p>

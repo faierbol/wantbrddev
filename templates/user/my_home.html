@@ -1,0 +1,263 @@
+{% extends 'base.html' %}
+{% load comments static %}
+{% load staticfiles %}
+{% load thumbnail %}
+
+{% block title %}
+	Home
+{% endblock %}
+
+{% block extra-css %}
+    <link type="text/css" href="{% static 'css/macy.css' %}" rel="stylesheet" />
+    <link rel="stylesheet" type="text/css" href="{% static 'fluent_comments/css/ajaxcomments.css' %}" />    
+{% endblock %}
+
+{% block body %}
+
+    <div class="discoveryWrap" style="background-image:url('img/profile-hero.jpg')"></div>
+    <div id="discoveryCont" class="container clearfix">
+        
+        <div class="feedLeft">
+            <div class="profileImage">
+                <a class="profileImage" href="{% url 'u:home' %}">
+                    {% if profile.picture %}
+                    <div class="circle" style="background-image:url('{{ profile.picture.url }}');"></div>
+                    {% else %}
+                    <div class="circle" style="background-image:url('{% static 'img/default-hero.png' %}');"></div>
+                    {% endif %}
+                </a>                
+            </div>
+            <div class="discoveryUsername">@{{ user.username }}</div>
+            <div class="discoveryName">{{ user.get_full_name }}</div>
+            <div class="discoveryStats">
+                <p><strong>{{ no_followers }}</strong> FOLLOWERS</p>
+                <p><strong>{{ no_connections }}</strong> FOLLOWING</p>
+                <p><strong>{{ boards.count }}</strong> {% if boards.count > 1 %}BOARDS{% else %}BOARD{% endif %}</p>
+                <p><strong>{{ no_items }}</strong> ITEMS</p>
+            </div>
+            <div class="discoveryBio">
+                {{ profile.bio }}
+                <a href="#">Edit <i class="fas fa-pencil-alt"></i></a>
+            </div>
+
+            <div class="accountLinks">
+                <h5>Your Account</h5>
+                <a href="#">Personal information</a>
+                <a href="#">Social media links</a>
+                <a href="#">Account security</a>
+            </div>
+
+            <div class="recentActivity">
+                <h6>Recent Activity</h6>
+                <p><i class="far fa-heart"></i> </strong>12</strong> Likes</p>
+                <p><i class="fas fa-user-plus"></i> <strong>14</strong> Followers</p>
+                <p><i class="far fa-comments"></i> <strong>22</strong> Comments</p>
+            </div>
+
+        </div>
+
+        <div class="discoveryFeed">
+            
+            <h3>Recent Activity</h3>
+
+            <div class="discoveryFeedContent">
+
+            	{% for item in itemconxs|dictsortreversed:"created" %}
+                
+	                <div class="discoveryItem clearfix">
+	                    <a href="{% url 'b:view_item' item.board.user item.board.slug item.id %}" class="discoveryImage">
+	                    	{% thumbnail item.image "300x300" as im %}
+	                    	    <img src="{{ im.url }}">
+	                    	{% endthumbnail %}
+	                    </a>
+	                    <div class="discoveryMeta">
+	                        <div class="trendingItemName">
+	                            <a href="#" class="trendName">{{ item.item.item_name }}</a>
+	                            <div class="trendingItemMeta">
+	                                Found in <a href="{% url 'b:view_board' item.board.user item.board.slug %}">{{ item.board.board_name }}</a> by 
+	                                <a href="{% url 'u:profile' item.board.user %}">
+	                                	{% if item.board.user.get_full_name %}
+	                                		{{ item.board.user.get_full_name }}	                                
+	                                	{% else %}
+	                                		@{{ item.board.user }}
+	                                	{% endif %}
+	                                </a>
+	                            </div>
+	                        </div>              
+	                        <div class="trendingFooter">
+                                <span>
+                                    <form class="inline" method="POST">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="itemconx_id" value="{{ item.id }}">
+                                        <button class="naked" name="savelater"><i class="far fa-bookmark"></i></button>
+                                    </form>
+                                </span>
+	                            <span><i class="far fa-comments"></i>
+	                            	{% get_comment_count for item as comment_count %}
+									{% if comment_count %}
+										{{ comment_count }}
+									{% else %}
+										0
+									{% endif %}
+	                            </span>
+                                {% if item.is_liked %}
+                                    <span>
+                                        <form class="inline" method="POST">
+                                            {% csrf_token %}
+                                            <input type="hidden" name="itemconx_id" value="{{ item.id }}">
+                                            <button class="naked" name="unlikeitem"><i class="fas fa-heart likeon"></i> {{ item.likes }}</button>
+                                        </form>
+                                    </span>
+                                {% else %}
+                                    <span>
+                                        <form class="inline" method="POST">
+                                            {% csrf_token %}
+                                            <input type="hidden" name="itemconx_id" value="{{ item.id }}">
+                                            <button class="naked" name="likeitem"><i class="far fa-heart"></i> {{ item.likes }}</button>                                
+                                        </form>
+                                    </span>                                    
+                                {% endif %}
+	                            <span><i class="fas fa-eye"></i> {{ item.views }}</span>                                
+	                        </div>
+	                    </div>
+                        <div class="clearfix"></div>
+                        <div style="text-align:left; font-size: .85rem; margin-top:20px;">
+
+                            {% get_comment_list for item as comment_list %}
+                            {% for comment in comment_list|slice:":2" %}
+                                <STRONG>{{user}}</STRONG>
+                                <div class="aComment" style="border-bottom:1px solid #ebebeb; padding-bottom:5px; margin-bottom:5px;">
+                                    {{ comment.comment|linebreaks|slice:":90" }}...                                    
+                                </div>  
+                            {% endfor %}
+                            {% if comment_list %}
+                                <a href="#">View comments</a>
+                            {% endif %}
+
+                        </div>
+	                </div>
+
+                {% endfor %}
+
+            </div>
+
+        </div>
+
+        <div class="feedRight">
+            <h5>Suggested to follow:</h5>
+            
+            <div class="followList">
+                <div class="followCard">
+                    <a class="followProfile" href="#">
+                        <div class="circle" style="background-image:url('img/profile-pic.jpg');"></div>
+                    </a>
+                    <div class="followInfo">
+                        <a href="#" class="follow">+Follow</a>
+                        <span><a href="#">@iamholdsworth</a></span>
+                        <strong><a href="#">Luke Holdsworth</a></strong>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="followCard">
+                    <a class="followProfile" href="#">
+                        <div class="circle" style="background-image:url('img/profile-pic.jpg');"></div>
+                    </a>
+                    <div class="followInfo">
+                        <a href="#" class="follow">+Follow</a>
+                        <span><a href="#">@iamholdsworth</a></span>
+                        <strong><a href="#">Luke Holdsworth</a></strong>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="followCard">
+                    <a class="followProfile" href="#">
+                        <div class="circle" style="background-image:url('img/profile-pic.jpg');"></div>
+                    </a>
+                    <div class="followInfo">
+                        <a href="#" class="follow">+Follow</a>
+                        <span><a href="#">@iamholdsworth</a></span>
+                        <strong><a href="#">Luke Holdsworth</a></strong>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+
+            <h5>Suggested boards:</h5>
+
+            <div class="suggestedBoards">
+
+                <div class="featBox trendingBoard">
+                    <a class="trendingBoardHero" style="background-image:url(img/feat-pic-hero.png);" href="board.php">
+                        <div class="trendingBoardMeta">
+                            <strong>Mountain Biking</strong>
+                            <span><i class="fas fa-eye"></i> 2467</span>
+                        </div>
+                    </a>
+                    <div class="trendingItems clearfix">
+                        <a style="background-image:url('img/feat-pic-1.png');" href="board.php"></a>
+                        <a style="background-image:url('img/feat-pic-2.png');" href="board.php"></a>
+                        <a class="plusMore" href="board.php">
+                            <div class="plusMoreNumber">+44</div>
+                        </a>
+                    </div>
+                    <a class="trendingUserUser" href="profile.php">
+                        <div class="trendingUserUserWrap clearfix">
+                            <div class="trendingUserPic">
+                                <div class="circle" style="background-image:url('img/profile-pic.jpg');"></div>                            
+                            </div>
+                            <div class="trendingUserNames">
+                                <strong>@iamholdsworth</strong>
+                                <span>Luke Holdsworth</span>
+                            </div>
+                        </div>
+                    </a>
+                    <div class="trendingFooter">
+                        <span>14 Boards</span>
+                        <span>275 Items</span>
+                        <span>2467 Views</span>
+                    </div>
+                </div>
+
+                <div class="featBox trendingBoard">
+                    <a class="trendingBoardHero" style="background-image:url(img/feat-pic-hero.png);" href="board.php">
+                        <div class="trendingBoardMeta">
+                            <strong>Mountain Biking</strong>
+                            <span><i class="fas fa-eye"></i> 2467</span>
+                        </div>
+                    </a>
+                    <div class="trendingItems clearfix">
+                        <a style="background-image:url('img/feat-pic-1.png');" href="board.php"></a>
+                        <a style="background-image:url('img/feat-pic-2.png');" href="board.php"></a>
+                        <a class="plusMore" href="board.php">
+                            <div class="plusMoreNumber">+44</div>
+                        </a>
+                    </div>
+                    <a class="trendingUserUser" href="profile.php">
+                        <div class="trendingUserUserWrap clearfix">
+                            <div class="trendingUserPic">
+                                <div class="circle" style="background-image:url('img/profile-pic.jpg');"></div>                            
+                            </div>
+                            <div class="trendingUserNames">
+                                <strong>@iamholdsworth</strong>
+                                <span>Luke Holdsworth</span>
+                            </div>
+                        </div>
+                    </a>
+                    <div class="trendingFooter">
+                        <span>14 Boards</span>
+                        <span>275 Items</span>
+                        <span>2467 Views</span>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>	
+
+{% endblock %}
+
+{% block extra-js %}
+    <script type="text/javascript" src="{% static 'fluent_comments/js/ajaxcomments.js' %}"></script>
+{% endblock %}

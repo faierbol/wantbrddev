@@ -1,87 +1,75 @@
 {% extends 'base.html' %}
-{% load comments %}
-{% load comments_xtd %}
 {% load staticfiles %}
+{% load comments static %}
+{% load thumbnail %}
 
 {% block title %}
-	View item
+	Home
+{% endblock %}
+
+{% block extra-css %}
+	<link type="text/css" href="{% static 'css/macy.css' %}" rel="stylesheet" />
+	<link rel="stylesheet" type="text/css" href="{% static 'fluent_comments/css/ajaxcomments.css' %}" />	
+	<style type="text/css">
+		.itemDetails {
+			background:#fff;
+			padding:60px 0;
+		}
+	</style>
 {% endblock %}
 
 {% block body %}
 
-	<h1>View item</h1>
-	
-	<h1>{{ item.item_name }}</h1>
-	{% if item.image %}
-		<img src="{{ item.image.url }}">
-	{% endif %}	
-	<p>Likes: {{ item.likes }}</p>
+<div class="profilePush"></div>
 
-	{% if item.is_liked %}
-		<form method="POST">
-			{% csrf_token %}
-			<input type="hidden" name="item_id" value="{{ item.id }}">
-			<button name="unlikeitem">UnLike</button>
-		</form>
-	{% else %}
-		<form method="POST">
-			{% csrf_token %}
-			<input type="hidden" name="item_id" value="{{ item.id }}">
-			<button name="likeitem">Like</button>
-		</form>
-	{% endif %}
+<div class="itemDetails">
 
-	{% get_comment_count for item as comment_count %}
-	<div class="text-center" style="padding-top:20px">
-		&nbsp;&sdot;&nbsp;
-		{{ comment_count }} comments have been posted.
+	<div class="container clearfix">
+		
+		<div class="popImage">
+		    {% thumbnail itemconx.image "600x600" as im %}
+		        <img src="{{ im.url }}">
+		    {% endthumbnail %}
+		    <div class="popMeta">
+		        <a href="#"><i class="fas fa-share"></i> Share</a>
+		        <a href="#"><i class="far fa-bookmark"></i> Save</a>
+		        <a href="#"><i class="fas fa-plus"></i> Add to My Board</a>
+		    </div>
+		</div>
+		<div class="popDetails">
+
+		    <h5>{{ itemconx.item.item_name }}</h5>
+		    {% if itemconx.item_desc %}
+		    <div class="popDesc">
+		        {{ itemconx.item_desc }}
+		    </div>
+		    {% endif %}
+
+		    <a href="#" class="btn orange large">Buy now</a>        
+
+		</div>
+
+		<div class="clearfix"></div>
+
+        <div class="popComments">
+			{% render_comment_list for itemconx %}
+			{% if user.is_authenticated %}
+			{% render_comment_form for itemconx %}
+			{% endif %}
+        </div>
+
 	</div>
 
-	{% if user.is_authenticated %}
-		{% if item.allow_comments %}
-			<div class="comment">
-				<h4 class="text-center">Your comment</h4>
-				<div class="well">
-					{% render_comment_form for item %}
-				</div>
-			</div>
-		{% endif %}
-	{% endif %}
-
-	{% if comment_count %}
-		<hr/>
-		<ul class="media-list">
-			{% render_xtdcomment_tree for item allow_flagging allow_feedback %}
-		</ul>
-	{% endif %}
-
-	<!-- <div id="comments"></div> -->
+</div>
 
 {% endblock %}
 
 {% block extra-js %}
-<!-- <script>
-  window.comments_props = {% get_commentbox_props for item %};
-  window.comments_props_override = {
-    allow_comments: {%if item.allow_comments%}true{%else%}false{%endif%},
-    allow_feedback: true,
-    show_feedback: false,
-    allow_flagging: true,
-    polling_interval: 5000  // In milliseconds.
-  };
-</script>
-<script src="https://code.jquery.com/jquery-2.2.4.min.js"
-        integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="
-        crossorigin="anonymous"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
-        integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
-        crossorigin="anonymous"></script>
-<script type="text/javascript"
-        src="{% url 'javascript-catalog' %}"></script>
-<script src="{% static 'django_comments_xtd/js/vendor-2.1.0.js' %}"></script>
-<script src="{% static 'django_comments_xtd/js/plugin-2.1.0.js' %}"></script>
+<script type="text/javascript" src="{% static 'fluent_comments/js/ajaxcomments.js' %}"></script>
 <script>
  $(function () {
      $('[data-toggle="tooltip"]').tooltip({html: true})
- })</script> -->
+ })</script>
+
+
 {% endblock %}

@@ -17,6 +17,7 @@ class Profile(models.Model):
     phone_number = PhoneNumberField(default='', null=True, blank=True)
     website = models.URLField(default='', blank=True)
     picture = models.ImageField(upload_to=user_directory_path, blank=True, null=True)
+    background = models.ImageField(upload_to=user_directory_path, blank=True, null=True)
     created = models.DateTimeField(auto_now_add=True)
     alert_new_subscribe = models.BooleanField(default=True)
     alert_new_item = models.BooleanField(default=True)

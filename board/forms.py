@@ -23,7 +23,7 @@ class BoardForm(forms.ModelForm):
 class ItemForm(forms.ModelForm):
 	class Meta:
 		model = Item
-		exclude = ['board', 'purchase_url', 'image', 'item_name']
+		exclude = ['image', 'item_name']
 		widgets = {
 	        'item_desc': Textarea(),
 	    }
@@ -37,9 +37,9 @@ class EditBoardForm(forms.ModelForm):
 
 
 class ChangeBackgroundForm(forms.ModelForm):
+	hero = forms.ImageField(label=(''),required=False, widget=forms.FileInput(attrs={'class': "jfilestyle"}))
 	class Meta:
-		model = Board
-		file = forms.FileField()
+		model = Board		
 		fields = ['hero', 'user']
 		widgets = {'user':forms.HiddenInput()}
 

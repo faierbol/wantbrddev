@@ -1,11 +1,10 @@
+import os, copy
 from django.db import models
 from sorl.thumbnail import ImageField
 from django.urls import reverse
 from django.contrib.auth.models import User
 from django.shortcuts import get_object_or_404
 from taggit.managers import TaggableManager
-from django_comments_xtd.moderation import moderator, SpamModerator
-from board.badwords import badwords
 from django.template.defaultfilters import slugify
 
 # Board Model
@@ -43,6 +42,10 @@ class Board(models.Model):
 		self.slug = slugify(self.board_name)
 		super(Board, self).save(*args, **kwargs)
 
+	def get_item_count(self):
+		item_count = ItemConnection.objects.filter(board=self).count()
+		return item_count
+
 	def __str__(self):
 		return self.board_name
 
@@ -54,16 +57,12 @@ class BoardLike(models.Model):
 	created = models.DateTimeField(auto_now_add=True)
 
 	# unlike board class method
-	def unlike(request, user):
-		board_id = request.POST.get("board_id", "")
-		board = get_object_or_404(Board, pk=board_id)
+	def unlike(board, user):
 		like = BoardLike.objects.filter(user=user, board=board)
-		like.delete()	    
+		like.delete()	    				
 
 	# like board class method
-	def like(request, user):
-		board_id = request.POST.get("board_id", "")
-		board = get_object_or_404(Board, pk=board_id)
+	def like(board, user):
 		new_like = BoardLike.objects.create(
 			user=user,
 			board=board,
@@ -78,14 +77,27 @@ class BoardView(models.Model):
 
 
 ##### Item Model
-class Item(models.Model):
+class Item(models.Model):		
+	item_name = models.CharField(null=False, max_length=255, blank=False)		
+
+	def __str__(self):
+		return self.item_name
+
+	# def get_absolute_url(self):
+	#     return reverse('board:view_item',
+	#                    kwargs={'board_id': self.board.id,
+	#                            'item_id': self.id})
+
+
+##### Item Connections
+class ItemConnection(models.Model):
 	board = models.ForeignKey(Board, on_delete=models.CASCADE)
+	image = ImageField(upload_to = 'uploads/items/', default = 'defaults/no-item.png')
+	item = models.ForeignKey(Item, on_delete=models.CASCADE)
 	created = models.DateTimeField(auto_now_add=True)
 	allow_comments = models.BooleanField('allow comments', default=True)
-	item_name = models.CharField(null=False, max_length=255, blank=False)
-	item_desc = models.CharField(null=True, max_length=500, blank=True)
-	image = ImageField(upload_to = 'uploads/items/', default = 'defaults/no-item.png')	
 	purchase_url = models.URLField(max_length=255, blank=True)
+	item_desc = models.CharField(null=True, max_length=500, blank=True)
 	WANT = 'WNT'
 	GOT = 'GOT'
 	ITEM_STATUS_CHOICES = (
@@ -97,83 +109,58 @@ class Item(models.Model):
 		choices=ITEM_STATUS_CHOICES,
 		default=WANT,
 	)	
-	active = models.BooleanField()
+	active = models.BooleanField(default=True)
 
-	def __str__(self):
-		return self.item_name
-
-	def get_absolute_url(self):
-	    return reverse('board:view_item',
-	                   kwargs={'board_id': self.board.id,
-	                           'item_id': self.id})
-
+	def save_item(itemconx, request):
+		# current user
+		user = request.user
+		# board to copy to
+		board = Board.objects.get(user=user, board_name="Your Saved Items")
+		# get model of item connection we're copying
+		itemconx = ItemConnection.objects.get(pk=itemconx)
+		# create clone
+		clone = copy.copy(itemconx)
+		# remove pk and add destination board to clone
+		clone.pk = None
+		clone.board = board			
+		# remove prefetch cache, becuase...
+		try:
+		    delattr(clone, '_prefetched_objects_cache')
+		except AttributeError:
+		    pass
+		clone.save()		
+		
 
 ##### Item Like Model
 class ItemLike(models.Model):
-	user = models.ForeignKey(User, on_delete=models.CASCADE)
-	item = models.ForeignKey(Item, on_delete=models.CASCADE)
+	item_conx = models.ForeignKey(ItemConnection, on_delete=models.CASCADE)
+	user = models.ForeignKey(User, on_delete=models.CASCADE)	
 	created = models.DateTimeField(auto_now_add=True)
 
-	# unlike item class method
-	def unlike(request, user):
-		item_id = request.POST.get("item_id", "")
-		item = get_object_or_404(Item, pk=item_id)
-		like = ItemLike.objects.filter(user=user, item=item)
-		like.delete()	    
-
 	# like item class method
-	def like(request, user):
-		item_id = request.POST.get("item_id", "")
-		item = get_object_or_404(Item, pk=item_id)
+	def like(itemconx, user):		
 		new_like = ItemLike.objects.create(
 			user=user,
-			item=item,
+			item_conx=itemconx,
 		)
+
+	# unlike item class method
+	def unlike(itemconx, user):
+		like = ItemLike.objects.filter(
+			user=user,
+			item_conx=itemconx
+		)
+		like.delete()	    				
+
 
 # Track item views
 class ItemView(models.Model):
-	item = models.ForeignKey(Item, on_delete=models.PROTECT)
+	item_conx = models.ForeignKey(ItemConnection, on_delete=models.PROTECT)
 	ip = models.CharField(max_length=16)
 	user = models.ForeignKey(User, on_delete=models.PROTECT)	
 
 
-# Add this code at the end of the file.
-class ItemCommentModerator(SpamModerator):
-    email_notification = True
-    removal_suggestion_notification = True
-    def moderate(self, comment, content_object, request):
-        # Make a dictionary where the keys are the words of the message and
-        # the values are their relative position in the message.
-        def clean(word):
-            ret = word
-            if word.startswith('.') or word.startswith(','):
-                ret = word[1:]
-            if word.endswith('.') or word.endswith(','):
-                ret = word[:-1]
-            return ret
-
-        lowcase_comment = comment.comment.lower()
-        msg = dict([(clean(w), i)
-                    for i, w in enumerate(lowcase_comment.split())])
-        for badword in badwords:
-            if isinstance(badword, str):
-                if lowcase_comment.find(badword) > -1:
-                    return True
-            else:
-                lastindex = -1
-                for subword in badword:
-                    if subword in msg:
-                        if lastindex > -1:
-                            if msg[subword] == (lastindex + 1):
-                                lastindex = msg[subword]
-                        else:
-                            lastindex = msg[subword]
-                    else:
-                        break
-                if msg.get(badword[-1]) and msg[badword[-1]] == lastindex:
-                    return True
-        return super(ItemCommentModerator, self).moderate(comment,
-                                                          content_object,
-                                                          request)
-
-moderator.register(Item, ItemCommentModerator)
+# Privacy
+class BoardPrivacy(models.Model):
+	board = models.ForeignKey(Board, on_delete=models.CASCADE)
+	user = models.ForeignKey(User, on_delete=models.CASCADE)

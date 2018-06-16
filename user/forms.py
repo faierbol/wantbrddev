@@ -20,3 +20,10 @@ class ProfileForm(forms.ModelForm):
 	class Meta:
 		model = Profile
 		fields = ('bio', 'website')
+
+class ChangeBackgroundForm(forms.ModelForm):
+	class Meta:
+		model = Profile
+		file = forms.FileField()
+		fields = ['background', 'user']
+		widgets = {'user':forms.HiddenInput()}

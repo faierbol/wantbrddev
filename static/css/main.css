@@ -180,6 +180,9 @@ TEXT
 h1,h2,h3,h4,h5,h6 {
     margin:0;
 }
+button i.likeon {
+    color:#F97D1F;
+}
 
 
 /* ---------------- 
@@ -459,6 +462,7 @@ HOME
             height: 100px;
             display: block;
             text-decoration: none;
+            border:4px solid #fff;
         }
         .trendingItems > a:nth-child(3n) {
             margin-right:0;
@@ -694,10 +698,31 @@ PROFILE
         display: table;
         vertical-align: middle;
     }
-        .theBio {
+        .theBio, #editBio {
             display: table-cell;
             vertical-align: middle;
             font-size:1rem;
+        }
+        .theBio p {
+            display: inline-block;
+        }
+        .theBio i, #editBio i {
+            display: inline-block;
+            margin-left:10px;
+        }
+        .theBio a i, #editBio button i {
+            color:#aaa;
+        }
+        .theBio a:hover i, #editBio button:hover i {
+            color:#fff;
+        }
+        #editBio input {
+            border:none;
+            border-bottom:1px solid #ccc;
+            background:none;
+            padding:10px 0;
+            color:#fff;
+            width: 80%;
         }
 
 .profileBoards {
@@ -710,6 +735,7 @@ PROFILE
         background:#fff;
         border:1px solid #ebebeb;
         border-radius:3px;
+        position: relative;
     }
         .profileBoardItem:nth-child(3n){
             margin-right:0;
@@ -730,7 +756,7 @@ PROFILE
         .profileBoardHero {
             height: 175px;
             background-size:cover;
-            position: relative;
+            /*position: relative;*/
         }
         .profileBoardShare a {
             float: right;
@@ -810,7 +836,7 @@ PROFILE
 }
 .profileLabel {
     position: absolute;
-    top:10px;
+    top:80px;
 }
     .profileLabel a {
         display: block;
@@ -821,18 +847,33 @@ PROFILE
         text-transform: capitalize;
         padding:10px;
     }
+.trendingItems > a.additembtn {
+    display: table;
+    text-align:center;
+    font-size:4rem;
+    background:#fff;
+}
+    .trendingItems a.additembtn > span {
+        display: table-cell;
+        vertical-align: middle;
+    }
 
 /* ---------------- 
 BOARD
 -----------------*/
-.boardWrap {
-    background-repeat: no-repeat;
-    background-size:100% auto;
-    background-position: top center;
-    padding-top:40px;
-}
+.boardWrap {}
+    .boardBg {
+        position: absolute;
+        z-index: 1;
+        background-size: cover;
+        height: 500px;
+        background-position: center center;
+        width: 100%;
+    }
     .boardWrap .container {
         max-width:1100px;
+        padding-top:40px;
+        z-index: 2;
     }
     .editBoardButtons {
         text-align: center;        
@@ -1156,6 +1197,9 @@ BOARD
         padding: 15px;
       }
     }
+    .select2-container {
+        width: 100% !important;
+    }
 
 /** DISCOVERY **/
 .discoveryWrap {
@@ -1205,8 +1249,8 @@ BOARD
         margin-bottom:15px;
     }
     .discoveryFeedContent .discoveryItem:last-child {
-        margin-bottom:0px;
-        padding-bottom:0px;
+/*        margin-bottom:0px;
+        padding-bottom:0px;*/
         border-bottom:none;
     }
     .discoveryFeed h3 {
@@ -1479,25 +1523,15 @@ MISC
     border-radius: 50%;
     background-size:cover;
 }
-/*.content {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    text-align: center;
-}
-.content:before {
-    content: '';
-    vertical-align: middle;
+form.inline {
     display: inline-block;
-    width: 0;
-    height: 100%;
 }
-.content span {
-    vertical-align: middle;
-    display: inline-block;
-}*/
+button.naked {
+    background:none;
+    border-radius:0;
+    line-height: 1;
+    padding:0;
+}
 
 
 

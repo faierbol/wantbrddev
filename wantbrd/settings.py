@@ -37,6 +37,9 @@ ALLOWED_HOSTS = ['127.0.0.1', '.herokuapp.com']
 # Application definition
 
 INSTALLED_APPS = [
+    'fluent_comments',  # must be before django_comments
+    'crispy_forms',
+    'django_comments',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -49,29 +52,20 @@ INSTALLED_APPS = [
     'phonenumber_field',
     'widget_tweaks',
     'taggit',
-    'django_comments_xtd',
-    'django_comments',
     'rest_framework',
     'sorl.thumbnail',
+    'storages',
+    'threadedcomments',
 ]
 
-# COMMENTS RELATED STUFF
+### COMMENTS STUFF
 
-COMMENTS_APP = 'django_comments_xtd'
-COMMENTS_XTD_CONFIRM_EMAIL = False
-COMMENTS_XTD_MAX_THREAD_LEVEL = 1
-COMMENTS_XTD_LIST_ORDER = ('-thread_id', 'order')  # default is ('thread_id', 'order')
-COMMENTS_XTD_APP_MODEL_OPTIONS = {
-    'default': {
-        'allow_flagging': True,
-        'allow_feedback': True,
-        'show_feedback': False,
-    }
-}
-MANAGERS = (
-    ('Luke Holdsworth', 'iamholdsworth@gmail.com'),
-)
+COMMENTS_APP = 'fluent_comments'
+FLUENT_COMMENTS_EXCLUDE_FIELDS = ('name', 'email', 'url', 'title')
+FLUENT_COMMENTS_USE_EMAIL_NOTIFICATION = True
+CRISPY_TEMPLATE_PACK = 'bootstrap3'
 
+### COMMENTS STUFF END
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -167,13 +161,29 @@ USE_TZ = True
 # our static files array
 STATICFILES_DIRS = [STATIC_DIR, ]
 # url definition for static files
-STATIC_URL = '/static/'
+# STATIC_URL = '/static/' # <------- enable for local static
 STATIC_ROOT = os.path.normpath(os.path.join(BASE_DIR, 'staticfiles'))
 
 
 # Media Files definition
 MEDIA_ROOT = MEDIA_DIR
 MEDIA_URL = '/media/'
+
+AWS_ACCESS_KEY_ID = 'AKIAIU7LUGADL7OX27LA'
+AWS_SECRET_ACCESS_KEY = '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'
+AWS_STORAGE_BUCKET_NAME = 'wantbrd-assets'
+AWS_S3_CUSTOM_DOMAIN = '%s.s3.amazonaws.com' % AWS_STORAGE_BUCKET_NAME
+
+AWS_S3_OBJECT_PARAMETERS = {
+    'CacheControl': 'max-age=86400',
+}
+
+AWS_LOCATION = 'static'
+STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage' # <------- enable for AWS static
+STATIC_URL = "https://%s/%s/" % (AWS_S3_CUSTOM_DOMAIN, AWS_LOCATION) # <------- enable for AWS static
+
+DEFAULT_FILE_STORAGE = 'wantbrd.storage_backends.MediaStorage'  # <-- here is where we reference it
+
 
 # the login url, needed so django knows where to redirect un-authenicated attempts to @login_required views
 LOGIN_URL = 'u:login'

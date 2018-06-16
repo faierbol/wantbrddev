@@ -1,0 +1,92 @@
+{% extends 'base.html' %}
+{% load comments %}
+{% load staticfiles %}
+{% load comments_xtd %}
+{% load thumbnail %}
+
+{% block title %}
+	Home
+{% endblock %}
+
+{% block extra-css %}
+	<link type="text/css" href="{% static 'css/macy.css' %}" rel="stylesheet" />
+	<style type="text/css">
+		.itemDetails {
+			background:#fff;
+			padding:60px 0;
+		}
+	</style>
+{% endblock %}
+
+{% block body %}
+
+<div class="profilePush"></div>
+
+<div class="itemDetails">
+
+	<div class="container clearfix">
+		
+		<div class="popImage">
+		    {% thumbnail itemconx.image "600x600" as im %}
+		        <img src="{{ im.url }}">
+		    {% endthumbnail %}
+		    <div class="popMeta">
+		        <a href="#"><i class="fas fa-share"></i> Share</a>
+		        <a href="#"><i class="far fa-bookmark"></i> Save</a>
+		        <a href="#"><i class="fas fa-plus"></i> Add to My Board</a>
+		    </div>
+		</div>
+		<div class="popDetails">
+
+		    <h5>{{ itemconx.item.item_name }}</h5>
+		    {% if itemconx.item_desc %}
+		    <div class="popDesc">
+		        {{ itemconx.item_desc }}
+		    </div>
+		    {% endif %}
+
+		    <a href="#" class="btn orange large">Buy now</a>        
+
+		</div>
+
+		<div class="clearfix"></div>
+
+        <div class="popComments">
+			<div id="comments"></div>
+        </div>
+
+	</div>
+
+</div>
+
+{% endblock %}
+
+{% block extra-js %}
+
+<script>
+  window.comments_props = {% get_commentbox_props for itemconx %};
+  window.comments_props_override = {
+    allow_comments: {%if itemconx.allow_comments%}true{%else%}false{%endif%},
+    allow_feedback: true,
+    show_feedback: true,
+    allow_flagging: true,
+    polling_interval: 5000  // In milliseconds.
+  };
+</script>
+<script src="https://code.jquery.com/jquery-2.2.4.min.js"
+        integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="
+        crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
+        integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+        crossorigin="anonymous"></script>
+<script type="text/javascript"
+        src="{% url 'javascript-catalog' %}"></script>
+<script src="{% static 'django_comments_xtd/js/vendor-2.1.0.js' %}"></script>
+<script src="{% static 'django_comments_xtd/js/plugin-2.1.0.js' %}"></script>
+<script>
+ $(function () {
+     $('[data-toggle="tooltip"]').tooltip({html: true})
+ })</script>
+
+
+{% endblock %}

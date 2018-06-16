@@ -9,262 +9,387 @@
 
 {% block extra-css %}
 	<link type="text/css" href="{% static 'css/macy.css' %}" rel="stylesheet" />
+    {% if board.isblocked %}
+        {% if refer %}
+            <meta http-equiv="refresh" content="3;url={{ refer }}" />
+        {% else %}
+            <meta http-equiv="refresh" content="3;url=/" />
+        {% endif %}
+    {% endif %}
+    <style type="text/css">
+        .selectize-dropdown { z-index: 9999; }
+    </style>
 {% endblock %}
 
 {% block body %}
 
 <div class="profilePush"></div>
 
-{% if board.hero %}
-<div class="boardWrap" style="background-image:url('{{ board.hero.url }}')">
-{% else %}    
-<div class="boardWrap" style="background-image:url('{% static 'img/default-hero.png' %}')">
-{% endif %}
-    <div class="container">
-        
-        {% if editable %}
-        <div class="editBoardButtons">		            
-            <a href="#" class="btn" data-featherlight="#setBackgroundModal"><i class="far fa-image"></i> Set Background {{ bg }}</a>
-            <a href="#" class="btn" data-featherlight="#addVideoModal"><i class="fas fa-video"></i> Manage Video</a>
-            <a href="#" class="btn" data-featherlight="#boardPrivacyModal"><i class="fas fa-user-secret"></i> Board Privacy</a>
-        </div>
+{% if not board.isblocked %}
 
-        <div id="setBackgroundModal" class="lightbox">
-            <h4>Set Background</h4>
-            <form method="POST" enctype="multipart/form-data">
-                {% csrf_token %}
-                {{ bgform }}
-                <button class="btn orange" name="changebackground" value="changebackground">Use Background</button>
-            </form>
-        </div>
+    {% if board.hero %}
+    <div class="boardWrap">
+    {% else %}    
+    <div class="boardWrap">
+    {% endif %}        
 
-        <div id="addVideoModal" class="lightbox">
-            <h4>Manage Video</h4>
-            <form method="POST" enctype="multipart/form-data">
-                {% csrf_token %}
-                <label>Show video:</label>
-                {% if board.show_video %}
-                    <input type="checkbox" name="show_video" id="show_video" value="yes" checked="checked">
-                {% else %}
-                    <input type="checkbox" name="show_video" id="show_video" value="yes">
-                {% endif %}
-                <br>
-                <label>Video id:</label>
-                <br>
-                <input type="text" name="videoid" id="videoid" value="{{ board.video }}">
-                <button class="btn orange" name="updatevideo" value="updatevideo">Update</button>
-            </form>
-        </div>
-
-        <div id="boardPrivacyModal" class="lightbox">
-            <h4>Board Privacy</h4>
-            <form method="POST" enctype="multipart/form-data">
-                {% csrf_token %}
-                <input type="file" name="background_image">
-                <button class="btn orange" name="boardprivacy" value="boardprivacy">Update</button>
-            </form>
-        </div>
-
-        {{ show.video }}
-
+        {% if board.hero %}
+        <div class="boardBg" style="background-image:url('{{ board.hero.url }}')"></div>
+        {% else %}    
+        <div class="boardBg" style="background-image:url('{% static 'img/default-hero.png' %}')"></div>
         {% endif %}
 
-        <div class="boardHeader clearfix">
+        <div class="container">
 
-            <div class="boardUser">                    
-                <div class="trendingUserPic">
-                    {% if board.user.profile.picture %}
-                        <div class="circle" style="background-image:url('{{ board.user.profile.picture.url }}');"></div>
-                    {% else %}
-                        <div class="circle" style="background-image:url('{% static 'img/default-hero.png' %}');"></div>
+            <div class="boardHeader clearfix">
+
+                <div class="boardUser">                    
+                    <div class="trendingUserPic">
+                        {% if board.user.profile.picture %}
+                            <div class="circle" style="background-image:url('{{ board.user.profile.picture.url }}');"></div>
+                        {% else %}
+                            <div class="circle" style="background-image:url('{% static 'img/default-hero.png' %}');"></div>
+                        {% endif %}
+                    </div>
+                    <a class="trendingUserNames" href="{% url 'u:profile' board.user.username %}">
+                        <strong>@{{ board.user }}</strong>
+                        <span>{{ board.user.first_name }} {{ board.user.last_name }}</span>
+                    </a>
+                </div>
+
+                <h1>{{ board.board_name }}</h1>
+                {% if board.slug == 'your-saved-items' %}
+                <span class="type">Items you have saved</span>
+                {% else %}
+                <span class="type">{{ board.board_type }}BOARD</span>
+                {% endif %}
+                {% if not board.slug == 'your-saved-items' %}
+                <div class="tags">    
+                    <div id="theTags">
+                        {% if editable %}<i class="far fa-question-circle"></i> {% endif %}
+                    	{% for tag in board.thetags %}
+                    		<span><a href="{% url 'search_board' %}?kw={{ tag }}">#{{ tag }}</a></span>
+                    	{% endfor %}
+                    </div>
+
+                    {% if editable %}
+                        <div id="editTags" style="display: none;">
+                            <form method="POST">
+                                {% csrf_token %}
+                                {{ tagform }}
+                                <button class="altbtn" name="updatetags" value="1"><i class="fas fa-check"></i></button>
+                            </form>                
+                        </div>
+                        <a href="#" id="showEditTags"><i class="fas fa-pencil-alt"></i></a>
+                        <a href="#" id="hideEditTags" style="display: none;"><i class="fas fa-times"></i></a>
                     {% endif %}
                 </div>
-                <a class="trendingUserNames" href="{% url 'u:profile' board.user.username %}">
-                    <strong>@{{ board.user }}</strong>
-                    <span>{{ board.user.first_name }} {{ board.user.last_name }}</span>
-                </a>
-            </div>
+                {% endif %}
 
-            <h1>{{ board.board_name }}</h1>
-            <span class="type">{{ board.board_type }} BOARD</span>
-            <div class="tags">    
-                <div id="theTags">
-                    {% if editable%}<i class="far fa-question-circle"></i> {% endif %}
-                	{% for tag in board.thetags %}
-                		<span>#{{ tag }} </span>
-                	{% endfor %}
+                <div class="boardMeta">
+                    {% if not editable %}
+                        <div class="followButton">
+                            {% if board.user != request.user %}
+            	                {% if is_followed %}
+            	                	<form method="POST">
+            	                		{% csrf_token %}
+            	                		<button name="unfollow">Unfollow</button>
+            	                	</form>
+            	                {% else %}
+            	                	<form method="POST">
+            	                		{% csrf_token %}
+            	                		<button name="follow">Follow</button>
+            	                	</form>
+            	                {% endif %}
+                            {% else %}
+                                <a class="btn orange" href="{% url 'b:edit_board' board.id %}">Edit board</a>
+                            {% endif %}
+        	            </div>                
+                    	<div class="boardStats">
+        	                <p>Created: {{ board.created|date:'d F o' }}</p>
+        	                <a href=""><i class="fas fa-share-alt"></i> Share</a> 
+
+                            {% if board.is_liked %}
+                                {% if board.user != request.user %}
+                                    <a href="{% url 'b:unlike_board' board.id %}">
+                                {% endif %}
+                                    <i class="fas fa-heart likeon"></i> {{ board.likes }}
+                                {% if board.user != request.user %}
+                                    </a>
+                                {% endif %}
+                            {% else %}
+                                <a href="{% url 'b:like_board' board.id %}"><i class="far fa-heart"></i> {{ board.likes }}</a>
+                            {% endif %} 
+
+        	                <i class="fas fa-eye"></i> {{ board.views }}
+        	            </div>
+                    {% else %}
+                        {% if not board.slug == 'your-saved-items' %}
+                            <a style="margin-bottom:10px;" class="btn grey" href="{% url 'b:view_board' board.user.username board.slug %}">View board as user</a><br>
+                            <a href="#0" class="btn grey" data-panel="main">Board Settings</a>
+                        {% endif %}
+                    {% endif %}
+
                 </div>
 
-                {% if editable %}
-                    <div id="editTags" style="display: none;">
-                        <form method="POST">
-                            {% csrf_token %}
-                            {{ tagform }}
-                            <button class="altbtn" name="updatetags" value="1"><i class="fas fa-check"></i></button>
-                        </form>                
-                    </div>
-                    <a href="#" id="showEditTags"><i class="fas fa-pencil-alt"></i></a>
-                    <a href="#" id="hideEditTags" style="display: none;"><i class="fas fa-times"></i></a>
-                {% endif %}
-
             </div>
 
-            <div class="boardMeta">
-                {% if not editable %}
-                <div class="followButton">
-	                {% if is_followed %}
-	                	<form method="POST">
-	                		{% csrf_token %}
-	                		<button name="unfollow">Unfollow</button>
-	                	</form>
-	                {% else %}
-	                	<form method="POST">
-	                		{% csrf_token %}
-	                		<button name="follow">Follow</button>
-	                	</form>
-	                {% endif %}
-	            </div>                
-            	<div class="boardStats">
-	                <p>Created: {{ board.created|date:'d F o' }}</p>
-	                <a href=""><i class="fas fa-share-alt"></i> Share</a> 
-	                <a href=""><i class="far fa-heart"></i> {{ board.likes }}</a> 
-	                <a href=""><i class="fas fa-eye"></i> {{ board.views }}</a> 
-	            </div>
-                {% else %}
-                YOU ARE EDITING THIS BOARD
-                {% endif %}
+            {% if board.show_video %}
+                {% if board.video %}
+            <div class="boardVideo">
+                <iframe width="100%" height="500" src="https://www.youtube.com/embed/{{ board.video }}" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
             </div>
-
-        </div>
-
-        {% if board.show_video %}
-            {% if board.video %}
-        <div class="boardVideo">
-            <iframe width="100%" height="500" src="https://www.youtube.com/embed/{{ board.video }}" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
-        </div>
-            {% endif %}
-        {% endif %}
-
-        {% if editable %}
-            <div class="boardDescription">
-                <span id="theDesc">
-                    {% if editable%}<i class="far fa-question-circle"></i> {% endif %}
-                    {{ board.description }}
-                </span>
-                {% if editable %}
-                    <div id="editDesc" style="display: none;">
-                        <form method="POST">
-                            {% csrf_token %}
-                            <input type="text" id="boardDesc" name="boardDesc" value="{{ board.description }}">
-                            <button class="altbtn" name="updatedescription" value="1"><i class="fas fa-check"></i></button>
-                        </form>                
-                    </div>                    
-                    <a href="#" id="showEditDesc"><i class="fas fa-pencil-alt"></i></a>
-                    <a href="#" id="hideEditDesc" style="display: none;"><i class="fas fa-times"></i></a>
                 {% endif %}
-            </div>
-        {% else %}
-            {% if board.description %}
-            <div class="boardDescription">
-                <span id="theDesc">{{ board.description }}</span>
-                {% if editable %}
-                    <div id="editDesc" style="display: none;">
-                        <form method="POST">
-                            {% csrf_token %}
-                            <input type="text" id="boardDesc" name="boardDesc" value="{{ board.description }}">
-                            <button class="altbtn" name="updatedescription" value="1"><i class="fas fa-check"></i></button>
-                        </form>                
-                    </div>
-                    <a href="#" id="showEditDesc"><i class="fas fa-pencil-alt"></i></a>
-                    <a href="#" id="hideEditDesc" style="display: none;"><i class="fas fa-times"></i></a>
-                {% endif %}
-            </div>
-            {% endif %}
-        {% endif %}
-
-        <div id="boardItems">
-            
-            {% if editable %}
-            <a class="featBox add" href="{% url 'b:add_item' board.id %}">
-                <strong>Add Item</strong>
-                <i class="far fa-smile"></i>
-            </a>
             {% endif %}
 
-            {% for item in items %}
-
-            <div class="featBox boardPic">
-                {% if item.item_status == 'GOT' %}
-                <div class="got">Got This<span></span></div>
-                {% endif %}
-                {% if not editable %}
-                <div class="featBoxMeta">
-                    <a href="#"><i class="fas fa-share"></i> Share</a>
-                    <a href="#"><i class="far fa-bookmark"></i> Save</a>
-                    <a href="#"><i class="fas fa-plus"></i> Add to My Board</a>
-                </div>
-                {% endif %}
-                {% if editable %}
-                <div class="featBoxMeta">
-                    <a href="{% url 'b:edit_item' board.id item.id %}"><i class="fas fa-share"></i> Edit</a>
-                    <a href="#" data-featherlight="#deleteModal{{ item.id }}"><i class="far fa-bookmark"></i> Delete</a>
-                </div>
-                <div id="deleteModal{{ item.id }}" class="lightbox deletepop">
-                    <h4>Delete "{{ item.item_name }}"</h4>
-                    <p>Are you sure you would like to delete the item <em>{{ item.item_name }}</em>? The item and all it's comments will be permenantly removed. Don't forget you can always make your item inactive instead.</p>
-                    <form method="POST" id="deleteitem-{{item.id}}" name="deleteitem_{{item.id}}">
-                        {% csrf_token %}                            
-                        <input type="hidden" name="item_id" value="{{ item.id }}">
-                        <button class="btn orange" name="deleteitem">Yes, delete this item</button>
-                    </form>
-                </div>
-                {% endif %}
-                
-                <a href="#" target="#item-details_another" class="inline_html_simple ilightbox" data-type="inline">
-                    {% thumbnail item.image "300x300" as im %}
-                        <img src="{{ im.url }}">
-                    {% endthumbnail %}
-                </a>
-                
-                <a href="item.php" class="boardItemName">{{ item.item_name }}</a>
-                <div class="boardItemStats">
-                    <span><i class="far fa-comments"></i> 
-                    	{% get_comment_count for item as comment_count %}
-                    	{{ comment_count }}                    	
+            {% if editable and not board.slug == 'your-saved-items' %}
+                <div class="boardDescription">
+                    <span id="theDesc">
+                        {% if editable%}<i class="far fa-question-circle"></i> {% endif %}
+                        {{ board.description }}
                     </span>
-                    <span><i class="fas fa-eye"></i> {{ item.views }}</span>
-                    <span><i class="far fa-heart"></i> {{ item.likes }}</span>
+                    {% if editable %}
+                        <div id="editDesc" style="display: none;">
+                            <form method="POST">
+                                {% csrf_token %}
+                                <input type="text" id="boardDesc" name="boardDesc" value="{{ board.description }}">
+                                <button class="altbtn" name="updatedescription" value="1"><i class="fas fa-check"></i></button>
+                            </form>                
+                        </div>                    
+                        <a href="#" id="showEditDesc"><i class="fas fa-pencil-alt"></i></a>
+                        <a href="#" id="hideEditDesc" style="display: none;"><i class="fas fa-times"></i></a>
+                    {% endif %}
+                    {{ deniedusers }}
                 </div>
+            {% else %}
+                {% if board.description %}
+                <div class="boardDescription">
+                    <span id="theDesc">{{ board.description }}</span>
+                    {% if editable %}
+                        <div id="editDesc" style="display: none;">
+                            <form method="POST">
+                                {% csrf_token %}
+                                <input type="text" id="boardDesc" name="boardDesc" value="{{ board.description }}">
+                                <button class="altbtn" name="updatedescription" value="1"><i class="fas fa-check"></i></button>
+                            </form>                
+                        </div>
+                        <a href="#" id="showEditDesc"><i class="fas fa-pencil-alt"></i></a>
+                        <a href="#" id="hideEditDesc" style="display: none;"><i class="fas fa-times"></i></a>
+                    {% endif %}
+                </div>
+                {% endif %}
+            {% endif %}
+
+            {% if message %}
+            <div>{{ message }}</div>
+            {% endif %}
+
+            <div id="boardItems">
+                
+                {% if editable and not board.slug == 'your-saved-items' %}
+                <a class="featBox add" href="{% url 'b:add_item' board.id %}">
+                    <strong>Add Item</strong>
+                    <i class="far fa-smile"></i>
+                </a>
+                {% endif %}        
+
+                {% if items %}
+
+                    {% for item in items %}
+
+                    <div class="featBox boardPic">                
+                        {% if item.itemconx.item_status == 'GOT' %}
+                        <div class="got">Got This<span></span></div>
+                        {% endif %}
+                        {% if not editable %}
+                        <div class="featBoxMeta">
+                            <a href="#"><i class="fas fa-share"></i> Share</a>
+                            <form class="inline" method="POST">
+                                {% csrf_token %}
+                                <input type="hidden" name="itemconx_id" value="{{ item.itemconx.id }}">
+                                <button class="naked" name="savelater"><i class="far fa-bookmark"></i> Save</button>
+                            </form>
+                            <a href="#" data-featherlight="#addToBoard{{item.id}}"><i class="fas fa-plus"></i> Add to My Board</a>
+                            <div id="addToBoard{{ item.id }}" class="lightbox addpop">
+                                <form method="POST" id="addtoboard-{{item.id}}" name="addtoboard{{item.id}}">
+                                    {% csrf_token %}                            
+                                    <select name="board_id">
+                                        {% for board in user_boards %}
+                                            <option value="{{board.id}}">{{board.board_name}}</option>
+                                        {% endfor %}
+                                    </select>
+                                    <input type="hidden" name="itemconx_id" value="{{ item.itemconx.id }}">
+                                    <p><button class="btn orange" name="addtoboard">Add to board</button></p>
+                                </form>
+                            </div>
+                        </div>
+                        {% endif %}
+                        {% if editable %}
+                        <div class="featBoxMeta">
+                            <a href="{% url 'b:edit_item' board.id item.id %}"><i class="fas fa-share"></i> Edit</a>
+                            <a href="#" data-featherlight="#deleteModal{{ item.itemconx.id }}"><i class="far fa-bookmark"></i> Delete</a>
+                        </div>
+                        <div id="deleteModal{{ item.itemconx.id }}" class="lightbox deletepop">
+                            <h4>Delete "{{ item.item_name }}"</h4>
+                            <p>Are you sure you would like to delete the item <em>{{ item.item_name }}</em>? The item and all it's comments will be permenantly removed. Don't forget you can always make your item inactive instead.</p>
+                            <form method="POST" id="deleteitem-{{item.itemconx.id}}" name="deleteitem_{{item.itemconx.id}}">
+                                {% csrf_token %}                            
+                                <input type="hidden" name="item_id" value="{{ item.itemconx.id }}">
+                                <button class="btn orange" name="deleteitem">Yes, delete this item</button>
+                            </form>
+                        </div>
+                        {% endif %}
+
+                        {% if editable %}
+                            <a href="{% url 'b:edit_item' board.id item.id %}">
+                                {% thumbnail item.itemconx.image "300x300" as im %}
+                                    <img src="{{ im.url }}">
+                                {% endthumbnail %}
+                            </a>
+                            <a href="{% url 'b:edit_item' board.id item.id %}" class="boardItemName">{{ item.item_name }}</a>
+
+                        {% else %}
+                        
+                            <a class="btn btn-default" href="{% url 'b:view_item' board.user board.slug item.itemconx.id %}">
+                                {% thumbnail item.itemconx.image "300x300" as im %}
+                                    <img src="{{ im.url }}">
+                                {% endthumbnail %}
+                            </a>
+                            <a href="{% url 'b:view_item' board.user board.slug item.itemconx.id %}" class="boardItemName">{{ item.item_name }}</a>
+
+                        {% endif %}
+
+                        {% if not board.slug == 'your-saved-items' %}
+                        <div class="boardItemStats">
+                            <span><i class="far fa-comments"></i> 
+                            	{% get_comment_count for item as comment_count %}
+                            	{{ comment_count }}                    	
+                            </span>
+                            <span><i class="fas fa-eye"></i> {{ item.views }}</span>
+
+                            {% if item.is_liked %}
+                                <span>
+                                    <form class="inline" method="POST">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="itemconx_id" value="{{ item.itemconx.id }}">
+                                        <button class="naked" name="unlikeitem"><i class="fas fa-heart likeon"></i></a> {{ item.likes }}</button>
+                                    </form>
+                                </span>
+                            {% else %}
+                                <span>
+                                    <form class="inline" method="POST">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="itemconx_id" value="{{ item.itemconx.id }}">
+                                        <button class="naked" name="likeitem"><i class="far fa-heart"></i> {{ item.likes }}</button>
+                                    </form>
+                                </span>                                    
+                            {% endif %}
+                        </div>
+                        {% endif %}
+
+                    </div>
+
+                    {% endfor %}
+
+                {% endif %}
+
+                {% if items|length < 1 %}
+                    {% if board.slug == 'your-saved-items' %}
+                        <p>You have no saved items</p>
+                    {% endif %}
+                {% endif %}
+
             </div>
 
-            {% endfor %}
+            <div class="clearfix"></div>
 
         </div>
-
-        <div class="clearfix"></div>
-
     </div>
-</div>
 
-
-<!-- {% if item.is_liked %}
-	<form method="POST">
-		{% csrf_token %}
-		<input type="hidden" name="item_id" value="{{ item.id }}">
-		<button name="unlikeitem">UnLike</button>
-	</form>
 {% else %}
-	<form method="POST">
-		{% csrf_token %}
-		<input type="hidden" name="item_id" value="{{ item.id }}">
-		<button name="likeitem">Like</button>
-	</form>
-{% endif %}	 -->
 
+    <div class="container">
+        Sorry, something went wrong.
+    </div>
+
+{% endif %}
+
+<div class="cd-panel cd-panel--from-left js-cd-panel-main">
+    <header class="cd-panel__header">
+        <h1>Board Options</h1>
+        <a href="#0" class="cd-panel__close js-cd-close">Close</a>
+    </header>
+
+    <div class="cd-panel__container">
+        <div class="cd-panel__content">
+
+            <div class="optionsPanel setBackground">
+                <h4>Set Background</h4>
+                <form method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    {{ bgform }}
+                    <p><button class="btn orange" name="changebackground" value="changebackground">Use Background</button></p>
+                </form>
+            </div>
+
+            <div class="optionsPanel manageVideo">
+                <h4>Manage Video</h4>
+                <form method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <p>Show video?</p>
+                    {% if board.show_video %}
+                        <input type="checkbox" name="show_video" hidden="hidden" id="show_video" value="yes" checked="checked">
+                        <label class="switch" for="show_video"></label>
+                    {% else %}
+                        <input type="checkbox" name="show_video" hidden="hidden" id="show_video" value="yes">
+                        <label class="switch" for="show_video"></label>
+                    {% endif %}
+                    <br>
+                    <label>Enter the YouTube video ID below:</label>
+                    <br>
+                    <input type="text" name="videoid" id="videoid" value="{{ board.video }}">
+                    <p><button class="btn orange" name="updatevideo" value="updatevideo">Update</button></p>
+                </form>
+            </div>
+
+            <div class="optionsPanel boardPrivacy">
+                <h4>Board Privacy</h4>
+                <p>Restrict the following users from viewing this board.</p>
+                <form method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div id="selectusers" style="width: 100%;">
+                        <select name="list-users" multiple="multiple">
+                            {% for user in allusers %}
+                                {% if user in board.blocked %}
+                                    <option value="{{user.id}}" selected="selected">{{ user.username }}</option>
+                                {% else %}
+                                    <option value="{{user.id}}">{{ user.username }}</option>
+                                {% endif %}                                
+                            {% endfor %}
+                        </select>                        
+                    </div>
+                    <input type="hidden" name="board" value="{{ board.id }}">
+                    <p><button class="btn orange" name="updateprivacy" value="updateprivacy">Update</button></p>
+
+                </form>
+            </div>
+
+        </div> <!-- cd-panel__content -->
+    </div> <!-- cd-panel__container -->
+</div> <!-- cd-panel -->
 
 {% endblock %}
 
 {% block extra-js %}
+<script type="text/javascript">
+    $('a.gallery').featherlightGallery({
+        previousIcon: '«',
+        nextIcon: '»',
+        galleryFadeIn: 300,
+        openSpeed: 300
+    });
+</script>
+
 <script src="{% static 'js/macy.js' %}" type="text/javascript"></script>
 <script>
     var masonry = new Macy({
@@ -318,5 +443,11 @@
         e.preventDefault();
     });
 
-</script>
+    $(document).ready(function() {
+        $('select').select2();
+    });
+
+
+
+</script>  
 {% endblock %}

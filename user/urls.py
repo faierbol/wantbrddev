@@ -6,9 +6,10 @@ from . import views
 app_name = 'u'
 urlpatterns = [	
 	url(r'^$', views.home, name='home'),
+	path('home/', views.my_home, name='my_home'),
 	url(r'^signup/$', views.signup, name='signup'),
 	url(r'^login/$',  auth_views.LoginView.as_view(template_name='user/login.html'), name='login'),
-	path('<username>/', views.profile, name='profile'),
+	path('<username>/', views.profile, name='profile'),	
 	path('my_account/', views.my_account, name='myaccount'),
 	path('update_account/', views.update_account, name='update_account'),
 	url(r'^logout/$', auth_views.LogoutView.as_view(), name='logout'),	

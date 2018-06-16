@@ -1,0 +1,143 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% load thumbnail %}
+
+{% block title %}
+	Search
+{% endblock %}
+
+{% block extra-css %}
+	<link type="text/css" href="{% static 'css/macy.css' %}" rel="stylesheet" />
+{% endblock %}
+
+{% block body %}
+
+	<div class="profilePush"></div>
+
+	<div class="searchTerm">
+	    <div class="container">            
+	        Search: {% if search_term %}"{{ search_term }}"{% endif %}
+	    </div>
+	</div>
+
+	<section class="searchResults">
+	    <div class="container clearfix">
+	        
+	    	<div class="tabNav">
+	    	    <a href="{% url 'search_item' %}?kw={{search_term}}">
+	    	    	{% if item_results|length == 1 %}
+	    	    		{{ item_results|length }} Item
+	    	    	{% else %}
+	    	    		{{ item_results|length }} Items
+	    	    	{% endif %}
+	    	    </a>
+	    	    <a href="{% url 'search_board' %}?kw={{search_term}}">
+	    	    	{% if board_results|length == 1 %}
+	    	    		{{ board_results|length }} Board
+	    	    	{% else %}
+	    	    		{{ board_results|length }} Boards
+	    	    	{% endif %}
+	    	    </a>                
+	    	    <a href="{% url 'search_user' %}?kw={{search_term}}" class="tabOn">
+	    	    	{% if user_results|length == 1 %}
+	    	    		{{ user_results|length }} User
+	    	    	{% else %}
+	    	    		{{ user_results|length }} Users
+	    	    	{% endif %}
+	    	    </a>
+	    	</div>
+
+
+	        <div id="homeBoardItems">
+	        
+	            {% if user_results %}
+	            	{% for user in user_results %}
+
+	            		<div class="featBox trendingUser">
+	            		    <a class="trendingUserUser" href="{% url 'u:profile' user.username  %}">
+	            		        <div class="trendingUserUserWrap clearfix">
+	            		            <div class="trendingUserPic">
+	            		            	{% if user.profile.picture %}
+	            		            	<div class="circle" style="background-image:url('{{ user.profile.picture.url }}');"></div>
+	            		            	{% else %}
+	            		            	<div class="circle" style="background-image:url('{% static 'img/default-hero.png' %}');"></div>
+	            		            	{% endif %}
+	            		            </div>
+	            		            <div class="trendingUserNames">
+	            		                <strong>@{{ user.username }}</strong>
+	            		                <span>{{ user.get_full_name }}</span>
+	            		            </div>
+	            		        </div>
+	            		    </a>
+
+
+	            		    <a class="trendingUserHero" href="{% url 'u:profile' user.username  %}" style="background-image:url('{% static 'img/profile-hero.jpg' %}')"></a>
+
+	            		    
+
+	            		    <div class="trendingItems clearfix">
+	            		    	{% for item in user.items %}
+		            		        {% thumbnail item.image "300x300" as im %}
+		            		            <a style="background-image:url('{{ im.url }}');" href="{% url 'u:profile' user.username  %}"></a>
+		            		        {% endthumbnail %}
+	            		        {% endfor %}
+
+            		        	{% if user.itemcount > 2 %}
+            		        		<a class="plusMore" href="board.php">
+            		            		<div class="plusMoreNumber">+{{ user.itemcount|add:"-2" }}</div>
+            		            	</a>
+            		            {% endif %}
+
+	            		    </div>
+	            		    <div class="trendingFooter">
+	            		        <span>
+	            		        	{{ user.boardcount }}
+	            		        	{% if user.boardcount == 1 %}Board{% else %}Boards{% endif %}
+	            		        </span>
+	            		        <span>
+	            		        	{{ user.itemcount }}
+	            		        	{% if user.itemcount == 1 %}Item{% else %}Items{% endif %}
+	            		        </span>
+	            		        <span>
+	            		        	{{ user.viewscount }}
+	            		        	{% if user.viewscount == 1 %}View{% else %}Views{% endif %}
+	            		        </span>
+	            		    </div>
+	            		</div>
+
+	            	{% endfor %}
+	            {% else %}
+
+	            <p>Sorry, no people matched your search term</p>
+
+	            {% endif %}
+
+	        </div>
+
+	    </div>
+	</section>
+
+
+{% endblock %}
+
+{% block extra-js %}
+<script src="{% static 'js/macy.js' %}" type="text/javascript"></script>
+<script>
+    var masonry = new Macy({
+        container: '#homeBoardItems',
+        trueOrder: false,
+        waitForImages: false,
+        useOwnImageLoader: false,
+        debug: true,
+        mobileFirst: true,
+        columns: 1,
+        margin: 24,
+        breakAt: {
+            1200: 3,
+            940: 2,
+            520: 2,
+            400: 2
+        }
+    });
+</script>
+{% endblock %}

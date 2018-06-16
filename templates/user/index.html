@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load staticfiles %}
+{% load thumbnail %}
 
 {% block title %}
 	Home
@@ -9,13 +10,18 @@
 
 <div class="profilePush"></div>
 
+{% if profile.background %}
+<div class="profileHero" style="background-image:url('{{ profile.background.url  }}">
+{% else %}
 <div class="profileHero" style="background-image:url('{% static 'img/profile-hero.jpg' %}">
+{% endif %}
+
     <div class="profileMeta">
         <div class="profileBar">
             <div class="container clearfix">
                 
                 <div class="profileImageDetails clearfix match">
-                    <a class="profileImage" href="home.php">
+                    <a class="profileImage" href="#">
                         {% if profile.picture %}
                         <div class="circle" style="background-image:url('{{ profile.picture.url }}');"></div>
                         {% else %}
@@ -28,9 +34,23 @@
                         <div class="profileStats">
                             <p>{{ no_followers }} FOLLOWERS</p>
                             <p>{{ no_connections }} FOLLOWING</p>                            
-                            <p>{{ boards.count }} {% if boards.count > 1 %}BOARDS{% else %}BOARD{% endif %}</p>
-                        </div>
-                        {% if profile.user != request.user %}
+                            <p>{{ boards.count|add:-1 }} {% if boards.count|add:-1 > 1 %}BOARDS{% else %}BOARD{% endif %}</p>
+                        </div>                        
+                        {% if profile.user == request.user %}
+                            {% if request.path != '/u/' %}
+                                <a href="{% url 'u:home' %}" class="btn orange">Edit board</a>
+                            {% else %}
+                                <a href="#" class="btn orange" data-featherlight="#setBackgroundModal">Set Background</a>
+                                <div id="setBackgroundModal" class="lightbox">
+                                    <h4>Set Background</h4>
+                                    <form method="POST" enctype="multipart/form-data">
+                                        {% csrf_token %}
+                                        {{ bgform }}
+                                        <button class="btn orange" name="changebackground" value="changebackground">Use Background</button>
+                                    </form>
+                                </div>
+                            {% endif %}
+                        {% else %}
                             {% if is_followed %}
                                 <form method="POST">
                                     {% csrf_token %}
@@ -47,9 +67,26 @@
                     </div>
                 </div>
                 <div class="profileBio match">
+
                     <div class="theBio">
                         <p>{{ profile.bio }}</p>
+                        {% if request.path == '/u/' %}
+                            <a href="#" id="showEditBio"><i class="fas fa-pencil-alt"></i></a>
+                            <a href="#" id="hideEditBio" style="display: none;"><i class="fas fa-times"></i></a>
+                        {% endif %}
+
                     </div>
+
+                    {% if profile.user == request.user %}
+                        <div id="editBio" style="display: none;">
+                            <form method="POST">
+                                {% csrf_token %}
+                                <input type="text" id="userBio" name="userBio" value="{{ profile.bio }}">
+                                <button class="altbtn" name="updatebio" value="1"><i class="fas fa-check"></i></button>
+                            </form>                
+                        </div>                    
+                    {% endif %}
+
                 </div>
 
             </div>
@@ -75,27 +112,37 @@
 
         <div class="profileBoardItem saved match">
             <div class="profileBoardSaved">
-                <a href="board.php">{{ saved_board.board_name }}</a>
+                <a href="{% url 'b:edit_board' saved_board.id %}">{{ saved_board.board_name }}</a>
             </div>
             <div class="trendingItems clearfix">
-<!--                 <a style="background-image:url('img/feat-pic-1.png');" href="saved.php"></a>
-                <a style="background-image:url('img/feat-pic-3.png');" href="saved.php"></a>
-                <a style="background-image:url('img/feat-pic-5.png');" href="saved.php"></a>
-                <a style="background-image:url('img/feat-pic-2.png');" href="saved.php"></a>
-                <a style="background-image:url('img/feat-pic-6.png');" href="saved.php"></a>
+                {% for item in saved_board.items %}
+                    {% thumbnail item.image "300x300" as im %}
+                        <a style="background-image:url('{{ im.url }}');" href="{% url 'b:edit_board' saved_board.id %}"></a>
+                    {% endthumbnail %}                    
+                {% endfor %}
+                {% if saved_board.items.count > 5 %}
                 <a class="plusMore" href="#">
-                    <div class="plusMoreNumber">+44 <span>more</span></div>
-                </a> -->
+                    <div class="plusMoreNumber">+{{ saved_board.items.count }} <span>more</span></div>
+                </a>
+                {% endif %}
             </div>
             <div class="trendingFooter clearfix">
-                <span>{{ saved_board_items.count }} Items</span>
+                <span>
+                    {{ saved_board.items.count }}
+                    {% if saved_board.items.count == 1 %}
+                    Item
+                    {% else %}
+                    Items
+                    {% endif %}
+                </span>
             </div>
         </div>
 
         {% endif %}
 
-        {% if boards %}
-	        {% for board in boards %}
+        {% if the_boards %}
+
+	        {% for board in the_boards %}
 
                 {% if board.deleteable %}
 
@@ -139,22 +186,58 @@
                         </div>
                         
                         <div class="trendingItems clearfix">
-                            <a style="background-image:url('img/feat-pic-1.png');" href="board.php"></a>
-                            <a style="background-image:url('img/feat-pic-2.png');" href="board.php"></a>
-                            <a style="background-image:url('img/feat-pic-3.png');" href="board.php"></a>
+                            {% if board.items.count < 3 and editable%}
+                                <a href="{% url 'b:edit_board' board.id %}" class="additembtn">
+                                    <span>+</span>
+                                </a>
+                            {% endif %}
+                            {% for item in board.items %}
+                            {% thumbnail item.image "300x300" as im %}
+                                <a style="background-image:url('{{ im.url }}');" href="{% url 'b:edit_board' board.id %}"></a>
+                            {% endthumbnail %}                                                
+                            {% endfor %}
                         </div>
                         <div class="trendingFooter clearfix">
-                            <span>{{ board.items }} Items</span>
-                            <span>2876 Views</span>
+                            <span>{{ board.count }} Items</span>
+                            <span>{{ board.views }}
+                            {% if board.views > 1 or board.views == 0 %}
+                            Views
+                            {% else %}
+                            View
+                            {% endif %}
+                            </span>
                         </div>
 
                     </div>
 
                 {% endif %}
 	        {% endfor %}
-	    {% endif %}
+	    {% else %}
+        <p>This user has not added any boards yet.</p>
+        {% endif %}
 
     </div>
 </section>
 
+{% endblock %}
+
+{% block extra-js %}
+<script type="text/javascript">
+    // show desc edit
+    $('#showEditBio').click(function(e){
+        $( ".theBio" ).hide();
+        $( "#editBio" ).show();
+        $( "#showEditBio" ).hide();
+        $( "#hideEditBio" ).show();        
+        e.preventDefault();
+    });
+    // hide desc edit
+    $('#hideEditBio').click(function(e){
+        $( ".theBio" ).show();
+        $( "#editBio" ).hide();
+        $( "#showEditBio" ).show();
+        $( "#hideEditBio" ).hide();        
+        e.preventDefault();
+    });
+</script>
 {% endblock %}
