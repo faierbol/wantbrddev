@@ -8,21 +8,21 @@ def get_trending_items(request, period):
 	now = datetime.datetime.now()
 	ago = now - datetime.timedelta(days=period)
 
-	# get all itemLike objects between those dates
 	item_likes = ItemLike.objects.filter(created__range=[ago, now])	
-
-	# get all itemConnections from the item_lkes queryset
+	
 	itemconxs = []
-	for item in item_likes:
-		if item.item_conx not in itemconxs:
-			itemconxs.append(item.item_conx)
-
 	trending_items = []
-	for item in itemconxs:
-		item.likes = ItemLike.objects.filter(item_conx=item).count()
-		item.is_liked = ItemLike.objects.filter(item_conx=item, user=request.user).exists()
-		item.views = ItemView.objects.filter(item_conx=item).count()
-		trending_items.append(item)
+
+	if item_likes:
+		for item in item_likes:
+			if item.item_conx not in itemconxs:
+				itemconxs.append(item.item_conx)
+		
+		for item in itemconxs:
+			item.likes = ItemLike.objects.filter(item_conx=item).count()
+			item.is_liked = ItemLike.objects.filter(item_conx=item, user=request.user).exists()
+			item.views = ItemView.objects.filter(item_conx=item).count()
+			trending_items.append(item)
 
 	return trending_items
 
