@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
-from board.models import Board
+from board.models import Board, BoardView, ItemConnection
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from phonenumber_field.modelfields import PhoneNumberField
@@ -22,6 +22,16 @@ class Profile(models.Model):
     alert_new_subscribe = models.BooleanField(default=True)
     alert_new_item = models.BooleanField(default=True)
     alert_suggested_boards = models.BooleanField(default=True)
+    social_instagram = models.CharField(default='', max_length=500, blank=True)
+    social_twitter = models.CharField(default='', max_length=500, blank=True)
+    social_youtube = models.CharField(default='', max_length=500, blank=True)
+    social_facebook = models.CharField(default='', max_length=500, blank=True)
+    social_twitch = models.CharField(default='', max_length=500, blank=True)
+    social_pinterest = models.CharField(default='', max_length=500, blank=True)
+    social_vimeo = models.CharField(default='', max_length=500, blank=True)
+    social_weibo = models.CharField(default='', max_length=500, blank=True)
+    social_vk = models.CharField(default='', max_length=500, blank=True)
+
 
     def __str__(self):
         return self.user.username
@@ -33,6 +43,49 @@ class Profile(models.Model):
     def get_followers(self):
         followers = Connection.objects.filter(following = self.user)
         return followers
+
+    def get_suggested_boards(self, qty, request):    
+        user_tags = []
+        user_obj = User.objects.get(pk=self.user.id)
+        user_boards = Board.objects.filter(user=user_obj)
+
+        ##### !!!!! NEED TO MAKE SURE BLOCKING BLOCKED USERS FROM BELOW !!!!! #####
+
+        suggested_boards = []    
+        c = 0    
+        q = qty
+        for board in user_boards:                        
+            if c < q:
+                similar_boards = board.tags.similar_objects()
+                for board in similar_boards:                
+                    if c < q:
+                        if (board.slug != 'Your Saved Items' and board not in suggested_boards and
+                            board.user != request.user and board.user_blocked(request.user) == False and
+                            board.get_item_count() > 0):
+                            board.totalitems = board.get_item_count()
+                            board.views = BoardView.objects.filter(board=board).count()
+                            board.items = []
+
+                            # get all items for this board
+                            boarditems = ItemConnection.objects.filter(board=board)
+                            board.itemcount = boarditems.count()
+                            x=0
+                            for item in boarditems:
+                                if x < 2:
+                                    board.items.append(item)
+                                    x+=1
+                                else:
+                                    break
+
+
+                            suggested_boards.append(board)
+                            c+=1
+                    else:
+                        break
+            else:
+                break
+
+        return suggested_boards
 
 
 # update or create user profile model when user model is created or updated

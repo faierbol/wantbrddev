@@ -16,7 +16,7 @@
 
 	<div class="searchTerm">
 	    <div class="container">            
-	        Search: {% if search_term %}"{{ search_term }}"{% endif %}
+	        You searched for: {% if search_term %}"{{ search_term }}"{% endif %}
 	    </div>
 	</div>
 
@@ -53,7 +53,7 @@
 	            {% if user_results %}
 	            	{% for user in user_results %}
 
-	            		<div class="featBox trendingUser">
+	            		<div class="featBox trendingUser match">
 	            		    <a class="trendingUserUser" href="{% url 'u:profile' user.username  %}">
 	            		        <div class="trendingUserUserWrap clearfix">
 	            		            <div class="trendingUserPic">
@@ -70,45 +70,70 @@
 	            		        </div>
 	            		    </a>
 
-
 	            		    <a class="trendingUserHero" href="{% url 'u:profile' user.username  %}" style="background-image:url('{% static 'img/profile-hero.jpg' %}')"></a>
 
-	            		    
-
-	            		    <div class="trendingItems clearfix">
+	            		    <div class="trendingItems clearfix">	            		    	
 	            		    	{% for item in user.items %}
 		            		        {% thumbnail item.image "300x300" as im %}
 		            		            <a style="background-image:url('{{ im.url }}');" href="{% url 'u:profile' user.username  %}"></a>
 		            		        {% endthumbnail %}
 	            		        {% endfor %}
 
-            		        	{% if user.itemcount > 2 %}
-            		        		<a class="plusMore" href="board.php">
+            		        	{% if user.items != 3 %}
+            		        		<a class="plusMore" href="{% url 'u:profile' user.username  %}">
             		            		<div class="plusMoreNumber">+{{ user.itemcount|add:"-2" }}</div>
             		            	</a>
             		            {% endif %}
-
 	            		    </div>
+
 	            		    <div class="trendingFooter">
 	            		        <span>
-	            		        	{{ user.boardcount }}
-	            		        	{% if user.boardcount == 1 %}Board{% else %}Boards{% endif %}
+	            		        	{{ user.boardcount|add:"-1" }}
+	            		        	{% if user.boardcount|add:"-1" == 1 %}Board{% else %}Boards{% endif %}
 	            		        </span>
 	            		        <span>
 	            		        	{{ user.itemcount }}
-	            		        	{% if user.itemcount == 1 %}Item{% else %}Items{% endif %}
+	            		        	{% if user.itemcount|add:"-1" == 1 %}Item{% else %}Items{% endif %}
 	            		        </span>
 	            		        <span>
 	            		        	{{ user.viewscount }}
-	            		        	{% if user.viewscount == 1 %}View{% else %}Views{% endif %}
+	            		        	{% if user.viewscount|add:"-1" == 1 %}View{% else %}Views{% endif %}
 	            		        </span>
 	            		    </div>
 	            		</div>
 
 	            	{% endfor %}
+	            	<div class="clearfix"></div>
 	            {% else %}
 
-	            <p>Sorry, no people matched your search term</p>
+    	            <div class="noresults">
+    	            	<i class="far fa-frown"></i>
+    	            	<p>Sorry, no items matched your search term.</p>
+                		{% if board_results|length >= 1 or item_results|length >= 1 %}
+                			<p>However we did find...</p>
+
+                			{% if item_results|length >= 1 %}
+                				<p><strong><a href="{% url 'search_item' %}?kw={{search_term}}">
+                					{% if item_results|length == 1 %}
+                						{{ item_results|length }} Item
+                					{% else %}
+                						{{ item_results|length }} Items
+                					{% endif %}
+                				</a></strong></p>
+                			{% endif %}
+
+                			{% if board_results|length >= 1 %}
+    	            			<p><strong><a href="{% url 'search_board' %}?kw={{search_term}}">
+    	            				{% if board_results|length == 1 %}
+    	            					{{ board_results|length }} Board
+    	            				{% else %}
+    	            					{{ board_results|length }} Boards
+    	            				{% endif %}
+    	            			</a></strong></p>
+                			{% endif %}
+
+                		{% endif %}
+    	            </div>	            	
 
 	            {% endif %}
 
@@ -118,26 +143,4 @@
 	</section>
 
 
-{% endblock %}
-
-{% block extra-js %}
-<script src="{% static 'js/macy.js' %}" type="text/javascript"></script>
-<script>
-    var masonry = new Macy({
-        container: '#homeBoardItems',
-        trueOrder: false,
-        waitForImages: false,
-        useOwnImageLoader: false,
-        debug: true,
-        mobileFirst: true,
-        columns: 1,
-        margin: 24,
-        breakAt: {
-            1200: 3,
-            940: 2,
-            520: 2,
-            400: 2
-        }
-    });
-</script>
 {% endblock %}

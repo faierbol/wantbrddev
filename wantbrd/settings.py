@@ -161,6 +161,7 @@ USE_TZ = True
 
 # our static files array
 STATICFILES_DIRS = [STATIC_DIR, ]
+
 # url definition for static files
 # STATIC_URL = '/static/' # <------- enable for local static
 STATIC_ROOT = os.path.normpath(os.path.join(BASE_DIR, 'staticfiles'))
@@ -187,11 +188,11 @@ DEFAULT_FILE_STORAGE = 'wantbrd.storage_backends.MediaStorage'  # <-- here is wh
 
 
 # the login url, needed so django knows where to redirect un-authenicated attempts to @login_required views
-LOGIN_URL = 'u:login'
+LOGIN_URL = 'login'
 # where to redirect after login
 LOGIN_REDIRECT_URL = 'u:home'
 # where to redirect after logout
-LOGOUT_REDIRECT_URL = 'u:home'
+LOGOUT_REDIRECT_URL = 'home'
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 

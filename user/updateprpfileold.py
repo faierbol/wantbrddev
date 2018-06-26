@@ -1,11 +1,10 @@
-import datetime
 from django.contrib import messages
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.models import User
 from django.http import HttpResponseRedirect
-from .forms import SignUpForm, UserForm, ProfileForm, ChangeBackgroundForm, UpdateSocial
+from .forms import SignUpForm, UserForm, ChangeBackgroundForm, UpdateSocial
 from .models import Profile, Connection
 from board.models import Board, Item, ItemConnection, BoardView, ItemLike, ItemView, BoardPrivacy
 from django.core.exceptions import PermissionDenied
@@ -116,10 +115,10 @@ def my_home(request):
 
 	user = request.user
 	boards = Board.objects.filter(user=user.id).exclude(slug='your-saved-items')
-	no_items = 0
 	
 	for board in boards:
-		board.items = []		
+		board.items = []
+		no_items = 0
 		# get the tags for each board
 		board.thetags = board.tags.all()
 		# get all connections matching this board
@@ -139,7 +138,6 @@ def my_home(request):
 	followers = profile.get_followers()
 	no_connections = profile.get_connections().count()
 	no_followers = profile.get_followers().count()
-	suggested_boards = profile.get_suggested_boards(2, request)
 
 	# get all users that we're following
 	following = request.user.profile.get_connections()
@@ -205,7 +203,6 @@ def my_home(request):
 		'followers': followers,
 		'boards': boards,
 		'itemconxs':itemconx_obj,
-		'suggested_boards':suggested_boards,
 	}
 
 	return render(request, template, context_dict)
@@ -228,20 +225,35 @@ def signup(request):
 def update_profile(request):
 	template = "user/update_profile.html"
 
-	user = request.user
+	user = User.objects.get(pk=request.user.id)
+
+	# prepopulate UserProfileForm with retrieved user values from above.
+	user_form = UserForm(instance=user)
+	ProfileInlineFormset = inlineformset_factory(User, Profile, fields=(
+		'website', 'bio', 'country', 'date_of_birth', 'phone_number',
+		'picture', 'alert_new_subscribe', 'alert_new_item', 'alert_suggested_boards',
+	))
+	formset = ProfileInlineFormset(instance=user)
+
 	profile = get_object_or_404(Profile, user=user)
+	social_form = UpdateSocial(instance=profile, label_suffix='')
+
 
 	if request.method == "POST":
 
 		if request.POST.get("updateprofile"):
 			user_form = UserForm(request.POST, request.FILES, instance=user)
-			profile_form = ProfileForm(request.POST, request.FILES, instance=profile)
+			formset = ProfileInlineFormset(request.POST, request.FILES, instance=user)
 
-			if all([user_form.is_valid(), profile_form.is_valid()]):
-				user = user_form.save()
-				profile = profile_form.save()
-				messages.info(request, 'Your profile has been updated.')
-				return HttpResponseRedirect(request.path_info)
+			if user_form.is_valid():
+				created_user = user_form.save(commit=False)
+				formset = ProfileInlineFormset(request.POST, request.FILES, instance=created_user)
+
+				if formset.is_valid():
+					created_user.save()
+					formset.save()
+					messages.info(request, 'Your profile has been updated.')
+					return HttpResponseRedirect(request.path_info)
 
 		if request.POST.get("updatesocial"):
 			form = UpdateSocial(request.POST, instance=profile) 
@@ -250,15 +262,11 @@ def update_profile(request):
 				form.save()
 				messages.info(request, 'Your social profiles have been updated.')
 				return HttpResponseRedirect(request.path_info)
-	else:
-		user_form = UserForm(instance=user, label_suffix='')
-		profile_form = ProfileForm(instance=profile, label_suffix='')	
-		social_form = UpdateSocial(instance=profile, label_suffix='')
 
 	return render(request, template, {
 		"userid": user.id,
 		"user_form": user_form,
-		"profile_form": profile_form,
+		"formset": formset,
 		"social_form":social_form,
 	})
 
@@ -289,7 +297,7 @@ def profile(request, username):
 
 	try:
 		user = get_object_or_404(User, username=username)
-		boards = Board.objects.filter(user=user.id).exclude()
+		boards = Board.objects.filter(user=user.id)
 		the_boards = []
 		# get the tags for each board
 		for board in boards:
@@ -297,16 +305,15 @@ def profile(request, username):
 			board.thetags = board.tags.all()
 			item_conxs = ItemConnection.objects.filter(board=board)
 			board.count = item_conxs.count()
-			if board.count > 0:
-				board.views = BoardView.objects.filter(board=board).count()
-				board.items = ItemConnection.objects.filter(board=board)[:3]
-				blocked_obj = BoardPrivacy.objects.filter(board=board) 
-				board.blocked = []
-				for obj in blocked_obj:
-					board.blocked.append(obj.user)
-				if board.items:
-					if request.user not in board.blocked:
-						the_boards.append(board)
+			board.views = BoardView.objects.filter(board=board).count()
+			board.items = ItemConnection.objects.filter(board=board)[:3]
+			blocked_obj = BoardPrivacy.objects.filter(board=board) 
+			board.blocked = []
+			for obj in blocked_obj:
+				board.blocked.append(obj.user)
+			if board.items:
+				if request.user not in board.blocked:
+					the_boards.append(board)
 
 		profile = user.profile
 		connections = profile.get_connections()

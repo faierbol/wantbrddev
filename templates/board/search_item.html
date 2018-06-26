@@ -17,7 +17,7 @@
 
 	<div class="searchTerm">
 	    <div class="container">            
-	        Search: {% if search_term %}"{{ search_term }}"{% endif %}
+	        You searched for: {% if search_term %}"{{ search_term }}"{% endif %}
 	    </div>
 	</div>
 
@@ -54,7 +54,7 @@
 	            {% if item_results %}
 	            	{% for item in item_results %}
 
-	            		<div class="featBox trendingItem">
+	            		<div class="featBox trendingItem match">
 	            		    <div class="trendingItemItem">
 	            		        {% thumbnail item.image "300x300" as im %}
 	            		            <a href="{% url 'b:view_item' item.board.user item.board.slug item.id %}"">
@@ -95,9 +95,35 @@
 	            		</div>
 
 	            	{% endfor %}
+	            	<div class="clearfix"></div>
 	            {% else %}
 
-	            <p>Sorry, no items matched your search term</p>
+		            <div class="noresults">
+		            	<i class="far fa-frown"></i>
+		            	<p>Sorry, no items matched your search term.</p>
+	            		{% if board_results|length >= 1 or user_results|length >= 1 %}
+	            			<p>However we did find...</p>
+
+	            			{% if board_results|length >= 1 %}
+	            				<p><strong><a href="{% url 'search_board' %}?kw={{search_term}}">
+	            					{% if board_results|length == 1 %}
+	            						{{ board_results|length }} Board
+	            					{% else %}
+	            						{{ board_results|length }} Boards
+	            					{% endif %}
+	            				</a></strong></p>
+	            			{% endif %}
+	            			{% if user_results|length >= 1 %}
+		            			<p><strong><a href="{% url 'search_user' %}?kw={{search_term}}">
+		            				{% if user_results|length == 1 %}
+		            					{{ user_results|length }} User
+		            				{% else %}
+		            					{{ user_results|length }} Users
+		            				{% endif %}
+		            			</a></strong></p>
+	            			{% endif %}
+	            		{% endif %}
+		            </div>
 
 	            {% endif %}
 
@@ -108,26 +134,4 @@
 	</section>
 
 
-{% endblock %}
-
-{% block extra-js %}
-<script src="{% static 'js/macy.js' %}" type="text/javascript"></script>
-<script>
-    var masonry = new Macy({
-        container: '#homeBoardItems',
-        trueOrder: false,
-        waitForImages: false,
-        useOwnImageLoader: false,
-        debug: true,
-        mobileFirst: true,
-        columns: 1,
-        margin: 24,
-        breakAt: {
-            1200: 3,
-            940: 2,
-            520: 2,
-            400: 2
-        }
-    });
-</script>
 {% endblock %}

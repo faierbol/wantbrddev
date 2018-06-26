@@ -34,9 +34,10 @@ class Board(models.Model):
 	hero = models.ImageField(upload_to = user_directory_path, blank=True, null=True)
 	show_video = models.BooleanField(default=False)
 	tags = TaggableManager(blank=True)
-	active = models.BooleanField(default=True)	
+	active = models.BooleanField(default=False)	
 	slug = models.SlugField(default='')
 	deleteable = models.BooleanField(default=True)
+	recommended = models.BooleanField(default=False)
 
 	def save(self, *args, **kwargs):
 		self.slug = slugify(self.board_name)
@@ -45,6 +46,13 @@ class Board(models.Model):
 	def get_item_count(self):
 		item_count = ItemConnection.objects.filter(board=self).count()
 		return item_count
+
+	def user_blocked(self,user):
+		if BoardPrivacy.objects.filter(board=self, user=user).exists():
+			return True
+		else:
+			return False		
+
 
 	def __str__(self):
 		return self.board_name

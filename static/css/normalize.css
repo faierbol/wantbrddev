@@ -447,3 +447,23 @@ template {
 [hidden] {
   display: none;
 }
+
+input:focus,
+select:focus,
+textarea:focus,
+button:focus {
+    outline: none;
+}
+
+::-webkit-input-placeholder:hover {
+    text-indent: 10px;
+}
+::-moz-placeholder:hover {
+    text-indent: 10px;
+}
+:-ms-input-placeholder:hover {
+    text-indent: 10px;
+}
+:-moz-placeholder:hover {
+    text-indent: 10px;
+}

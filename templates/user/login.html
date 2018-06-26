@@ -3,17 +3,22 @@
 {% block title %}Login{% endblock %}
 
 {% block body %}
-<div class="profilePush"></div>
 
-<h1>Login</h1>
+<section class="loginPanel login">
+	<div class="container">
 
-<form method="post" novalidate>
-	{% csrf_token %}
-	<input type="hidden" name="next" value="{{ next }}">
-	{% include 'includes/form.html' %}
-<button type="submit" class="btn btn-primary btn-block">Log in</button>
-</form>
+		<h1>Login</h1>
 
-<a href="{% url 'u:password_reset' %}" class="text-muted">Forgot your password?</a>
+		<form method="post" novalidate>
+			{% csrf_token %}
+			<input type="hidden" name="next" value="{{ next }}">
+			{% include 'includes/form.html' %}
+		<button type="submit" class="btn btn-primary btn-block">Log in</button>
+		</form>
+
+		<a href="{% url 'password_reset' %}" class="text-muted">Forgot your password?</a>
+
+	</div>
+</section>
 
 {% endblock %}

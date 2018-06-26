@@ -35,17 +35,6 @@
                 <p><strong>{{ boards.count }}</strong> {% if boards.count > 1 %}BOARDS{% else %}BOARD{% endif %}</p>
                 <p><strong>{{ no_items }}</strong> ITEMS</p>
             </div>
-            <div class="discoveryBio">
-                {{ profile.bio }}
-                <a href="#">Edit <i class="fas fa-pencil-alt"></i></a>
-            </div>
-
-            <div class="accountLinks">
-                <h5>Your Account</h5>
-                <a href="#">Personal information</a>
-                <a href="#">Social media links</a>
-                <a href="#">Account security</a>
-            </div>
 
             <div class="recentActivity">
                 <h6>Recent Activity</h6>
@@ -62,88 +51,97 @@
 
             <div class="discoveryFeedContent">
 
-            	{% for item in itemconxs|dictsortreversed:"created" %}
-                
-	                <div class="discoveryItem clearfix">
-	                    <a href="{% url 'b:view_item' item.board.user item.board.slug item.id %}" class="discoveryImage">
-	                    	{% thumbnail item.image "300x300" as im %}
-	                    	    <img src="{{ im.url }}">
-	                    	{% endthumbnail %}
-	                    </a>
-	                    <div class="discoveryMeta">
-	                        <div class="trendingItemName">
-	                            <a href="#" class="trendName">{{ item.item.item_name }}</a>
-	                            <div class="trendingItemMeta">
-	                                Found in <a href="{% url 'b:view_board' item.board.user item.board.slug %}">{{ item.board.board_name }}</a> by 
-	                                <a href="{% url 'u:profile' item.board.user %}">
-	                                	{% if item.board.user.get_full_name %}
-	                                		{{ item.board.user.get_full_name }}	                                
-	                                	{% else %}
-	                                		@{{ item.board.user }}
-	                                	{% endif %}
-	                                </a>
-	                            </div>
-	                        </div>              
-	                        <div class="trendingFooter">
-                                <span>
-                                    <form class="inline" method="POST">
-                                        {% csrf_token %}
-                                        <input type="hidden" name="itemconx_id" value="{{ item.id }}">
-                                        <button class="naked" name="savelater"><i class="far fa-bookmark"></i></button>
-                                    </form>
-                                </span>
-	                            <span><i class="far fa-comments"></i>
-	                            	{% get_comment_count for item as comment_count %}
-									{% if comment_count %}
-										{{ comment_count }}
-									{% else %}
-										0
-									{% endif %}
-	                            </span>
-                                {% if item.is_liked %}
+                {% if itemconxs %}
+
+                	{% for item in itemconxs|dictsortreversed:"created" %}
+                    
+    	                <div class="discoveryItem clearfix">
+    	                    <a href="{% url 'b:view_item' item.board.user item.board.slug item.id %}" class="discoveryImage">
+    	                    	{% thumbnail item.image "300x300" as im %}
+    	                    	    <a href="" rel="tooltip" title="{{item.purchase_url}}"><img src="{{ im.url }}"></a>
+    	                    	{% endthumbnail %}
+    	                    </a>
+    	                    <div class="discoveryMeta">
+    	                        <div class="trendingItemName">
+    	                            <a href="#" class="trendName">{{ item.item.item_name }}</a>
+    	                            <div class="trendingItemMeta">
+    	                                Found in <a href="{% url 'b:view_board' item.board.user item.board.slug %}">{{ item.board.board_name }}</a> by 
+    	                                <a href="{% url 'u:profile' item.board.user %}">
+    	                                	{% if item.board.user.get_full_name %}
+    	                                		{{ item.board.user.get_full_name }}	                                
+    	                                	{% else %}
+    	                                		@{{ item.board.user }}
+    	                                	{% endif %}
+    	                                </a>
+    	                            </div>
+    	                        </div>              
+    	                        <div class="trendingFooter">
                                     <span>
                                         <form class="inline" method="POST">
                                             {% csrf_token %}
                                             <input type="hidden" name="itemconx_id" value="{{ item.id }}">
-                                            <button class="naked" name="unlikeitem"><i class="fas fa-heart likeon"></i> {{ item.likes }}</button>
+                                            <button class="naked" name="savelater"><i class="far fa-bookmark"></i></button>
                                         </form>
                                     </span>
-                                {% else %}
-                                    <span>
-                                        <form class="inline" method="POST">
-                                            {% csrf_token %}
-                                            <input type="hidden" name="itemconx_id" value="{{ item.id }}">
-                                            <button class="naked" name="likeitem"><i class="far fa-heart"></i> {{ item.likes }}</button>                                
-                                        </form>
-                                    </span>                                    
+    	                            <span><i class="far fa-comments"></i>
+    	                            	{% get_comment_count for item as comment_count %}
+    									{% if comment_count %}
+    										{{ comment_count }}
+    									{% else %}
+    										0
+    									{% endif %}
+    	                            </span>
+                                    {% if item.is_liked %}
+                                        <span>
+                                            <form class="inline" method="POST">
+                                                {% csrf_token %}
+                                                <input type="hidden" name="itemconx_id" value="{{ item.id }}">
+                                                <button class="naked" name="unlikeitem"><i class="fas fa-heart likeon"></i> {{ item.likes }}</button>
+                                            </form>
+                                        </span>
+                                    {% else %}
+                                        <span>
+                                            <form class="inline" method="POST">
+                                                {% csrf_token %}
+                                                <input type="hidden" name="itemconx_id" value="{{ item.id }}">
+                                                <button class="naked" name="likeitem"><i class="far fa-heart"></i> {{ item.likes }}</button>                                
+                                            </form>
+                                        </span>                                    
+                                    {% endif %}
+    	                            <span><i class="fas fa-eye"></i> {{ item.views }}</span>                                
+    	                        </div>
+    	                    </div>
+                            <div class="clearfix"></div>
+                            <div style="text-align:left; font-size: .85rem; margin-top:20px;">
+
+                                {% get_comment_list for item as comment_list %}
+                                {% for comment in comment_list|slice:":2" %}
+                                    <STRONG>{{user}}</STRONG>
+                                    <div class="aComment" style="border-bottom:1px solid #ebebeb; padding-bottom:5px; margin-bottom:5px;">
+                                        {{ comment.comment|linebreaks|slice:":90" }}...                                    
+                                    </div>  
+                                {% endfor %}
+                                {% if comment_list %}
+                                    <a href="#">View comments</a>
                                 {% endif %}
-	                            <span><i class="fas fa-eye"></i> {{ item.views }}</span>                                
-	                        </div>
-	                    </div>
-                        <div class="clearfix"></div>
-                        <div style="text-align:left; font-size: .85rem; margin-top:20px;">
 
-                            {% get_comment_list for item as comment_list %}
-                            {% for comment in comment_list|slice:":2" %}
-                                <STRONG>{{user}}</STRONG>
-                                <div class="aComment" style="border-bottom:1px solid #ebebeb; padding-bottom:5px; margin-bottom:5px;">
-                                    {{ comment.comment|linebreaks|slice:":90" }}...                                    
-                                </div>  
-                            {% endfor %}
-                            {% if comment_list %}
-                                <a href="#">View comments</a>
-                            {% endif %}
+                            </div>
+    	                </div>
 
-                        </div>
-	                </div>
+                    {% endfor %}
 
-                {% endfor %}
+                {% else %}
+
+                    <div class="nofollow">You are not following anyone yet.</div>
+
+                {% endif %}
 
             </div>
 
         </div>
 
         <div class="feedRight">
+
             <h5>Suggested to follow:</h5>
             
             <div class="followList">
@@ -182,75 +180,65 @@
                 </div>
             </div>
 
-            <h5>Suggested boards:</h5>
+            {% if suggested_boards %}
 
-            <div class="suggestedBoards">
+                <h5>Suggested boards:</h5>
+                <div class="suggestedBoards">
 
-                <div class="featBox trendingBoard">
-                    <a class="trendingBoardHero" style="background-image:url(img/feat-pic-hero.png);" href="board.php">
-                        <div class="trendingBoardMeta">
-                            <strong>Mountain Biking</strong>
-                            <span><i class="fas fa-eye"></i> 2467</span>
-                        </div>
-                    </a>
-                    <div class="trendingItems clearfix">
-                        <a style="background-image:url('img/feat-pic-1.png');" href="board.php"></a>
-                        <a style="background-image:url('img/feat-pic-2.png');" href="board.php"></a>
-                        <a class="plusMore" href="board.php">
-                            <div class="plusMoreNumber">+44</div>
-                        </a>
-                    </div>
-                    <a class="trendingUserUser" href="profile.php">
-                        <div class="trendingUserUserWrap clearfix">
-                            <div class="trendingUserPic">
-                                <div class="circle" style="background-image:url('img/profile-pic.jpg');"></div>                            
+                    {% for board in suggested_boards %}
+
+                        <div class="featBox trendingBoard">
+                            {% if board.hero %}
+                            <a class="trendingBoardHero" style="background-image:url('{{ board.hero.url }}');" href="{% url 'b:view_board' board.user.username board.slug %}">
+                            {% else %}    
+                            <a class="trendingBoardHero" style="background-image:url('{% static 'img/default-hero.png' %}');" href="{% url 'b:view_board' board.user.username board.slug %}">
+                            {% endif %}                            
+                                <div class="trendingBoardMeta">
+                                    <strong>{{ board.board_name }}</strong>
+                                    <span><i class="fas fa-eye"></i> {{ board.views }}</span>
+                                </div>
+                            </a>
+
+                            <div class="trendingItems clearfix">
+                                {% for item in board.items %}
+                                    {% thumbnail item.image "300x300" as im %}
+                                        <a style="background-image:url('{{ im.url }}');" href="{% url 'u:profile' user.username  %}"></a>
+                                    {% endthumbnail %}
+                                {% endfor %}
+
+                                {% if board.itemcount > 2 %}
+                                    <a class="plusMore" href="{% url 'u:profile' user.username  %}">
+                                        <div class="plusMoreNumber">+{{ board.itemcount|add:"-2" }}</div>
+                                    </a>
+                                {% endif %}
                             </div>
-                            <div class="trendingUserNames">
-                                <strong>@iamholdsworth</strong>
-                                <span>Luke Holdsworth</span>
+
+                            <a class="trendingUserUser" href="profile.php">
+                                <div class="trendingUserUserWrap clearfix">
+                                    <div class="trendingUserPic">
+                                        {% if board.user.profile.picture %}
+                                        <div class="circle" style="background-image:url('{{ board.user.profile.picture.url }}');"></div>
+                                        {% else %}
+                                        <div class="circle" style="background-image:url('{% static 'img/default-hero.png' %}');"></div>
+                                        {% endif %}
+                                    </div>
+                                    <div class="trendingUserNames">
+                                        <strong>@{{ board.user.username }}</strong>
+                                        <span>{{ board.user.get_full_name }}</span>
+                                    </div>
+                                </div>
+                            </a>
+                            <div class="trendingFooter">
+                                <span>{{ board.totalitems }} {% if board.totalitems > 1 or board.totalitems == 0 %} Items {% else %} Item {% endif %}</span>
+                                <span>{{ board.views }} {% if board.views > 1 or board.views == 0 %} Views {% else %} View {% endif %}</span>
                             </div>
                         </div>
-                    </a>
-                    <div class="trendingFooter">
-                        <span>14 Boards</span>
-                        <span>275 Items</span>
-                        <span>2467 Views</span>
-                    </div>
+                        
+                    {% endfor %}
+
                 </div>
-
-                <div class="featBox trendingBoard">
-                    <a class="trendingBoardHero" style="background-image:url(img/feat-pic-hero.png);" href="board.php">
-                        <div class="trendingBoardMeta">
-                            <strong>Mountain Biking</strong>
-                            <span><i class="fas fa-eye"></i> 2467</span>
-                        </div>
-                    </a>
-                    <div class="trendingItems clearfix">
-                        <a style="background-image:url('img/feat-pic-1.png');" href="board.php"></a>
-                        <a style="background-image:url('img/feat-pic-2.png');" href="board.php"></a>
-                        <a class="plusMore" href="board.php">
-                            <div class="plusMoreNumber">+44</div>
-                        </a>
-                    </div>
-                    <a class="trendingUserUser" href="profile.php">
-                        <div class="trendingUserUserWrap clearfix">
-                            <div class="trendingUserPic">
-                                <div class="circle" style="background-image:url('img/profile-pic.jpg');"></div>                            
-                            </div>
-                            <div class="trendingUserNames">
-                                <strong>@iamholdsworth</strong>
-                                <span>Luke Holdsworth</span>
-                            </div>
-                        </div>
-                    </a>
-                    <div class="trendingFooter">
-                        <span>14 Boards</span>
-                        <span>275 Items</span>
-                        <span>2467 Views</span>
-                    </div>
-                </div>
-
-            </div>
+            
+            {% endif %}
 
         </div>
 

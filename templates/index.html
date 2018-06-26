@@ -1,5 +1,7 @@
 {% extends 'base.html' %}
 {% load staticfiles %}
+{% load comments static %}
+{% load thumbnail %}
 
 
 {% block title %}
@@ -13,7 +15,7 @@
 {% endblock %}
 
 
-{% block body %}
+{% block body %}   
 
 <section class="homeBanner clearfix">
         
@@ -31,91 +33,176 @@
     <div class="container">
 
         <div class="tabNav">
-            <a href="#">Hot</a>
-            <a href="#">Trending users</a>
-            <a href="#">Trending boards</a>
-            <a href="#">Trending items</a>
+            <a href="/" class="tabOn">Hot</a>
+            <a href="/trending/users">Trending users</a>
+            <a href="/trending/boards">Trending boards</a>
+            <a href="/trending/items">Trending items</a>
         </div>
+
         
-        <div id="homeBoardItems">
-            
-            <!-- trending user example -->
+        <div id="homeBoardItems">  
 
-            <div class="featBox trendingUser">
-                <div class="trendingTop clearfix">
-                    <strong>Trending User</strong>
-                    <a href="#" class="trendingUserShare">Share <i class="fas fa-share-alt"></i></a>
-                </div>
-                <a class="trendingUserUser" href="profile.php">
-                    <div class="trendingUserUserWrap clearfix">
-                        <div class="trendingUserPic">
-                            <div class="circle" style="background-image:url('img/profile-pic.jpg');"></div>
+            {% for hot in hot_items %}          
+
+                <!-- ### TRENDING BOARDS ### -->
+                {% if hot.board_name and not hot.recommended %}
+
+                    <div class="featBox trendingBoard">
+                        <div class="trendingTop clearfix">
+                            <strong>Trending Board</strong>
+                            <a href="b#" class="trendingUserShare">Share <i class="fas fa-share-alt"></i></a>
                         </div>
-                        <div class="trendingUserNames">
-                            <strong>@iamholdsworth</strong>
-                            <span>Luke Holdsworth</span>
+
+                        {% if hot.hero %}
+                        <a class="trendingBoardHero" style="background-image:url('{{ hot.hero.url }}');" href="{% url 'b:view_board' hot.user.username hot.slug %}">
+                        {% else %}    
+                        <a class="trendingBoardHero" style="background-image:url('{% static 'img/default-hero.png' %}');" href="{% url 'b:view_board' hot.user.username hot.slug %}">
+                        {% endif %}
+
+                            <div class="trendingBoardMeta">
+                                <strong>{{ hot.board_name }}</strong>
+                            </div>
+                        </a>
+                        <div class="trendingItems clearfix">
+                            {% for itemconx in hot.itemconxs %}
+                                {% thumbnail itemconx.image "300x300" as im %}
+                                    <a style="background-image:url('{{ im.url }}');" href="{% url 'b:view_board' hot.user.username hot.slug %}"></a>
+                                {% endthumbnail %}                              
+                            {% endfor %}                                
+
+                            {% if hot.totalitems > 5 %}
+                                <a class="plusMore" href="{% url 'b:view_board' hot.user.username hot.slug %}">
+                                    <div class="plusMoreNumber">+{{ hot.totalitems|add:"-5" }}</div>
+                                </a>
+                            {% endif %}
+                        </div>
+                        <a class="trendingUserUser" href="profile.php">
+                            <div class="trendingUserUserWrap clearfix">
+                                <div class="trendingUserPic">
+                                    {% if hot.user.profile.picture %}
+                                        <div class="circle" style="background-image:url('{{ hot.user.profile.picture.url }}');"></div>
+                                    {% else %}
+                                        <div class="circle" style="background-image:url('{% static 'img/default-hero.png' %}');"></div>
+                                    {% endif %}
+                                </div>
+                                <div class="trendingUserNames">
+                                    <strong>@{{ hot.user.username }}</strong>
+                                    <span>{{ hot.user.get_full_name }}</span>
+                                </div>
+                            </div>
+                        </a>
+                        <div class="trendingFooter">
+                            <span>{{ hot.totalitems }} {% if hot.totalitems > 1 or hot_items.totalitems == 0 %} Items {% else %} Item {% endif %}</span>
+                            <span>{{ hot.views }} {% if hot.views > 1 or hot.views == 0 %} Views {% else %} View {% endif %}</span>
                         </div>
                     </div>
-                </a>
-                <a class="trendingUserHero" href="profile.php" style="background-image:url(img/feat-pic-hero.png);"></a>
-                <div class="trendingItems clearfix">
-                    <a href="profile.php" style="background-image:url('img/feat-pic-4.png');" href="#"></a>
-                    <a href="profile.php" style="background-image:url('img/feat-pic-5.png');" href="#"></a>
-                    <a class="plusMore" href="#">
-                        <div class="plusMoreNumber">+44</div>
-                    </a>
-                </div>
-                <div class="trendingFooter">
-                    <span>14 Boards</span>
-                    <span>275 Items</span>
-                    <span>2467 Views</span>
-                </div>
-            </div>
 
-            <!-- trending item example -->
+                <!-- ### TRENDING USERS ### -->
+                {% elif hot.username %}
+                    <div class="featBox trendingUser">
+                        <div class="trendingTop clearfix">
+                            <strong>Trending User</strong>
+                            <a href="#" class="trendingUserShare">Share <i class="fas fa-share-alt"></i></a>
+                        </div>
+                        <a class="trendingUserUser" href="profile.php">
+                            <div class="trendingUserUserWrap clearfix">
+                                <div class="trendingUserPic">
+                                    {% if hot.profile.picture %}
+                                    <div class="circle" style="background-image:url('{{ hot.profile.picture.url }}');"></div>
+                                    {% else %}
+                                    <div class="circle" style="background-image:url('{% static 'img/default-hero.png' %}');"></div>
+                                    {% endif %}
+                                </div>
+                                <div class="trendingUserNames">
+                                    <strong>@{{ hot.username }}</strong>
+                                    <span>{{ hot.get_full_name }}</span>
+                                </div>
+                            </div>
+                        </a>
+                        
+                        <a class="trendingUserHero" href="{% url 'u:profile' hot.username  %}" style="background-image:url('{% static 'img/profile-hero.jpg' %}')"></a>
 
-            <div class="featBox trendingItem">
-                <div class="trendingTop clearfix">
-                    <strong>Trending Item</strong>
-                    <a href="#" class="trendingUserShare">Share <i class="fas fa-share-alt"></i></a>
-                </div>
-                <div class="trendingItemItem">
-                    <a href="#"><img src="img/feat-item.jpg" alt=""></a>
-                </div>
-                <div class="trendingItemName">
-                    <a href="#">Amazon Echo Spot</a>
-                    <div class="trendingItemMeta">
-                        Found on <a href="#">Gadgets</a> by <a href="#">Luke Holdsworth</a>
+                        <div class="trendingItems clearfix">
+                            {% for item in hot.items %}
+                                {% thumbnail item.image "300x300" as im %}
+                                    <a style="background-image:url('{{ im.url }}');" href="{% url 'u:profile' hot.username  %}"></a>
+                                {% endthumbnail %}
+                            {% endfor %}
+
+                            {% if hot.itemcount > 2 %}
+                                <a class="plusMore" href="{% url 'u:profile' hot.username  %}">
+                                    <div class="plusMoreNumber">+{{ hot.itemcount|add:"-2" }}</div>
+                                </a>
+                            {% endif %}
+                        </div>
+                        <div class="trendingFooter">
+                            <span>{{ hot.totalboards }} {% if hot.totalboards > 1 or hot.totalboards == 0 %} Boards {% else %} Board {% endif %}</span>
+                            <span>{{ hot.totalitems }} {% if hot.totalitems > 1 or hot.totalitems == 0 %} Items {% else %} Item {% endif %}</span>
+                        </div>
                     </div>
-                </div>              
-                <div class="trendingFooter">
-                    <span><i class="far fa-comments"></i> 23</span>
-                    <span><i class="far fa-heart"></i> 275</span>
-                    <span><i class="fas fa-eye"></i> 2467</span>
-                </div>
-            </div>
 
-            <!-- wanatbrd recommended -->
+                {% elif hot.item %}
+                    <div class="featBox trendingItem">
+                        <div class="trendingTop clearfix">
+                            <strong>Trending Item</strong>
+                            <a href="#" class="trendingUserShare">Share <i class="fas fa-share-alt"></i></a>
+                        </div>
+                        <div class="trendingItemItem">
+                            {% thumbnail hot.image "300x300" as im %}
+                                <img src="{{ im.url }}">
+                            {% endthumbnail %}
+                        </div>
+                        <div class="trendingItemName">
+                            <a href="#">{{ hot.item.item_name }}</a>
+                            <div class="trendingItemMeta">
+                                Found on <a href="#">{{ hot.board.board_name }}</a> by <a href="#">{{ hot.board.user.get_full_name }}</a>
+                            </div>
+                        </div>              
+                        <div class="trendingFooter">
+                            <span><i class="far fa-comments"></i>
+                                {% get_comment_count for hot as comment_count %}
+                                {% if comment_count %}
+                                    {{ comment_count }}
+                                {% else %}
+                                    0
+                                {% endif %}
+                            </span>
+                            <span><i class="far fa-heart"></i> {{ hot.likes }}</span>
+                            <span><i class="fas fa-eye"></i> {{ hot.views }}</span>
+                        </div>
+                    </div>
 
-            <div class="featBox recommendedBoard">
-                <div class="featOrangeHead">
-                    <strong>Wantbrd Recommended</strong>
-                    <a href="#">Yoga</a>                      
-                </div>
-                <div class="recommendedImage" style="background-image:url(img/recommended-hero.jpg)"></div>
-                <div class="recommendedText">
-                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus pharetra porttitor arcu at vulputate. Suspendisse eget lobortis justo.</p>
-                </div>
-                <div class="recommendedMeta">
-                    <span>275 Items</span> <span>259334 Views</span>
-                </div>
-                <a href="#" class="btn grey">View Board</a>
-                <div class="clear"></div>
-            </div>
+                {% elif hot.recommended %}
+
+                    <div class="featBox recommendedBoard">
+                        <div class="featOrangeHead">
+                            <strong>Wantbrd Recommended</strong>
+                            <a href="{% url 'b:view_board' hot.user.username hot.slug %}">{{ hot.board_name }}</a>
+                        </div>                        
+                        {% if hot.hero %}
+                            <div class="recommendedImage" style="background-image:url('{{ hot.hero.url }}');"></div>
+                        {% else %}
+                            <div class="recommendedImage" style="background-image:url('{% static 'img/default-hero.png' %}');"></div>
+                        {% endif %}
+                        <div class="recommendedText">
+                            <p>{{ hot.description }}</p>
+                        </div>
+                        <div class="recommendedMeta">
+                            <span>{{ hot.totalitems }} {% if hot.totalitems > 1 or hot_items.totalitems == 0 %} Items {% else %} Item {% endif %}</span>
+                            <span>{{ hot.views }} {% if hot.views > 1 or hot.views == 0 %} Views {% else %} View {% endif %}</span>
+                        </div>
+                        <a href="{% url 'b:view_board' hot.user.username hot.slug %}" class="btn grey">View Board</a>
+                        <div class="clear"></div>
+                    </div>            
+
+                {% endif %}
+
+            {% endfor %}
+
 
             <!-- feat group -->
 
-            <div class="featBox recommendedBoard group">
+<!--             <div class="featBox recommendedBoard group">
                 <div class="featOrangeHead">
                     <strong>Featured Group</strong>
                     <a href="#">#Resorts</a>
@@ -128,48 +215,7 @@
                 </div>
                 <a href="#" class="btn large grey">View Board</a>
                 <div class="clear"></div>
-            </div>
-
-            <!-- trending board -->
-
-            <div class="featBox trendingBoard">
-                <div class="trendingTop clearfix">
-                    <strong>Trending Board</strong>
-                    <a href="board.php" class="trendingUserShare">Share <i class="fas fa-share-alt"></i></a>
-                </div>
-                <a class="trendingBoardHero" style="background-image:url(img/feat-pic-hero.png);" href="board.php">
-                    <div class="trendingBoardMeta">
-                        <strong>Mountain Biking</strong>
-                        <span><i class="fas fa-eye"></i> 2467</span>
-                    </div>
-                </a>
-                <div class="trendingItems clearfix">
-                    <a style="background-image:url('img/feat-pic-1.png');" href="board.php"></a>
-                    <a style="background-image:url('img/feat-pic-2.png');" href="board.php"></a>
-                    <a style="background-image:url('img/feat-pic-3.png');" href="board.php"></a>
-                    <a style="background-image:url('img/feat-pic-4.png');" href="board.php"></a>
-                    <a style="background-image:url('img/feat-pic-5.png');" href="board.php"></a>
-                    <a class="plusMore" href="board.php">
-                        <div class="plusMoreNumber">+44</div>
-                    </a>
-                </div>
-                <a class="trendingUserUser" href="profile.php">
-                    <div class="trendingUserUserWrap clearfix">
-                        <div class="trendingUserPic">
-                            <div class="circle" style="background-image:url('img/profile-pic.jpg');"></div>                            
-                        </div>
-                        <div class="trendingUserNames">
-                            <strong>@iamholdsworth</strong>
-                            <span>Luke Holdsworth</span>
-                        </div>
-                    </div>
-                </a>
-                <div class="trendingFooter">
-                    <span>14 Boards</span>
-                    <span>275 Items</span>
-                    <span>2467 Views</span>
-                </div>
-            </div>
+            </div> -->
 
         </div>
 

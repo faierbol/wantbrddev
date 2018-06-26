@@ -88,15 +88,15 @@ Slide In Panel - by CodyHouse.co
   position: fixed;
   width: 90%;
   padding:30px 30px;  
-  background: rgba(255, 255, 255, 0.96);
+  background: rgba(50, 50, 50, 0.96);
   z-index: 2;
   -webkit-transition: -webkit-transform 0.3s 0s;
   transition: -webkit-transform 0.3s 0s;
   transition: transform 0.3s 0s;
   transition: transform 0.3s 0s, -webkit-transform 0.3s 0s;
-  -webkit-transform: translateY(-110px);
-      -ms-transform: translateY(-110px);
-          transform: translateY(-110px);
+  -webkit-transform: translateY(-130px);
+      -ms-transform: translateY(-130px);
+          transform: translateY(-130px);
 }
 
 .cd-panel--from-right .cd-panel__header {
@@ -108,6 +108,8 @@ Slide In Panel - by CodyHouse.co
 }
 
 .cd-panel--is-visible .cd-panel__header {
+  background:#212121;
+  color:#fff;
   -webkit-transition: -webkit-transform 0.3s 0.3s;
   transition: -webkit-transform 0.3s 0.3s;
   transition: transform 0.3s 0.3s;
@@ -253,6 +255,20 @@ Slide In Panel - by CodyHouse.co
   transition: transform 0.3s 0.3s;
   transition: transform 0.3s 0.3s, -webkit-transform 0.3s 0.3s;
 }
+.cd-panel__container.account_slide {
+  margin-top:30px;
+}
+.cd-panel__container.account_slide a i {
+  font-size: 1.2rem;
+  margin-right:5px;
+  -webkit-transition: all .3s;
+  -moz-transition: all .3s;
+  -o-transition: all .3s;
+  transition: all .3s;
+}
+.cd-panel__container.account_slide a:hover i {
+  transform: rotate(360deg);
+}
 
 .cd-panel--from-right .cd-panel__container {
   right: 0;
@@ -291,7 +307,7 @@ Slide In Panel - by CodyHouse.co
   left: 0;
   width: 100%;
   height: 100%;
-  padding: 110px 40px 30px 30px;
+  padding: 125px 40px 30px 30px;
   overflow: auto;
   /* smooth scrolling on touch devices */
   -webkit-overflow-scrolling: touch;

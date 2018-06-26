@@ -1,4 +1,5 @@
-import requests, urllib
+import requests, urllib, datetime, random
+from django.contrib import messages
 from django.shortcuts import render, redirect, get_object_or_404
 from django.core.files.storage import FileSystemStorage
 from django.db.models import Q
@@ -15,12 +16,74 @@ from urllib.parse import urlparse
 from PIL import ImageFile
 from django.core import files
 from io import BytesIO
+from wantbrd.utils import get_trending_items, get_trending_boards, get_trending_users, get_recommended_boards
 import requests
 
 # instantiate a chrome options object so you can set the size and headless preference
 chrome_options = Options()
 chrome_options.add_argument("--headless")
 chrome_options.add_argument("--window-size=1920x1080")
+
+
+##### HOME PAGE
+def home(request):
+	template = 'index.html'
+	trending_items = get_trending_items(request,3)
+	trending_users = get_trending_users(request,3)
+	trending_boards = get_trending_boards(request,3)
+	recommended_boards = get_recommended_boards(request)
+
+	mixed = list(trending_boards) + list(trending_items) + list(trending_users) + list(recommended_boards)
+	random.shuffle(mixed)
+	hot_items = []
+	for item in mixed:
+		if item not in hot_items:
+			hot_items.append(item)
+
+	context_dict = {
+		'hot_items':hot_items
+	}
+
+	return render(request, template, context_dict)
+
+
+##### Home Trending Items
+def trending_items(request):
+	template = 'trending_items.html'
+
+	items = get_trending_items(request,3)
+
+	context_dict = {
+		'items':items
+	}
+
+	return render(request, template, context_dict)
+
+
+##### Home Trending Boards
+def trending_boards(request):
+	template = 'trending_boards.html'
+
+	trending_boards = get_trending_boards(request,3)
+
+	context_dict = {
+		'trending_boards':trending_boards,
+	}
+
+	return render(request, template, context_dict)
+
+
+##### Home Trending Users
+def trending_users(request):
+	template = 'trending_users.html'
+
+	trending_users = get_trending_users(request,3)
+
+	context_dict = {
+		'trending_users':trending_users
+	}
+
+	return render(request, template, context_dict)
 
 
 ##### Add a new board
@@ -83,6 +146,7 @@ def edit_board(request, board_id):
 				form = ChangeBackgroundForm(request.POST, request.FILES, instance=board)
 				if form.is_valid():
 					form.save()
+					messages.info(request, 'Your boards background was updated.')
 					return HttpResponseRedirect(request.path_info)
 
 			# manage video
@@ -91,9 +155,11 @@ def edit_board(request, board_id):
 				video_id = request.POST.get("videoid")
 				Board.objects.filter(pk=board.id).update(video=video_id)
 				if video_status:					
+					messages.info(request, 'The video has been enabled.')
 					Board.objects.filter(pk=board.id).update(show_video=True)
 				else:
 					Board.objects.filter(pk=board.id).update(show_video=False)
+					messages.info(request, 'The video has been disabled.')
 				return HttpResponseRedirect(request.path_info)
 
 			# manage privacy
@@ -113,13 +179,14 @@ def edit_board(request, board_id):
 					new_block.user = user
 					# save it
 					new_block.save()
-
+				messages.info(request, 'Your board privacy settings have been updated.')
 				return HttpResponseRedirect(request.path_info)
 
 			# update desc
 			if request.POST.get("updatedescription"):
 				new_desc = request.POST.get("boardDesc")
 				Board.objects.filter(pk=board.id).update(description=new_desc)
+				messages.info(request, 'Your board description was updated.')
 				return HttpResponseRedirect(request.path_info)
 
 			# update tags
@@ -127,6 +194,7 @@ def edit_board(request, board_id):
 				form = UpdateTags(request.POST, instance=board)
 				if form.is_valid():
 					form.save()
+					messages.info(request, 'Your board tags have been updated.')
 					return HttpResponseRedirect(request.path_info)
 
 			if 'deleteitem' in request.POST:
@@ -142,7 +210,8 @@ def edit_board(request, board_id):
 					items = ItemConnection.objects.filter(item=item)
 					# is there less than one? If so, delete the item as well as we dont need it.
 					if items.count() < 1:
-						item.delete()				
+						item.delete()	
+						messages.info(request, 'The item was deleted.')			
 					return HttpResponseRedirect(request.path_info)
 				# if the current user is not the owner
 				else:
@@ -239,10 +308,11 @@ def edit_item(request, board_id, item_id):
 ##### View board
 def view_board(request, username, board_name):
 	template = 'board/view_board.html'	
+	board_owner = get_object_or_404(User, username=username)
 	user = request.user
 	message = None
 
-	board = get_object_or_404(Board, slug=board_name)
+	board = get_object_or_404(Board, slug=board_name, user=board_owner)
 	board.thetags = board.tags.all()
 	board.likes = BoardLike.objects.filter(board=board).count()
 	board.is_liked = BoardLike.objects.filter(board=board, user=request.user).exists()
@@ -328,11 +398,15 @@ def view_board(request, username, board_name):
 			except AttributeError:
 			    pass
 			clone.save()
+			messages.info(request, '"{0}" was added to the board, "{1}".'.format(itemconx.item.item_name, board.board_name))
+			return HttpResponseRedirect(request.path_info)
 
 		if 'savelater' in request.POST:
 			itemconx = request.POST.get("itemconx_id")
-			ItemConnection.save_item(itemconx, request)
-			message = "The item was added to your saved items"
+			ItemConnection.save_item(itemconx, request)							
+			copied_item = ItemConnection.objects.get(pk=itemconx)
+			messages.info(request, '"%s" was added to your saved items board.' % copied_item.item.item_name)
+			return HttpResponseRedirect(request.path_info)
 
 	context_dict = {
 		'message':message,
@@ -520,13 +594,19 @@ def search_item(request):
 			item_results.append(item)
 
 	# boards
-	board_results = False
+	all_boards = False
+	board_results = []
 	board_search_tags = Board.objects.filter(tags__name__in=[search_term])
 	board_search_names = Board.objects.filter(board_name__contains=search_term)
-	board_results = board_search_tags | board_search_names
-	board_results = board_results.distinct()
+	
+	all_boards = board_search_tags | board_search_names
+	all_boards = all_boards.distinct()	
+	for board in all_boards:
+		if board.get_item_count() > 0 and not board.user_blocked(request.user) and not board.user == request.user:
+			board_results.append(board)
 	for board in board_results:
 		board.totalitems = board.get_item_count()
+
 
 	# users
 	user_results = False
@@ -562,15 +642,19 @@ def search_board(request):
 			item_results.append(item)
 
 	# boards
-	board_results = False
+	all_boards = False
+	board_results = []
 	board_search_tags = Board.objects.filter(tags__name__in=[search_term])
 	board_search_names = Board.objects.filter(board_name__contains=search_term)
-	board_results = board_search_tags | board_search_names
-	board_results = board_results.distinct()
+	all_boards = board_search_tags | board_search_names
+	all_boards = all_boards.distinct()	
+	for board in all_boards:
+		if board.get_item_count() > 0 and not board.user_blocked(request.user) and not board.user == request.user:
+			board_results.append(board)
 	for board in board_results:
 		board.totalitems = board.get_item_count()
 		board.views = BoardView.objects.filter(board=board).count()
-		board.itemconxs = ItemConnection.objects.filter(board=board)[:5]	
+		board.itemconxs = ItemConnection.objects.filter(board=board)[:5]
 
 	# users
 	user_results = False
@@ -606,11 +690,16 @@ def search_user(request):
 			item_results.append(item)
 
 	# boards
-	board_results = False
+	all_boards = False
+	board_results = []
 	board_search_tags = Board.objects.filter(tags__name__in=[search_term])
 	board_search_names = Board.objects.filter(board_name__contains=search_term)
-	board_results = board_search_tags | board_search_names
-	board_results = board_results.distinct()
+	
+	all_boards = board_search_tags | board_search_names
+	all_boards = all_boards.distinct()	
+	for board in all_boards:
+		if board.get_item_count() > 0 and not board.user_blocked(request.user) and not board.user == request.user:
+			board_results.append(board)
 	for board in board_results:
 		board.totalitems = board.get_item_count()
 
@@ -627,6 +716,8 @@ def search_user(request):
 		boards = Board.objects.filter(user=user)
 		# set board count
 		user.boardcount = boards.count()
+		# start the item count so we only get the initial display ones
+		x = 0
 		#cycle through boards
 		for board in boards:
 			# get the board views
@@ -634,13 +725,12 @@ def search_user(request):
 			# get all items for this board and count 
 			boarditems = ItemConnection.objects.filter(board=board)			
 			user.itemcount+=boarditems.count()
-			itemviews = 0
-			x = 0
+			itemviews = 0			
 			for item in boarditems:
 				itemviews += ItemView.objects.filter(item_conx=item).count()
 				if x < 2:
 					user.items.append(item)
-				x+=1
+				x+=1				
 			user.viewscount = boardviews + itemviews
 
 	context_dict = {

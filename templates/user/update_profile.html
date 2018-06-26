@@ -1,0 +1,232 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+
+{% block title %}Settings{% endblock %}
+
+{% block body %}
+<section class="accountUpdate">
+
+	<div class="container clearfix">
+
+		<div class="profileLeft">
+			<div class="panel match">
+
+				<h1>Edit Profile</h1>
+
+				<form method="POST" enctype="multipart/form-data" id="updateprofileform">
+				    {% csrf_token %}
+				    <div class="updatePpic">	
+					    {% if user.profile.picture %}
+						    <div class="circle" style="background-image:url('{{ user.profile.picture.url }}');">
+						    	{{ profile_form.picture }}
+						    </div>
+					    {% else %}
+						    <div class="circle" style="background-image:url('{% static 'img/default-hero.png' %}');">
+						  		{{ profile_form.picture }}  	
+						    </div>
+					    {% endif %}
+					</div>				    
+				    <label>Your email address</label>
+				    <p>{{ user_form.email }}</p>
+				    <label>First name</label>
+				    <p>{{ user_form.first_name }}</p>
+				    <label>Last name</label>
+				    <p>{{ user_form.last_name }}</p>
+				    <label>About you</label>
+				    <p>{{ profile_form.bio }}</p>
+				    <label>Country</label>
+				    <p>{{ profile_form.country }}</p>
+				    <label>Date of birth</label>
+				    <p>{{ profile_form.date_of_birth }}</p>
+				    <label>Teephone number</label>
+				    <p>{{ profile_form.phone_number }}</p>
+				    <label>Your website</label>
+				    <p>{{ profile_form.website }}</p>
+				    <label>Alert you when you receive a new follower</label>
+				    <p>
+				    	{{ profile_form.alert_new_subscribe }}
+				    	<label class="switch" for="alert_new_sub"></label>
+				    </p>
+				    <label>Recieve an alert when someone you follow adds an item</label>
+				    <p>
+				    	{{ profile_form.alert_new_item }}
+				    	<label class="switch" for="alert_new_item"></label>
+				    </p>
+				    <label>Recieve suggested boards by email</label>
+				    <p>
+				    	{{ profile_form.alert_suggested_boards }}
+				    	<label class="switch" for="alert_sug_board"></label>
+				   	</p>
+				    <button class="btn grey" type="submit" name="updateprofile" value="updateprofile">Update profile</button>
+				</form>
+
+			</div>
+		</div>
+
+		<div class="profileRight">
+			<div class="panel match">
+
+				<h1>Edit Social</h1>
+
+				<form method="POST" id="updatesocialform">
+					{% csrf_token %}
+					<strong><i class="fab fa-instagram"></i> Instagram</strong>
+					<p><span>https://www.instagram.com/</span>{{ social_form.social_instagram }}</p>					
+
+					<strong><i class="fab fa-twitter"></i> Twitter</strong>
+					<p><span>https://www.twitter.com/</span>{{ social_form.social_twitter }}</p>
+
+					<strong><i class="fab fa-facebook"></i> Facebook</strong>
+					<p><span>https://www.facebook.com/</span>{{ social_form.social_facebook }}</p>
+
+					<strong><i class="fab fa-youtube"></i> YouTube</strong>
+					<p><span>https://www.youtube.com/</span>{{ social_form.social_youtube }}</p>
+
+					<strong><i class="fab fa-twitch"></i> Twitch</strong>
+					<p><span>https://www.twitch.com/</span>{{ social_form.social_twitch }}</p>
+
+					<strong><i class="fab fa-vimeo"></i> Vimeo</strong>
+					<p><span>https://www.vimeo.com/</span>{{ social_form.social_vimeo }}</p>
+
+					<strong><i class="fab fa-pinterest"></i> Pinterest</strong>
+					<p><span>https://www.pinterest.com/</span>{{ social_form.social_pinterest }}</p>
+
+					<strong><i class="fab fa-weibo"></i> Weibo</strong>
+					<p><span>https://www.weibo.com/</span>{{ social_form.social_weibo }}</p>
+
+					<strong><i class="fab fa-vk"></i> VK</strong>
+					<p><span>https://www.vk.com/</span>{{ social_form.social_vk }}</p>
+
+					<input type="hidden" name="user" value="{{ user.id }}" id="id_user">
+					<button class="btn grey" name="updatesocial" value="updatesocial">Update social links</button>
+				</form>
+
+			</div>
+		</div>
+
+	</div>
+
+</section>
+      
+
+{% endblock %}
+
+{% block extra-js %}
+
+	<!--- succes alert -->
+	{% if messages %}
+	    {% for message in messages %}    
+		    <script type="text/javascript">
+		    	function codeAddress() {
+		    	    Swal('Congratulations!', '{{ message }}', 'success')
+		    	}
+		    	window.onload = codeAddress;    
+		    </script>
+	    {% endfor %}
+	{% endif %}
+
+	<script type="text/javascript">
+
+		var error = false;
+
+		$('#id_social_instagram').on('input', function() {
+			var input=$(this);
+			var value=input.val();
+			if (value.startsWith("http") || value.startsWith("www") || value.startsWith("instagram.") ){
+				input.removeClass("valid").addClass("invalid");
+				error = true;
+			} else {
+				input.removeClass("invalid").addClass("valid");
+			}
+		});
+
+		// facebook
+		$('#id_social_facebook').on('input', function() {
+			var input=$(this);
+			var value=input.val();
+			if (value.startsWith("http") || value.startsWith("www") || value.startsWith("facebook.") ){
+				input.removeClass("valid").addClass("invalid");
+			} else {
+				input.removeClass("invalid").addClass("valid");
+			}
+		});
+
+		// twitter
+		$('#id_social_twitter').on('input', function() {
+			var input=$(this);
+			var value=input.val();
+			if (value.startsWith("http") || value.startsWith("www") || value.startsWith("twitter.") ){
+				input.removeClass("valid").addClass("invalid");
+			} else {
+				input.removeClass("invalid").addClass("valid");
+			}
+		});
+
+		// youtube
+		$('#id_social_youtube').on('input', function() {
+			var input=$(this);
+			var value=input.val();
+			if (value.startsWith("http") || value.startsWith("www") || value.startsWith("youtube.") ){
+				input.removeClass("valid").addClass("invalid");
+			} else {
+				input.removeClass("invalid").addClass("valid");
+			}
+		});
+
+		// twitch
+		$('#id_social_twitch').on('input', function() {
+			var input=$(this);
+			var value=input.val();
+			if (value.startsWith("http") || value.startsWith("www") || value.startsWith("twitch.") ){
+				input.removeClass("valid").addClass("invalid");
+			} else {
+				input.removeClass("invalid").addClass("valid");
+			}
+		});
+
+		// vimeo
+		$('#id_social_vimeo').on('input', function() {
+			var input=$(this);
+			var value=input.val();
+			if (value.startsWith("http") || value.startsWith("www") || value.startsWith("vimeo.") ){
+				input.removeClass("valid").addClass("invalid");
+			} else {
+				input.removeClass("invalid").addClass("valid");
+			}
+		});
+
+		// pinterest
+		$('#id_social_pinterest').on('input', function() {
+			var input=$(this);
+			var value=input.val();
+			if (value.startsWith("http") || value.startsWith("www") || value.startsWith("pinterest.") ){
+				input.removeClass("valid").addClass("invalid");
+			} else {
+				input.removeClass("invalid").addClass("valid");
+			}
+		});
+
+		// weibo
+		$('#id_social_weibo').on('input', function() {
+			var input=$(this);
+			var value=input.val();
+			if (value.startsWith("http") || value.startsWith("www") || value.startsWith("weibo.") ){
+				input.removeClass("valid").addClass("invalid");
+			} else {
+				input.removeClass("invalid").addClass("valid");
+			}
+		});
+
+		// vk
+		$('#id_social_vk').on('input', function() {
+			var input=$(this);
+			var value=input.val();
+			if (value.startsWith("http") || value.startsWith("www") || value.startsWith("vk.") ){
+				input.removeClass("valid").addClass("invalid");
+			} else {
+				input.removeClass("invalid").addClass("valid");
+			}
+		});
+
+	</script>
+{% endblock %}

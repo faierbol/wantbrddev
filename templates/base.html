@@ -18,6 +18,7 @@
 	<link href="//cdn.rawgit.com/noelboss/featherlight/1.7.13/release/featherlight.min.css" type="text/css" rel="stylesheet" />
     <link href="//cdn.rawgit.com/noelboss/featherlight/1.7.13/release/featherlight.gallery.min.css" type="text/css" rel="stylesheet" />
     <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet" />
+    <script src="https://unpkg.com/sweetalert2@7.22.2/dist/sweetalert2.all.js"></script>
     <link href="{% static 'css/slidein.css' %}" rel="stylesheet"> 
     <link href="{% static 'css/jquery-filestyle.min.css' %}" rel="stylesheet"> 
 	{% block extra-css %}{% endblock %}
@@ -36,7 +37,7 @@
 <header id="main">
     <div class="container clearfix">
         <div class="headerLeft">
-            <a class="logo" href="index.php"><span>wantbrd</span></a>
+            <a class="logo" href="{% url 'home' %}"><span>wantbrd</span></a>
             <div class="search">
                 <form method="GET" action="{% url 'search_item' %}">
                     <input
@@ -57,10 +58,17 @@
         </div>
         <div class="headerRight">
             <a href="#" class="influencerLink">Influencer?</a>
-            {% if is_authenticated %}
-            <a href="#" class="btn orange" data-featherlight="#loginModal">My Account</a>
+            {% if request.user.is_authenticated %}
+                <a href="{% url 'my_home' %}" class="btn orange">My Home</a>
+                <a href="#0" class="headerPpic js-cd-panel-trigger" data-panel="menu">
+                    {% if user.profile.picture %}
+                        <div class="circle" style="background-image:url('{{ user.profile.picture.url }}');"></div>
+                    {% else %}
+                        <div class="circle" style="background-image:url('{% static 'img/default-hero.png' %}');"></div>
+                    {% endif %}
+                </a>
             {% else %}
-            <a href="#" class="btn orange" data-featherlight="#loginModal">Login / Register</a>
+                <a href="#" class="btn orange" data-featherlight="#loginModal">Login / Register</a>
             {% endif %}
         </div>
     </div>
@@ -107,7 +115,7 @@
 
 
 <div id="loginModal" class="lightbox">
-    <h4>Login</h4>
+    <h4>Login</h4>    
     <form method="post" novalidate>
         {% csrf_token %}
         {{ login_form }}
@@ -115,6 +123,26 @@
     </form>
 </div>
 
+<div class="cd-panel cd-panel--from-right js-cd-panel-menu">
+    <header class="cd-panel__header">
+        <h1>{{ request.user.get_full_name}}</h1>
+        <span class="popUser">@{{ request.user.username }}</span>
+        <a href="#0" class="cd-panel__close js-cd-close">Close</a>
+    </header>
+
+    <div class="cd-panel__container account_slide">
+        <div class="cd-panel__content">
+            <ul>
+                <li><a href="{% url 'u:home' %}"><i class="far fa-clipboard"></i> <span>My Boards</span></a>
+                <li><a href="#"><i class="far fa-bookmark"></i> Saved Items</a>
+                <li><a href="#"><i class="far fa-flag"></i> Notifications</a>
+                <li><a href="{% url 'update_profile' %}"><i class="far fa-user"></i> Edit Profile</a>
+                <li><a href="#"><i class="far fa-check-square"></i> Settings &amp; Privacy</a>
+                <li><a href="{% url 'logout' %}"><i class="far fa-times-circle"></i> Logout</a>
+            </ul>
+        </div>
+    </div>
+</div>
 
 <!-- Constant JS -->
 <script src="{% static 'js/vendor/modernizr-3.5.0.min.js' %}" type="text/javascript"></script>
@@ -126,6 +154,8 @@
 <script src="{% static 'js/jquery-filestyle.min.js' %}" type="text/javascript"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
 <script src="{% static 'js/slidein.js' %}" type="text/javascript"></script>
+<script src="{% static 'js/tooltip.js' %}" type="text/javascript"></script>
+
 <script type="text/javascript">
     $(function() {
         $('.match').matchHeight();
