@@ -111,9 +111,9 @@ WSGI_APPLICATION = 'wantbrd.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'djangogirls',
-        'USER': 'name',
-        'PASSWORD': '',
+        'NAME': 'wantbrd',
+        'USER': 'admin',
+        'PASSWORD': 'password',
         'HOST': 'localhost',
         'PORT': '',
     }
