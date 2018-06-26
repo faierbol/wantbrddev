@@ -8,7 +8,10 @@ def get_trending_items(request, period):
 	now = datetime.datetime.now()
 	ago = now - datetime.timedelta(days=period)
 
-	item_likes = ItemLike.objects.filter(created__range=[ago, now])	
+	try:
+		item_likes = ItemLike.objects.filter(created__range=[ago, now])	
+	except:
+		pass
 	
 	itemconxs = []
 	trending_items = []
