@@ -27,11 +27,7 @@
 
 {% if not board.isblocked %}
 
-    {% if board.hero %}
-    <div class="boardWrap">
-    {% else %}    
-    <div class="boardWrap">
-    {% endif %}        
+    <div class="boardWrap">        
 
         {% if board.hero %}
         <div class="boardBg" style="background-image:url('{{ board.hero.url }}')"></div>
@@ -63,6 +59,7 @@
                 {% else %}
                 <span class="type">{{ board.board_type }}BOARD</span>
                 {% endif %}
+
                 {% if not board.slug == 'your-saved-items' %}
                 <div class="tags">    
                     <div id="theTags">
@@ -79,7 +76,10 @@
                                 <button class="altbtn" name="updatetags" value="1"><i class="fas fa-check"></i></button>
                             </form>                
                         </div>
-                        <a href="#" id="showEditTags" rel="tooltip" title="Set the board tags"><i class="fas fa-pencil-alt"></i></a>
+                        
+                        <a href="#" id="showEditTags" rel="tooltip" title="Set the board tags">
+                            {% if not board.thetags %} Tags {% endif %} &nbsp; <i class="fas fa-pencil-alt"></i>
+                        </a>
                         <a href="#" id="hideEditTags" style="display: none;"><i class="fas fa-times"></i></a>
                     {% endif %}
                 </div>
@@ -156,7 +156,10 @@
                                 <button class="altbtn" name="updatedescription" value="1"><i class="fas fa-check"></i></button>
                             </form>                
                         </div>                    
-                        <a href="#" id="showEditDesc" rel="tooltip" title="Add a board description"><i class="fas fa-pencil-alt"></i></a>
+                        <a href="#" id="showEditDesc" rel="tooltip" title="Add a board description">
+                            {% if not board.description %}Board description {% endif %}
+                            <i class="fas fa-pencil-alt"></i>
+                        </a>
                         <a href="#" id="hideEditDesc" style="display: none;"><i class="fas fa-times"></i></a>
                     {% endif %}
                 </div>
@@ -179,10 +182,6 @@
                 {% endif %}
             {% endif %}
 
-            {% if message %}
-            <div>{{ message }}</div>
-            {% endif %}
-
             <div id="boardItems">
                 
                 {% if editable and not board.slug == 'your-saved-items' %}
@@ -190,27 +189,25 @@
                     <strong>Add Item</strong>
                     <i class="far fa-smile"></i>
                 </a>
-                {% endif %}        
+                {% endif %}                
 
                 {% if items %}
 
-                    {% for item in items %}
+                    {% for itemconx in items %}                    
 
                     <div class="featBox boardPic">                
-                        {% if item.itemconx.item_status == 'GOT' %}
-                        <div class="got">Got This<span></span></div>
-                        {% endif %}
+
                         {% if not editable %}
                         <div class="featBoxMeta">
                             <a href="#"><i class="fas fa-share"></i> Share</a>
                             <form class="inline" method="POST">
                                 {% csrf_token %}
-                                <input type="hidden" name="itemconx_id" value="{{ item.itemconx.id }}">
+                                <input type="hidden" name="itemconx_id" value="{{ itemconx.id }}">
                                 <button class="naked" name="savelater"><i class="far fa-bookmark"></i> Save</button>
                             </form>
-                            <a href="#" data-featherlight="#addToBoard{{item.id}}"><i class="fas fa-plus"></i> Add to My Board</a>
-                            <div id="addToBoard{{ item.id }}" class="lightbox addpop">
-                                <form method="POST" id="addtoboard-{{item.id}}" name="addtoboard{{item.id}}">
+                            <a href="#" data-featherlight="#addToBoard{{itemconx.id}}"><i class="fas fa-plus"></i> Add to My Board</a>
+                            <div id="addToBoard{{ itemconx.id }}" class="lightbox addpop">
+                                <form method="POST" id="addtoboard-{{itemconx.id}}" name="addtoboard{{itemconx.id}}">
                                     {% csrf_token %}        
                                     <p>Select which of your boards you would like to copy this item to:</p>
                                     <select name="board_id">
@@ -218,7 +215,7 @@
                                             <option value="{{board.id}}">{{board.board_name}}</option>
                                         {% endfor %}
                                     </select>
-                                    <input type="hidden" name="itemconx_id" value="{{ item.itemconx.id }}">
+                                    <input type="hidden" name="itemconx_id" value="{{ itemconx.id }}">
                                     <p><button class="btn orange" name="addtoboard">Add to board</button></p>
                                 </form>
                             </div>
@@ -226,63 +223,75 @@
                         {% endif %}
                         {% if editable %}
                         <div class="featBoxMeta">
-                            <a href="{% url 'b:edit_item' board.id item.id %}"><i class="fas fa-share"></i> Edit</a>
-                            <a href="#" data-featherlight="#deleteModal{{ item.itemconx.id }}"><i class="far fa-bookmark"></i> Delete</a>
+                            <a href="{% url 'b:edit_item' board.id itemconx.id %}"><i class="fas fa-share"></i> Edit</a>
+                            <a href="#" data-featherlight="#deleteModal{{ itemconx.id }}"><i class="far fa-bookmark"></i> Delete</a>
                         </div>
-                        <div id="deleteModal{{ item.itemconx.id }}" class="lightbox deletepop">
-                            <h4>Delete "{{ item.item_name }}"</h4>
-                            <p>Are you sure you would like to delete the item <em>{{ item.item_name }}</em>? The item and all it's comments will be permenantly removed. Don't forget you can always make your item inactive instead.</p>
-                            <form method="POST" id="deleteitem-{{item.itemconx.id}}" name="deleteitem_{{item.itemconx.id}}">
+                        <div id="deleteModal{{ itemconx.id }}" class="lightbox deletepop">
+                            <h4>Delete "{{ itemconx.item.item_name }}"</h4>
+                            <p>Are you sure you would like to delete the item <em>{{ itemconx.item.item_name }}</em>? The item and all it's comments will be permenantly removed. Don't forget you can always make your item inactive instead.</p>
+                            <form method="POST" id="deleteitem-{{itemconx.id}}" name="deleteitem_{{itemconx.id}}">
                                 {% csrf_token %}                            
-                                <input type="hidden" name="item_id" value="{{ item.itemconx.id }}">
+                                <input type="hidden" name="item_id" value="{{ itemconx.id }}">
                                 <button class="btn orange" name="deleteitem">Yes, delete this item</button>
                             </form>
                         </div>
                         {% endif %}
 
                         {% if editable %}
-                            <a href="{% url 'b:edit_item' board.id item.id %}">
-                                {% thumbnail item.itemconx.image "300x300" as im %}
+                            <a href="{% url 'b:edit_item' board.id itemconx.id %}">
+                                {% thumbnail itemconx.image "300x300" as im %}
                                     <img src="{{ im.url }}">
                                 {% endthumbnail %}
                             </a>
-                            <a href="{% url 'b:edit_item' board.id item.id %}" class="boardItemName">{{ item.item_name }}</a>
+                            <a href="{% url 'b:edit_item' board.id itemconx.id %}" class="boardItemName">{{ itemconx.item.item_name }}</a>
 
                         {% else %}
                         
-                            <a class="btn btn-default" href="{% url 'b:view_item' board.user board.slug item.itemconx.id %}">
-                                {% thumbnail item.itemconx.image "300x300" as im %}
+                            <a class="btn btn-default" href="{% url 'b:view_item' board.user board.slug itemconx.id %}">
+                                {% thumbnail itemconx.image "300x300" as im %}
                                     <img src="{{ im.url }}">
                                 {% endthumbnail %}
                             </a>
-                            <a href="{% url 'b:view_item' board.user board.slug item.itemconx.id %}" class="boardItemName">{{ item.item_name }}</a>
+                            <a href="{% url 'b:view_item' board.user board.slug itemconx.id %}" class="boardItemName">{{ itemconx.item.item_name }}</a>
 
                         {% endif %}
 
                         {% if not board.slug == 'your-saved-items' %}
                         <div class="boardItemStats">
                             <span><i class="far fa-comments"></i> 
-                            	{% get_comment_count for item as comment_count %}
+                            	{% get_comment_count for itemconx as comment_count %}
                             	{{ comment_count }}                    	
                             </span>
-                            <span><i class="fas fa-eye"></i> {{ item.views }}</span>
+                            <span><i class="fas fa-eye"></i> {{ itemconx.views }}</span>
 
-                            {% if item.is_liked %}
+                            {% if itemconx.is_liked %}
                                 <span>
                                     <form class="inline" method="POST">
                                         {% csrf_token %}
-                                        <input type="hidden" name="itemconx_id" value="{{ item.itemconx.id }}">
-                                        <button class="naked" name="unlikeitem"><i class="fas fa-heart likeon"></i></a> {{ item.likes }}</button>
+                                        <input type="hidden" name="itemconx_id" value="{{ itemconx.id }}">
+                                        <button class="naked" name="unlikeitem"><i class="fas fa-heart likeon"></i></a> {{ itemconx.likes }}</button>
                                     </form>
                                 </span>
                             {% else %}
                                 <span>
                                     <form class="inline" method="POST">
                                         {% csrf_token %}
-                                        <input type="hidden" name="itemconx_id" value="{{ item.itemconx.id }}">
-                                        <button class="naked" name="likeitem"><i class="far fa-heart"></i> {{ item.likes }}</button>
+                                        <input type="hidden" name="itemconx_id" value="{{ itemconx.id }}">
+                                        <button class="naked" name="likeitem"><i class="far fa-heart"></i> {{ itemconx.likes }}</button>
                                     </form>
                                 </span>                                    
+                            {% endif %}
+                            {% if itemconx.item_status == 'GOT' %}
+                                <div class="got">
+                                    <span>GOT THIS!</span>
+                                    {% if itemconx.rating == '3' %}
+                                        <i class="far fa-smile"></i>
+                                    {% elif itemconx.rating == '2' %}
+                                        <i class="far fa-meh"></i>
+                                    {% elif itemconx.rating == '1' %}
+                                        <i class="far fa-frown"></i>
+                                    {% endif %}
+                                </div>
                             {% endif %}
                         </div>
                         {% endif %}
@@ -461,11 +470,6 @@
         $( "#showEditTags" ).show();
         $( "#hideEditTags" ).hide();
         e.preventDefault();
-    });
-
-    // select 2
-    $(document).ready(function() {
-        $('select').select2();
     });
 
 </script>  

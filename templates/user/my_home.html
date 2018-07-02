@@ -14,7 +14,12 @@
 
 {% block body %}
 
-    <div class="discoveryWrap" style="background-image:url('img/profile-hero.jpg')"></div>
+    {% if profile.background %}
+    <div class="discoveryWrap" style="background-image:url('{{ profile.background.url  }}"></div>
+    {% else %}
+    <div class="discoveryWrap" style="background-image:url('{% static 'img/profile-hero.jpg' %}"></div>
+    {% endif %}
+
     <div id="discoveryCont" class="container clearfix">
         
         <div class="feedLeft">

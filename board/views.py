@@ -18,11 +18,8 @@ from django.core import files
 from io import BytesIO
 from wantbrd.utils import get_trending_items, get_trending_boards, get_trending_users, get_recommended_boards
 import requests
-
-# instantiate a chrome options object so you can set the size and headless preference
-chrome_options = Options()
-chrome_options.add_argument("--headless")
-chrome_options.add_argument("--window-size=1920x1080")
+import urllib.request
+import base64
 
 
 ##### HOME PAGE
@@ -41,7 +38,7 @@ def home(request):
 			hot_items.append(item)
 
 	context_dict = {
-		'hot_items':hot_items
+		'hot_items':hot_items,
 	}
 
 	return render(request, template, context_dict)
@@ -124,9 +121,7 @@ def edit_board(request, board_id):
 	item_conxs = ItemConnection.objects.filter(board=board_id)
 	allusers = User.objects.all()
 	for item_conx in item_conxs:
-		item = Item.objects.get(pk=item_conx.item.id)
-		item.itemconx = item_conx
-		items.append(item)	
+		items.append(item_conx)	
 
 	blocked_obj = BoardPrivacy.objects.filter(board=board) 
 	board.blocked = []
@@ -242,39 +237,22 @@ def edit_board(request, board_id):
 
 
 ##### Edit item
-def edit_item(request, board_id, item_id):
+def edit_item(request, board_id, itemconx_id):
 	template = 'board/edit_item.html'
 	board = get_object_or_404(Board, id=board_id)
-	item = get_object_or_404(Item, id=item_id)
-	itemconx = get_object_or_404(ItemConnection, item=item, board=board_id)
-	itemconxs = ItemConnection.objects.filter(item=item).count()
-
-	form = ItemForm(instance=item)
-	item.url = itemconx.purchase_url
-
-	context_dict = {
-		'board':board,
-		'item':item,
-		'itemconx':itemconx,
-		'form':form,
-		'itemconxs':itemconxs,
-	}
+	itemconx = get_object_or_404(ItemConnection, pk=itemconx_id)	
+	item = get_object_or_404(Item, pk=itemconx.item.id)
+	form = ItemForm(instance=itemconx)	
 
 	if request.method == 'POST':
 
 		if 'updateitem' in request.POST:
-			form = ItemForm(request.POST, request.FILES, instance=item)
+			form = ItemForm(request.POST, instance=itemconx)
 			item_name = request.POST.get("item_name")
-			purchase_url = request.POST.get("purchase_url")
-			item_status = request.POST.get("item_status")
-			item_desc = request.POST.get("item_desc")
-			item_active = request.POST.get("item_active")
-			if item_active == "active":
-				item_active = True
-			else:
-				item_active = False		
 
 			if form.is_valid():
+				# save the new form instance to a var
+				itemconx = form.save(commit=False)				
 				# if the name has changed
 				if item.item_name != item_name:
 					# check is there is another item_connection connected to this item
@@ -292,14 +270,20 @@ def edit_item(request, board_id, item_id):
 					else:
 						# we can update the original item
 						item.item_name = item_name
-						item.save()					
-				itemconx.purchase_url = purchase_url
-				itemconx.item_status = item_status
-				itemconx.item_desc = item_desc
-				itemconx.active = item_active
-				itemconx.save()					
+						item.save()
+				form.save()		
 
 				return redirect('b:edit_board', board_id=board_id)
+
+			else:
+				return redirect('home')				
+
+	context_dict = {
+		'board':board,
+		'itemconx':itemconx,
+		'form':form,
+		'item':item,
+	}
 
 	return render(request, template, context_dict)
 
@@ -330,12 +314,10 @@ def view_board(request, username, board_name):
 
 	items = []
 	item_conxs = ItemConnection.objects.filter(board=board.id)		
-	for item_conx in item_conxs:
-		item = Item.objects.get(pk=item_conx.item.id)
-		item.likes = ItemLike.objects.filter(item_conx=item_conx).count()
-		item.is_liked = ItemLike.objects.filter(item_conx=item_conx, user=request.user).exists()
-		item.views = ItemView.objects.filter(item_conx=item_conx).count()
-		item.itemconx = item_conx
+	for item in item_conxs:
+		item.likes = ItemLike.objects.filter(item_conx=item).count()
+		item.is_liked = ItemLike.objects.filter(item_conx=item, user=request.user).exists()
+		item.views = ItemView.objects.filter(item_conx=item).count()
 		items.append(item)	
 
 	user_boards = Board.objects.filter(user=user).exclude(board_name="Your Saved Items")
@@ -441,40 +423,42 @@ def add_item(request, board_id):
 	board = get_object_or_404(Board, pk=board_id)
 	form = ItemForm()
 	url = ''
-	page = ''
 
 	if request.method == 'POST':
 
 		if 'geturl' in request.POST:
 
-			# the url submitted	
+			ogimg = False
+			og_img_meta = False
+			sizes = []
+			allimages = []
+			output = []
 			url = request.POST.get("targeturl", "")
-			# get the domain from the url var
 			parsed_uri = urlparse(url)
 			domain = '{uri.scheme}://{uri.netloc}/'.format(uri=parsed_uri)
-			# set up selenium to use headless chrome
-			driver = webdriver.Chrome("/usr/bin/chromedriver", chrome_options=chrome_options)
-			driver.get(url)
-			# assign the scraped page content to response
-			response = driver.page_source
-			allimages = driver.find_elements_by_tag_name('img')
-			page_title = driver.title
-			# soup = BeautifulSoup(response)
-			# find all image tags in response
-			# images = soup.find_all('img')
-			data = []
-			sizes = []
+			
+			headers = {"Content-Type": "application/json", "Authorization": "Token bbe4508713209982e62f29b19add62d4a3a8a851"}
+			data = {"url":url}
+			res = requests.post('https://string.click/api/0.1/', json=data, headers=headers)
+			json = res.json()
+			all_images = json['all_images']	
 
-			for image in allimages:
-				imgurl = image.get_attribute('src')
+			# if there was no open graph image
+			for img in all_images:
+
+				# get src from img
+				imgurl = img['src']				
+				# check a value is there and its not a data: src
 				if (imgurl is not None) and ("data:" not in imgurl):
-					# check is src starts without full path and append with domain appropriately 
+
+					# check if src starts without full path and append with domain appropriately 
 					if not imgurl.startswith("http"):
 						if imgurl.startswith("//"):
 							imgurl = "https:" + imgurl
 						else:
 							imgurl = domain + imgurl
 
+					allimages.append(imgurl)		
 					# get the sizes		
 					file = urllib.request.urlopen(imgurl)
 					size = file.headers.get("content-length")
@@ -486,21 +470,24 @@ def add_item(request, board_id):
 							break
 						p.feed(imgdata)
 						if p.image:
-							if p.image.size[0] > 200:
+							if p.image.size[0] > 300 and p.image.size[1] > 300:
 								sizes.append(p.image.size[0])
-								data.append(imgurl)
+								output.append(imgurl)
 							break
-					file.close()					
+					file.close()
 					
 			context_dict = {
 				'board':board,
 				'form':form,
-				'data':data,
 				'domain':domain,
-				'sizes':sizes,
 				'url':url,
-				'allimages':allimages,
-				'pagetitle':page_title,
+				'all_images':all_images,
+				# 'pagetitle':page_title,
+				# 'ogimg':ogimg,
+				# 'soup':soup,
+				# 'allimages':allimages,
+				'json':json,
+				'output':output,
 			}
 
 			return render(request, template, context_dict)
@@ -510,9 +497,12 @@ def add_item(request, board_id):
 			imgsrc = request.POST.get("imgsrc")
 			item_name = request.POST.get("item_name")
 			purchase_url = request.POST.get("purchase_url")
-			item_status = request.POST.get("item_name")
+			item_status = request.POST.get("item_status")
 			item_desc = request.POST.get("item_desc")
 			item_active = request.POST.get("item_active")
+			rating = request.POST.get("rating")
+			review = request.POST.get("review")
+
 			if item_active == "active":
 				item_active = True
 			else:
@@ -535,9 +525,11 @@ def add_item(request, board_id):
 				new_item_conx.board = board
 				new_item_conx.item = new_item
 				new_item_conx.purchase_url = purchase_url
-				new_item_conx.status = item_status
+				new_item_conx.item_status = item_status
 				new_item_conx.item_desc = item_desc
 				new_item_conx.active = item_active
+				new_item_conx.rating = rating
+				new_item_conx.review = review
 				if imgsrc == 'own':
 					new_image = request.FILES['ownimage']
 					new_item_conx.image = new_image
@@ -548,9 +540,9 @@ def add_item(request, board_id):
 
 				return redirect('b:edit_board', board_id=board_id)
 
+
 	context_dict = {
 		'board':board,
-		'page':page,
 	}
 
 	return render(request, template, context_dict)

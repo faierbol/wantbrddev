@@ -1,6 +1,6 @@
 from django import forms
 from django.forms import Textarea
-from .models import Board, Item
+from .models import Board, Item, ItemConnection
 from django.core.exceptions import ValidationError
 
 
@@ -22,10 +22,11 @@ class BoardForm(forms.ModelForm):
 
 class ItemForm(forms.ModelForm):
 	class Meta:
-		model = Item
-		exclude = ['image', 'item_name']
+		model = ItemConnection
+		fields = ['purchase_url', 'item_desc', 'item_status', 'rating', 'review']
 		widgets = {
 	        'item_desc': Textarea(),
+	        'rating':forms.HiddenInput()
 	    }
 
 

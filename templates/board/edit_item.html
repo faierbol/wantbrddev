@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load staticfiles %}
+{% load thumbnail %}
 
 {% block title %}
 	Add Item
@@ -12,40 +13,182 @@
 
 
 {% block body %}
-<section id="addItem">
-	<div class="container">
 
-		<h1>Edit {{ item.item_name }}</h1>
+{% if board.background %}
+<div class="discoveryWrap" style="background-image:url('{{ board.background.url  }}"></div>
+{% else %}
+<div class="discoveryWrap" style="background-image:url('{% static 'img/default-hero.jpg' %}"></div>
+{% endif %}
 
-		<p><img src="{{ itemconx.image.url }}" style="max-width: 200px; height: auto;"></p>
+<div id="discoveryCont" class="container clearfix">
+    
+    <div class="addItem">
 
-<!-- 		<form method="POST">
-			{% csrf_token %}
-			<input type="text" name="targeturl" placeholder="Enter url of the item" value="{{ item.url }}">
-			<button name="geturl">Get item</button>
-		</form> -->
+        <h3>Edit: <em>{{ itemconx.item.item_name }}</em></h3>
 
-		<form method="POST" enctype="multipart/form-data">
-			{% csrf_token %}
-			<label>Item name:</label>
-			<input type="text" name="item_name" value="{{ item.item_name }}">
-			{{ form.as_p }}			
-			<br>
-			<label>URL:</label>
-			<input type="text" name="purchase_url" value="{{ itemconx.purchase_url }}"><br>
-			<input type="hidden" name="scrapedimg" value="" id="scrapedimg"><br>
-			<textarea name="item_desc">{{ itemconx.item_desc }}</textarea><br>
-			<select name="item_status">
-				<option value="WANT">I Want This</option>
-				<option value="GOT">I've got this</option>
-			</select><br>
-			Active <input type="checkbox" name="active" checked="checked" value="active">
-			<p><button class="orange" name="updateitem" value="1">Update item</button></p>
-		</form>
+        <div class="addItemContent">
+        	
+            <div id="addeditleft">
+            	<div style="margin-bottom:30px;">
+                    {% thumbnail itemconx.image "500x500" as im %}
+                        <img src="{{ im.url }}">
+                    {% endthumbnail %}                
+                </div>
+            </div>
 
+            <div id="addeditright">
 
-	</div>
+            	<form method="POST" enctype="multipart/form-data" id="edititemform" name="edititemform">
+            		<div class="addItemFields">
 
-</section>
+            			{% csrf_token %}
+            			<label>Item name:</label>
+            			<input type="text" name="item_name" value="{{ itemconx.item.item_name }}">	
+            			
+            			<label>Link to buy/view this item:</label>
+                        {{ form.purchase_url }}
+            			
+            			<label>About this item:</label>
+                        {{ form.item_desc }}
+            			
+                        <label>Is this something you want or already have?</label>
+                        {{ form.item_status }}                    
 
+                        {% if itemconx.item_status == 'GOT' %}
+                        <div class="gotThisExtra">
+                        {% else %}
+                        <div class="gotThisExtra" style="display:none;">
+                        {% endif %}
+                            <label>How would you rate this item?</label>
+                            {% if itemconx.rating == '3' %}
+                                <a href="#" id="three" class="rate on" rel="tooltip" title="Recommended"><i class="far fa-smile"></i></a>    
+                            {% else %}
+                                <a href="#" id="three" class="rate" rel="tooltip" title="Recommended"><i class="far fa-smile"></i></a>
+                            {% endif %}
+                            {% if itemconx.rating == '2' %}
+                                <a href="#" id="two" class="rate on" rel="tooltip" title="Meh"><i class="far fa-meh"></i></a>
+                            {% else %}
+                                <a href="#" id="two" class="rate" rel="tooltip" title="Meh"><i class="far fa-meh"></i></a>
+                            {% endif %}
+                            {% if itemconx.rating == '1' %}
+                                <a href="#" id="one" class="rate on" rel="tooltip" title="Not recommended"><i class="far fa-frown"></i></a>
+                            {% else %}
+                                <a href="#" id="one" class="rate" rel="tooltip" title="Not recommended"><i class="far fa-frown"></i></a>
+                            {% endif %}
+                            {{ form.rating }}                        
+
+                            <label>Review this item:</label>
+                            <textarea name="review" id="review" placeholder="Write a short review for others, explaining what you like or dislike about this item.">{{ itemconx.review }}</textarea>
+                        </div>
+
+            			<label>Make active</label>
+            			<input type="checkbox" name="active" checked="checked" value="active" id="itemactive" hidden="hidden">
+            			<label class="switch" for="itemactive"></label>
+
+                        <button class="grey large" name="updateitem" id="updateitem" value="1" onclick="clicked(event)">Update item</button>                    
+
+    	        	</div>
+            	</form>
+            </div>
+
+            <div class="clearfix"></div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}
+
+{% block extra-js %}
+<script src="{% static 'js/slick.min.js' %}" type="text/javascript"></script>
+<script>
+    $(document).ready(function(){
+        $('.imageSlider').slick({
+            arrows:true,
+            slidesToShow: 1,
+            dots: false,
+            nextArrow: '<i class="itemLeft fa fa-chevron-right"></i>',
+            prevArrow: '<i class="itemRight fa fa-chevron-left"></i>',
+        });
+    	$('.retimg').click(function() {
+            var src = $(this).find('img').attr('src');
+            $('#scrapedimg').val(src);   
+            $('.retimg i').hide();
+            $(this).find('i').show();
+    	});
+		$('#uploadweb').click(function() {	        
+	        $('#imgsrc').val('web');
+            $('#uploadOwnImage').hide();
+            $('#uploadweb').hide();
+            $('#uploadFromSite').show();
+            $('#uploadown').show();
+		});
+		$('#uploadown').click(function() {
+	        $('#imgsrc').val('own');
+            $('#uploadOwnImage').show();
+            $('#uploadweb').show();
+            $('#uploadFromSite').hide();
+            $('#uploadown').hide();
+		});
+
+		$('#additem').click(function(e){
+		    var imgsrc = $('#imgsrc').val();
+		    var scrapedimg = $('#scrapedimg').val();
+		    var ownimg = $('#ownimage').val();
+		    var postit = true
+
+	        if(imgsrc == "web"){
+	        	if(scrapedimg == ""){
+	        		console.log('scraped image is empty')
+	        		postit = false
+	        	};
+	        };
+
+	        if(imgsrc == "own"){
+	        	if(ownimg == ""){
+	        		console.log('own image is empty')
+	        		postit = false
+	        	};
+	        };
+
+	        if (postit == false) {
+		        e.preventDefault()
+		    } else {
+		    	return true
+		    }
+
+		});
+        $('#id_item_status').change(function(){
+            if ($(this).val() == 'GOT') {
+                $('.gotThisExtra').show();
+            } else {
+                $('.gotThisExtra').hide();
+            }
+        });
+        var rating = $('#id_rating');
+        $('#three').click(function(e){
+            rating.val("3");
+            $(this).addClass('on');
+            $('#one').removeClass('on');
+            $('#two').removeClass('on');
+            e.preventDefault();
+        })
+        $('#two').click(function(e){
+            rating.val("2");
+            $(this).addClass('on');
+            $('#one').removeClass('on');
+            $('#three').removeClass('on');
+            e.preventDefault();
+        })
+        $('#one').click(function(e){
+            rating.val("1");
+            $(this).addClass('on');
+            $('#two').removeClass('on');
+            $('#three').removeClass('on');
+            e.preventDefault();
+        })
+    });
+</script>
 {% endblock %}

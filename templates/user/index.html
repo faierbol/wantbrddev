@@ -46,15 +46,7 @@
                             {% if request.path != '/u/' %}
                                 <a href="{% url 'u:home' %}" class="btn orange">Add/edit boards</a>
                             {% else %}
-                                <a href="#" class="btn orange" data-featherlight="#setBackgroundModal">Set Background</a>
-                                <div id="setBackgroundModal" class="lightbox">
-                                    <h4>Set Background</h4>
-                                    <form method="POST" enctype="multipart/form-data">
-                                        {% csrf_token %}
-                                        {{ bgform.as_p }}
-                                        <button class="btn orange" name="changebackground" value="changebackground">Use Background</button>
-                                    </form>
-                                </div>
+                                <a href="#0" class="btn orange js-cd-panel-trigger" data-panel="main" title="Update your background and bio" rel="tooltip">Profile Settings</a>
                             {% endif %}
                         {% else %}
                             {% if is_followed %}
@@ -75,10 +67,6 @@
                 <div class="profileBio match">
 
                     <div class="theBio">                        
-                        {% if request.path == '/u/' %}
-                            <a href="#" class="bioeditbtn" id="showEditBio" rel="tooltip" title="Write a little about yourself"><i class="fas fa-pencil-alt"></i></a>
-                            <a href="#" class="bioeditbtn" id="hideEditBio" style="display: none;"><i class="fas fa-times"></i></a>
-                        {% endif %}
                         <p>{{ profile.bio }}</p>
                         <div class="pSocial">
                             {% if profile.social_instagram %}
@@ -111,16 +99,6 @@
                         </div>
                     </div>
 
-                    {% if profile.user == request.user %}
-                        <div id="editBio" style="display: none;">
-                            <form method="POST">
-                                {% csrf_token %}
-                                <input type="text" id="userBio" name="userBio" value="{{ profile.bio }}">
-                                <button class="altbtn" name="updatebio" value="1"><i class="fas fa-check"></i></button>
-                            </form>                
-                        </div>                    
-                    {% endif %}
-
                 </div>
 
             </div>
@@ -138,9 +116,8 @@
             <form method="POST" name="add_board" id="add_board">
                 {% csrf_token %}
                 <p class="error">{{ error }}</p>
-                <input type="text" placeholder="Name your board..." name="boardname" required="requred">
-                <p><button value="createwantboard" name="createwantboard" class="btn orange">Create a Want Board</button></p>
-                <p><button value="createrecboard" name="createrecboard" class="btn orange">Create a Recommended Board</button></p>
+                <input type="text" placeholder="Name your board..." name="boardname" id="boardname">
+                <p><button id="createwantboard" value="createwantboard" name="createwantboard" class="btn orange">Create a Board</button></p>                
             </form>
         </div>
 
@@ -232,13 +209,21 @@
                             {% endfor %}
                         </div>
                         <div class="trendingFooter clearfix">
-                            <span>{{ board.count }} Items</span>
-                            <span>{{ board.views }}
-                            {% if board.views > 1 or board.views == 0 %}
-                            Views
-                            {% else %}
-                            View
-                            {% endif %}
+                            <span>
+                                {{ board.count }}
+                                {% if board.count == 1 %}
+                                Item
+                                {% else %}
+                                Items
+                                {% endif %}
+                            </span>
+                            <span>
+                                {{ board.views }}
+                                {% if board.views > 1 or board.views == 0 %}
+                                Views
+                                {% else %}
+                                View
+                                {% endif %}
                             </span>
                         </div>
 
@@ -255,41 +240,59 @@
     </div>
 </section>
 
+<div class="cd-panel cd-panel--from-right js-cd-panel-main" id="profileSlide">
+    <header class="cd-panel__header">
+        <h1>Profile Settings</h1>
+        <a href="#0" class="cd-panel__close js-cd-close">Close</a>
+    </header>
+
+    <div class="cd-panel__container">
+        <div class="cd-panel__content">
+            <div class="optionsPanel setBackground">
+                <h4>Set Background</h4>
+                <form method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    {{ bgform.as_p }}
+                    <button class="btn orange" name="changebackground" value="changebackground">Update background</button>
+                </form>
+            </div>
+
+            <div class="optionsPanel manageBio">
+                <h4>About You</h4>
+                <form method="POST">
+                    {% csrf_token %}
+                    <textarea type="text" id="userBio" name="userBio">{{ profile.bio }}</textarea>
+                    <button class="btn orange" name="updatebio" value="1">Update</button>
+                </form>                
+            </div>
+
+        </div>
+    </div>
+</div>
+
 {% endblock %}
 
 {% block extra-js %}
 
-<!--- succes alert -->
-{% if messages %}
-    {% for message in messages %}    
-        <script type="text/javascript">
-            function codeAddress() {
-                Swal('Congratulations!', '{{ message }}', 'success')
-            }
-            window.onload = codeAddress;    
-        </script>
-    {% endfor %}
-{% endif %}
+    <!--- succes alert -->
+    {% if messages %}
+        {% for message in messages %}    
+            <script type="text/javascript">
+                function codeAddress() {
+                    Swal('Congratulations!', '{{ message }}', 'success')
+                }
+                window.onload = codeAddress;    
+            </script>
+        {% endfor %}
+    {% endif %}
 
-<!-- editing the bio -->
-<script type="text/javascript">
-    // show desc edit
-    $('#showEditBio').click(function(e){
-        $( ".theBio" ).hide();
-        $( "#editBio" ).show();
-        $( "#showEditBio" ).hide();
-        $( "#hideEditBio" ).show();        
-        e.preventDefault();
-    });
-    // hide desc edit
-    $('#hideEditBio').click(function(e){
-        $( ".theBio" ).show();
-        $( "#editBio" ).hide();
-        $( "#showEditBio" ).show();
-        $( "#hideEditBio" ).hide();        
-        e.preventDefault();
-    });
-</script>
-
+    <script type="text/javascript">
+        $('#createwantboard').click(function(e){
+            if(!$('#boardname').val()){
+                Swal('You need to enter a name for your board', '{{ message }}', 'error');
+                e.preventDefault();
+            };
+        })
+    </script>
 
 {% endblock %}

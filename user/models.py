@@ -4,6 +4,8 @@ from board.models import Board, BoardView, ItemConnection
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from phonenumber_field.modelfields import PhoneNumberField
+from django_countries.fields import CountryField
+
 
 def user_directory_path(instance, filename):
     return 'user_files/{0}/picture/{1}'.format(instance.user.id, filename)
@@ -12,7 +14,7 @@ def user_directory_path(instance, filename):
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     bio = models.TextField(default='', max_length=500, blank=True)
-    country = models.CharField(default='', max_length=30, blank=True)
+    country = CountryField(default='', max_length=30, blank=True)
     date_of_birth = models.DateField(null=True, blank=True)
     phone_number = PhoneNumberField(default='', null=True, blank=True)
     website = models.URLField(default='', blank=True)
@@ -86,6 +88,10 @@ class Profile(models.Model):
                 break
 
         return suggested_boards
+
+    def get_saved_board(self):
+        saved_board = Board.objects.get(user=self.user, slug="your-saved-items")
+        return saved_board.id
 
 
 # update or create user profile model when user model is created or updated

@@ -12,68 +12,140 @@
 
 
 {% block body %}
-<section id="addItem">
-	<div class="container">
 
-		<h1>Adding item to: {{ board.board_name }}</h1>
+{% if board.background %}
+<div class="discoveryWrap" style="background-image:url('{{ board.background.url  }}"></div>
+{% else %}
+<div class="discoveryWrap" style="background-image:url('{% static 'img/default-hero.jpg' %}"></div>
+{% endif %}
 
-		<h2>Add Item</h2>
+<div id="discoveryCont" class="container clearfix">
+    
+    <div class="feedLeft">&nbsp;</div>
 
-		<form method="POST">
-			{% csrf_token %}
-			<input type="text" name="targeturl" placeholder="Enter url of the item" value="{{ url }}">
-			<button name="geturl">Get item</button>
-		</form>
+    <div class="addItem">
 
-		{% if domain %}
-			<p>Looking at {{ domain }}</p>
-		{% endif %}
+<!--         <div>
+            {{ json }}
+        </div>
 
-		{% if data %}
-		<form method="POST" enctype="multipart/form-data">
-			{% csrf_token %}
-			<div id="addItemForm">
-				<input id="tab1" type="radio" name="tabs" checked>
-				<label for="tab1">From website</label>
+        <div>
+            {{all_images}}
+        </div> -->
 
-				<input id="tab2" type="radio" name="tabs">
-				<label for="tab2">Upload own</label>
+<!--         <div>
+            {% for src in output %}
+                <img src="{{ src }}">
+            {% endfor %}
+        </div> -->
+        
+        <h3>Add an item to <em>'{{ board.board_name }}'</em></h3>
 
-				<section id="content1">
-					<div class="imageSlider" style="margin-bottom:40px;">
-						{% for item in data %}
-							<div><img src="{{ item }}" class="retimg"></div>
-						{% endfor %}
-					</div>
-				</section>
+        <div class="addItemContent">
+        	
+        	<form method="POST">
+        		{% csrf_token %}
+        		<input type="text" name="targeturl" placeholder="Enter url of the item" value="{{ url }}" class="scrapeUrl">
+        		<button name="geturl" class="getItem">Get item</button>
+        	</form>
 
-				<section id="content2">
-					<input type="file" name="ownimage" id="ownimage">
-				</section>
-			</div>
+        	{% if domain %}
+        		<p>Looking at {{ domain }}</p>
+        	{% endif %}         
 
-			<label>Item name:</label>
-			<input type="text" name="item_name" value="{{ pagetitle }}">
-			{{ form.as_p }}			
-			<label>URL:</label>
-			<br>
-			<input type="text" name="purchase_url" value="{{ url }}"><br>
-			<br>
-			<select name="item_status">
-				<option value="WANT">I Want This</option>
-				<option value="GOT">I've got this</option>
-			</select><br>
-			<textarea name="item_desc"></textarea>
-			Active <input type="checkbox" name="active" checked="checked" value="active">
-			<input type="hidden" name="scrapedimg" value="" id="scrapedimg">
-			<input type="hidden" name="imgsrc" value="web" id="imgsrc">
-			<p><button class="orange submit" name="additem" id="additem" value="1">Add item</button></p>
-		</form>
-		{% endif %}
 
-	</div>
+        	<form method="POST" enctype="multipart/form-data">
+        		{% csrf_token %}
+        		<div id="addItemForm">
 
-</section>
+        			<section id="uploadFromSite">
+                        <p>Click on the image you would like to use.</p>
+        				<div class="imageSlider" style="margin-bottom:40px;">
+                            {% if ogimg %}
+                                <div>
+                                    <a href="#" class="retimg">
+                                        <i class="fas fa-check-circle"></i>
+                                        <img src="{{ ogimg }}">
+                                    </a>
+                                </div>                                
+                            {% else %}
+            					{% for src in output %}
+                                    <div>
+                                        <a href="#" class="retimg">
+                                            <i class="fas fa-check-circle"></i>
+                                            <img src="{{ src }}">
+                                        </a>
+                                    </div>        						
+            					{% endfor %}
+                            {% endif %}
+        				</div>
+        			</section>
+
+                    <a href="#" id="uploadown">Or, upload your own image</a>
+
+        			<section id="uploadOwnImage" style="display: none;">
+                        <p>Select an image from your device.</p>
+        				<input type="file" name="ownimage" id="ownimage">
+        			</section>
+
+                    <a href="#" id="uploadweb" style="display: none;">Or, get images from URL</a>
+
+        		</div>
+
+        		<div class="addItemFields">
+
+	        		<label>Item name:</label>
+	        		<input type="text" name="item_name" value="{{ pagetitle }}">
+	        		{{ form.as_p }}			
+
+	        		<label>Link to buy/view this item:</label>
+	        		<input type="text" name="purchase_url" value="{{ url }}"><br>
+
+	        		<label>About this item:</label>
+	        		<textarea name="item_desc"></textarea>
+
+                    <label>Is this something you want or already have?</label>
+                    <select name="item_status" id="item_status">
+                        <option value="WNT">I Want This</option>
+                        <option value="GOT">I've got this</option>
+                    </select>
+
+
+                    <div class="gotThisExtra" style="display:none;">
+                        <label>How would you rate this item?</label>
+                            <a href="#" id="three" class="rate" rel="tooltip" title="Recommended"><i class="far fa-smile"></i></a>
+                            <a href="#" id="two" class="rate" rel="tooltip" title="Meh"><i class="far fa-meh"></i></a>
+                            <a href="#" id="one" class="rate" rel="tooltip" title="Not recommended"><i class="far fa-frown"></i></a>
+                        <input type="hidden" name="rating" id="rating" value="0"> 
+
+                        <label>Review this item:</label>
+                        <textarea name="review" id="review" placeholder="Write a short review for others, explaining what you like or dislike about this item.">{{ itemconx.review }}</textarea>
+                    </div>
+
+	        		<label>Make active</label>
+	        		<input type="checkbox" name="active" checked="checked" value="active" id="itemactive" hidden="hidden">
+	        		<label class="switch" for="itemactive"></label>
+
+	        		<input type="hidden" name="scrapedimg" value="" id="scrapedimg">
+	        		<input type="hidden" name="imgsrc" value="web" id="imgsrc">
+
+	        		<button class="grey large submit" name="additem" id="additem" value="1">Add item</button>
+
+	        	</div>
+        	</form>
+
+            {% for size in sizes %}
+                {{ size }}
+            {% endfor %}
+        	
+
+        </div>
+
+    </div>
+
+    <div class="feedRight">&nbsp;</div>
+
+</div>
 
 {% endblock %}
 
@@ -84,17 +156,29 @@
         $('.imageSlider').slick({
             arrows:true,
             slidesToShow: 1,
-            dots: true,
+            dots: false,
+            nextArrow: '<i class="itemLeft fa fa-chevron-right"></i>',
+            prevArrow: '<i class="itemRight fa fa-chevron-left"></i>',
         });
-    	$('img.retimg').click(function() {
-            var src = $(this).attr('src');
-            $('#scrapedimg').val(src);
+    	$('.retimg').click(function() {
+            var src = $(this).find('img').attr('src');
+            $('#scrapedimg').val(src);   
+            $('.retimg i').hide();
+            $(this).find('i').show();
     	});
-		$('#tab1').click(function() {	        
+		$('#uploadweb').click(function() {	        
 	        $('#imgsrc').val('web');
+            $('#uploadOwnImage').hide();
+            $('#uploadweb').hide();
+            $('#uploadFromSite').show();
+            $('#uploadown').show();
 		});
-		$('#tab2').click(function() {
+		$('#uploadown').click(function() {
 	        $('#imgsrc').val('own');
+            $('#uploadOwnImage').show();
+            $('#uploadweb').show();
+            $('#uploadFromSite').hide();
+            $('#uploadown').hide();
 		});
 
 		$('#additem').click(function(e){
@@ -105,14 +189,12 @@
 
 	        if(imgsrc == "web"){
 	        	if(scrapedimg == ""){
-	        		console.log('scraped image is empty')
 	        		postit = false
 	        	};
 	        };
 
 	        if(imgsrc == "own"){
 	        	if(ownimg == ""){
-	        		console.log('own image is empty')
 	        		postit = false
 	        	};
 	        };
@@ -124,6 +206,35 @@
 		    }
 
 		});
+        $('#item_status').change(function(){
+            if ($(this).val() == 'GOT') {
+                $('.gotThisExtra').show();
+            } else {
+                $('.gotThisExtra').hide();
+            }
+        })
+        var rating = $('#rating');
+        $('#three').click(function(e){
+            rating.val("3");
+            $(this).addClass('on');
+            $('#one').removeClass('on');
+            $('#two').removeClass('on');
+            e.preventDefault();
+        })
+        $('#two').click(function(e){
+            rating.val("2");
+            $(this).addClass('on');
+            $('#one').removeClass('on');
+            $('#three').removeClass('on');
+            e.preventDefault();
+        })
+        $('#one').click(function(e){
+            rating.val("1");
+            $(this).addClass('on');
+            $('#two').removeClass('on');
+            $('#three').removeClass('on');
+            e.preventDefault();
+        })
 
     });
 </script>

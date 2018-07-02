@@ -18,7 +18,8 @@
 	<link href="//cdn.rawgit.com/noelboss/featherlight/1.7.13/release/featherlight.min.css" type="text/css" rel="stylesheet" />
     <link href="//cdn.rawgit.com/noelboss/featherlight/1.7.13/release/featherlight.gallery.min.css" type="text/css" rel="stylesheet" />
     <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet" />
-    <script src="https://unpkg.com/sweetalert2@7.22.2/dist/sweetalert2.all.js"></script>
+    <!-- <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script> -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2"></script>
     <link href="{% static 'css/slidein.css' %}" rel="stylesheet"> 
     <link href="{% static 'css/jquery-filestyle.min.css' %}" rel="stylesheet"> 
 	{% block extra-css %}{% endblock %}
@@ -134,7 +135,7 @@
         <div class="cd-panel__content">
             <ul>
                 <li><a href="{% url 'u:home' %}"><i class="far fa-clipboard"></i> <span>My Boards</span></a>
-                <li><a href="#"><i class="far fa-bookmark"></i> Saved Items</a>
+                <li><a href="{% url 'b:edit_board' request.user.profile.get_saved_board %}"><i class="far fa-bookmark"></i> Saved Items</a>
                 <li><a href="#"><i class="far fa-flag"></i> Notifications</a>
                 <li><a href="{% url 'update_profile' %}"><i class="far fa-user"></i> Edit Profile</a>
                 <li><a href="#"><i class="far fa-check-square"></i> Settings &amp; Privacy</a>
@@ -177,6 +178,12 @@
         });
     }
     window.onload = init();
+
+    // select 2
+    $(document).ready(function() {
+        $('select').select2();
+    });
+    
 </script>
 
 <!-- Extra JS -->

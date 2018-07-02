@@ -39,6 +39,9 @@ html {
     background: #b3d4fc;
     text-shadow: none;
 }
+:focus {
+    outline: none !important;
+}
 
 /*
  * A better looking default horizontal rule
@@ -812,6 +815,14 @@ PROFILE
             margin:0 5px 0 0;
             font-size: 1.6rem;
         }
+        #profileSlide .manageBio textarea {
+            height: 200px;
+            width: 100%;
+            display: block;
+            padding:5px;
+            border-radius: 10px;
+            border:1px solid #ccc;
+        }
 
 .profileBoards {
     margin-bottom:3.5%;
@@ -1207,41 +1218,39 @@ BOARD
             height: auto;
         }
         a.boardItemName {
-            margin:10px 0;
+            margin:20px 0;
             text-align: center;
             display: block;
             font-weight: lighter;
-            font-size:1.5rem;
+            font-size:1.1rem;
             border-bottom:1px solid #ebebeb;
-            padding-bottom:10px;
+            padding-bottom:20px;
             text-decoration: none;
             color:#121212;
         }
         .boardItemStats {
             font-size:.8rem;
-            text-align: center;
+            text-align: left;
         }
             .boardItemStats span {
                 display: inline-block;
                 padding:0 10px;
+                line-height: 28px;
             }
         .got {
-            position: absolute;
-            left:-7px;
-            top:75px;
-            background:#202020;
-            color:#fff;
             font-size:.85rem;
-            padding:10px 20px;
+            float: right;
+            color:#121212;
+            padding:0 8px;
+            line-height: 28px;
         }
             .got span {
-                background:url(../img/got-shadow.png) left no-repeat;
-                height: 10px;
-                width:7px;
-                display: block;
-                position: absolute;
-                left:0;
-                bottom:-10px;
+                padding:0;
+            }
+            .got i {
+                padding-left:5px;
+                font-size: 1.5rem;
+                line-height: 28px;
             }
         .boardPic .featBoxMeta {
             position: absolute;
@@ -1336,8 +1345,9 @@ BOARD
 #theTags {
     display: inline-block;
 }
-    #showEditTags, #hideEditTags {
+    a#showEditTags, a#hideEditTags {
         padding-left:5px;
+        text-decoration: none;
     }
     #editDesc {
         display: inline-block;
@@ -1351,9 +1361,10 @@ BOARD
     #editTags .helptext, #editTags label, #editTags br {
         display: none;
     }
-    #showEditDesc, #hideEditDesc{
+    a#showEditDesc, a#hideEditDesc{
         color:#999;
         padding-left:10px;
+        text-decoration: none;
     }
     #showEditDesc:hover, #hideEditDesc:hover {
         color:#fff;
@@ -1371,22 +1382,133 @@ BOARD
         width: 150px;
         color:#333;
     }
+    #editTags input#id_tags {
+        text-transform: lowercase;
+    }
     #editTags button, #editDesc button {
         padding-left:5px;
     }
 
-#addItem {
-    padding:120px 0;
-    max-width: 700px;
+
+.addItem {
+    width: 80%;
     margin: auto;
+    background:#fff;
+    -webkit-box-shadow: 0px 5px 73px -11px rgba(0,0,0,0.2);
+    -moz-box-shadow: 0px 5px 73px -11px rgba(0,0,0,0.2);
+    box-shadow: 0px 5px 73px -11px rgba(0,0,0,0.2);
 }
+    #addeditright {
+        float: right;
+        width: 48%;
+    }
+    #addeditleft {
+        float: left;
+        width: 48%;
+    }
+        #addeditleft img {
+            width: 100%;
+            height: auto;
+        }
+    .addItem h3 {
+        background:#444;
+        color:#fff;
+        padding:25px 20px;
+        font-weight: lighter;
+        text-align: center;
+        font-size: 1.5rem;
+    }
+    .addItemContent {
+        padding:30px;
+    }
+    .addItemContent form {
+        position: relative;
+    }
+    .addItemContent button.getItem {
+        position: absolute;
+        right: 0;
+        top:0;
+        height: 45px;
+        border-radius:0;
+        width: 100px;
+        cursor:pointer;
+    }
+    .addItemContent button.getItem:hover {
+        background:#F97D1F;
+        color:#fff;
+    }
+    input.scrapeUrl {
+        line-height: 1;
+        padding:0 115px 0 15px;
+        width: 100%;
+        height: 45px;
+        border-radius: 5px;
+        border:1px solid #ccc;
+    }
+    .imageSlider .retimg {
+        position: relative;
+        display: inline-block;
+    }
+    .imageSlider .retimg i {
+        display: none;
+        position: absolute;
+        z-index: 99;
+        left:0;
+        top:0;
+        font-size: 2.5rem;
+        color:#333;
+    }
     .imageSlider img {
         max-width: 300px;
         height: auto;
     }
-    #addItemForm {
-        margin:25px 0;
+    .addItemFields label, .rateitem label {
+        font-style: italic;
+        color:#666;
+        font-size: .9rem;
+        display: block;
+        margin-bottom:5px;
+        display: block;
     }
+    .addItemFields input, .addItemFields textarea, .rateitem input, .rateitem textarea {
+        line-height: 1;
+        border-radius:5px;
+        border:1px solid #ccc;
+        height: 45px;
+        padding:0 15px;
+        width: 100%;
+        margin-bottom:10px;
+    }
+    .addItemFields textarea, .rateitem textarea {
+        padding:15px;
+        height: 100px;
+    }
+    .addItemFields .select2 {
+        margin-bottom:10px;
+    }
+    .addItemFields button#additem, .rateitem button#additem {
+        margin-top:20px;
+    }
+    .addItemFields .rate, .rateitem .rate {
+        font-size: 2rem;
+        display: inline-block;
+        padding-right:5px;
+        color:#999
+    }
+    .addItemFields .rate:hover, .rateitem .rate:hover, .addItemFields .rate.on:hover, .rateitem .rate.on:hover {
+        color:#222;
+    }
+    .addItemFields .rate.on, .rateitem .rate.on  {
+        color:#F97D1F;
+    }
+    #addItemForm {
+        text-align: center;
+    }
+    #addItemForm #uploadown, #addItemForm #uploadweb {
+        font-size: .9rem;
+        line-height: 30px;
+    }
+    /*
     #addItemForm section {
       display: none;
       padding: 20px 0 0;
@@ -1428,7 +1550,45 @@ BOARD
     #addItemForm #tab3:checked ~ #content3,
     #addItemForm #tab4:checked ~ #content4 {
       display: block;
+    }*/
+    #uploadFromSite, #uploadOwnImage {
+        margin-top:30px;
+        text-align: center;
     }
+    #uploadOwnImage p {
+        margin-bottom:10px;
+    }
+    .imageSlider {
+        padding:0 30px;
+        margin-top:10px;
+    }
+    .imageSlider .itemRight, .imageSlider .itemLeft {
+        top:50%;
+        font-size: 2rem;
+        cursor: pointer;
+        z-index: 999;
+    }
+    .imageSlider .slick-dots {
+        left:0;
+    }
+    .imageSlider .slick-slide {
+        text-align:center;
+    }
+    .imageSlider .slick-slide img {
+        margin: auto;
+    }
+    .imageSlider .itemLeft {
+        position: absolute;
+        right:0;
+    }
+    .imageSlider .itemRight {
+        position: absolute;
+        left:0;
+    }
+    .imageSlider label {
+        display: none;
+    }
+
     @media screen and (max-width: 650px) {
       #addItemForm label {
         font-size: 0;
@@ -1460,7 +1620,8 @@ BOARD
     background-repeat: no-repeat;
     background-size:cover;
     background-position: top center;
-    height: 250px;
+    background-attachment: fixed;
+    height: 350px;
 }
     #discoveryCont.container {
         margin-top:-100px;
@@ -1592,6 +1753,7 @@ BOARD
 .feedRight {
     width: 23%;
     float: right;
+    margin-top:150px;
 }
     .feedRight h5, .feedLeft h5 {
         font-size:1.2rem;

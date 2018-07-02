@@ -19,17 +19,6 @@ class Board(models.Model):
 	created = models.DateTimeField(auto_now_add=True)
 	private = models.BooleanField(default=False)
 	description = models.TextField(default='', max_length=500, blank=True)
-	WANTS = 'Want'
-	RECOMMENDS = 'Recommended'
-	BOARD_TYPE_CHOICES = (
-		(WANTS, 'Wants'),
-		(RECOMMENDS, 'Recommended'),
-	)
-	board_type = models.CharField(
-		max_length=11,
-		choices=BOARD_TYPE_CHOICES,
-		default=WANTS,
-	)
 	video = models.CharField(max_length=50, blank=True)
 	hero = models.ImageField(upload_to = user_directory_path, blank=True, null=True)
 	show_video = models.BooleanField(default=False)
@@ -52,7 +41,6 @@ class Board(models.Model):
 			return True
 		else:
 			return False		
-
 
 	def __str__(self):
 		return self.board_name
@@ -106,6 +94,8 @@ class ItemConnection(models.Model):
 	allow_comments = models.BooleanField('allow comments', default=True)
 	purchase_url = models.URLField(max_length=255, blank=True)
 	item_desc = models.CharField(null=True, max_length=500, blank=True)
+	review = models.CharField(null=True, max_length=500, blank=True, default='')
+	rating = models.CharField(null=False, max_length=500, blank=False, default=0)
 	WANT = 'WNT'
 	GOT = 'GOT'
 	ITEM_STATUS_CHOICES = (
@@ -116,7 +106,8 @@ class ItemConnection(models.Model):
 		max_length=3,
 		choices=ITEM_STATUS_CHOICES,
 		default=WANT,
-	)	
+	)
+
 	active = models.BooleanField(default=True)
 
 	def save_item(itemconx, request):

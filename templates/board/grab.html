@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+
+{% block title %}
+	Add Item
+{% endblock %}
+
+
+{% block extra-css %}
+	<link type="text/css" href="{% static 'css/slick.css' %}" rel="stylesheet" />
+{% endblock %}
+
+
+{% block body %}
+
+
+<div id="discoveryCont" class="container clearfix">
+    
+    <div class="feedLeft">&nbsp;</div>
+
+    <div class="addItem">
+        
+        <h3>Grab</h3>
+
+        <div class="addItemContent">
+
+            <h1>{{ page_title }}</h1>
+
+            <p>OGIMG</p>
+                <img src="{{ ogimg }}">
+            <p>ENDOGIMG</p>
+
+            {% for size in sizes %}
+                {{ size }}
+            {% endfor %}
+        	   
+            {% for img in data %}
+                <p><img src="{{ img }}"></p>
+            {% endfor %}
+
+        </div>
+
+    </div>
+
+    <div class="feedRight">&nbsp;</div>
+
+</div>
+
+{% endblock %}

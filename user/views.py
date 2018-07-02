@@ -39,23 +39,11 @@ def home(request):
 	followers = profile.get_followers()
 	no_connections = profile.get_connections().count()
 	no_followers = profile.get_followers().count()
-	context_dict = {
-		'profile': profile,
-		'no_connections': no_connections,
-		'no_followers': no_followers,
-		'connections': connections,
-		'followers': followers,
-		'the_boards': boards,
-		'saved_board':saved_board,
-		'editable':editable,
-		'boards':boards,
-		'bgform':bgform,
-	}
 
 	if request.method == 'POST':
 
 		# check we have submitted a want or rec create 
-		if request.POST.get("createwantboard") or request.POST.get("createrecboard"):
+		if request.POST.get("createwantboard"):
 			
 			#check the board name has not already been used
 			new_board_name = request.POST.get("boardname","")
@@ -71,28 +59,22 @@ def home(request):
 
 			# if the name is not aready used by this user
 			else:
-				# set the board type
-				if 'createwantboard' in request.POST:
-					board_type = "Want"
-				else:
-					board_type = "Recommended"	
 				#create the board
 				new_board = Board.objects.create (
 					user = user,
 					board_name = new_board_name,
-					board_type = board_type,
 				)
 				#redirect to edit board page using new model
 				return redirect('b:edit_board', board_id=new_board.id)
 
 		#update bio
 		elif request.POST.get("updatebio"):
-				new_bio = request.POST.get("userBio")
-				Profile.objects.filter(pk=user.id).update(bio=new_bio)
-				return HttpResponseRedirect(request.path_info)
+			new_bio = request.POST.get("userBio")
+			Profile.objects.filter(pk=user.id).update(bio=new_bio)
+			return HttpResponseRedirect(request.path_info)
 
 		# set background
-		elif 'changebackground' in request.POST:
+		if request.POST.get("changebackground"):
 			form = ChangeBackgroundForm(request.POST, request.FILES, instance=profile)
 			if form.is_valid():
 				form.save()
@@ -104,6 +86,19 @@ def home(request):
 			board = get_object_or_404(Board, pk=request.POST.get("board_id",""))
 			board.delete()
 			return redirect('u:home')
+
+	context_dict = {
+		'profile': profile,
+		'no_connections': no_connections,
+		'no_followers': no_followers,
+		'connections': connections,
+		'followers': followers,
+		'the_boards': boards,
+		'saved_board':saved_board,
+		'editable':editable,
+		'boards':boards,
+		'bgform':bgform,
+	}
 
 	return render(request, template, context_dict)
 

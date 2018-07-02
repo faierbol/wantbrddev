@@ -23,18 +23,19 @@ class ProfileForm(forms.ModelForm):
 		fields = ('bio', 'website', 'country', 'date_of_birth', 'phone_number', 'picture', 'alert_new_subscribe', 'alert_new_item', 'alert_suggested_boards')
 		widgets = {
 			'bio':forms.Textarea(attrs={'placeholder': 'Tell people about yourself', 'rows':20, 'cols':100}),
-			'website':forms.TextInput(attrs={'placeholder': 'Your website address'}),
-			'country':forms.TextInput(attrs={'placeholder': 'Your current country'}),
+			'website':forms.TextInput(attrs={'placeholder': 'Your website address'}),			
 			'phone_number':forms.TextInput(attrs={'placeholder': 'Yourt telephone number'}),
 			'alert_new_subscribe':forms.CheckboxInput(attrs={'name': 'alert_new_sub', 'hidden': 'hidden', 'id':'alert_new_sub'}), 
 			'alert_new_item':forms.CheckboxInput(attrs={'name': 'alert_new_item', 'hidden': 'hidden', 'id':'alert_new_item'}),
 			'alert_suggested_boards':forms.CheckboxInput(attrs={'name': 'alert_sug_board', 'hidden': 'hidden', 'id':'alert_sug_board'}),
+			'date_of_birth':forms.TextInput(attrs={'data-toggle':'datepicker'}),
 		}
 
+
 class ChangeBackgroundForm(forms.ModelForm):
+	background = forms.ImageField(label=(''),required=False, widget=forms.FileInput(attrs={'class': "jfilestyle"}))
 	class Meta:
-		model = Profile
-		file = forms.FileField()
+		model = Profile		
 		fields = ['background', 'user']
 		widgets = {'user':forms.HiddenInput()}
 
