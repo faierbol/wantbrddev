@@ -43,9 +43,9 @@
 
             <div class="recentActivity">
                 <h6>Recent Activity</h6>
-                <p><i class="far fa-heart"></i> </strong>12</strong> Likes</p>
-                <p><i class="fas fa-user-plus"></i> <strong>14</strong> Followers</p>
-                <p><i class="far fa-comments"></i> <strong>22</strong> Comments</p>
+                <a href="{% url 'my_notifications' %}"><i class="far fa-heart"></i> <strong>{{ recent_likes }}</strong> Likes</a>
+                <a href="{% url 'my_notifications' %}"><i class="fas fa-user-plus"></i> <strong>{{ recent_followers }}</strong> Followers</a>
+                <a href="{% url 'my_notifications' %}"><i class="far fa-comments"></i> <strong>X</strong> Comments</a>
             </div>
 
         </div>
@@ -81,6 +81,7 @@
     	                            </div>
     	                        </div>              
     	                        <div class="trendingFooter">
+                                    {{ item.is_saved }}
                                     <span>
                                         <form class="inline" method="POST">
                                             {% csrf_token %}
@@ -192,6 +193,10 @@
 
                     {% for board in suggested_boards %}
 
+                        {% for tag in board.thetags %}
+                            {{ tag }}
+                        {% endfor %}
+
                         <div class="featBox trendingBoard">
                             {% if board.hero %}
                             <a class="trendingBoardHero" style="background-image:url('{{ board.hero.url }}');" href="{% url 'b:view_board' board.user.username board.slug %}">
@@ -252,5 +257,20 @@
 {% endblock %}
 
 {% block extra-js %}
+
     <script type="text/javascript" src="{% static 'fluent_comments/js/ajaxcomments.js' %}"></script>
+
+    <!--- message alert -->
+    {% if messages %}
+        {% for message in messages %}    
+            <script type="text/javascript">
+                function codeAddress() {
+                    Swal('Done!', '{{ message }}', 'success')
+                }
+                window.onload = codeAddress;    
+            </script>
+        {% endfor %}
+    {% endif %}
+
+
 {% endblock %}

@@ -1,11 +1,13 @@
-import requests, urllib, datetime, random
+import requests, urllib, datetime, random, json, re
 from django.contrib import messages
+from django.template import RequestContext
 from django.shortcuts import render, redirect, get_object_or_404
 from django.core.files.storage import FileSystemStorage
 from django.db.models import Q
 from django.http import HttpResponseRedirect
 from django.contrib.auth.models import User
 from .models import Board, Item, BoardLike, ItemLike, BoardView, ItemView, ItemConnection, BoardPrivacy
+from user.models import Notification
 from user.views import Connection
 from .forms import BoardForm, ItemForm, EditBoardForm, ChangeBackgroundForm, UpdateTags
 from bs4 import BeautifulSoup
@@ -13,26 +15,44 @@ from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 import os, copy
 from urllib.parse import urlparse
-from PIL import ImageFile
+from PIL import ImageFile, Image
 from django.core import files
 from io import BytesIO
-from wantbrd.utils import get_trending_items, get_trending_boards, get_trending_users, get_recommended_boards
-import requests
+from wantbrd.utils import *
 import urllib.request
-import base64
+from urllib.parse import quote_plus
+from lxml import html
+import opengraph_py3
+import metadata_parser
 
 
 ##### HOME PAGE
 def home(request):
+
+	if request.method == "POST":
+
+		# like item
+		if 'likeitem' in request.POST:
+			itemconx_id = request.POST.get("itemconx_id")						
+			like_item(itemconx_id, request.user)
+			return HttpResponseRedirect(request.path_info)
+
+		# unlike item
+		if 'unlikeitem' in request.POST:
+			itemconx_id = request.POST.get("itemconx_id")
+			unlike_item(itemconx_id, request.user)
+			return HttpResponseRedirect(request.path_info)
+
 	template = 'index.html'
+	hot_items = []
+
 	trending_items = get_trending_items(request,3)
 	trending_users = get_trending_users(request,3)
 	trending_boards = get_trending_boards(request,3)
 	recommended_boards = get_recommended_boards(request)
 
 	mixed = list(trending_boards) + list(trending_items) + list(trending_users) + list(recommended_boards)
-	random.shuffle(mixed)
-	hot_items = []
+	random.shuffle(mixed)	
 	for item in mixed:
 		if item not in hot_items:
 			hot_items.append(item)
@@ -294,12 +314,14 @@ def view_board(request, username, board_name):
 	template = 'board/view_board.html'	
 	board_owner = get_object_or_404(User, username=username)
 	user = request.user
-	message = None
 
 	board = get_object_or_404(Board, slug=board_name, user=board_owner)
 	board.thetags = board.tags.all()
 	board.likes = BoardLike.objects.filter(board=board).count()
-	board.is_liked = BoardLike.objects.filter(board=board, user=request.user).exists()
+	try:
+		board.is_liked = BoardLike.objects.filter(board=board, user=request.user).exists()
+	except:
+		board.is_liked = False
 	blocked_obj = BoardPrivacy.objects.filter(board=board) 
 	board.blocked = []
 	for obj in blocked_obj:
@@ -313,53 +335,72 @@ def view_board(request, username, board_name):
 	refer = request.META.get('HTTP_REFERER')
 
 	items = []
-	item_conxs = ItemConnection.objects.filter(board=board.id)		
+	item_conxs = ItemConnection.objects.filter(board=board.id, active=True)		
 	for item in item_conxs:
-		item.likes = ItemLike.objects.filter(item_conx=item).count()
-		item.is_liked = ItemLike.objects.filter(item_conx=item, user=request.user).exists()
-		item.views = ItemView.objects.filter(item_conx=item).count()
-		items.append(item)	
+		if item.active:
+			item.likes = ItemLike.objects.filter(item_conx=item).count()
+			try:
+				item.is_liked = ItemLike.objects.filter(item_conx=item, user=request.user).exists()
+			except:
+				item.is_liked = False
+			item.views = ItemView.objects.filter(item_conx=item).count()
+			items.append(item)	
 
-	user_boards = Board.objects.filter(user=user).exclude(board_name="Your Saved Items")
+	try:
+		user_boards = Board.objects.filter(user=user).exclude(board_name="Your Saved Items")
+	except:
+		user_boards = []
 
 	# create new board view instance if not exsists, count views
-	board_view, created = BoardView.objects.get_or_create(board=board, ip=userip, user=request.user)
+	board_view, created = BoardView.objects.get_or_create(board=board, ip=userip)
 	board.views = BoardView.objects.filter(board=board).count()
 
-	following = request.user.profile.get_connections()
-	is_followed = False
-	for user in following:
-		if board.user == user.following:
-			is_followed = True
+	try:
+		following = request.user.profile.get_connections()
+		is_followed = False
+		for user in following:
+			if board.user == user.following:
+				is_followed = True
+	except:
+		following = False
+		is_followed = False
 
 	# handle submissions
 	if request.method == 'POST':
 
 		# like item
 		if 'likeitem' in request.POST:
-			itemconx_id = request.POST.get("itemconx_id")
-			itemconx = get_object_or_404(ItemConnection, pk=itemconx_id)
-			ItemLike.like(itemconx, request.user)
+			itemconx_id = request.POST.get("itemconx_id")						
+			like_item(itemconx_id, request.user)
 			return HttpResponseRedirect(request.path_info)
 
 		# unlike item
 		if 'unlikeitem' in request.POST:
 			itemconx_id = request.POST.get("itemconx_id")
-			itemconx = get_object_or_404(ItemConnection, pk=itemconx_id)
-			ItemLike.unlike(itemconx, request.user)
+			unlike_item(itemconx_id, request.user)
+			return HttpResponseRedirect(request.path_info)
+
+		# like board
+		if 'likeboard' in request.POST:
+			board_id = request.POST.get("board_id")
+			like_board(board_id, request.user)
+			return HttpResponseRedirect(request.path_info)
+
+		# unlike board
+		if 'unlikeboard' in request.POST:
+			board_id = request.POST.get("board_id")
+			unlike_board(board_id, request.user)
 			return HttpResponseRedirect(request.path_info)
 
 		# if user followed
 		if 'follow' in request.POST:
-			new_connection = Connection.objects.create(
-				creator = user,
-				following = board.user,
-			)
+			board.user.profile.make_connection(request)
+			return HttpResponseRedirect(request.path_info)
 
 		# if user unfollowed
 		if 'unfollow' in request.POST:
-			connection = Connection.objects.filter(creator=user, following=board.user)
-			connection.delete()
+			board.user.profile.break_connection(request)
+			return HttpResponseRedirect(request.path_info)
 
 		# if add to board
 		if 'addtoboard' in request.POST:
@@ -391,7 +432,6 @@ def view_board(request, username, board_name):
 			return HttpResponseRedirect(request.path_info)
 
 	context_dict = {
-		'message':message,
 		'is_followed': is_followed,
 		'following': following,
 		'items':items,
@@ -433,61 +473,85 @@ def add_item(request, board_id):
 			sizes = []
 			allimages = []
 			output = []
+			page_title = ''
+			image = False
+			html = ''
+			page = ''
 			url = request.POST.get("targeturl", "")
 			parsed_uri = urlparse(url)
 			domain = '{uri.scheme}://{uri.netloc}/'.format(uri=parsed_uri)
-			
-			headers = {"Content-Type": "application/json", "Authorization": "Token bbe4508713209982e62f29b19add62d4a3a8a851"}
-			data = {"url":url}
-			res = requests.post('https://string.click/api/0.1/', json=data, headers=headers)
-			json = res.json()
-			all_images = json['all_images']	
 
-			# if there was no open graph image
-			for img in all_images:
+			try:
+				page = metadata_parser.MetadataParser(url=url)
+			except:
+				pass
+			if page:
+				try:
+					page_title = page.get_metadatas('title')[0]
+				except:
+					pass
+				try:
+					meta_image = page.get_metadata_link('image')
+				except:
+					pass
 
-				# get src from img
-				imgurl = img['src']				
-				# check a value is there and its not a data: src
-				if (imgurl is not None) and ("data:" not in imgurl):
+			if meta_image:
+				output.append(meta_image)
+			else:
+				# ########## PROXYCRAWL BELOW #########
+				api = 'aaF7juZfhdnyptXo4Kjm6A'
+				jsapi = 'vBlWMcz5CXvV4A-YnXhhag'
 
-					# check if src starts without full path and append with domain appropriately 
-					if not imgurl.startswith("http"):
-						if imgurl.startswith("//"):
-							imgurl = "https:" + imgurl
+				modded_url = quote_plus(url)
+				response = requests.get('https://api.proxycrawl.com/?token=' + jsapi + '&format=json&page_wait=3000&url=' + modded_url)	
+				parsed_json = response.json()
+				html = parsed_json['body']
+
+				soup = BeautifulSoup(html)
+
+				if not page_title:
+					page_title = soup.title.string
+
+				# image_tags = soup.findAll('img', {'src' : re.compile(r'(jpe?g)|(png)$')})
+				image_tags = soup.findAll('img')
+				# loop through all img's found
+				for img in image_tags:
+
+					# get src from img
+					imgurl = img.get('src')
+
+					# check a value is there and its not a data: src
+					if (imgurl is not None) and ("data:" not in imgurl):
+
+						if imgurl.lower().endswith(('.bmp', '.png', '.gif', '.tif')):
+							pass
+
 						else:
-							imgurl = domain + imgurl
+							# check if src starts without full path and append with domain appropriately 
+							if not imgurl.startswith("http"):
+								if imgurl.startswith("//"):
+									imgurl = "https:" + imgurl
+								else:
+									imgurl = domain + imgurl		
 
-					allimages.append(imgurl)		
-					# get the sizes		
-					file = urllib.request.urlopen(imgurl)
-					size = file.headers.get("content-length")
-					if size: size = int(size)
-					p = ImageFile.Parser()
-					while 1:
-						imgdata = file.read(1024)
-						if not imgdata:
-							break
-						p.feed(imgdata)
-						if p.image:
-							if p.image.size[0] > 300 and p.image.size[1] > 300:
-								sizes.append(p.image.size[0])
-								output.append(imgurl)
-							break
-					file.close()
-					
+							try:
+								image_raw = requests.get(imgurl)
+								the_image = Image.open(BytesIO(image_raw.content))
+								img_width, img_height = the_image.size
+								if img_width > 250:
+									output.append(imgurl)
+							except:
+								pass
 			context_dict = {
 				'board':board,
 				'form':form,
 				'domain':domain,
-				'url':url,
-				'all_images':all_images,
-				# 'pagetitle':page_title,
-				# 'ogimg':ogimg,
-				# 'soup':soup,
-				# 'allimages':allimages,
-				'json':json,
+				'url':url,				
+				'ogimg':ogimg,				
 				'output':output,
+				'allimages':allimages,
+				'page_title':page_title,
+				'html':html,
 			}
 
 			return render(request, template, context_dict)
@@ -518,18 +582,15 @@ def add_item(request, board_id):
 				file_name = url.split("/")[-1]
 
 			if form.is_valid():		
-				new_item = form.save(commit=False)
+				# create a new item with this item name and save it
+				new_item = Item()
 				new_item.item_name = item_name
 				new_item.save()
-				new_item_conx = ItemConnection()
+				
+				# save the model form
+				new_item_conx = form.save(commit=False)
 				new_item_conx.board = board
 				new_item_conx.item = new_item
-				new_item_conx.purchase_url = purchase_url
-				new_item_conx.item_status = item_status
-				new_item_conx.item_desc = item_desc
-				new_item_conx.active = item_active
-				new_item_conx.rating = rating
-				new_item_conx.review = review
 				if imgsrc == 'own':
 					new_image = request.FILES['ownimage']
 					new_item_conx.image = new_image
@@ -548,37 +609,19 @@ def add_item(request, board_id):
 	return render(request, template, context_dict)
 
 
-##### Like Board
-def like_board(request, board_id):
-	user = request.user
-	board = get_object_or_404(Board, pk=board_id)
-	BoardLike.like(board, user)
-	board_user = board.user
-	return redirect('b:view_board', username=board_user, board_name=board.slug)
-
-
-##### Unlike Board
-def unlike_board(request, board_id):
-	user = request.user
-	board = get_object_or_404(Board, pk=board_id)
-	BoardLike.unlike(board, user)
-	board_user = board.user
-	return redirect('b:view_board', username=board_user, board_name=board.slug)
-
-
 ##### Search Items
 def search_item(request):
 	template = 'board/search_item.html'
 
 	# set things up
 	item_results = []
-	search_term = ""
 	search_term = request.GET.get('kw', '')
+	search_term = search_term.lower()
 
 	#items 
-	items = Item.objects.filter(item_name__contains=search_term)
+	items = Item.objects.filter(item_name__icontains=search_term)
 	for item in items:
-		item_conxs = ItemConnection.objects.filter(item=item)
+		item_conxs = ItemConnection.objects.filter(item=item, active=True)
 		for item in item_conxs:
 			item.likes = ItemLike.objects.filter(item_conx=item).count()
 			item.is_liked = ItemLike.objects.filter(item_conx=item, user=request.user).exists()
@@ -589,7 +632,7 @@ def search_item(request):
 	all_boards = False
 	board_results = []
 	board_search_tags = Board.objects.filter(tags__name__in=[search_term])
-	board_search_names = Board.objects.filter(board_name__contains=search_term)
+	board_search_names = Board.objects.filter(board_name__icontains=search_term)
 	
 	all_boards = board_search_tags | board_search_names
 	all_boards = all_boards.distinct()	
@@ -602,7 +645,7 @@ def search_item(request):
 
 	# users
 	user_results = False
-	user_results = User.objects.filter(username__contains=search_term)
+	user_results = User.objects.filter(username__icontains=search_term)
 
 	context_dict = {
 		'search_term':search_term,
@@ -620,13 +663,13 @@ def search_board(request):
 
 	# set things up
 	item_results = []
-	search_term = ""
 	search_term = request.GET.get('kw', '')
+	search_term = search_term.lower()
 
 	#items 
-	items = Item.objects.filter(item_name__contains=search_term)
+	items = Item.objects.filter(item_name__icontains=search_term)
 	for item in items:
-		item_conxs = ItemConnection.objects.filter(item=item)
+		item_conxs = ItemConnection.objects.filter(item=item, active=True)
 		for item in item_conxs:
 			item.likes = ItemLike.objects.filter(item_conx=item).count()
 			item.is_liked = ItemLike.objects.filter(item_conx=item, user=request.user).exists()
@@ -637,7 +680,7 @@ def search_board(request):
 	all_boards = False
 	board_results = []
 	board_search_tags = Board.objects.filter(tags__name__in=[search_term])
-	board_search_names = Board.objects.filter(board_name__contains=search_term)
+	board_search_names = Board.objects.filter(board_name__icontains=search_term)
 	all_boards = board_search_tags | board_search_names
 	all_boards = all_boards.distinct()	
 	for board in all_boards:
@@ -646,11 +689,11 @@ def search_board(request):
 	for board in board_results:
 		board.totalitems = board.get_item_count()
 		board.views = BoardView.objects.filter(board=board).count()
-		board.itemconxs = ItemConnection.objects.filter(board=board)[:5]
+		board.itemconxs = ItemConnection.objects.filter(board=board, active=True)[:5]
 
 	# users
 	user_results = False
-	user_results = User.objects.filter(username__contains=search_term)
+	user_results = User.objects.filter(username__icontains=search_term)
 
 	context_dict = {
 		'search_term':search_term,
@@ -668,13 +711,13 @@ def search_user(request):
 
 	# set things up
 	item_results = []
-	search_term = ""
 	search_term = request.GET.get('kw', '')
+	search_term = search_term.lower()
 
 	#items 
-	items = Item.objects.filter(item_name__contains=search_term)
+	items = Item.objects.filter(item_name__icontains=search_term)
 	for item in items:
-		item_conxs = ItemConnection.objects.filter(item=item)
+		item_conxs = ItemConnection.objects.filter(item=item, active=True)
 		for item in item_conxs:
 			item.likes = ItemLike.objects.filter(item_conx=item).count()
 			item.is_liked = ItemLike.objects.filter(item_conx=item, user=request.user).exists()
@@ -685,7 +728,7 @@ def search_user(request):
 	all_boards = False
 	board_results = []
 	board_search_tags = Board.objects.filter(tags__name__in=[search_term])
-	board_search_names = Board.objects.filter(board_name__contains=search_term)
+	board_search_names = Board.objects.filter(board_name__icontains=search_term)
 	
 	all_boards = board_search_tags | board_search_names
 	all_boards = all_boards.distinct()	
@@ -697,7 +740,7 @@ def search_user(request):
 
 	# users
 	user_results = False
-	user_results = User.objects.filter(username__contains=search_term)
+	user_results = User.objects.filter(username__icontains=search_term)
 	for user in user_results:
 		# set things up
 		user.itemcount = 0
@@ -715,7 +758,7 @@ def search_user(request):
 			# get the board views
 			boardviews = BoardView.objects.filter(board=board).count()
 			# get all items for this board and count 
-			boarditems = ItemConnection.objects.filter(board=board)			
+			boarditems = ItemConnection.objects.filter(board=board, active=True)			
 			user.itemcount+=boarditems.count()
 			itemviews = 0			
 			for item in boarditems:

@@ -78,7 +78,7 @@
                                 </a>
                             {% endif %}
                         </div>
-                        <a class="trendingUserUser" href="profile.php">
+                        <a class="trendingUserUser" href="{% url 'u:profile' hot.user.username %}">
                             <div class="trendingUserUserWrap clearfix">
                                 <div class="trendingUserPic">
                                     {% if hot.user.profile.picture %}
@@ -106,7 +106,7 @@
                             <strong>Trending User</strong>
                             <a href="#" class="trendingUserShare">Share <i class="fas fa-share-alt"></i></a>
                         </div>
-                        <a class="trendingUserUser" href="profile.php">
+                        <a class="trendingUserUser" href="{% url 'u:profile' hot.username  %}">
                             <div class="trendingUserUserWrap clearfix">
                                 <div class="trendingUserPic">
                                     {% if hot.profile.picture %}
@@ -147,17 +147,18 @@
                     <div class="featBox trendingItem">
                         <div class="trendingTop clearfix">
                             <strong>Trending Item</strong>
-                            <a href="#" class="trendingUserShare">Share <i class="fas fa-share-alt"></i></a>
+                            <a href="" class="trendingUserShare">Share <i class="fas fa-share-alt"></i></a>
                         </div>
                         <div class="trendingItemItem">
                             {% thumbnail hot.image "300x300" as im %}
-                                <img src="{{ im.url }}">
+                                <a href="{% url 'b:view_item' hot.board.user hot.board.slug hot.id %}"><img src="{{ im.url }}"></a>
                             {% endthumbnail %}
                         </div>
                         <div class="trendingItemName">
-                            <a href="#">{{ hot.item.item_name }}</a>
+                            <a href="{% url 'b:view_item' hot.board.user hot.board.slug hot.id %}">{{ hot.item.item_name }}</a>
                             <div class="trendingItemMeta">
-                                Found on <a href="#">{{ hot.board.board_name }}</a> by <a href="#">{{ hot.board.user.get_full_name }}</a>
+                                Found on <a href="{% url 'b:view_board' hot.board.user hot.board.slug %}">{{ hot.board.board_name }}</a>
+                                by <a href="{% url 'u:profile' hot.board.user %}">{{ hot.board.user.get_full_name }}</a>
                             </div>
                         </div>              
                         <div class="trendingFooter">
@@ -169,7 +170,25 @@
                                     0
                                 {% endif %}
                             </span>
-                            <span><i class="far fa-heart"></i> {{ hot.likes }}</span>
+                            
+                            {% if hot.is_liked %}
+                                <span>
+                                    <form class="inline" method="POST">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="itemconx_id" value="{{ hot.id }}">
+                                        <button class="naked" name="unlikeitem"><i class="fas fa-heart likeon"></i> {{ hot.likes }}</button>
+                                    </form>
+                                </span>
+                            {% else %}
+                                <span>
+                                    <form class="inline" method="POST">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="itemconx_id" value="{{ hot.id }}">
+                                        <button class="naked" name="likeitem"><i class="far fa-heart"></i> {{ hot.likes }}</button>                                
+                                    </form>
+                                </span>                                    
+                            {% endif %}
+
                             <span><i class="fas fa-eye"></i> {{ hot.views }}</span>
                         </div>
                     </div>

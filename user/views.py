@@ -1,16 +1,17 @@
 import datetime
 from django.contrib import messages
-from django.contrib.auth import login
+from django.contrib.auth import login, update_session_auth_hash
+from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.models import User
 from django.http import HttpResponseRedirect
-from .forms import SignUpForm, UserForm, ProfileForm, ChangeBackgroundForm, UpdateSocial
-from .models import Profile, Connection
+from .forms import SignUpForm, UserForm, ProfileForm, ChangeBackgroundForm, UpdateSocial, SettingsForm, PrivacyForm
+from .models import Profile, Connection, BlockedUsers, AuthorisedUsers, Notification
 from board.models import Board, Item, ItemConnection, BoardView, ItemLike, ItemView, BoardPrivacy
 from django.core.exceptions import PermissionDenied
 from django.forms.models import inlineformset_factory
-
+from wantbrd.utils import *
 
 # viewing your own profile
 @login_required
@@ -136,6 +137,15 @@ def my_home(request):
 	no_followers = profile.get_followers().count()
 	suggested_boards = profile.get_suggested_boards(2, request)
 
+	# recent activity
+	now = datetime.datetime.now()
+	ago = now - datetime.timedelta(days=1)
+
+	recent_itemlikes = Notification.objects.filter(user=user, notification_type='likeitem', created__range=[ago, now]).count()
+	recent_boardlikes = Notification.objects.filter(user=user, notification_type='likeboard', created__range=[ago, now]).count()
+	recent_followers = Notification.objects.filter(user=user, notification_type='newfollow', created__range=[ago, now]).count()
+	recent_likes = recent_itemlikes = recent_boardlikes
+
 	# get all users that we're following
 	following = request.user.profile.get_connections()
 
@@ -150,7 +160,7 @@ def my_home(request):
 	itemconx_obj = []
 	for board in board_obj: 
 		# get item conx instances with this board
-		itemconxs = ItemConnection.objects.filter(board=board)
+		itemconxs = ItemConnection.objects.filter(board=board, active=True)
 		# for each item conx instance...
 		for item in itemconxs:
 			# get the likes
@@ -169,26 +179,28 @@ def my_home(request):
 			item.is_saved = ItemConnection.objects.filter(pk=item.id, board=user_saved_board.id).exists()
 			itemconx_obj.append(item)
 
+
 	if request.method == 'POST':
 
 		# like item
 		if 'likeitem' in request.POST:
-			itemconx_id = request.POST.get("itemconx_id")
-			itemconx = get_object_or_404(ItemConnection, pk=itemconx_id)
-			ItemLike.like(itemconx, request.user)
+			itemconx_id = request.POST.get("itemconx_id")						
+			like_item(itemconx_id, request.user)
+			messages.info(request, 'Item liked')
 			return HttpResponseRedirect(request.path_info)
 
 		# unlike item
 		if 'unlikeitem' in request.POST:
 			itemconx_id = request.POST.get("itemconx_id")
-			itemconx = get_object_or_404(ItemConnection, pk=itemconx_id)
-			ItemLike.unlike(itemconx, request.user)
+			unlike_item(itemconx_id, request.user)
+			messages.info(request, 'Item unliked')
 			return HttpResponseRedirect(request.path_info)
 
 		# save item
 		if 'savelater' in request.POST:
 			itemconx = request.POST.get("itemconx_id")
 			ItemConnection.save_item(itemconx, request)
+			messages.info(request, 'This item has been added to your Saved Items collection')
 			return HttpResponseRedirect(request.path_info)
 
 	context_dict = {
@@ -201,6 +213,8 @@ def my_home(request):
 		'boards': boards,
 		'itemconxs':itemconx_obj,
 		'suggested_boards':suggested_boards,
+		'recent_likes':recent_likes,
+		'recent_followers':recent_followers,
 	}
 
 	return render(request, template, context_dict)
@@ -225,6 +239,9 @@ def update_profile(request):
 
 	user = request.user
 	profile = get_object_or_404(Profile, user=user)
+	user_form = UserForm(instance=user, label_suffix='')
+	profile_form = ProfileForm(instance=profile, label_suffix='')	
+	social_form = UpdateSocial(instance=profile, label_suffix='')
 
 	if request.method == "POST":
 
@@ -245,10 +262,6 @@ def update_profile(request):
 				form.save()
 				messages.info(request, 'Your social profiles have been updated.')
 				return HttpResponseRedirect(request.path_info)
-	else:
-		user_form = UserForm(instance=user, label_suffix='')
-		profile_form = ProfileForm(instance=profile, label_suffix='')	
-		social_form = UpdateSocial(instance=profile, label_suffix='')
 
 	return render(request, template, {
 		"userid": user.id,
@@ -258,27 +271,120 @@ def update_profile(request):
 	})
 
 
-def update_social(request):
-	template = "user/update_social.html"
+def privacy_settings(request):
+	template = "user/privacy_settings.html"
 	user = request.user
 	profile = get_object_or_404(Profile, user=user)
-	form = UpdateSocial(instance=profile, label_suffix='')
+	blocked_users_obj = BlockedUsers.objects.filter(user=user)
+	blocked_users_list = []
+	authorised_users_obj = AuthorisedUsers.objects.filter(user=user)
+	authorised_users_list = []
+	for user in blocked_users_obj:
+		blocked_users_list.append(user.blocked_user)
+	for user in authorised_users_obj:
+		authorised_users_list.append(user.authorised_user)
+	blocked_users = ','.join(map(str, blocked_users_list))
+	authorised_users = ','.join(map(str, authorised_users_list))
 
-	if request.method == "POST":
-		form = UpdateSocial(request.POST, instance=profile) 
-		if form.is_valid():
-			form.save()
-			messages.info(request, 'Your social profiles have been updated.')
-			return HttpResponseRedirect(request.path_info)
+
+	settings_form = SettingsForm(instance=profile)	
+	password_form = PasswordChangeForm(user)
+	privacy_form = PrivacyForm(instance = profile)
 
 	context_dict = {
-		'form':form,
+		'settings_form':settings_form,
+		'password_form':password_form,
+		'privacy_form':privacy_form,
+		'blocked_users':blocked_users,
+		'authorised_users':authorised_users,
 	}
+
+	if request.method == "POST":
+		if 'updatepassword' in request.POST:
+			password_form = PasswordChangeForm(request.user, request.POST)
+			if password_form.is_valid():
+				user = password_form.save()
+				update_session_auth_hash(request, user)  # Important!
+				messages.success(request, 'Your password was updated.')
+				return redirect('privacy_settings')
+			else:
+				messages.error(request, 'There was a problem updating your password, please try again')
+				context_dict = {
+					'settings_form':settings_form,
+					'password_form':password_form,
+					'privacy_form':privacy_form,
+					'blocked_users':blocked_users,
+					'authorised_users':authorised_users,
+				}
+				return render(request, template, context_dict)
+
+		if 'updateprivacy' in request.POST:
+			privacy_form = PrivacyForm(request.POST, instance=profile)
+			privacy_choice = request.POST.get("global_privacy")
+			userlist = request.POST.get("user_list")			
+
+			if privacy_form.is_valid():		
+
+				# if we need to deal with the blocked/allowed users
+				if privacy_choice == 'HIDE' or privacy_choice == 'SHOW':
+
+					# split it
+					user_list = userlist.split(",")
+
+					# if privacy choice is invisible except...
+					if privacy_choice == 'HIDE':
+						for x in user_list:						
+							new_authorised_user = AuthorisedUsers.objects.create(
+								user = user,
+								authorised_user = x
+							)
+					# if privacy choice is visible except...							
+					else:
+						for x in user_list:						
+							new_blocked_user = BlockedUsers.objects.create(
+								user = user,
+								blocked_user = x
+							)
+
+				privacy_form.save()
+				messages.info(request, 'Your global privacy settings were updated.')
+				return redirect('privacy_settings')	
+
+				privacy_form.save()
+				messages.info(request, 'Your global privacy settings were updated.')
+				return redirect('privacy_settings')	
+			else:
+				messages.error(request, 'There was a problem updating your privacy settings, please try again')
+				context_dict = {
+					'settings_form':settings_form,
+					'password_form':password_form,
+					'privacy_form':privacy_form,
+					'blocked_users':blocked_users,
+					'authorised_users':authorised_users,
+				}
+				return render(request, template, context_dict)
+
+		if 'updatenotification' in request.POST:
+			settings_form = SettingsForm(request.POST, instance=profile)
+			if settings_form.is_valid():
+				settings_form.save()
+				messages.info(request, 'Your notification settings were updated.')
+				return redirect('privacy_settings')	
+			else:
+				messages.error(request, 'There was a problem updating your notifications preferences, please try again')
+				context_dict = {
+					'settings_form':settings_form,
+					'password_form':password_form,
+					'privacy_form':privacy_form,
+					'blocked_users':blocked_users,
+					'authorised_users':authorised_users,
+				}
+				return render(request, template, context_dict)
 
 	return render(request, template, context_dict)
 
 
-# viewing someone elses profile
+# view someone elses profile
 def profile(request, username):
 	template = 'user/index.html'	
 
@@ -290,11 +396,11 @@ def profile(request, username):
 		for board in boards:
 			board.items = []
 			board.thetags = board.tags.all()
-			item_conxs = ItemConnection.objects.filter(board=board)
+			item_conxs = ItemConnection.objects.filter(board=board, active=True)
 			board.count = item_conxs.count()
 			if board.count > 0:
 				board.views = BoardView.objects.filter(board=board).count()
-				board.items = ItemConnection.objects.filter(board=board)[:3]
+				board.items = ItemConnection.objects.filter(board=board, active=True)[:3]
 				blocked_obj = BoardPrivacy.objects.filter(board=board) 
 				board.blocked = []
 				for obj in blocked_obj:
@@ -339,16 +445,82 @@ def profile(request, username):
 
 		# if user followed
 		if 'follow' in request.POST:
-			new_connection = Connection.objects.create(
-				creator = current_user,
-				following = user,
-			)
+			user.profile.make_connection(request)
 
 		#if user unfollowed
 		if 'unfollow' in request.POST:
-			connection = Connection.objects.filter(creator=current_user, following=user)
-			connection.delete()
+			user.profile.break_connection(request)
 
 		return HttpResponseRedirect(request.path_info)
+
+	return render(request, template, context_dict)
+
+
+def check_status(request):
+	user = request.user
+	
+	if user.profile.login_count > 1:
+		return redirect('my_home')
+	else:
+		return redirect('initial')
+
+
+def initial(request):
+	template = 'user/initial.html'
+
+	# handle submissions
+	if request.method == 'POST':
+
+		# after selecting the topics interested in
+		if request.POST.get("nextstep"):
+			tags = request.POST.get("usertags")
+			tags_list = tags.split(',')
+			tags_list = tags_list[:-1]
+			users = []
+			boards = Board.objects.filter(tags__name__in = tags_list).distinct()
+			for board in boards:
+				user = board.user
+				user.boardcount = Board.objects.filter(user=user).exclude(slug='your-saved-items').count()
+				user.itemcount = user.profile.get_user_item_count()
+				user.viewscount = user.profile.get_user_views()
+				user.the_tags = user.profile.get_user_tags()
+				users.append(user)			
+
+		# after selecting users to follow
+		if request.POST.get("followall"):
+			users_to_follow = request.POST.get("userstofollow")
+			follow_list = users_to_follow.split(",")			
+			follow_list = list(map(int, follow_list))
+			for user in follow_list:
+				to_follow = User.objects.get(id=user)
+				to_follow.profile.make_connection(request)
+			return redirect('my_home')
+
+
+		context_dict = {
+			'users':users
+		}
+
+		return render(request, template, context_dict)
+
+	context_dict = {}
+
+	return render(request, template, context_dict)
+
+
+def my_notifications(request):
+
+	template = 'user/my_notifications.html'	
+
+	new, old = get_notifications(request)
+
+	# clear all notifications
+	notifications = Notification.objects.filter(user=request.user)
+	notifications.update(seen=True)
+
+	context_dict = {
+		'new':new,
+		'old':old,
+	}
 
 	return render(request, template, context_dict)

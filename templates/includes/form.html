@@ -9,19 +9,13 @@
   </div>
 {% endif %}
 
-{% for field in form %}
-  <div>
+{% for field in login_form %}
     {{ field.label_tag }}
     {% render_field field class=field|input_class %}
     {% for error in field.errors %}
-      <div>
-        {{ error }}
-      </div>
+      <div>{{ error }}</div>
     {% endfor %}
     {% if field.help_text %}
-      <small>
-        {{ field.help_text|safe }}
-      </small>
+      <small>{{ field.help_text|safe }}</small>
     {% endif %}
-  </div>
 {% endfor %}

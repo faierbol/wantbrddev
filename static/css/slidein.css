@@ -266,9 +266,6 @@ Slide In Panel - by CodyHouse.co
   -o-transition: all .3s;
   transition: all .3s;
 }
-.cd-panel__container.account_slide a:hover i {
-  transform: rotate(360deg);
-}
 
 .cd-panel--from-right .cd-panel__container {
   right: 0;

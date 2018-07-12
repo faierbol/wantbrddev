@@ -71,7 +71,7 @@
                             </a>
                         {% endif %}
                     </div>
-                    <a class="trendingUserUser" href="profile.php">
+                    <a class="trendingUserUser" href="{% url 'u:profile' board.user.username %}">
                         <div class="trendingUserUserWrap clearfix">
                             <div class="trendingUserPic">
                                 {% if board.user.profile.picture %}

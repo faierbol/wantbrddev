@@ -20,7 +20,7 @@ class ProfileForm(forms.ModelForm):
 	picture = forms.ImageField(label=(''),required=False, widget=forms.FileInput(attrs={'class': "jfilestyle"}))
 	class Meta:
 		model = Profile		
-		fields = ('bio', 'website', 'country', 'date_of_birth', 'phone_number', 'picture', 'alert_new_subscribe', 'alert_new_item', 'alert_suggested_boards')
+		fields = ('bio', 'website', 'country', 'date_of_birth', 'phone_number', 'picture')
 		widgets = {
 			'bio':forms.Textarea(attrs={'placeholder': 'Tell people about yourself', 'rows':20, 'cols':100}),
 			'website':forms.TextInput(attrs={'placeholder': 'Your website address'}),			
@@ -29,6 +29,25 @@ class ProfileForm(forms.ModelForm):
 			'alert_new_item':forms.CheckboxInput(attrs={'name': 'alert_new_item', 'hidden': 'hidden', 'id':'alert_new_item'}),
 			'alert_suggested_boards':forms.CheckboxInput(attrs={'name': 'alert_sug_board', 'hidden': 'hidden', 'id':'alert_sug_board'}),
 			'date_of_birth':forms.TextInput(attrs={'data-toggle':'datepicker'}),
+		}
+
+
+class PrivacyForm(forms.ModelForm):	
+	class Meta:
+		model = Profile		
+		fields = ('global_privacy', 'user')
+		widgets = {'user':forms.HiddenInput()}
+
+
+class SettingsForm(forms.ModelForm):	
+	class Meta:
+		model = Profile		
+		fields = ('alert_new_subscribe', 'alert_new_item', 'alert_suggested_boards', 'user')
+		widgets = {
+			'alert_new_subscribe':forms.CheckboxInput(attrs={'hidden': 'hidden', 'id':'alert_new_sub'}), 
+			'alert_new_item':forms.CheckboxInput(attrs={'hidden': 'hidden', 'id':'alert_new_item'}),
+			'alert_suggested_boards':forms.CheckboxInput(attrs={'hidden': 'hidden', 'id':'alert_sug_board'}),
+			'user':forms.HiddenInput(),
 		}
 
 

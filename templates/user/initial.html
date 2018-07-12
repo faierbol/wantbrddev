@@ -1,0 +1,198 @@
+{% extends 'base.html' %}
+{% load comments static %}
+{% load staticfiles %}
+{% load thumbnail %}
+
+{% block title %}
+	Home
+{% endblock %}
+
+{% block body %}
+
+<div class="profilePush"></div>
+
+{% if not users %}
+
+<div class="newUserIntro">
+    <div class="container">
+        <h1>Let's get started!</h1>
+        <p>Lets find you some interesting people to follow, select your interests below.</p>
+        <form method="POST">
+            {% csrf_token %}
+            <input type="hidden" name="usertags" id="usertags" value="">
+            <button name="nextstep" id="nextstep" value="1">Next Step</button>
+        </form>
+        
+    </div>
+</div>
+
+<div class="newUserTopics">
+    <div class="container clearfix">
+        <a id="int1" data-tags="interior,design" href="#" class="rain1 intbtn">Interior Design <i class="fas fa-check"></i></a>
+        <a id="int2" data-tags="technology" href="#" class="rain2 intbtn">Technology <i class="fas fa-check"></i></a>
+        <a id="int3" data-tags="fashion" href="#" class="rain3 intbtn">Fashion <i class="fas fa-check"></i></a>
+        <a id="int4" data-tags="sports" href="#" class="rain4 intbtn">Sports <i class="fas fa-check"></i></a>
+        <a id="int5" data-tags="gadgets" href="#" class="rain5 intbtn">Gadgets <i class="fas fa-check"></i></a>
+        <a id="int6" data-tags="travel" href="#" class="rain6 intbtn">Travel <i class="fas fa-check"></i></a>
+        <a id="int7" data-tags="makeup" href="#" class="rain7 intbtn">Makeup <i class="fas fa-check"></i></a>
+        <a id="int8" data-tags="photography" href="#" class="rain8 intbtn">Photography <i class="fas fa-check"></i></a>
+        <a id="int9" data-tags="art, design" href="#" class="rain9 intbtn">Art &amp; Design <i class="fas fa-check"></i></a>
+        <a id="int10" data-tags="cryptocurrency" href="#" class="rain10 intbtn">Cryptocurrency <i class="fas fa-check"></i></a>
+        <a id="int11" data-tags="cars,motorcycles" href="#" class="rain11 intbtn">Cars &amp; Motorcycles <i class="fas fa-check"></i></a>
+        <a id="int12" data-tags="gardening" href="#" class="rain12 intbtn">Gardening <i class="fas fa-check"></i></a>
+        <a id="int13" data-tags="gaming" href="#" class="rain13 intbtn">Gaming <i class="fas fa-check"></i></a>
+    </div>
+</div>
+
+{% else %}
+
+<div class="newUserIntro">
+    <div class="container">
+        <h1>We found the following users that might interest you...</h1>
+
+        <form method="POST">
+            {% csrf_token %}
+            <input type="hidden" id="userstofollow" name="userstofollow" value="">
+            <button id="followall" value="1" name="followall">Follow now</button>            
+        </form>
+
+    </div>
+</div>
+
+<div class="newUserFollow">
+    <div class="container clearfix">
+
+        {% for user in users %}
+        
+        <div class="featBox">
+            <div class="newUserFollowDetails">
+                <a class="followProfile" href="#">
+                    {% if user.profile.picture %}
+                    <div class="circle" style="background-image:url('{{ user.profile.picture.url }}');"></div>
+                    {% else %}
+                    <div class="circle" style="background-image:url('{% static 'img/default-hero.png' %}');"></div>
+                    {% endif %}                    
+                </a>
+
+                <div class="followInfo">
+
+                    <div class="followlinks">
+                        <a href="#" class="follow_user go" data-uid="{{ user.id }}">Follow <i class="fas fa-check"></i></a>
+                    </div>
+
+                    <span><a href="#">@{{ user }}</a></span>
+                    <strong><a href="#">{{ user.get_full_name }}</a></strong>
+                </div>
+                <div class="clearfix"></div>
+            </div>
+            <div class="newUserFollowTags">
+                {% for tag in user.the_tags|slice:":6" %}
+                    <a href="{% url 'search_board' %}?kw={{ tag }}">#{{ tag }} </a>
+                {% endfor %}
+                {% if user.the_tags|length > 6 %}
+                    <strong>+{{ user.the_tags|length|add:"-6" }} more</strong>
+                {% endif %}
+            </div>
+            <div class="trendingFooter">
+                <span>
+                    {% if user.boardcount == 1 %}
+                        {{ user.boardcount }} Board
+                    {% else %}
+                        {{ user.boardcount }} Boards
+                    {% endif %}
+                </span>
+                <span>
+                    {% if user.itemcount == 1 %}
+                        {{ user.itemcount }} Items
+                    {% else %}
+                        {{ user.itemcount }} Items
+                    {% endif %}
+                </span>
+                <span>
+                    {% if user.viewscount == 1 %}
+                        {{ user.viewscount }} View
+                    {% else %}
+                        {{ user.viewscount }} Views
+                    {% endif %}
+                </span>
+            </div>
+        </div>
+
+        {% endfor %}
+
+        <div class="clearfix"></div>
+
+        <a href="{% url 'u:home' %}" class="skipadding">Skip</a>
+
+    </div>    
+
+</div>
+
+{% endif %}
+
+{% endblock %}
+
+{% block extra-js %}
+        
+    <script type="text/javascript">
+        
+        var users_to_follow = [{% for user in users %}{{ user.id }}{% if not forloop.last %},{% endif %}{% endfor %}];
+
+        $('#followall').click(function(e){            
+            if (users_to_follow == false){
+                Swal('Oops!', 'You have not selected any users to follow.', 'warning')
+                e.preventDefault();
+            } else {                
+                str = users_to_follow.toString()
+                $('#userstofollow').val(str)
+                console.log($('#userstofollow').val());            
+            }
+        });
+
+        $('.intbtn').click(function(e){
+            e.preventDefault();
+            if( $(this).hasClass('active') ) {
+                $(this).removeClass('active');
+                var current_tags = $('#usertags').val();
+                var tags = $(this).attr('data-tags');
+                new_tags = current_tags.replace(tags+',','')
+                $('#usertags').val(new_tags);
+                console.log($('#usertags').val());
+
+            } else {
+                $(this).addClass('active');
+                var current_tags = $('#usertags').val();
+                var tags = $(this).attr('data-tags') + "," + current_tags;
+                $('#usertags').val(tags);
+                console.log($('#usertags').val());
+            }
+        })        
+
+        $('.follow_user').click(function(e){
+            e.preventDefault();
+
+            var to_follow = $('#userstofollow').val();
+            var userid = $(this).attr('data-uid');  
+
+            if( $(this).hasClass('go') ) {
+                console.log('>>>>> REMOVE USER');
+                $(this).removeClass('go');  
+                console.log(users_to_follow);
+                console.log("Remove: " + userid);
+                var removeItem = userid;
+                users_to_follow = jQuery.grep(users_to_follow, function(value) {
+                  return value != removeItem;                  
+                });                
+                console.log(users_to_follow);
+            } else {                        
+                console.log('>>>>> ADD USER');
+                $(this).addClass('go'); 
+                console.log(users_to_follow);
+                console.log("Add: " + userid);
+                users_to_follow.push(userid);
+                console.log(users_to_follow);    
+            }
+        })
+
+    </script>
+{% endblock %}

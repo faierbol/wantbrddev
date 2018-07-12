@@ -33,7 +33,7 @@ class Board(models.Model):
 		super(Board, self).save(*args, **kwargs)
 
 	def get_item_count(self):
-		item_count = ItemConnection.objects.filter(board=self).count()
+		item_count = ItemConnection.objects.filter(board=self,active=True).count()
 		return item_count
 
 	def user_blocked(self,user):
@@ -69,7 +69,6 @@ class BoardLike(models.Model):
 class BoardView(models.Model):
 	board = models.ForeignKey(Board, on_delete=models.CASCADE)
 	ip = models.CharField(max_length=16)
-	user = models.ForeignKey(User, on_delete=models.PROTECT)
 
 
 ##### Item Model
@@ -107,7 +106,6 @@ class ItemConnection(models.Model):
 		choices=ITEM_STATUS_CHOICES,
 		default=WANT,
 	)
-
 	active = models.BooleanField(default=True)
 
 	def save_item(itemconx, request):

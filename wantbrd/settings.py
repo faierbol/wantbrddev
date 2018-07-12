@@ -94,6 +94,7 @@ TEMPLATES = [
                 'django.contrib.messages.context_processors.messages',
                 'django.template.context_processors.media',
                 'wantbrd.context_processors.include_login_form',
+                'wantbrd.context_processors.unread_notifications',
                 # 'social_django.context_processors.backends',
                 # 'social_django.context_processors.login_redirect',
             ],
@@ -190,7 +191,7 @@ DEFAULT_FILE_STORAGE = 'wantbrd.storage_backends.MediaStorage'  # <-- here is wh
 # the login url, needed so django knows where to redirect un-authenicated attempts to @login_required views
 LOGIN_URL = 'login'
 # where to redirect after login
-LOGIN_REDIRECT_URL = 'u:home'
+LOGIN_REDIRECT_URL = '/checkstatus/'
 # where to redirect after logout
 LOGOUT_REDIRECT_URL = 'home'
 

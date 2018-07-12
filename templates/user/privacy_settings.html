@@ -1,0 +1,177 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+
+{% block title %}Privacy &amp; Settings{% endblock %}
+
+{% block extra-css %}
+	<link type="text/css" href="{% static 'css/date-picker.min.css' %}" rel="stylesheet" />
+{% endblock %}
+
+{% block body %}
+<section class="accountUpdate">
+
+	<div class="container clearfix">
+
+		<div class="panel privacysettings">
+
+			<h2>Privacy &amp; Settings</h2>
+
+			<!-- change password -->
+			<form method="POST">
+				{% csrf_token %}
+				<h4>Change Password</h4>
+				<label>Current password:</label>
+				<p>{{ password_form.old_password }}</p>
+				{% for error in password_form.old_password.errors %}
+				  <span class="fielderror">{{ error }}</span>
+				{% endfor %}
+
+				<label>New password:</label>
+				<p>{{ password_form.new_password1 }}</p>
+				{% for error in password_form.new_password1.errors %}
+				  <span class="fielderror">{{ error }}</span>
+				{% endfor %}
+
+				<label>Confirm password:</label>
+				<p>{{ password_form.new_password2 }}</p>
+				{% for error in password_form.new_password2.errors %}
+				  <span class="fielderror">{{ error }}</span>
+				{% endfor %}
+
+				<button class="btn large grey" name="updatepassword" value="1">Update Password</button>
+
+				{% if PasswordChangeForm.errors %}
+				    {% for field in PasswordChangeForm %}
+				        {% for error in field.errors %}
+				            <div class="alert alert-danger">
+				                <strong>{{ error|escape }}</strong>
+				            </div>
+				        {% endfor %}
+				    {% endfor %}
+				    {% for error in PasswordChangeForm.non_field_errors %}
+				        <div class="alert alert-danger">
+				            <strong>{{ error|escape }}</strong>
+				        </div>
+				    {% endfor %}
+				{% endif %}
+
+			</form>
+
+			<!-- change privacy -->
+			<form method="POST" class="formPadTop">
+				{% csrf_token %}
+				<h4>Global Account Privacy</h4>				
+				<label>Select from the following options:</label>
+
+				{{ privacy_form }}
+
+				{% if request.user.profile.global_privacy == 'HIDE' or request.user.profile.global_privacy == 'SHOW' %}
+				<div id="userlist">
+				{% else %}
+				<div id="userlist" style="display: none;">
+				{% endif %}
+					<label>Enter the usernames below, separated by a comma:</label>
+					{% if request.user.profile.global_privacy == 'HIDE' %}
+						<input type="text" id="user_list" name="user_list" class="smallfield" value="{{ authorised_users }}">
+					{% elif request.user.profile.global_privacy == 'SHOW' %}
+						<input type="text" id="user_list" name="user_list" class="smallfield" value="{{ blocked_users }}">
+					{% else %}
+					<input type="text" id="user_list" name="user_list" class="smallfield">
+					{% endif %}
+				</div>
+
+				<button class="btn large grey" name="updateprivacy" id="updateprivacy" value="1">Update Privacy</button>
+			</form>
+
+			<!-- change notifications -->
+			<form method="POST" class="formPadTop">
+				<h4>Notification Settings</h4>
+				{% csrf_token %}
+
+				<label>Notify me when I have a new subscriber:</label>
+				{{ settings_form.alert_new_subscribe }}
+				<label class="switch" for="alert_new_sub"></label>
+
+				<label>Notify me when someone I subscribe to adds a new item:</label>
+				{{ settings_form.alert_new_item }}
+				<label class="switch" for="alert_new_item"></label>
+
+				<label>Notify me by email about items, boards and users I may be interested in:</label>
+				{{ settings_form.alert_suggested_boards }}
+				<label class="switch" for="alert_sug_board"></label>
+
+				{{ settings_form.user }}
+				
+				<button class="btn large grey" name="updatenotification" id="updatenotification" value="1">Update Notification Preferences</button>
+			</form>
+
+			{{ settings_form.errors }}
+
+		</div>
+
+	</div>
+
+</section>
+      
+
+{% endblock %}
+
+{% block extra-js %}
+
+	<!--- succes alert -->
+	{% if messages %}				
+	    {% for message in messages %}  
+	    	{% if message.tags == 'error' %}  
+	    		<script type="text/javascript">
+	    			function codeAddress() {
+	    			    Swal('Oops!', '{{ message }}', 'warning')
+	    			}
+	    			window.onload = codeAddress;    
+	    		</script>
+	    	{% else %}
+			    <script type="text/javascript">
+			    	function codeAddress() {
+			    	    Swal('Congratulations!', '{{ message }}', 'success')
+			    	}
+			    	window.onload = codeAddress;    
+			    </script>
+		    {% endif %}
+	    {% endfor %}
+	{% endif %}
+
+	<script type="text/javascript">
+
+		// set up the form valdation vars
+		var gloabl_privacy = $('#id_global_privacy');
+		var submit_privacy = $('#updateprivacy');
+		var userlist = $('#userlist');
+		var users = $('#user_list');
+
+		// make sure the user list field appears if the relevant global privacy drop down option is picked		
+		gloabl_privacy.on('change', function() {
+			if( $(this).val() == 'SHOW' || $(this).val() == 'HIDE') {
+				userlist.show();
+			} else {
+				userlist.hide();
+			}
+		});
+
+		// check the user list field is not empty if form is submitted and relevant fields are picked		
+		submit_privacy.click(function(e){
+			if( gloabl_privacy.val() == 'SHOW') {				
+				if(!users.val()) {
+					e.preventDefault()
+					Swal('Oops!', 'You have selected to hide your boards from specific users, but not provided any usernames', 'warning');
+				}
+			} else if (gloabl_privacy.val() == 'HIDE') {
+				if(!users.val()) {
+					e.preventDefault()
+					Swal('Oops!', 'You have selected to only show your boards to specific users, but not provided any usernames', 'warning');
+				}
+			} else { return true; }
+		});
+		
+
+
+	</script>
+{% endblock %}

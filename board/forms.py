@@ -23,10 +23,11 @@ class BoardForm(forms.ModelForm):
 class ItemForm(forms.ModelForm):
 	class Meta:
 		model = ItemConnection
-		fields = ['purchase_url', 'item_desc', 'item_status', 'rating', 'review']
+		fields = ['purchase_url', 'item_desc', 'item_status', 'rating', 'review', 'active']
 		widgets = {
 	        'item_desc': Textarea(),
-	        'rating':forms.HiddenInput()
+	        'rating':forms.HiddenInput(),
+	        'active' : forms.CheckboxInput(attrs={'id': 'itemactive', 'hidden':'hidden'})        
 	    }
 
 
@@ -50,3 +51,13 @@ class UpdateTags(forms.ModelForm):
 		model = Board
 		fields = ['tags', 'user']
 		widgets = {'user':forms.HiddenInput()}
+
+	def clean_tags(self):
+	    """
+	    Force all tags to lowercase.
+	    """
+	    tags = self.cleaned_data.get('tags', None)
+	    if tags:
+	        tags = [t.lower() for t in tags]
+
+	    return tags

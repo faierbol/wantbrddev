@@ -24,22 +24,10 @@
     <div class="feedLeft">&nbsp;</div>
 
     <div class="addItem">
-
-<!--         <div>
-            {{ json }}
-        </div>
-
-        <div>
-            {{all_images}}
-        </div> -->
-
-<!--         <div>
-            {% for src in output %}
-                <img src="{{ src }}">
-            {% endfor %}
-        </div> -->
         
         <h3>Add an item to <em>'{{ board.board_name }}'</em></h3>
+
+        <strong>{{ meta }}</strong>
 
         <div class="addItemContent">
         	
@@ -49,17 +37,12 @@
         		<button name="geturl" class="getItem">Get item</button>
         	</form>
 
-        	{% if domain %}
-        		<p>Looking at {{ domain }}</p>
-        	{% endif %}         
-
-
         	<form method="POST" enctype="multipart/form-data">
         		{% csrf_token %}
         		<div id="addItemForm">
 
         			<section id="uploadFromSite">
-                        <p>Click on the image you would like to use.</p>
+                        <p><strong>Click on the image you would like to use.</strong></p>
         				<div class="imageSlider" style="margin-bottom:40px;">
                             {% if ogimg %}
                                 <div>
@@ -95,8 +78,7 @@
         		<div class="addItemFields">
 
 	        		<label>Item name:</label>
-	        		<input type="text" name="item_name" value="{{ pagetitle }}">
-	        		{{ form.as_p }}			
+	        		<input type="text" name="item_name" value="{{ page_title }}">
 
 	        		<label>Link to buy/view this item:</label>
 	        		<input type="text" name="purchase_url" value="{{ url }}"><br>
@@ -122,22 +104,18 @@
                         <textarea name="review" id="review" placeholder="Write a short review for others, explaining what you like or dislike about this item.">{{ itemconx.review }}</textarea>
                     </div>
 
-	        		<label>Make active</label>
-	        		<input type="checkbox" name="active" checked="checked" value="active" id="itemactive" hidden="hidden">
-	        		<label class="switch" for="itemactive"></label>
+                    <label>Make active</label>                        
+                    <input type="checkbox" name="active" id="itemactive" hidden="hidden" checked>
+                    <label class="switch" for="itemactive"></label>
 
 	        		<input type="hidden" name="scrapedimg" value="" id="scrapedimg">
 	        		<input type="hidden" name="imgsrc" value="web" id="imgsrc">
+                    <input type="hidden" name="boardid" value="{{ board.id }}" id="board">
 
 	        		<button class="grey large submit" name="additem" id="additem" value="1">Add item</button>
 
 	        	</div>
         	</form>
-
-            {% for size in sizes %}
-                {{ size }}
-            {% endfor %}
-        	
 
         </div>
 
@@ -160,7 +138,8 @@
             nextArrow: '<i class="itemLeft fa fa-chevron-right"></i>',
             prevArrow: '<i class="itemRight fa fa-chevron-left"></i>',
         });
-    	$('.retimg').click(function() {
+    	$('.retimg').click(function(e) {
+            e.preventDefault();
             var src = $(this).find('img').attr('src');
             $('#scrapedimg').val(src);   
             $('.retimg i').hide();
@@ -186,25 +165,22 @@
 		    var scrapedimg = $('#scrapedimg').val();
 		    var ownimg = $('#ownimage').val();
 		    var postit = true
-
 	        if(imgsrc == "web"){
 	        	if(scrapedimg == ""){
 	        		postit = false
 	        	};
 	        };
-
 	        if(imgsrc == "own"){
 	        	if(ownimg == ""){
 	        		postit = false
 	        	};
 	        };
-
 	        if (postit == false) {
-		        e.preventDefault()
+		        e.preventDefault();
+                Swal('Oops!', 'You need to select or upload an image for this item', 'warning')
 		    } else {
 		    	return true
 		    }
-
 		});
         $('#item_status').change(function(){
             if ($(this).val() == 'GOT') {

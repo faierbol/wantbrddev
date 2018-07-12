@@ -81,11 +81,11 @@
                             <textarea name="review" id="review" placeholder="Write a short review for others, explaining what you like or dislike about this item.">{{ itemconx.review }}</textarea>
                         </div>
 
-            			<label>Make active</label>
-            			<input type="checkbox" name="active" checked="checked" value="active" id="itemactive" hidden="hidden">
+            			<label>Make active</label>                        
+                        {{ form.active }}
             			<label class="switch" for="itemactive"></label>
 
-                        <button class="grey large" name="updateitem" id="updateitem" value="1" onclick="clicked(event)">Update item</button>                    
+                        <button class="grey large" name="updateitem" id="updateitem" value="1">Update item</button>                    
 
     	        	</div>
             	</form>

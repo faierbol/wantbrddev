@@ -5,7 +5,7 @@ from . import views
 app_name = 'b'
 urlpatterns = [	
 	path('<username>/<board_name>', views.view_board, name='view_board'),
-	path('<username>/<board_name>/view/<itemconx_id>', views.view_item, name='view_item'),
+	path('<username>/<board_name>/view/<itemconx_id>', views.view_item, name='view_item'), 
 	path('my_boards/edit/<board_id>', views.edit_board, name='edit_board'),
 	path('my_boards/edit/<board_id>/add_item', views.add_item, name='add_item'),
 	path('my_boards/edit/<board_id>/<itemconx_id>', views.edit_item, name='edit_item'),
