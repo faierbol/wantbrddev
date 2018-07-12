@@ -11,8 +11,6 @@ from user.models import Notification
 from user.views import Connection
 from .forms import BoardForm, ItemForm, EditBoardForm, ChangeBackgroundForm, UpdateTags
 from bs4 import BeautifulSoup
-from selenium import webdriver
-from selenium.webdriver.chrome.options import Options
 import os, copy
 from urllib.parse import urlparse
 from PIL import ImageFile, Image
