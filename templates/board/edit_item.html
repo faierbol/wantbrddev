@@ -24,7 +24,7 @@
     
     <div class="addItem">
 
-        <h3>Edit: <em>{{ itemconx.item.item_name }}</em></h3>
+        <h3>Updating, {{ itemconx.item.item_name }}</h3>
 
         <div class="addItemContent">
         	
@@ -50,6 +50,13 @@
             			
             			<label>About this item:</label>
                         {{ form.item_desc }}
+
+                        <label>Board:</label>
+                        <select id="currentBoard" name="currentBoard">
+                            {% for b in user_boards %}                                
+                                <option value="{{b.id}}" {% if b.id == itemconx.board.id %}selected="selected"{% endif %}>{{ b.board_name }}</option>
+                            {% endfor %}
+                        </select>
             			
                         <label>Is this something you want or already have?</label>
                         {{ form.item_status }}                    

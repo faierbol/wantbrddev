@@ -144,7 +144,7 @@ def my_home(request):
 	recent_itemlikes = Notification.objects.filter(user=user, notification_type='likeitem', created__range=[ago, now]).count()
 	recent_boardlikes = Notification.objects.filter(user=user, notification_type='likeboard', created__range=[ago, now]).count()
 	recent_followers = Notification.objects.filter(user=user, notification_type='newfollow', created__range=[ago, now]).count()
-	recent_likes = recent_itemlikes = recent_boardlikes
+	recent_likes = recent_itemlikes + recent_boardlikes
 
 	# get all users that we're following
 	following = request.user.profile.get_connections()

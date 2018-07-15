@@ -781,7 +781,6 @@ PROFILE
         }
         .theBio p {
             display: inline-block;
-            padding-left:30px;
         }
         .theBio i, #editBio i {
             display: inline-block;
@@ -810,7 +809,7 @@ PROFILE
         }
         .pSocial {            
             margin-top:10px;
-            text-align: right;
+            text-align: left;
         }
         .pSocial a {
             display: inline-block;
@@ -1387,49 +1386,6 @@ BOARD
             margin-top:10px;
         }
 
-.item-details-wrap {
-    padding:30px;
-}
-    .popImage {
-        width:40%;
-        float: left;
-    }
-        .popImage img {
-            width: 100%;
-            height: auto;
-        }
-    .popDetails {
-        float: right;
-        width:56%;
-    }
-        .popDetails .btn {
-            margin-top:20px;
-            font-size:1.5rem;
-        }
-    .item-details-wrap h5 {
-        font-size: 2rem;
-        font-weight: lighter;
-        line-height: 2rem;
-    }
-    .popDesc p {
-        margin:20px 0;
-        font-family: 'Open Sans', sans-serif;
-        line-height: 1.6rem
-    }
-    .popMeta {
-        text-align: center;
-        margin-top:20px;
-    }
-    .popMeta a {
-        display: inline-block;
-        padding:0 15px;
-        text-decoration: none;
-        border-right:1px solid #aaa;
-    }
-    .popMeta a:last-child {
-        border-right:0;
-    }
-
 #theTags {
     display: inline-block;
 }
@@ -1482,7 +1438,7 @@ BOARD
 
 
 .addItem {
-    width: 80%;
+    width: 60%;
     margin: auto;
     background:#fff;
     -webkit-box-shadow: 0px 5px 73px -11px rgba(0,0,0,0.2);
@@ -1662,7 +1618,70 @@ BOARD
     background:#fff;
     border:1px solid #ebebeb;
     border-radius: 3px;
-}    
+}  
+
+#finditem {
+    margin-bottom:20px;
+} 
+    strong.formtitle {
+        margin-bottom:5px;
+        display: block;
+    }
+
+.wantResults {
+    width: 60%;
+    margin: 20px auto 0;
+}
+    .foundItems {
+        margin-top:20px;
+    } 
+    .wantResults p {
+        margin-bottom:20px;
+        text-align: center;
+    }
+    .foundItem {
+        width: 32%;
+        margin-right: 2%;
+        margin-bottom:20px;
+        float: left;
+        background:#fff;
+        padding:30px;
+        border:1px solid #ebebeb;
+        position: relative;
+        text-align: center;
+    }
+    .foundItem:nth-child(3n) {
+        margin-right:0;        
+    }
+    .foundItem h4 {
+        line-height: 1.2;
+        margin:15px 0;
+        text-align: center;
+    }
+    .foundItem img {
+        width: 100%;
+        height: auto;
+    }
+    .foundItem .addExistingItem span {
+        opacity: 0.3;
+        position: absolute;
+        left:50%;
+        top:50%;
+        margin-left:-30px;
+        margin-top:-75px;
+        display: block;
+        font-size: 5rem;
+        -webkit-transition: all .3s;
+        -moz-transition: all .3s;
+        -o-transition: all .3s;
+        transition: all .3s;
+    }
+    .foundItem .addExistingItem:hover span {
+        opacity: 1;
+    }
+    .addExisting {
+        display: inline-block;        
+    }
 
 /** DISCOVERY **/
 .discoveryWrap {
@@ -1713,8 +1732,6 @@ BOARD
         margin-bottom:15px;
     }
     .discoveryFeedContent .discoveryItem:last-child {
-/*        margin-bottom:0px;
-        padding-bottom:0px;*/
         border-bottom:none;
     }
     .discoveryFeed h3 {
@@ -1728,6 +1745,26 @@ BOARD
     }
     .nofollow {
         padding:60px 0;
+    }
+    .trendingFooter .myHomeComments {
+        text-align:left; font-size: .85rem; margin-top:20px;
+        text-transform: none;
+    }
+    .trendingFooter .myHomeComments .aComment {
+        border-bottom:1px solid #ebebeb; padding-bottom:5px; margin-bottom:5px;
+    }
+    .trendingFooter .myHomeComments .aComment:last-child {
+        border:none;
+        padding:0;
+        margin:0;
+    }
+    .trendingFooter .myHomeComments .aComment p {
+        display: inline;
+    }
+    .trendingFooter .viewComments {
+        text-transform: none;
+        margin-top:10px;
+        display: block;
     }
 
 .feedLeft {
@@ -2047,6 +2084,111 @@ BOARD
         .follow_user.go i {
             display: inline-block;
         }
+
+
+/* ---------------- 
+ITEM DETAILS
+-----------------*/
+.itemDetails {
+    background:#f7f7f7;
+}
+    .itemDetails .panel {
+        padding:40px;
+    }
+    .popImage {
+        width:40%;
+        float: left;
+    }
+        .popImage img {
+            width: 100%;
+            height: auto;
+        }
+    .popDetails {
+        float: right;
+        width:56%;
+    }
+        .itemMeta {
+            margin:10px 0 20px;
+        }
+        .itemMetaPic {
+            float: left;
+            width: 30px;
+            margin-right:10px;
+        }
+        .itemMetaFound {
+            font-size: .8rem;
+            line-height: 30px;
+        }
+        .popDetails .btn.large {
+            margin:20px 0 30px 0;
+            font-size:1.5rem;
+        }
+        .popDesc p {
+            line-height: 1.6rem
+        }
+        .itemComments {
+            padding-top:30px;
+            border-top:1px solid #dbdbdb;
+        }
+        .itemComments h2 {
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+        .js-comments-form-orig-position {
+            margin-top:20px;
+        }
+        .itemComments textarea {
+            padding:15px;
+            font-family: inherit;
+            font-size: .9rem;
+            color:#444;
+            width: 100%;
+        }
+        .itemComments h4 {
+            font-size: .8rem;
+            color:#666;            
+        }
+        ul.comment-list-wrapper {
+            -webkit-margin-before: 0;
+            -webkit-margin-after: 0;
+            -webkit-margin-start: 0px;
+            -webkit-margin-end: 0px;
+            -webkit-padding-start: 0;
+        }
+        ul.comment-list-wrapper ul.comment-list-wrapper {
+            margin-top:10px;
+        }
+        .comment-wrapper:first-child {
+            padding-bottom:10px;
+        }
+        .comment-text {
+            color:#000;
+        }
+        #div_id_comment label {
+            display: block;
+            font-style: italic;
+            color:#666;
+            margin-right:10px;
+            font-size: .9rem;
+            margin-bottom:4px;
+        }
+        .itemComments input[name=preview]{
+            display: none;
+        }
+    .popMeta {
+        text-align: center;
+        margin-top:20px;
+    }
+        .popMeta a {
+            display: inline-block;
+            padding:0 15px;
+            text-decoration: none;
+            border-right:1px solid #aaa;
+        }
+        .popMeta a:last-child {
+            border-right:0;
+        }
+
 
 /* ---------------- 
 MISC

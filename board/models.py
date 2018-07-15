@@ -88,10 +88,12 @@ class Item(models.Model):
 class ItemConnection(models.Model):
 	board = models.ForeignKey(Board, on_delete=models.CASCADE)
 	image = ImageField(upload_to = 'uploads/items/', default = 'defaults/no-item.png')
+	img_own = models.BooleanField(default=False)
 	item = models.ForeignKey(Item, on_delete=models.CASCADE)
 	created = models.DateTimeField(auto_now_add=True)
 	allow_comments = models.BooleanField('allow comments', default=True)
 	purchase_url = models.URLField(max_length=255, blank=True)
+	original_purchase_url = models.URLField(max_length=255, blank=True)
 	item_desc = models.CharField(null=True, max_length=500, blank=True)
 	review = models.CharField(null=True, max_length=500, blank=True, default='')
 	rating = models.CharField(null=False, max_length=500, blank=False, default=0)

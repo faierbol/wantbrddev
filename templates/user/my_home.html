@@ -63,12 +63,12 @@
     	                <div class="discoveryItem clearfix">
     	                    <a href="{% url 'b:view_item' item.board.user item.board.slug item.id %}" class="discoveryImage">
     	                    	{% thumbnail item.image "300x300" as im %}
-    	                    	    <a href="" rel="tooltip" title="{{item.purchase_url}}"><img src="{{ im.url }}"></a>
+    	                    	    <img src="{{ im.url }}">
     	                    	{% endthumbnail %}
     	                    </a>
     	                    <div class="discoveryMeta">
     	                        <div class="trendingItemName">
-    	                            <a href="#" class="trendName">{{ item.item.item_name }}</a>
+    	                            <a href="{% url 'b:view_item' item.board.user item.board.slug item.id %}" class="trendName">{{ item.item.item_name }}</a>
     	                            <div class="trendingItemMeta">
     	                                Found in <a href="{% url 'b:view_board' item.board.user item.board.slug %}">{{ item.board.board_name }}</a> by 
     	                                <a href="{% url 'u:profile' item.board.user %}">
@@ -81,7 +81,6 @@
     	                            </div>
     	                        </div>              
     	                        <div class="trendingFooter">
-                                    {{ item.is_saved }}
                                     <span>
                                         <form class="inline" method="POST">
                                             {% csrf_token %}
@@ -114,24 +113,27 @@
                                             </form>
                                         </span>                                    
                                     {% endif %}
-    	                            <span><i class="fas fa-eye"></i> {{ item.views }}</span>                                
+    	                            <span><i class="fas fa-eye"></i> {{ item.views }}</span>    
+
+                                    <div class="myHomeComments">
+
+                                        {% get_comment_list for item as comment_list %}
+                                        {% for comment in comment_list|slice:":2" %}
+                                            <STRONG>{{user}}</STRONG>
+                                            <div class="aComment">
+                                                {{ comment.comment|linebreaks|slice:":90" }}{% if comment.comment|length > 90 %}<p>...</p>{% endif %}
+                                            </div>  
+                                        {% endfor %}
+
+                                    </div>
+
+                                    {% if comment_list %}
+                                        <a href="{% url 'b:view_item' item.board.user item.board.slug item.id %}" class="viewComments">View comments</a>
+                                    {% endif %}
+
     	                        </div>
     	                    </div>
                             <div class="clearfix"></div>
-                            <div style="text-align:left; font-size: .85rem; margin-top:20px;">
-
-                                {% get_comment_list for item as comment_list %}
-                                {% for comment in comment_list|slice:":2" %}
-                                    <STRONG>{{user}}</STRONG>
-                                    <div class="aComment" style="border-bottom:1px solid #ebebeb; padding-bottom:5px; margin-bottom:5px;">
-                                        {{ comment.comment|linebreaks|slice:":90" }}...                                    
-                                    </div>  
-                                {% endfor %}
-                                {% if comment_list %}
-                                    <a href="#">View comments</a>
-                                {% endif %}
-
-                            </div>
     	                </div>
 
                     {% endfor %}

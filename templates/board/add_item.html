@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load staticfiles %}
+{% load thumbnail %}
 
 {% block title %}
 	Add Item
@@ -27,16 +28,35 @@
         
         <h3>Add an item to <em>'{{ board.board_name }}'</em></h3>
 
-        <strong>{{ meta }}</strong>
-
         <div class="addItemContent">
-        	
-        	<form method="POST">
+
+            {% if not ogimg or not output %}
+            <strong class="formtitle">Search wantbrd for an item:</strong>
+            <form method="GET" action="{% url 'b:add_item' board.id %}" id="finditem">
+                <input
+                    type="search"
+                    placeholder="Search for an item by name"
+                    name="find"
+                    id="find"
+                    value=""
+                    pattern=".{3,}"
+                    required
+                    title="Please enter at least 3 characters"
+                    class="scrapeUrl"
+                >
+                <button name="geturl" class="getItem">Search</button>
+            </form>
+            {% endif %}
+
+            <strong class="formtitle">Enter the website address where we can find this item:</strong>
+        	<form method="POST" id="scrapeitem">
         		{% csrf_token %}
         		<input type="text" name="targeturl" placeholder="Enter url of the item" value="{{ url }}" class="scrapeUrl">
         		<button name="geturl" class="getItem">Get item</button>
         	</form>
 
+
+            {% if ogimg or output %}
         	<form method="POST" enctype="multipart/form-data">
         		{% csrf_token %}
         		<div id="addItemForm">
@@ -48,7 +68,7 @@
                                 <div>
                                     <a href="#" class="retimg">
                                         <i class="fas fa-check-circle"></i>
-                                        <img src="{{ ogimg }}">
+                                        <img src="{{ ogimg }}" id="ogimg">
                                     </a>
                                 </div>                                
                             {% else %}
@@ -86,6 +106,13 @@
 	        		<label>About this item:</label>
 	        		<textarea name="item_desc"></textarea>
 
+                    <label>Board:</label>
+                    <select id="currentBoard" name="currentBoard">
+                        {% for b in user_boards %}                                
+                            <option value="{{b.id}}" {% if b.id == board.id %}selected="selected"{% endif %}>{{ b.board_name }}</option>
+                        {% endfor %}
+                    </select>
+
                     <label>Is this something you want or already have?</label>
                     <select name="item_status" id="item_status">
                         <option value="WNT">I Want This</option>
@@ -116,12 +143,38 @@
 
 	        	</div>
         	</form>
+            {% endif %}
 
         </div>
-
     </div>
 
-    <div class="feedRight">&nbsp;</div>
+    <div class="wantResults">
+
+        {% if item_results %}
+            <p><strong>Not what you were looking for?</strong> No problem, search the internet for the item and paste the web address above.</p>
+            <div class="foundItems">                
+                {% for item in item_results %}
+
+                    <div class="foundItem">                            
+                        {% thumbnail item.image "300x300" as im %}
+                            <a href="{% url 'b:add_existing_item' board.id item.id %}" class="addExistingItem">
+                                <img src="{{ im.url }}">
+                            </a>
+                        {% endthumbnail %}
+                        <h4>{{ item.item.item_name }}</h4>
+                        <a href="#" class="btn grey addExisting">Add item</a>
+                    </div>
+                {% endfor %}
+                <div class="clearfix"></div>
+            </div>
+        {% else %}
+            {% if results == 'no' %}
+                <p><strong>Sorry, no one has added this item to wantbrd yet.</strong></p>
+                <p>Try searching the internet for the item and paste the web address above.</p>
+            {% endif %}
+        {% endif %}
+
+    </div>
 
 </div>
 

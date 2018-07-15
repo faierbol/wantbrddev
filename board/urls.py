@@ -10,5 +10,6 @@ urlpatterns = [
 	path('my_boards/edit/<board_id>/add_item', views.add_item, name='add_item'),
 	path('my_boards/edit/<board_id>/<itemconx_id>', views.edit_item, name='edit_item'),
 	path('like_board/<board_id>/', views.like_board, name='like_board'),
-	path('unlike_board/<board_id>', views.unlike_board, name='unlike_board'),
+	path('unlike_board/<board_id>', views.unlike_board, name='unlike_board'),		
+	path('my_boards/edit/<board_id>/add_item/<item_id>', views.add_existing_item, name='add_existing_item'),
 ]

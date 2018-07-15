@@ -22,6 +22,8 @@ from urllib.parse import quote_plus
 from lxml import html
 import opengraph_py3
 import metadata_parser
+from amazon.api import AmazonAPI
+import bottlenose.api
 
 
 ##### HOME PAGE
@@ -31,7 +33,7 @@ def home(request):
 
 		# like item
 		if 'likeitem' in request.POST:
-			itemconx_id = request.POST.get("itemconx_id")						
+			itemconx_id = request.POST.get("itemconx_id")
 			like_item(itemconx_id, request.user)
 			return HttpResponseRedirect(request.path_info)
 
@@ -258,6 +260,7 @@ def edit_board(request, board_id):
 def edit_item(request, board_id, itemconx_id):
 	template = 'board/edit_item.html'
 	board = get_object_or_404(Board, id=board_id)
+	user_boards = Board.objects.filter(user=request.user)
 	itemconx = get_object_or_404(ItemConnection, pk=itemconx_id)	
 	item = get_object_or_404(Item, pk=itemconx.item.id)
 	form = ItemForm(instance=itemconx)	
@@ -267,6 +270,8 @@ def edit_item(request, board_id, itemconx_id):
 		if 'updateitem' in request.POST:
 			form = ItemForm(request.POST, instance=itemconx)
 			item_name = request.POST.get("item_name")
+			current_board = request.POST.get("currentBoard")
+			board_assign = Board.objects.get(id=current_board)
 
 			if form.is_valid():
 				# save the new form instance to a var
@@ -289,6 +294,7 @@ def edit_item(request, board_id, itemconx_id):
 						# we can update the original item
 						item.item_name = item_name
 						item.save()
+				itemconx.board = board_assign
 				form.save()		
 
 				return redirect('b:edit_board', board_id=board_id)
@@ -301,6 +307,7 @@ def edit_item(request, board_id, itemconx_id):
 		'itemconx':itemconx,
 		'form':form,
 		'item':item,
+		'user_boards':user_boards
 	}
 
 	return render(request, template, context_dict)
@@ -459,10 +466,43 @@ def add_item(request, board_id):
 	template = 'board/add_item.html'
 
 	board = get_object_or_404(Board, pk=board_id)
+	user_boards = Board.objects.filter(user=request.user)
 	form = ItemForm()
 	url = ''
 
-	if request.method == 'POST':
+	if request.method == 'GET' and 'find' in request.GET:
+
+		find_item = request.GET.get('find', '')
+		find_item = find_item.lower()
+		item_results = []
+		results = 'no'
+
+		found_items = Item.objects.filter(item_name__icontains=find_item)
+		for item in found_items:
+			try:
+				item_conx = ItemConnection.objects.filter(item=item, active=True, img_own=False).exclude(board__user=request.user)[0]
+				item_results.append(item_conx)
+			except IndexError:
+				try:
+					item_conx = ItemConnection.objects.filter(item=item, active=True, img_own=True).exclude(board__user=request.user)[0]
+					item_results.append(item_conx)
+				except:
+					pass
+
+		if item_results:
+			results = 'yes'
+
+		context_dict = {
+			'find_item':find_item,
+			'item_results':item_results,
+			'board':board,
+			'user_boards':user_boards,
+			'results':results,
+		}
+
+		return render(request, template, context_dict)
+	
+	if request.method == 'POST':			
 
 		if 'geturl' in request.POST:
 
@@ -479,67 +519,84 @@ def add_item(request, board_id):
 			parsed_uri = urlparse(url)
 			domain = '{uri.scheme}://{uri.netloc}/'.format(uri=parsed_uri)
 
-			try:
-				page = metadata_parser.MetadataParser(url=url)
-			except:
-				pass
-			if page:
+			# if amazon.co.uk
+			if domain == 'https://www.amazon.co.uk/':				
+				match = re.findall(r'(?:[/dp/]|$)([A-Z0-9]{10})', url)
+				asin = match[0]
+				amazon = AmazonAPI('AKIAIB7XBGHKU3J4L7PA', 'KHC/thUX/c8q93NbM0xuqlUlq2pS8XJ++BwrxZvG', 'wantbrd-21', region="UK")
+				product = amazon.lookup(ItemId=asin)
+				ogimg = product.large_image_url
+				page_title = product.title
+
+			# otherwise, try and parse meta
+			else:				
 				try:
-					page_title = page.get_metadatas('title')[0]
+					page = metadata_parser.MetadataParser(url=url)
 				except:
 					pass
-				try:
-					meta_image = page.get_metadata_link('image')
-				except:
-					pass
 
-			if meta_image:
-				output.append(meta_image)
-			else:
-				# ########## PROXYCRAWL BELOW #########
-				api = 'aaF7juZfhdnyptXo4Kjm6A'
-				jsapi = 'vBlWMcz5CXvV4A-YnXhhag'
+				# if we got some meta
+				if page:
+					try:
+						page_title = page.get_metadatas('title')[0]
+					except:
+						pass
+					try:
+						meta_image = page.get_metadata('image')
+					except:
+						pass
+			
+				# if we got image from meta
+				if meta_image:
+					ogimg = meta_image
+				
+				# if we failed to get meta image use proxycrawl
+				else:
+					# ########## PROXYCRAWL BELOW #########
+					api = 'aaF7juZfhdnyptXo4Kjm6A'
+					jsapi = 'vBlWMcz5CXvV4A-YnXhhag'
 
-				modded_url = quote_plus(url)
-				response = requests.get('https://api.proxycrawl.com/?token=' + jsapi + '&format=json&page_wait=3000&url=' + modded_url)	
-				parsed_json = response.json()
-				html = parsed_json['body']
+					modded_url = quote_plus(url)
+					response = requests.get('https://api.proxycrawl.com/?token=' + jsapi + '&format=json&page_wait=3000&url=' + modded_url)	
+					parsed_json = response.json()
+					html = parsed_json['body']
+					soup = BeautifulSoup(html)				
 
-				soup = BeautifulSoup(html)
+					if not page_title:
+						page_title = soup.title.string
 
-				if not page_title:
-					page_title = soup.title.string
+					# image_tags = soup.findAll('img', {'src' : re.compile(r'(jpe?g)|(png)$')})
+					image_tags = soup.findAll('img', {'src' : re.compile(r'(jpe?g)|(png)$')})
+					# loop through all img's found
+					for img in image_tags:
 
-				# image_tags = soup.findAll('img', {'src' : re.compile(r'(jpe?g)|(png)$')})
-				image_tags = soup.findAll('img')
-				# loop through all img's found
-				for img in image_tags:
+						# get src from img
+						imgurl = img.get('src')
 
-					# get src from img
-					imgurl = img.get('src')
+						# check a value is there and its not a data: src
+						if (imgurl is not None) and ("data:" not in imgurl):
 
-					# check a value is there and its not a data: src
-					if (imgurl is not None) and ("data:" not in imgurl):
-
-						if imgurl.lower().endswith(('.bmp', '.png', '.gif', '.tif')):
-							pass
-
-						else:
-							# check if src starts without full path and append with domain appropriately 
-							if not imgurl.startswith("http"):
-								if imgurl.startswith("//"):
-									imgurl = "https:" + imgurl
-								else:
-									imgurl = domain + imgurl		
-
-							try:
-								image_raw = requests.get(imgurl)
-								the_image = Image.open(BytesIO(image_raw.content))
-								img_width, img_height = the_image.size
-								if img_width > 250:
-									output.append(imgurl)
-							except:
+							if imgurl.lower().endswith(('.bmp', '.gif', '.tif')):
 								pass
+
+							else:
+								# check if src starts without full path and append with domain appropriately 
+								if not imgurl.startswith("http"):
+									if imgurl.startswith("//"):
+										imgurl = "https:" + imgurl
+									else:
+										imgurl = domain + imgurl	
+
+								allimages.append(imgurl)
+
+								try:
+									image_raw = requests.get(imgurl)
+									the_image = Image.open(BytesIO(image_raw.content))
+									img_width, img_height = the_image.size
+									if img_width > 250:
+										output.append(imgurl)
+								except:
+									pass
 			context_dict = {
 				'board':board,
 				'form':form,
@@ -550,6 +607,7 @@ def add_item(request, board_id):
 				'allimages':allimages,
 				'page_title':page_title,
 				'html':html,
+				'user_boards':user_boards
 			}
 
 			return render(request, template, context_dict)
@@ -564,6 +622,8 @@ def add_item(request, board_id):
 			item_active = request.POST.get("item_active")
 			rating = request.POST.get("rating")
 			review = request.POST.get("review")
+			current_board = request.POST.get("currentBoard")
+			board_assign = Board.objects.get(id=current_board)
 
 			if item_active == "active":
 				item_active = True
@@ -592,16 +652,103 @@ def add_item(request, board_id):
 				if imgsrc == 'own':
 					new_image = request.FILES['ownimage']
 					new_item_conx.image = new_image
+					new_item_conx.img_own = True
 					new_item_conx.save()
 				else:
 					new_item_conx.image.save(file_name, files.File(fp))
+				new_item_conx.board = board_assign
+				new_item_conx.original_purchase_url = new_item_conx.purchase_url
 				new_item_conx.save()					
 
 				return redirect('b:edit_board', board_id=board_id)
 
+	context_dict = {
+		'board':board,
+		'user_boards':user_boards
+	}
+
+	return render(request, template, context_dict)
+
+
+### add existing item
+def add_existing_item(request, board_id, item_id):
+	template = 'board/add_item.html'
+
+	itemconx = ItemConnection.objects.get(id=item_id)
+	board = Board.objects.get(id=board_id)
+	ogimg = itemconx.image.url
+	page_title = itemconx.item.item_name
+	user_boards = Board.objects.filter(user=request.user)
+	if itemconx.img_own == True:
+		url = itemconx.purchase_url
+	else:
+		url = itemconx.original_purchase_url
+	existing_item = True
+
+	if request.method == 'POST':
+		if 'additem' in request.POST:
+			form = ItemForm(request.POST, request.FILES)
+			imgsrc = request.POST.get("imgsrc")
+			item_name = request.POST.get("item_name")
+			purchase_url = request.POST.get("purchase_url")
+			item_status = request.POST.get("item_status")
+			item_desc = request.POST.get("item_desc")
+			item_active = request.POST.get("item_active")
+			rating = request.POST.get("rating")
+			review = request.POST.get("review")
+			current_board = request.POST.get("currentBoard")
+			board_assign = Board.objects.get(id=current_board)
+
+			if item_active == "active":
+				item_active = True
+			else:
+				item_active = False
+
+			if imgsrc == 'web':
+				url = request.POST.get("scrapedimg")
+				resp = requests.get(url)
+				if resp.status_code != requests.codes.ok:
+					return redirect('home')
+				fp = BytesIO()
+				fp.write(resp.content)
+				file_name = url.split("/")[-1]
+
+			if form.is_valid():		
+				# create a new item with this item name and save it
+				new_item = Item()
+				new_item.item_name = item_name
+				new_item.save()
+				
+				# save the model form
+				new_item_conx = form.save(commit=False)
+				new_item_conx.board = board
+				new_item_conx.item = new_item
+				if imgsrc == 'own':
+					new_image = request.FILES['ownimage']
+					new_item_conx.image = new_image
+					new_item_conx.img_own = True
+					new_item_conx.save()
+				else:
+					new_item_conx.image.save(file_name, files.File(fp))
+				new_item_conx.board = board_assign
+				new_item_conx.original_purchase_url = new_item_conx.purchase_url
+				new_item_conx.save()					
+
+				return redirect('b:edit_board', board_id=board_id)
 
 	context_dict = {
 		'board':board,
+		'user_boards':user_boards
+	}
+
+	context_dict = {
+		'itemconx':itemconx,
+		'ogimg':ogimg,
+		'board':board,
+		'page_title':page_title,	
+		'url':url,
+		'user_boards':user_boards,
+		'existing_item':existing_item,
 	}
 
 	return render(request, template, context_dict)
@@ -774,9 +921,3 @@ def search_user(request):
 	}
 
 	return render(request, template, context_dict)
-
-
-def item_details(request):
-	context_dict = {
-	}
-	return render(request, 'board/item_details.html', context_dict)
