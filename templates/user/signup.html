@@ -5,13 +5,25 @@
 {% endblock %}
 
 {% block body %}
-<div class="profilePush"></div>
-	<h2>Sign up</h2>
 
-	<form method="post" novalidate>
-		{% csrf_token %}
-		{% include 'includes/form.html' %}
-		<button type="submit">Create an account</button>
-	</form>
+<section class="accountUpdate">
+
+	<div class="container clearfix">
+
+		<div class="panel privacysettings">
+
+			<h2>Create an account</h2>
+
+			<form method="post" novalidate>
+				{% csrf_token %}
+				{{ form.as_p }}
+				<button type="submit">Create an account</button>		
+			</form>
+
+		</div>
+
+	</div>
+
+</section>
 
 {% endblock %}

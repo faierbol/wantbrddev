@@ -27,7 +27,8 @@ urlpatterns = [
     path('my/profile/', user_views.update_profile, name='update_profile'),
     path('my/settings/', user_views.privacy_settings, name='privacy_settings'),
     path('my/notifications', user_views.my_notifications, name='my_notifications'),
-    url(r'^signup/$', user_views.signup, name='signup'),
+    # SIGN UP / SIGN IN
+    path('signup/', user_views.signup, name='signup'),   
     url(r'^login/$',  auth_views.LoginView.as_view(template_name='user/login.html'), name='login'),
     url(r'^logout/$', auth_views.LogoutView.as_view(), name='logout'),  
     url(r'^reset/$',
@@ -35,7 +36,7 @@ urlpatterns = [
             template_name='user/password_reset.html',
             email_template_name='user/password_reset_email.html',
             subject_template_name='user/password_reset_subject.txt',
-            success_url=reverse_lazy('u:password_reset_done'),
+            success_url=reverse_lazy('password_reset_done'),
         ),
         name='password_reset'),
     path(
@@ -45,7 +46,7 @@ urlpatterns = [
     url(r'^reset/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/$',
         auth_views.PasswordResetConfirmView.as_view(
             template_name='user/password_reset_confirm.html',
-            success_url=reverse_lazy('u:password_reset_complete'),
+            success_url=reverse_lazy('password_reset_complete'),
         ),
         name='password_reset_confirm'),
     url(r'^reset/complete/$',
@@ -56,7 +57,7 @@ urlpatterns = [
         'settings/password/',
         auth_views.PasswordChangeView.as_view(
             template_name='user/password_change.html',
-            success_url=reverse_lazy('u:password_change_done'),
+            success_url=reverse_lazy('password_change_done'),
         ),
         name='password_change'),
     url(r'^settings/password/done/$', auth_views.PasswordChangeDoneView.as_view(template_name='user/password_change_done.html'),
