@@ -55,102 +55,114 @@
         		<button name="geturl" class="getItem">Get item</button>
         	</form>
 
+            <div class="gettingContentLoader" style="display: none;">
+                <div class="spinner">
+                  <i></i>
+                  <i></i>
+                  <i></i>
+                  <i></i>
+                  <i></i>
+                  <i></i>
+                  <i></i>
+                </div>
+            </div>
 
-            {% if ogimg or output %}
-        	<form method="POST" enctype="multipart/form-data">
-        		{% csrf_token %}
-        		<div id="addItemForm">
+            <section class="scrapeInfo">
+                {% if ogimg or output %}
+            	<form method="POST" enctype="multipart/form-data">
+            		{% csrf_token %}
+            		<div id="addItemForm">
 
-        			<section id="uploadFromSite">
-                        <p><strong>Click on the image you would like to use.</strong></p>
-        				<div class="imageSlider" style="margin-bottom:40px;">
-                            {% if ogimg %}
-                                <div>
-                                    <a href="#" class="retimg">
-                                        <i class="fas fa-check-circle"></i>
-                                        <img src="{{ ogimg }}" id="ogimg">
-                                    </a>
-                                </div>                                
-                            {% else %}
-            					{% for src in output %}
+            			<section id="uploadFromSite">
+                            <p><strong>Click on the image you would like to use.</strong></p>
+            				<div class="imageSlider" style="margin-bottom:40px;">
+                                {% if ogimg %}
                                     <div>
                                         <a href="#" class="retimg">
                                             <i class="fas fa-check-circle"></i>
-                                            <img src="{{ src }}">
+                                            <img src="{{ ogimg }}" id="ogimg">
                                         </a>
-                                    </div>        						
-            					{% endfor %}
-                            {% endif %}
-        				</div>
-        			</section>
+                                    </div>                                
+                                {% else %}
+                					{% for src in output %}
+                                        <div>
+                                            <a href="#" class="retimg">
+                                                <i class="fas fa-check-circle"></i>
+                                                <img src="{{ src }}">
+                                            </a>
+                                        </div>        						
+                					{% endfor %}
+                                {% endif %}
+            				</div>
+            			</section>
 
-                    <a href="#" id="uploadown">Or, upload your own image</a>
+                        <a href="#" id="uploadown">Or, upload your own image</a>
 
-        			<section id="uploadOwnImage" style="display: none;">
-                        <p>Select an image from your device.</p>
-        				<input type="file" name="ownimage" id="ownimage">
-        			</section>
+            			<section id="uploadOwnImage" style="display: none;">
+                            <p>Select an image from your device.</p>
+            				<input type="file" name="ownimage" id="ownimage">
+            			</section>
 
-                    <a href="#" id="uploadweb" style="display: none;">Or, get images from URL</a>
+                        <a href="#" id="uploadweb" style="display: none;">Or, get images from URL</a>
 
-        		</div>
+            		</div>
 
-        		<div class="addItemFields">
+            		<div class="addItemFields">
 
-	        		<label>Item name:</label>
-	        		<input type="text" name="item_name" value="{{ page_title }}">
+    	        		<label>Item name:</label>
+    	        		<input type="text" name="item_name" value="{{ page_title }}">
 
-	        		<label>Link to buy/view this item:</label>
-	        		<input type="text" name="purchase_url" value="{{ url }}"><br>
+    	        		<label>Link to buy/view this item:</label>
+    	        		<input type="text" name="purchase_url" value="{{ url }}"><br>
 
-	        		<label>About this item:</label>
-	        		<textarea name="item_desc"></textarea>
+    	        		<label>About this item:</label>
+    	        		<textarea name="item_desc"></textarea>
 
-                    <label>Board:</label>
-                    <select id="currentBoard" name="currentBoard">
-                        {% for b in user_boards %}                                
-                            <option value="{{b.id}}" {% if b.id == board.id %}selected="selected"{% endif %}>{{ b.board_name }}</option>
-                        {% endfor %}
-                    </select>
+                        <label>Board:</label>
+                        <select id="currentBoard" name="currentBoard">
+                            {% for b in user_boards %}                                
+                                <option value="{{b.id}}" {% if b.id == board.id %}selected="selected"{% endif %}>{{ b.board_name }}</option>
+                            {% endfor %}
+                        </select>
 
-                    <label>Is this something you want or already have?</label>
-                    <select name="item_status" id="item_status">
-                        <option value="WNT">I Want This</option>
-                        <option value="GOT">I've got this</option>
-                    </select>
+                        <label>Is this something you want or already have?</label>
+                        <select name="item_status" id="item_status">
+                            <option value="WNT">I Want This</option>
+                            <option value="GOT">I've got this</option>
+                        </select>
 
 
-                    <div class="gotThisExtra" style="display:none;">
-                        <label>How would you rate this item?</label>
-                            <a href="#" id="three" class="rate" rel="tooltip" title="Recommended"><i class="far fa-smile"></i></a>
-                            <a href="#" id="two" class="rate" rel="tooltip" title="Meh"><i class="far fa-meh"></i></a>
-                            <a href="#" id="one" class="rate" rel="tooltip" title="Not recommended"><i class="far fa-frown"></i></a>
-                        <input type="hidden" name="rating" id="rating" value="0"> 
+                        <div class="gotThisExtra" style="display:none;">
+                            <label>How would you rate this item?</label>
+                                <a href="#" id="three" class="rate" rel="tooltip" title="Recommended"><i class="far fa-smile"></i></a>
+                                <a href="#" id="two" class="rate" rel="tooltip" title="Meh"><i class="far fa-meh"></i></a>
+                                <a href="#" id="one" class="rate" rel="tooltip" title="Not recommended"><i class="far fa-frown"></i></a>
+                            <input type="hidden" name="rating" id="rating" value="0"> 
 
-                        <label>Review this item:</label>
-                        <textarea name="review" id="review" placeholder="Write a short review for others, explaining what you like or dislike about this item.">{{ itemconx.review }}</textarea>
-                    </div>
+                            <label>Review this item:</label>
+                            <textarea name="review" id="review" placeholder="Write a short review for others, explaining what you like or dislike about this item.">{{ itemconx.review }}</textarea>
+                        </div>
 
-                    <label>Make active</label>                        
-                    <input type="checkbox" name="active" id="itemactive" hidden="hidden" checked>
-                    <label class="switch" for="itemactive"></label>
+                        <label>Make active</label>                        
+                        <input type="checkbox" name="active" id="itemactive" hidden="hidden" checked>
+                        <label class="switch" for="itemactive"></label>
 
-	        		<input type="hidden" name="scrapedimg" value="" id="scrapedimg">
-	        		<input type="hidden" name="imgsrc" value="web" id="imgsrc">
-                    <input type="hidden" name="boardid" value="{{ board.id }}" id="board">
+    	        		<input type="hidden" name="scrapedimg" value="" id="scrapedimg">
+    	        		<input type="hidden" name="imgsrc" value="web" id="imgsrc">
+                        <input type="hidden" name="boardid" value="{{ board.id }}" id="board">
 
-	        		<button class="grey large submit" name="additem" id="additem" value="1">Add item</button>
+    	        		<button class="grey large submit" name="additem" id="additem" value="1">Add item</button>
 
-	        	</div>
-        	</form>
-            {% endif %}
+    	        	</div>
+            	</form>
+                {% endif %}
+            </section>
 
         </div>
     </div>
 
-    <div class="wantResults">
-
-        {% if item_results %}
+    {% if item_results %}
+        <div class="wantResults">
             <p><strong>Not what you were looking for?</strong> No problem, search the internet for the item and paste the web address above.</p>
             <div class="foundItems">                
                 {% for item in item_results %}
@@ -172,10 +184,8 @@
                 <p><strong>Sorry, no one has added this item to wantbrd yet.</strong></p>
                 <p>Try searching the internet for the item and paste the web address above.</p>
             {% endif %}
-        {% endif %}
-
-    </div>
-
+        </div>
+    {% endif %}
 </div>
 
 {% endblock %}
@@ -184,6 +194,12 @@
 <script src="{% static 'js/slick.min.js' %}" type="text/javascript"></script>
 <script>
     $(document).ready(function(){
+
+        $('.getItem').click(function() {
+            $('.gettingContentLoader').show()
+            $('.scrapeInfo').hide()
+        });
+
         $('.imageSlider').slick({
             arrows:true,
             slidesToShow: 1,

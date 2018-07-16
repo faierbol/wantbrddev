@@ -513,13 +513,14 @@ def add_item(request, board_id):
 			output = []
 			page_title = ''
 			image = False
+			meta_image = False
 			html = ''
 			page = ''
 			url = request.POST.get("targeturl", "")
 			parsed_uri = urlparse(url)
 			domain = '{uri.scheme}://{uri.netloc}/'.format(uri=parsed_uri)
 
-			# if amazon.co.uk
+			####### CASE: AMAZON
 			if domain == 'https://www.amazon.co.uk/':				
 				match = re.findall(r'(?:[/dp/]|$)([A-Z0-9]{10})', url)
 				asin = match[0]
@@ -528,7 +529,7 @@ def add_item(request, board_id):
 				ogimg = product.large_image_url
 				page_title = product.title
 
-			# otherwise, try and parse meta
+			####### CASE: META_PARSER
 			else:				
 				try:
 					page = metadata_parser.MetadataParser(url=url)
@@ -550,53 +551,67 @@ def add_item(request, board_id):
 				if meta_image:
 					ogimg = meta_image
 				
-				# if we failed to get meta image use proxycrawl
+				####### CASE: PROXYCRAWL
 				else:
-					# ########## PROXYCRAWL BELOW #########
 					api = 'aaF7juZfhdnyptXo4Kjm6A'
 					jsapi = 'vBlWMcz5CXvV4A-YnXhhag'
 
 					modded_url = quote_plus(url)
-					response = requests.get('https://api.proxycrawl.com/?token=' + jsapi + '&format=json&page_wait=3000&url=' + modded_url)	
-					parsed_json = response.json()
-					html = parsed_json['body']
-					soup = BeautifulSoup(html)				
+					try:
+						response = requests.get('https://api.proxycrawl.com/?token=' + jsapi + '&format=json&page_wait=3000&url=' + modded_url, timeout=30)	
+						parsed_json = response.json()
+						html = parsed_json['body']
+						soup = BeautifulSoup(html)				
 
-					if not page_title:
-						page_title = soup.title.string
-
-					# image_tags = soup.findAll('img', {'src' : re.compile(r'(jpe?g)|(png)$')})
-					image_tags = soup.findAll('img', {'src' : re.compile(r'(jpe?g)|(png)$')})
-					# loop through all img's found
-					for img in image_tags:
-
-						# get src from img
-						imgurl = img.get('src')
-
-						# check a value is there and its not a data: src
-						if (imgurl is not None) and ("data:" not in imgurl):
-
-							if imgurl.lower().endswith(('.bmp', '.gif', '.tif')):
+						# if we didnt already get the meta page title
+						if not page_title:
+							try:
+								page_title = soup.title.string
+							except:
 								pass
 
-							else:
-								# check if src starts without full path and append with domain appropriately 
-								if not imgurl.startswith("http"):
-									if imgurl.startswith("//"):
-										imgurl = "https:" + imgurl
+						# try bs4 to find OG first
+						ogmeta = soup.find("meta",  property="og:image")
+						if ogmeta:
+							ogimg = ogmeta["content"]
+
+						# otherwise just scrape whatever images we can find
+						else:
+							# image_tags = soup.findAll('img', {'src' : re.compile(r'(jpe?g)|(png)$')})
+							image_tags = soup.findAll('img')
+							# loop through all img's found
+							for img in image_tags:
+
+								# get src from img
+								imgurl = img.get('src')
+
+								# check a value is there and its not a data: src
+								if (imgurl is not None) and ("data:" not in imgurl):
+
+									if imgurl.lower().endswith(('.bmp', '.gif', '.tif')):
+										pass
+
 									else:
-										imgurl = domain + imgurl	
+										# check if src starts without full path and append with domain appropriately 
+										if not imgurl.startswith("http"):
+											if imgurl.startswith("//"):
+												imgurl = "https:" + imgurl
+											else:
+												imgurl = domain + imgurl	
 
-								allimages.append(imgurl)
+										allimages.append(imgurl)
 
-								try:
-									image_raw = requests.get(imgurl)
-									the_image = Image.open(BytesIO(image_raw.content))
-									img_width, img_height = the_image.size
-									if img_width > 250:
-										output.append(imgurl)
-								except:
-									pass
+										try:
+											image_raw = requests.get(imgurl)
+											the_image = Image.open(BytesIO(image_raw.content))
+											img_width, img_height = the_image.size
+											if img_width > 250:
+												output.append(imgurl)
+										except:
+											pass
+					except:
+						pass
+
 			context_dict = {
 				'board':board,
 				'form':form,
