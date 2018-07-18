@@ -648,8 +648,8 @@ def add_item(request, board_id):
 			if imgsrc == 'web':
 				url = request.POST.get("scrapedimg")
 				resp = requests.get(url)
-				# if resp.status_code != requests.codes.ok:
-				# 	return redirect('home')
+				if resp.status_code != requests.codes.ok:
+					return redirect('home')
 				fp = BytesIO()
 				fp.write(resp.content)
 				file_name = url.split("/")[-1]
@@ -675,7 +675,17 @@ def add_item(request, board_id):
 				new_item_conx.original_purchase_url = new_item_conx.purchase_url
 				new_item_conx.save()					
 
-				return redirect('b:edit_board', board_id=board_id)
+				# return redirect('b:edit_board', board_id=board_id)
+
+				context_dict = {
+					'board':board,
+					'form':form,
+					'user_boards':user_boards,
+					'status_code':resp.status_code,
+					'imgsrc':imgsrc,
+				}
+
+				return render(request, template, context_dict)
 
 	context_dict = {
 		'board':board,
