@@ -33,7 +33,18 @@
 			        <img src="{{ im.url }}">
 			    {% endthumbnail %}
 			    <div class="popMeta">
-			        <a href="#"><i class="fas fa-share"></i> Share</a>
+			    	<div class="share-link">
+			    		<a class="toggle" href="javascript:void(0);"><i class="fas fa-share"></i> Share</a>
+			    		<div class="tip">
+			    			<div class="ssk-group">
+			    			    <a href="" class="ssk ssk-icon ssk-facebook"></a>
+			    			    <a href="" class="ssk ssk-icon ssk-twitter"></a>
+			    			    <a href="" class="ssk ssk-icon ssk-google-plus"></a>
+			    			    <a href="" class="ssk ssk-icon ssk-pinterest"></a>
+			    			    <a href="" class="ssk ssk-icon ssk-tumblr"></a>
+			    			</div>
+			    		</div>
+			    	</div>
 			        <a href="#"><i class="far fa-bookmark"></i> Save</a>
 			        <a href="#"><i class="fas fa-plus"></i> Add to My Board</a>
 			    </div>
@@ -45,8 +56,8 @@
 
 		        <div class="itemMeta">
 		    		<div class="itemMetaPic">
-		    			{% if user.profile.picture %}
-		    			<div class="circle" style="background-image:url('{{ user.profile.picture.url }}');"></div>
+		    			{% if itemconx.board.user.profile.picture %}
+		    			<div class="circle" style="background-image:url('{{ itemconx.board.user.profile.picture.url }}');"></div>
 		    			{% else %}
 		    			<div class="circle" style="background-image:url('{% static 'img/default-hero.png' %}');"></div>
 		    			{% endif %}

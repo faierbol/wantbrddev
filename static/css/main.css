@@ -1033,15 +1033,12 @@ UPDATE ACCOUNT
         font-size: inherit;
         padding:0;
     }
-    #updateprofileform .updatePpic {
+    .profileLeft .updatePpic {
         width: 100px;
         margin-bottom:10px;
     }
-    #updateprofileform .updatePpic div.jfilestyle label {
-        background:none;
-        border:none;
-        color:#fff;
-        font-size: 2.5rem;
+    .profileLeft .updatePpic a {
+        display: block;
     }
 
     /*** social ***/
@@ -1359,7 +1356,7 @@ BOARD
         .boardPic:hover > .featBoxMeta {
             opacity: 1
         }
-        .boardPic .featBoxMeta a {
+        .boardPic .featBoxMeta a.metalink {
             padding:0 5px;
             text-decoration: none;
             color:#000;
@@ -2218,6 +2215,9 @@ div.jfilestyle input {
 div.jfilestyle input i {
     color:#333;
 }
+.count-jfilestyle {
+    display: none;
+}
 #tooltip
 {
     text-align: center;
@@ -2464,6 +2464,76 @@ div.spinner i:nth-child(8) {
     transform: rotate(360deg);
   }
 }
+.share-link {
+    display: inline-block;
+    text-decoration: none;
+    position: relative;
+}
+.share-link .toggle {
+    text-decoration: none;
+}
+.share-link .tip {
+    display: none;
+    position: absolute;
+    background:#fff;
+    border-radius:5px;
+    padding:5px;
+    width: 150px;
+    transform: translate(-31px, 0);
+    -webkit-box-shadow: 0px 5px 73px -11px rgba(0,0,0,0.55);
+    -moz-box-shadow: 0px 5px 73px -11px rgba(0,0,0,0.55);
+    box-shadow: 0px 5px 73px -11px rgba(0,0,0,0.55);
+    top:30px;
+}
+.share-link .tip.up {
+    display: block;
+}
+.share-link .tip a {
+    border:none;
+}
+
+.image-editor {
+    width: 200px;
+}
+.cropit-preview {
+  background-color: #f8f8f8;
+  background-size: cover;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  margin-top: 7px;
+  width: 200px;
+  height: 200px;
+  border-radius: 100px;
+  overflow: hidden;
+}
+.cropit-preview-image-container {
+  cursor: move;
+}
+.image-size-label {
+  margin-top: 10px;
+}
+button {
+  margin-top: 10px;
+}
+.cropitMeta {
+    width: 200px;
+}
+.image-editor input[type="range" i] {
+    margin-top:10px;
+}
+button.rotate-ccw {
+    padding:10px;
+    margin-left:10px;
+    margin:5px 0 0 0;   
+    float: right; 
+}
+button.export {
+    clear: both;
+    display: block;
+    margin-top:0;
+    margin-bottom:20px;
+}
+
 
 /* ---------------- 
 VALIDATION

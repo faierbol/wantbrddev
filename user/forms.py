@@ -17,10 +17,9 @@ class UserForm(forms.ModelForm):
 
 
 class ProfileForm(forms.ModelForm):
-	picture = forms.ImageField(label=(''),required=False, widget=forms.FileInput(attrs={'class': "jfilestyle"}))
 	class Meta:
 		model = Profile		
-		fields = ('bio', 'website', 'country', 'date_of_birth', 'phone_number', 'picture')
+		fields = ('bio', 'website', 'country', 'date_of_birth', 'phone_number')
 		widgets = {
 			'bio':forms.Textarea(attrs={'placeholder': 'Tell people about yourself', 'rows':20, 'cols':100}),
 			'website':forms.TextInput(attrs={'placeholder': 'Your website address'}),			

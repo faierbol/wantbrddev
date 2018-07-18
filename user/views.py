@@ -1,4 +1,4 @@
-import datetime
+import datetime, base64
 from django.contrib import messages
 from django.contrib.auth import login, update_session_auth_hash
 from django.contrib.auth.forms import PasswordChangeForm
@@ -234,6 +234,7 @@ def signup(request):
 	return render(request, template, {'form':form})
 
 
+### Update profile
 def update_profile(request):
 	template = "user/update_profile.html"
 
@@ -244,6 +245,14 @@ def update_profile(request):
 	social_form = UpdateSocial(instance=profile, label_suffix='')
 
 	if request.method == "POST":
+
+		if request.POST.get("updatePpic"):
+			b64string = request.POST.get("imageb64").split(',')
+			b64pic = b64string[1]
+			image_data = base64.b64decode(b64pic)
+			messages.info(request, image_data)
+			return HttpResponseRedirect(request.path_info)
+
 
 		if request.POST.get("updateprofile"):
 			user_form = UserForm(request.POST, request.FILES, instance=user)
