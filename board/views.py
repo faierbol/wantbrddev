@@ -651,8 +651,9 @@ def add_item(request, board_id):
 				item_active = False
 
 			if imgsrc == 'web':
+				headers = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36'}
 				url = request.POST.get("scrapedimg")
-				resp = requests.get(url)
+				resp = requests.get(url, headers=headers)
 				fp = BytesIO()
 				fp.write(resp.content)
 				file_name = url.split("/")[-1]
