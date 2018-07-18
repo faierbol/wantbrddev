@@ -573,46 +573,39 @@ def add_item(request, board_id):
 							except:
 								pass
 
-						# try bs4 to find OG first
-						ogmeta = soup.find("meta",  property="og:image")
-						if ogmeta:
-							ogimg = ogmeta["content"]
-							method = 'bs4og'
 
-						# otherwise just scrape whatever images we can find
-						else:
-							# image_tags = soup.findAll('img', {'src' : re.compile(r'(jpe?g)|(png)$')})
-							image_tags = soup.findAll('img')
-							# loop through all img's found
-							for img in image_tags:
+						# image_tags = soup.findAll('img', {'src' : re.compile(r'(jpe?g)|(png)$')})
+						image_tags = soup.findAll('img')
+						# loop through all img's found
+						for img in image_tags:
 
-								# get src from img
-								imgurl = img.get('src')
+							# get src from img
+							imgurl = img.get('src')
 
-								# check a value is there and its not a data: src
-								if (imgurl is not None) and ("data:" not in imgurl):
+							# check a value is there and its not a data: src
+							if (imgurl is not None) and ("data:" not in imgurl):
 
-									if imgurl.lower().endswith(('.bmp', '.gif', '.tif')):
+								if imgurl.lower().endswith(('.bmp', '.gif', '.tif')):
+									pass
+
+								else:
+									# check if src starts without full path and append with domain appropriately 
+									if not imgurl.startswith("http"):
+										if imgurl.startswith("//"):
+											imgurl = "https:" + imgurl
+										else:
+											imgurl = domain + imgurl	
+
+									allimages.append(imgurl)
+
+									try:
+										image_raw = requests.get(imgurl)
+										the_image = Image.open(BytesIO(image_raw.content))
+										img_width, img_height = the_image.size
+										if img_width > 250:
+											output.append(imgurl)
+									except:
 										pass
-
-									else:
-										# check if src starts without full path and append with domain appropriately 
-										if not imgurl.startswith("http"):
-											if imgurl.startswith("//"):
-												imgurl = "https:" + imgurl
-											else:
-												imgurl = domain + imgurl	
-
-										allimages.append(imgurl)
-
-										try:
-											image_raw = requests.get(imgurl)
-											the_image = Image.open(BytesIO(image_raw.content))
-											img_width, img_height = the_image.size
-											if img_width > 250:
-												output.append(imgurl)
-										except:
-											pass
 					except:
 						pass
 
