@@ -469,6 +469,8 @@ def add_item(request, board_id):
 	user_boards = Board.objects.filter(user=request.user)
 	form = ItemForm()
 	url = ''
+	api = 'aaF7juZfhdnyptXo4Kjm6A'
+	jsapi = 'vBlWMcz5CXvV4A-YnXhhag'
 
 	if request.method == 'GET' and 'find' in request.GET:
 
@@ -556,9 +558,6 @@ def add_item(request, board_id):
 				
 				####### CASE: PROXYCRAWL
 				else:
-					api = 'aaF7juZfhdnyptXo4Kjm6A'
-					jsapi = 'vBlWMcz5CXvV4A-YnXhhag'
-
 					modded_url = quote_plus(url)
 					try:
 						response = requests.get('https://api.proxycrawl.com/?token=' + jsapi + '&format=json&page_wait=3000&url=' + modded_url, timeout=30)	
@@ -642,7 +641,6 @@ def add_item(request, board_id):
 			item_active = request.POST.get("item_active")
 			rating = request.POST.get("rating")
 			review = request.POST.get("review")
-			domain = request.POST.get("domain")
 			current_board = request.POST.get("currentBoard")
 			board_assign = Board.objects.get(id=current_board)
 
@@ -651,15 +649,10 @@ def add_item(request, board_id):
 			else:
 				item_active = False
 
-			if imgsrc == 'web':
+			if imgsrc == 'web':				
 				url = request.POST.get("scrapedimg")
-
-				my_session = requests.session()
-				for_cookies = my_session.get(domain)
-				cookies = for_cookies.cookies
-				headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:57.0) Gecko/20100101 Firefox/57.0'}
-				my_url = url
-				resp = my_session.get(my_url, headers=headers, cookies=cookies)
+				# resp = requests.get('https://www.maccosmetics.co.uk/media/export/cms/products/640x600/mac_sku_MCBX04_640x600_0.jpg')
+				resp = requests.get('https://api.proxycrawl.com/?token=' + api + '&format=html&url=' + url, timeout=30)					
 				fp = BytesIO()
 				fp.write(resp.content)
 				file_name = url.split("/")[-1]
@@ -685,15 +678,13 @@ def add_item(request, board_id):
 				new_item_conx.original_purchase_url = new_item_conx.purchase_url
 				new_item_conx.save()					
 
-				# return redirect('b:edit_board', board_id=board_id)
+				return redirect('b:edit_board', board_id=board_id)
 
 				context_dict = {
 					'board':board,
 					'form':form,
 					'user_boards':user_boards,
-					'status_code':resp.status_code,
 					'imgsrc':imgsrc,
-					'resp':resp.content
 				}
 
 				return render(request, template, context_dict)
