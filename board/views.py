@@ -642,6 +642,7 @@ def add_item(request, board_id):
 			item_active = request.POST.get("item_active")
 			rating = request.POST.get("rating")
 			review = request.POST.get("review")
+			domain = request.POST.get("domain")
 			current_board = request.POST.get("currentBoard")
 			board_assign = Board.objects.get(id=current_board)
 
@@ -651,9 +652,14 @@ def add_item(request, board_id):
 				item_active = False
 
 			if imgsrc == 'web':
-				headers = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36'}
 				url = request.POST.get("scrapedimg")
-				resp = requests.get(url, headers=headers)
+
+				my_session = requests.session()
+				for_cookies = my_session.get(domain)
+				cookies = for_cookies.cookies
+				headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:57.0) Gecko/20100101 Firefox/57.0'}
+				my_url = url
+				resp = my_session.get(my_url, headers=headers, cookies=cookies)
 				fp = BytesIO()
 				fp.write(resp.content)
 				file_name = url.split("/")[-1]
@@ -687,6 +693,7 @@ def add_item(request, board_id):
 					'user_boards':user_boards,
 					'status_code':resp.status_code,
 					'imgsrc':imgsrc,
+					'resp':resp.content
 				}
 
 				return render(request, template, context_dict)

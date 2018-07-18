@@ -33,6 +33,7 @@
             <p>Image src: {{ imgsrc }}</p>
             <p>Method: {{ method }}</p>
             <p>Image URL: {{ ogimg }}</p>
+            <p>Resp: {{ resp }}</p>
 
         </div>
 
@@ -158,6 +159,7 @@
     	        		<input type="hidden" name="scrapedimg" value="" id="scrapedimg">
     	        		<input type="hidden" name="imgsrc" value="web" id="imgsrc">
                         <input type="hidden" name="boardid" value="{{ board.id }}" id="board">
+                        <input type="hidden" name="domain" value="{{ domain }}" id="domain">
 
     	        		<button class="grey large submit" name="additem" id="additem" value="1">Add item</button>
 
