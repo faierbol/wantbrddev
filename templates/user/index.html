@@ -52,12 +52,12 @@
                             {% if is_followed %}
                                 <form method="POST">
                                     {% csrf_token %}
-                                    <button class="btn orange" name="unfollow"><i class="fas fa-minus"></i> Unollow</button>
+                                    <button class="btn orange" name="unfollow"><i class="fas fa-times"></i> Unfollow</button>
                                 </form>
                             {% else %}
                                 <form method="POST">
                                     {% csrf_token %}
-                                    <button class="btn orange" name="follow"><i class="fas fa-plus"></i> Follow</button>
+                                    <button class="btn orange" name="follow"><i class="fas fa-user-plus"></i></i> Follow</button>
                                 </form>
                             {% endif %}
                             <div class="clear"></div>

@@ -121,7 +121,7 @@
                                         {% for comment in comment_list|slice:":2" %}
                                             <STRONG>{{user}}</STRONG>
                                             <div class="aComment">
-                                                {{ comment.comment|linebreaks|slice:":90" }}{% if comment.comment|length > 90 %}<p>...</p>{% endif %}
+                                                {{ comment.comment|escape|slice:":90" }}{% if comment.comment|length > 90 %}<p>...</p>{% endif %}
                                             </div>  
                                         {% endfor %}
 

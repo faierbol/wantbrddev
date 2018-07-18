@@ -17,15 +17,18 @@
 
 {% block body %}   
 
+<div class="homeBannerPush"></div>
 <section class="homeBanner clearfix">
-        
+    <div class="leftFade"></div>  
+    <div class="rightFade"></div>  
     <div class="homeSlider">
         <div><img src="{% static 'img/tmp-banner1.jpg' %}" alt=""></div>
         <div><img src="{% static 'img/tmp-banner1.jpg' %}" alt=""></div>
         <div><img src="{% static 'img/tmp-banner1.jpg' %}" alt=""></div>
         <div><img src="{% static 'img/tmp-banner1.jpg' %}" alt=""></div>
     </div>
-
+    <div class="slickLeft"><i class="fas fa-chevron-right"></i></div>
+    <div class="slickRight"><i class="fas fa-chevron-left"></i></div>
 </section>
 
 
@@ -271,10 +274,16 @@
             arrows:false,
             centerPadding: '200px',
             slidesToShow: 1,
-            autoplay: true,
-            autoplaySpeed: 4000,
-            dots: true,
+            autoplay: false,
+            dots: true,            
         });
+        $('.slickLeft').click(function(){
+            $('.homeSlider').slick('slickPrev');
+        })
+
+        $('.slickRight').click(function(){
+            $('.homeSlider').slick('slickNext');
+        })
     });
 </script>
 {% endblock %}
