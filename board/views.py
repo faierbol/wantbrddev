@@ -653,8 +653,7 @@ def add_item(request, board_id):
 			if imgsrc == 'web':
 				url = request.POST.get("scrapedimg")
 				resp = requests.get(url)
-				# if resp.status_code != requests.codes.ok:
-				# 	return redirect('home')
+				if resp.status_code != requests.codes.ok:
 				fp = BytesIO()
 				fp.write(resp.content)
 				file_name = url.split("/")[-1]
