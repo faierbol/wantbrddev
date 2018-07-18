@@ -516,6 +516,7 @@ def add_item(request, board_id):
 			meta_image = False
 			html = ''
 			page = ''
+			method = 'scraped'
 			url = request.POST.get("targeturl", "")
 			parsed_uri = urlparse(url)
 			domain = '{uri.scheme}://{uri.netloc}/'.format(uri=parsed_uri)
@@ -528,6 +529,7 @@ def add_item(request, board_id):
 				product = amazon.lookup(ItemId=asin)
 				ogimg = product.large_image_url
 				page_title = product.title
+				method = 'amazon'
 
 			####### CASE: META_PARSER
 			else:				
@@ -550,6 +552,7 @@ def add_item(request, board_id):
 				# if we got image from meta
 				if meta_image:
 					ogimg = meta_image
+					method = 'metaparser'
 				
 				####### CASE: PROXYCRAWL
 				else:
@@ -574,6 +577,7 @@ def add_item(request, board_id):
 						ogmeta = soup.find("meta",  property="og:image")
 						if ogmeta:
 							ogimg = ogmeta["content"]
+							method = 'bs4og'
 
 						# otherwise just scrape whatever images we can find
 						else:
@@ -622,7 +626,8 @@ def add_item(request, board_id):
 				'allimages':allimages,
 				'page_title':page_title,
 				'html':html,
-				'user_boards':user_boards
+				'user_boards':user_boards,
+				'method':method,
 			}
 
 			return render(request, template, context_dict)
