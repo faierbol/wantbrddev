@@ -471,6 +471,7 @@ def add_item(request, board_id):
 	url = ''
 	api = 'aaF7juZfhdnyptXo4Kjm6A'
 	jsapi = 'vBlWMcz5CXvV4A-YnXhhag'
+	proxy = 'no'
 
 	if request.method == 'GET' and 'find' in request.GET:
 
@@ -651,8 +652,10 @@ def add_item(request, board_id):
 
 			if imgsrc == 'web':				
 				url = request.POST.get("scrapedimg")
-				# resp = requests.get('https://www.maccosmetics.co.uk/media/export/cms/products/640x600/mac_sku_MCBX04_640x600_0.jpg')
-				resp = requests.get('https://api.proxycrawl.com/?token=' + api + '&format=html&url=' + url, timeout=30)					
+				resp = requests.get(url)
+				if resp.status_code != 200:
+					resp = requests.get('https://api.proxycrawl.com/?token=' + api + '&format=html&url=' + url, timeout=30)					
+					proxy = 'yes'
 				fp = BytesIO()
 				fp.write(resp.content)
 				file_name = url.split("/")[-1]
@@ -680,14 +683,18 @@ def add_item(request, board_id):
 
 				return redirect('b:edit_board', board_id=board_id)
 
-				context_dict = {
-					'board':board,
-					'form':form,
-					'user_boards':user_boards,
-					'imgsrc':imgsrc,
-				}
+				# context_dict = {
+				# 	'board':board,
+				# 	'form':form,
+				# 	'user_boards':user_boards,
+				# 	'imgsrc':imgsrc,
+				# 	'resp':resp,
+				# 	'ogimg':url,
+				# 	'status':resp.status_code,
+				# 	'proxy':proxy,
+				# }
 
-				return render(request, template, context_dict)
+				# return render(request, template, context_dict)
 
 	context_dict = {
 		'board':board,
