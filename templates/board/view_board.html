@@ -239,8 +239,8 @@
                         {% endif %}
                         {% if editable %}
                         <div class="featBoxMeta">
-                            <a href="{% url 'b:edit_item' board.id itemconx.id %}"><i class="fas fa-share"></i> Edit</a>
-                            <a href="#" data-featherlight="#deleteModal{{ itemconx.id }}"><i class="far fa-bookmark"></i> Delete</a>
+                            <a class="metalink" href="{% url 'b:edit_item' board.id itemconx.id %}"><i class="fas fa-share"></i> Edit</a>
+                            <a class="metalink" href="#" data-featherlight="#deleteModal{{ itemconx.id }}"><i class="far fa-bookmark"></i> Delete</a>
                         </div>
                         <div id="deleteModal{{ itemconx.id }}" class="lightbox deletepop">
                             <h4>Delete "{{ itemconx.item.item_name }}"</h4>
@@ -407,14 +407,23 @@
 {% endblock %}
 
 {% block extra-js %}
-<!--- succes alert -->
+
+<!--- alerts -->
 {% if messages %}
     {% for message in messages %}    
         <script type="text/javascript">
-            function codeAddress() {
-                Swal('Congratulations!', '{{ message }}', 'success')
+        $(function(){
+          new PNotify({
+            title: false,
+            type: "success",
+            text: {{ message }},
+            shadow: false,
+            delay: 5000,
+            buttons: {
+                sticker: false,
             }
-            window.onload = codeAddress;    
+          });
+        });
         </script>
     {% endfor %}
 {% endif %}

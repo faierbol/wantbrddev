@@ -121,34 +121,6 @@
             </form>
         </div>
 
-<!--         <div class="profileBoardItem saved match">
-            <div class="profileBoardSaved">
-                <a href="{% url 'b:edit_board' saved_board.id %}" rel="tooltip" title="View your saved items">{{ saved_board.board_name }}</a>
-            </div>
-            <div class="trendingItems clearfix">
-                {% for item in saved_board.items %}
-                    {% thumbnail item.image "300x300" as im %}
-                        <a style="background-image:url('{{ im.url }}');" href="{% url 'b:edit_board' saved_board.id %}"></a>
-                    {% endthumbnail %}                    
-                {% endfor %}
-                {% if saved_board.items.count > 5 %}
-                <a class="plusMore" href="#">
-                    <div class="plusMoreNumber">+{{ saved_board.items.count }} <span>more</span></div>
-                </a>
-                {% endif %}
-            </div>
-            <div class="trendingFooter clearfix">
-                <span>
-                    {{ saved_board.items.count }}
-                    {% if saved_board.items.count == 1 %}
-                    Item
-                    {% else %}
-                    Items
-                    {% endif %}
-                </span>
-            </div>
-        </div>
- -->
         {% endif %}
 
         {% if the_boards %}
@@ -204,7 +176,11 @@
                             {% endif %}
                             {% for item in board.items %}
                             {% thumbnail item.image "300x300" as im %}
-                                <a style="background-image:url('{{ im.url }}');" href="{% url 'b:edit_board' board.id %}"></a>
+                                {% if editable %}
+                                    <a style="background-image:url('{{ im.url }}');" href="{% url 'b:edit_board' board.id %}"></a>
+                                {% else %}
+                                    <a style="background-image:url('{{ im.url }}');" href="{% url 'b:view_board' board.user.username board.slug %}"></a>
+                                {% endif %}
                             {% endthumbnail %}                                                
                             {% endfor %}
                         </div>
@@ -278,10 +254,18 @@
     {% if messages %}
         {% for message in messages %}    
             <script type="text/javascript">
-                function codeAddress() {
-                    Swal('Congratulations!', '{{ message }}', 'success')
+            $(function(){
+              new PNotify({
+                title: false,
+                type: "success",
+                text: {{ message }},
+                shadow: false,
+                delay: 5000,
+                buttons: {
+                    sticker: false,
                 }
-                window.onload = codeAddress;    
+              });
+            });
             </script>
         {% endfor %}
     {% endif %}
@@ -289,7 +273,16 @@
     <script type="text/javascript">
         $('#createwantboard').click(function(e){
             if(!$('#boardname').val()){
-                Swal('You need to enter a name for your board', '{{ message }}', 'error');
+                new PNotify({
+                  title: false,
+                  type: "error",
+                  text: 'You need to enter a name for your board',
+                  shadow: false,
+                  delay: 5000,
+                  buttons: {
+                      sticker: false,
+                  }
+                });                
                 e.preventDefault();
             };
         })

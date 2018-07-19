@@ -152,7 +152,7 @@ def my_home(request):
 	# get boards of people we're following and build array
 	board_obj = []
 	for user in following:		
-		boards = Board.objects.filter(user=user.following)
+		boards = Board.objects.filter(user=user.following).exclude(slug='your-saved-items')
 		for board in boards:
 			board_obj.append(board)
 

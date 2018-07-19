@@ -88,13 +88,16 @@
                                             <button class="naked" name="savelater"><i class="far fa-bookmark"></i></button>
                                         </form>
                                     </span>
-    	                            <span><i class="far fa-comments"></i>
-    	                            	{% get_comment_count for item as comment_count %}
-    									{% if comment_count %}
-    										{{ comment_count }}
-    									{% else %}
-    										0
-    									{% endif %}
+    	                            <span>
+                                        <a href="{% url 'b:view_item' item.board.user item.board.slug item.id %}">
+                                            <i class="far fa-comments"></i>
+        	                            	{% get_comment_count for item as comment_count %}
+        									{% if comment_count %}
+        										{{ comment_count }}
+        									{% else %}
+        										0
+        									{% endif %}
+                                        </a>
     	                            </span>
                                     {% if item.is_liked %}
                                         <span>
@@ -195,10 +198,6 @@
 
                     {% for board in suggested_boards %}
 
-                        {% for tag in board.thetags %}
-                            {{ tag }}
-                        {% endfor %}
-
                         <div class="featBox trendingBoard">
                             {% if board.hero %}
                             <a class="trendingBoardHero" style="background-image:url('{{ board.hero.url }}');" href="{% url 'b:view_board' board.user.username board.slug %}">
@@ -225,7 +224,7 @@
                                 {% endif %}
                             </div>
 
-                            <a class="trendingUserUser" href="profile.php">
+                            <a class="trendingUserUser" href="{% url 'u:profile' board.user %}">
                                 <div class="trendingUserUserWrap clearfix">
                                     <div class="trendingUserPic">
                                         {% if board.user.profile.picture %}
@@ -263,16 +262,24 @@
     <script type="text/javascript" src="{% static 'fluent_comments/js/ajaxcomments.js' %}"></script>
 
     <!--- message alert -->
-    {% if messages %}
-        {% for message in messages %}    
-            <script type="text/javascript">
-                function codeAddress() {
-                    Swal('Done!', '{{ message }}', 'success')
-                }
-                window.onload = codeAddress;    
-            </script>
-        {% endfor %}
-    {% endif %}
+        {% if messages %}
+            {% for message in messages %}    
+                <script type="text/javascript">
+                $(function(){
+                  new PNotify({
+                    title: false,
+                    type: "success",
+                    text: '{{ message }}',
+                    shadow: false,
+                    delay: 5000,
+                    buttons: {
+                        sticker: false,
+                    }
+                  });
+                });
+                </script>
+            {% endfor %}
+        {% endif %}
 
 
 {% endblock %}

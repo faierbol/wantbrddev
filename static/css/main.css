@@ -556,6 +556,9 @@ HOME
         .trendingFooter span {
             padding:0 5px;
         }
+        .trendingFooter a {
+            text-decoration: none;
+        }
 
     /** trending item **/
     .trendingItemItem {
@@ -1435,6 +1438,11 @@ BOARD
 }
     #theTags a {
         text-transform: lowercase;
+        text-decoration: none;
+        color:#888;
+    }
+    #theTags a:hover {
+        color:#000;
     }
     a#showEditTags, a#hideEditTags {
         padding-left:5px;
@@ -1523,6 +1531,8 @@ BOARD
         border-radius:0;
         width: 100px;
         cursor:pointer;
+        margin-top:0;
+        border-radius: 0 5px 5px 0;
     }
     .addItemContent button.getItem:hover {
         background:#F97D1F;

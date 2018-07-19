@@ -124,12 +124,20 @@
 	<!--- succes alert -->
 	{% if messages %}
 	    {% for message in messages %}    
-		    <script type="text/javascript">
-		    	function codeAddress() {
-		    	    Swal('Congratulations!', '{{ message }}', 'success')
-		    	}
-		    	window.onload = codeAddress;    
-		    </script>
+	        <script type="text/javascript">
+	        $(function(){
+	          new PNotify({
+	            title: false,
+	            type: "success",
+	            text: 'Your board\'s tags have been updated!',
+	            shadow: false,
+	            delay: 5000,
+	            buttons: {
+	                sticker: false,
+	            }
+	          });
+	        });
+	        </script>
 	    {% endfor %}
 	{% endif %}
 

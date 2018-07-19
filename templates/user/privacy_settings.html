@@ -122,19 +122,35 @@
 	{% if messages %}				
 	    {% for message in messages %}  
 	    	{% if message.tags == 'error' %}  
-	    		<script type="text/javascript">
-	    			function codeAddress() {
-	    			    Swal('Oops!', '{{ message }}', 'warning')
-	    			}
-	    			window.onload = codeAddress;    
-	    		</script>
+		        <script type="text/javascript">
+		        $(function(){
+		          new PNotify({
+		            title: false,
+		            type: "warning",
+		            text: {{ message }},
+		            shadow: false,
+		            delay: 5000,
+		            buttons: {
+		                sticker: false,
+		            }
+		          });
+		        });
+		        </script>
 	    	{% else %}
-			    <script type="text/javascript">
-			    	function codeAddress() {
-			    	    Swal('Congratulations!', '{{ message }}', 'success')
-			    	}
-			    	window.onload = codeAddress;    
-			    </script>
+		        <script type="text/javascript">
+		        $(function(){
+		          new PNotify({
+		            title: false,
+		            type: "success",
+		            text: {{ message }},
+		            shadow: false,
+		            delay: 5000,
+		            buttons: {
+		                sticker: false,
+		            }
+		          });
+		        });
+		        </script>
 		    {% endif %}
 	    {% endfor %}
 	{% endif %}
@@ -161,12 +177,30 @@
 			if( gloabl_privacy.val() == 'SHOW') {				
 				if(!users.val()) {
 					e.preventDefault()
-					Swal('Oops!', 'You have selected to hide your boards from specific users, but not provided any usernames', 'warning');
+					new PNotify({
+					  title: 'Oops!',
+					  type: "warning",
+					  text: 'You have selected to hide your boards from specific users, but not provided any usernames',
+					  shadow: false,
+					  delay: 5000,
+					  buttons: {
+					      sticker: false,
+					  }
+					});
 				}
 			} else if (gloabl_privacy.val() == 'HIDE') {
 				if(!users.val()) {
 					e.preventDefault()
-					Swal('Oops!', 'You have selected to only show your boards to specific users, but not provided any usernames', 'warning');
+					new PNotify({
+					  title: 'Oops!',
+					  type: "warning",
+					  text: 'You have selected to only show your boards to specific users, but not provided any usernames',
+					  shadow: false,
+					  delay: 5000,
+					  buttons: {
+					      sticker: false,
+					  }
+					});
 				}
 			} else { return true; }
 		});

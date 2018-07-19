@@ -46,7 +46,7 @@
                         <strong>Trending User</strong>
                         <a href="#" class="trendingUserShare">Share <i class="fas fa-share-alt"></i></a>
                     </div>
-                    <a class="trendingUserUser" href="profile.php">
+                    <a class="trendingUserUser" href="{% url 'u:profile' user.username %}">
                         <div class="trendingUserUserWrap clearfix">
                             <div class="trendingUserPic">
                                 {% if user.profile.picture %}

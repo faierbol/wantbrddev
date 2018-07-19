@@ -28,7 +28,7 @@
         
         <h3>Add an item to <em>'{{ board.board_name }}'</em></h3>
 
-        <div style="padding:30px; border:1px solid #ccc; margin:10px 30px 0;">
+<!--         <div style="padding:30px; border:1px solid #ccc; margin:10px 30px 0;">
             <p>PROXY: {{ proxy }}</p>
             <p>STATUS: {{ status }}</p>
             {% if status == 200 %}
@@ -40,7 +40,7 @@
             <p>Method: {{ method }}</p>
             <p>Image URL: {{ ogimg }}</p>
             <p>Resp: {{ resp.content }}</p>
-        </div>
+        </div> -->
 
         <div class="addItemContent">
 
@@ -261,7 +261,16 @@
 	        };
 	        if (postit == false) {
 		        e.preventDefault();
-                Swal('Oops!', 'You need to select or upload an image for this item', 'warning')
+                new PNotify({
+                    title: false,
+                    type: "warning",
+                    text: 'You need to select or upload an image for this item first.',
+                    shadow: false,
+                    delay: 5000,
+                    buttons: {
+                        sticker: false,
+                    }
+                });
 		    } else {
 		    	return true
 		    }

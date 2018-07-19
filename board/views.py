@@ -140,8 +140,14 @@ def edit_board(request, board_id):
 	items = []
 	item_conxs = ItemConnection.objects.filter(board=board_id)
 	allusers = User.objects.all()
-	for item_conx in item_conxs:
-		items.append(item_conx)	
+	for item in item_conxs:
+		item.likes = ItemLike.objects.filter(item_conx=item).count()
+		try:
+			item.is_liked = ItemLike.objects.filter(item_conx=item, user=request.user).exists()
+		except:
+			item.is_liked = False
+		item.views = ItemView.objects.filter(item_conx=item).count()
+		items.append(item)
 
 	blocked_obj = BoardPrivacy.objects.filter(board=board) 
 	board.blocked = []
@@ -394,7 +400,7 @@ def view_board(request, username, board_name):
 		# unlike board
 		if 'unlikeboard' in request.POST:
 			board_id = request.POST.get("board_id")
-			unlike_board(board_id, request.user)
+			unlike_board(board_id, request.user)	
 			return HttpResponseRedirect(request.path_info)
 
 		# if user followed
@@ -419,7 +425,9 @@ def view_board(request, username, board_name):
 			clone = copy.copy(itemconx)
 			# remove pk and add destination board to clone
 			clone.pk = None
-			clone.board = board			
+			clone.board = board	
+			clone.item_status = 'WNT'
+			clone.item_desc = ''
 			# remove prefetch cache, becuase...
 			try:
 			    delattr(clone, '_prefetched_objects_cache')

@@ -85,10 +85,20 @@ Slide In Panel - by CodyHouse.co
 }
 
 .cd-panel__header {
+  color:#fff;
   position: fixed;
   width: 90%;
   padding:30px 30px;  
-  background: rgba(50, 50, 50, 0.96);
+  -webkit-transform: translateY(0px);
+      -ms-transform: translateY(0px);
+          transform: translateY(0px);
+  -webkit-clip-path: polygon(0 0, 100% 0, 100% 56%, 0 100%);
+  clip-path: polygon(0 0, 100% 0, 100% 66%, 0 100%);  
+  background: #f77c40; /* Old browsers */
+  background: -moz-linear-gradient(-45deg, #f77c40 0%, #eb3b33 100%); /* FF3.6-15 */
+  background: -webkit-linear-gradient(-45deg, #f77c40 0%,#eb3b33 100%); /* Chrome10-25,Safari5.1-6 */
+  background: linear-gradient(135deg, #f77c40 0%,#eb3b33 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f77c40', endColorstr='#eb3b33',GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
   z-index: 2;
   -webkit-transition: -webkit-transform 0.3s 0s;
   transition: -webkit-transform 0.3s 0s;
@@ -108,7 +118,6 @@ Slide In Panel - by CodyHouse.co
 }
 
 .cd-panel--is-visible .cd-panel__header {
-  background:#212121;
   color:#fff;
   -webkit-transition: -webkit-transform 0.3s 0.3s;
   transition: -webkit-transform 0.3s 0.3s;
@@ -117,6 +126,13 @@ Slide In Panel - by CodyHouse.co
   -webkit-transform: translateY(0px);
       -ms-transform: translateY(0px);
           transform: translateY(0px);
+  -webkit-clip-path: polygon(0 0, 100% 0, 100% 56%, 0 100%);
+  clip-path: polygon(0 0, 100% 0, 100% 66%, 0 100%);  
+  background: #f77c40; /* Old browsers */
+  background: -moz-linear-gradient(-45deg, #f77c40 0%, #eb3b33 100%); /* FF3.6-15 */
+  background: -webkit-linear-gradient(-45deg, #f77c40 0%,#eb3b33 100%); /* Chrome10-25,Safari5.1-6 */
+  background: linear-gradient(135deg, #f77c40 0%,#eb3b33 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f77c40', endColorstr='#eb3b33',GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
 }
 
 @media only screen and (min-width: 768px) {
@@ -152,7 +168,7 @@ Slide In Panel - by CodyHouse.co
   left: 20px;
   height: 3px;
   width: 30px;
-  background-color: #424f5c;
+  background-color: #fff;
   /* this fixes a bug where pseudo elements are slighty off position */
   -webkit-backface-visibility: hidden;
           backface-visibility: hidden;
@@ -256,7 +272,7 @@ Slide In Panel - by CodyHouse.co
   transition: transform 0.3s 0.3s, -webkit-transform 0.3s 0.3s;
 }
 .cd-panel__container.account_slide {
-  margin-top:30px;
+  /*margin-top:30px;*/
 }
 .cd-panel__container.account_slide a i {
   font-size: 1.2rem;
@@ -304,7 +320,7 @@ Slide In Panel - by CodyHouse.co
   left: 0;
   width: 100%;
   height: 100%;
-  padding: 125px 40px 30px 30px;
+  padding: 150px 40px 30px 30px;
   overflow: auto;
   /* smooth scrolling on touch devices */
   -webkit-overflow-scrolling: touch;

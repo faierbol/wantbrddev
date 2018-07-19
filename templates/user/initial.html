@@ -140,7 +140,16 @@
 
         $('#followall').click(function(e){            
             if (users_to_follow == false){
-                Swal('Oops!', 'You have not selected any users to follow.', 'warning')
+                new PNotify({
+                  title: false,
+                  type: "warning",
+                  text: 'You have not selected any users to follow!',
+                  shadow: false,
+                  delay: 5000,
+                  buttons: {
+                      sticker: false,
+                  }
+                });
                 e.preventDefault();
             } else {                
                 str = users_to_follow.toString()
