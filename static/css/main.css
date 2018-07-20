@@ -1026,6 +1026,10 @@ UPDATE ACCOUNT
 .accountUpdate {
     padding:150px 0 60px 0;
 }
+    .accountUpdate h1 {
+        font-size: 1.5rem;
+        margin-bottom:10px;
+    }
     .profileLeft {
         float: left;
         width: 47.5%;
@@ -1090,6 +1094,18 @@ UPDATE ACCOUNT
     .profileLeft .updatePpic a {
         display: block;
     }
+    #croppic {
+        width: 125px;
+    }
+    .image_container img {
+        width: 100%;
+        height: auto;
+    }
+    .image_container {
+        width:200px;
+        height: 200px;  
+        margin:20px 0;
+    }
 
     /*** social ***/
     #updatesocialform {
@@ -1130,6 +1146,12 @@ UPDATE ACCOUNT
         line-height: 45px;
         font-size: .8rem;
         font-style: italic;        
+    }
+    .charsLeft {
+        display: block;
+        margin-bottom:20px;
+        font-size: .8rem;
+        color:#999;
     }
     
     /*** privacy & settings ***/

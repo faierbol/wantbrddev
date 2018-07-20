@@ -6,7 +6,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.models import User
 from django.http import HttpResponseRedirect
-from .forms import SignUpForm, UserForm, ProfileForm, ChangeBackgroundForm, UpdateSocial, SettingsForm, PrivacyForm
+from .forms import SignUpForm, UserForm, ProfileForm, ProfileImageForm, ChangeBackgroundForm, UpdateSocial, SettingsForm, PrivacyForm
 from .models import Profile, Connection, BlockedUsers, AuthorisedUsers, Notification
 from board.models import Board, Item, ItemConnection, BoardView, ItemLike, ItemView, BoardPrivacy
 from django.core.exceptions import PermissionDenied
@@ -246,12 +246,21 @@ def update_profile(request):
 
 	if request.method == "POST":
 
-		if request.POST.get("updatePpic"):
-			b64string = request.POST.get("imageb64").split(',')
-			b64pic = b64string[1]
-			image_data = base64.b64decode(b64pic)
-			messages.info(request, image_data)
-			return HttpResponseRedirect(request.path_info)
+		if 'updatePpic' in request.POST:
+			b64image = request.POST.get("imageb64")
+			form = ProfileImageForm(request.POST, instance=profile)
+			if form.is_valid():
+				up = form.save(commit=False)
+				up.picture = decode_base64_file(b64image)
+				up.save()			
+
+			return render(request, template, {
+				"userid": user.id,
+				"user_form": user_form,
+				"profile_form": profile_form,
+				"social_form":social_form,
+				'b64image':b64image,
+			})
 
 
 		if request.POST.get("updateprofile"):

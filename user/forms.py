@@ -30,6 +30,10 @@ class ProfileForm(forms.ModelForm):
 			'date_of_birth':forms.TextInput(attrs={'data-toggle':'datepicker'}),
 		}
 
+class ProfileImageForm(forms.ModelForm):
+	class Meta:
+		model = Profile		
+		fields = ('picture',)
 
 class PrivacyForm(forms.ModelForm):	
 	class Meta:
