@@ -45,7 +45,18 @@
                 <div class="featBox trendingBoard">
                     <div class="trendingTop clearfix">
                         <strong>Trending Board</strong>
-                        <a href="#" class="trendingUserShare">Share <i class="fas fa-share-alt"></i></a>
+                        <div class="share-link trendingUserShare">
+                            <a class="toggle" href="javascript:void(0);"><i class="fas fa-share-alt"></i> Share</a>
+                            <div class="tip">
+                                <div class="ssk-group">
+                                    <a href="" class="ssk ssk-icon ssk-facebook"></a>
+                                    <a href="" class="ssk ssk-icon ssk-twitter"></a>
+                                    <a href="" class="ssk ssk-icon ssk-google-plus"></a>
+                                    <a href="" class="ssk ssk-icon ssk-pinterest"></a>
+                                    <a href="" class="ssk ssk-icon ssk-tumblr"></a>
+                                </div>
+                            </div>
+                        </div>
                     </div>
 
                     {% if board.hero %}

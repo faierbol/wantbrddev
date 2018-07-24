@@ -45,7 +45,18 @@
                 <div class="featBox trendingItem">
                     <div class="trendingTop clearfix">
                         <strong>Trending Item</strong>
-                        <a href="#" class="trendingUserShare">Share <i class="fas fa-share-alt"></i></a>
+                        <div class="share-link trendingUserShare">
+                            <a class="toggle" href="javascript:void(0);"><i class="fas fa-share-alt"></i> Share</a>
+                            <div class="tip">
+                                <div class="ssk-group">
+                                    <a href="" class="ssk ssk-icon ssk-facebook"></a>
+                                    <a href="" class="ssk ssk-icon ssk-twitter"></a>
+                                    <a href="" class="ssk ssk-icon ssk-google-plus"></a>
+                                    <a href="" class="ssk ssk-icon ssk-pinterest"></a>
+                                    <a href="" class="ssk ssk-icon ssk-tumblr"></a>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                     <div class="trendingItemItem">
                         {% thumbnail item.image "300x300" as im %}
@@ -53,9 +64,10 @@
                         {% endthumbnail %}
                     </div>
                     <div class="trendingItemName">
-                        <a href="#">{{ item.item.item_name }}</a>
+                        <a href="{% url 'b:view_item' item.board.user item.board.slug item.id %}">{{ item.item.item_name }}</a>
                         <div class="trendingItemMeta">
-                            Found on <a href="#">{{ item.board.board_name }}</a> by <a href="#">{{ item.board.user.get_full_name }}</a>
+                            Found on <a href="{% url 'b:view_board' item.board.user.username item.board.slug %}">{{ item.board.board_name }}</a>
+                            by <a href="{% url 'u:profile' item.board.user.username  %}">{{ item.board.user.get_full_name }}</a>
                         </div>
                     </div>              
                     <div class="trendingFooter">

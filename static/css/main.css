@@ -481,6 +481,9 @@ HOME
         font-size:.75rem;
         text-transform: uppercase;
     }
+        .trendingTop .trendingUserShare {
+            float: right;
+        }
         .trendingTop strong {
             float: left;
             font-weight: bold;

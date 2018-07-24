@@ -90,6 +90,7 @@ class ItemConnection(models.Model):
 	image = ImageField(upload_to = 'uploads/items/', default = 'defaults/no-item.png')
 	img_own = models.BooleanField(default=False)
 	item = models.ForeignKey(Item, on_delete=models.CASCADE)
+	slug = models.SlugField(default='')
 	created = models.DateTimeField(auto_now_add=True)
 	allow_comments = models.BooleanField('allow comments', default=True)
 	purchase_url = models.URLField(max_length=255, blank=True)
@@ -109,6 +110,10 @@ class ItemConnection(models.Model):
 		default=WANT,
 	)
 	active = models.BooleanField(default=True)
+
+	def save(self, *args, **kwargs):
+		self.slug = slugify(self.item.item_name)
+		super(ItemConnection, self).save(*args, **kwargs)
 
 	def save_item(itemconx, request):
 		# current user

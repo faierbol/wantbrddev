@@ -247,7 +247,7 @@ def update_profile(request):
 	if request.method == "POST":
 
 		if 'updatePpic' in request.POST:
-			b64image = request.POST.get("imageb64")
+			b64image = request.POST.get("image-data")
 			form = ProfileImageForm(request.POST, instance=profile)
 			if form.is_valid():
 				up = form.save(commit=False)

@@ -161,7 +161,7 @@ USE_TZ = True
 STATICFILES_DIRS = [STATIC_DIR, ]
 
 # url definition for static files
-#STATIC_URL = '/static/' # <------- enable for local static
+# STATIC_URL = '/static/' # <------- enable for local static
 STATIC_ROOT = os.path.normpath(os.path.join(BASE_DIR, 'staticfiles'))
 
 
