@@ -33,7 +33,7 @@ SECRET_KEY = '3i22t4vm=tnjqp%w@ye^n=zo=z$12=f=)bi_sw0ij9a2mup(o-'
 DEBUG = True
 
 ALLOWED_HOSTS = ['127.0.0.1', '.herokuapp.com', '0.0.0.0']
-
+CORS_ORIGIN_ALLOW_ALL=True
 
 # Application definition
 
@@ -57,6 +57,7 @@ INSTALLED_APPS = [
     'sorl.thumbnail',
     'storages',
     'threadedcomments',
+    'corsheaders',
 ]
 
 ### COMMENTS STUFF
@@ -69,6 +70,7 @@ CRISPY_TEMPLATE_PACK = 'bootstrap3'
 ### COMMENTS STUFF END
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
