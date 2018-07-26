@@ -21,7 +21,7 @@
     <link rel="stylesheet" href="{% static 'css/social-share-kit.css' %}" rel="stylesheet">
     <link href="{% static 'css/pnotify.custom.min.css' %}" rel="stylesheet"> 
     <link href="{% static 'css/slidein.css' %}" rel="stylesheet"> 
-    <!-- <link href="{% static 'css/jquery-filestyle.min.css' %}" rel="stylesheet">  -->
+    <link href="{% static 'css/jquery-filestyle.min.css' %}" rel="stylesheet"> 
 	{% block extra-css %}{% endblock %}
 	<link href="{% static 'css/main.css' %}" rel="stylesheet">
 
@@ -68,6 +68,10 @@
                         <div class="circle" style="background-image:url('{% static 'img/default-hero.png' %}');"></div>
                     {% endif %}
                 </a>
+                {% if unread_followers or unread_likes %}
+                    <i class="fas fa-exclamation"></i>
+                {% endif %}
+
             {% else %}
                 <a href="#" class="btn orange" data-featherlight="#loginModal">Login / Register</a>
             {% endif %}
@@ -144,7 +148,7 @@
                 <ul>
                     <li><a href="{% url 'u:home' %}"><i class="far fa-user"></i> <span>Profile</span></a></li>
                     <li><a href="{% url 'b:edit_board' request.user.profile.get_saved_board %}"><i class="far fa-bookmark"></i> Saved Items</a></li>
-                    {% if unread_followers or unread_likes %}    
+                    {% if unread_followers or unread_likes %}
                     <li><a href="{% url 'my_notifications' %}" rel="tooltip" title="
                         {% if unread_likes %}
                         <i class='fas fa-heart likeon'></i> {{ unread_likes }} 

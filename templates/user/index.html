@@ -23,10 +23,8 @@
                 <div class="profileImageDetails clearfix match">
                     <a class="profileImage" href="{% url 'update_profile' %}">
                         {% if profile.picture %}
-                        <i class="fas fa-camera"></i>
                         <div class="circle" style="background-image:url('{{ profile.picture.url }}');"></div>
                         {% else %}
-                        <i class="fas fa-camera"></i>
                         <div class="circle" style="background-image:url('{% static 'img/default-hero.png' %}');"></div>
                         {% endif %}
                     </a>
@@ -46,7 +44,7 @@
                             {% if request.path != '/u/' %}
                                 <a href="{% url 'u:home' %}" class="btn orange">Add/edit boards</a>
                             {% else %}
-                                <a href="#0" class="btn orange js-cd-panel-trigger" data-panel="main" title="Update your background and bio" rel="tooltip">Profile Settings</a>
+                                <a href="{% url 'update_profile' %}" class="btn orange" title="Update your profile settings" rel="tooltip">Update profile</a>
                             {% endif %}
                         {% else %}
                             {% if is_followed %}
@@ -215,36 +213,6 @@
 
     </div>
 </section>
-
-<div class="cd-panel cd-panel--from-right js-cd-panel-main" id="profileSlide">
-    <header class="cd-panel__header">
-        <h1>Profile Settings</h1>
-        <a href="#0" class="cd-panel__close js-cd-close">Close</a>
-    </header>
-
-    <div class="cd-panel__container">
-        <div class="cd-panel__content">
-            <div class="optionsPanel setBackground">
-                <h4>Set Background</h4>
-                <form method="POST" enctype="multipart/form-data">
-                    {% csrf_token %}
-                    {{ bgform.as_p }}
-                    <button class="btn orange" name="changebackground" value="changebackground">Update background</button>
-                </form>
-            </div>
-
-            <div class="optionsPanel manageBio">
-                <h4>About You</h4>
-                <form method="POST">
-                    {% csrf_token %}
-                    <textarea type="text" id="userBio" name="userBio">{{ profile.bio }}</textarea>
-                    <button class="btn orange" name="updatebio" value="1">Update</button>
-                </form>                
-            </div>
-
-        </div>
-    </div>
-</div>
 
 {% endblock %}
 

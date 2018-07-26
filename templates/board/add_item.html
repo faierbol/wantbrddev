@@ -88,12 +88,12 @@
             		<div id="addItemForm">
 
             			<section id="uploadFromSite">
-                            <p><strong>Click on the image you would like to use.</strong></p>
+                            <p><strong>Click to select the image you would like to use.</strong></p>
             				<div class="imageSlider" style="margin-bottom:40px;">
                                 {% if ogimg %}
                                     <div>
                                         <a href="#" class="retimg">
-                                            <i class="fas fa-check-circle"></i>
+                                            <div class="selected">selected</div>
                                             <img src="{{ ogimg }}" id="ogimg">
                                         </a>
                                     </div>                                
@@ -101,7 +101,7 @@
                 					{% for src in output %}
                                         <div>
                                             <a href="#" class="retimg">
-                                                <i class="fas fa-check-circle"></i>
+                                                <div class="selected">selected</div>
                                                 <img src="{{ src }}">
                                             </a>
                                         </div>        						
@@ -226,8 +226,8 @@
             e.preventDefault();
             var src = $(this).find('img').attr('src');
             $('#scrapedimg').val(src);   
-            $('.retimg i').hide();
-            $(this).find('i').show();
+            $('.retimg .selected').hide();
+            $(this).find('.selected').show();
     	});
 		$('#uploadweb').click(function() {	        
 	        $('#imgsrc').val('web');

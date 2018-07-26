@@ -302,6 +302,9 @@ header#main {
         float: right;
         padding-top:16px;
     }
+        .headerRight i {
+            color:#F97D1F;
+        }
         .influencerLink {
             color:#121212;
             text-decoration: none;
@@ -789,13 +792,6 @@ PROFILE
             -o-transition: all .3s;
             transition: all .3s;
         }
-        .profileImage:hover .circle {
-            opacity: 0.7;
-            background:rgba(0,0,0,0.5) !important;
-        }
-        .profileImage:hover i {
-            opacity: 1;
-        }
         .profileDetails {
             float: left;
             width:60%;
@@ -1098,16 +1094,66 @@ UPDATE ACCOUNT
         display: block;
     }
     #croppic {
-        width: 125px;
+        margin-bottom:40px;        
+    }    
+    .cropit-preview {
+      background-color: #f8f8f8;
+      background-size: cover;
+      border: 1px solid #ccc;
+      border-radius: 3px;
+      margin-top: 7px;
+      width: 200px;
+      height: 200px;
+      border-radius: 100px;
+      overflow: hidden;
+      margin-bottom:10px;
+      display: block;
     }
-    .image_container img {
+    .cropit-preview-image-container {
+      cursor: move;
+    }
+    .image-size-label {
+      margin-top: 10px;
+    }
+    button {
+      margin-top: 10px;
+    }
+    .cropitMeta {
+        width: 200px;
+    }
+    .image-editor input[type="range" i] {
+        margin-top:10px;
+    }
+    button.rotate-ccw {
+        padding:10px;
+        margin-left:10px;
+        margin:5px 0 0 0;   
+        float: right; 
+    }
+    button.export {
+        clear: both;
+        display: block;
+        margin-top:0;
+        margin-bottom:20px;
+    }
+    .resizeSlide {
+        display: inline-block;
+        margin-left:10px;
+    }
+    .resizeSlide > div {
+        display: inline-block;
+        margin-right:5px;
+    }
+    .resizeSlide > input {
+        display: inline-block;
+        margin-top:10px;
+    }
+    .currentHero {
         width: 100%;
-        height: auto;
-    }
-    .image_container {
-        width:200px;
-        height: 200px;  
-        margin:20px 0;
+        height: 125px;
+        margin-bottom:10px;
+        background-size: cover;
+        background-position: center;
     }
 
     /*** social ***/
@@ -1574,15 +1620,20 @@ BOARD
     .imageSlider .retimg {
         position: relative;
         display: inline-block;
+        width: 100%;
     }
-    .imageSlider .retimg i {
+    .imageSlider .retimg .selected {
         display: none;
         position: absolute;
         z-index: 99;
         left:0;
         top:0;
-        font-size: 2.5rem;
-        color:#333;
+        font-size: 1rem;
+        background:#F97D1F;
+        color:#fff;
+        border-radius: 5px;
+        line-height: 30px;
+        padding:0 15px;
     }
     .imageSlider img {
         max-width: 300px;
@@ -1634,7 +1685,6 @@ BOARD
         font-size: .9rem;
         line-height: 30px;
     }
-
     #uploadFromSite, #uploadOwnImage {
         margin-top:30px;
         text-align: center;
@@ -2572,48 +2622,6 @@ div.spinner i:nth-child(8) {
 }
 .share-link .tip a {
     border:none;
-}
-
-.image-editor {
-    width: 200px;
-}
-.cropit-preview {
-  background-color: #f8f8f8;
-  background-size: cover;
-  border: 1px solid #ccc;
-  border-radius: 3px;
-  margin-top: 7px;
-  width: 200px;
-  height: 200px;
-  border-radius: 100px;
-  overflow: hidden;
-}
-.cropit-preview-image-container {
-  cursor: move;
-}
-.image-size-label {
-  margin-top: 10px;
-}
-button {
-  margin-top: 10px;
-}
-.cropitMeta {
-    width: 200px;
-}
-.image-editor input[type="range" i] {
-    margin-top:10px;
-}
-button.rotate-ccw {
-    padding:10px;
-    margin-left:10px;
-    margin:5px 0 0 0;   
-    float: right; 
-}
-button.export {
-    clear: both;
-    display: block;
-    margin-top:0;
-    margin-bottom:20px;
 }
 
 

@@ -34,8 +34,7 @@ def home(request):
 	saved_board = Board.objects.get(user=user.id, slug="your-saved-items")
 	saved_board.items = ItemConnection.objects.filter(board=saved_board)[:5]
 	
-	profile = request.user.profile
-	bgform = ChangeBackgroundForm(instance=profile)
+	profile = request.user.profile	
 	connections = profile.get_connections()
 	followers = profile.get_followers()
 	no_connections = profile.get_connections().count()
@@ -68,20 +67,6 @@ def home(request):
 				#redirect to edit board page using new model
 				return redirect('b:edit_board', board_id=new_board.id)
 
-		#update bio
-		elif request.POST.get("updatebio"):
-			new_bio = request.POST.get("userBio")
-			Profile.objects.filter(pk=user.id).update(bio=new_bio)
-			return HttpResponseRedirect(request.path_info)
-
-		# set background
-		if request.POST.get("changebackground"):
-			form = ChangeBackgroundForm(request.POST, request.FILES, instance=profile)
-			if form.is_valid():
-				form.save()
-				messages.info(request, 'Your profile background was updated.')
-				return HttpResponseRedirect(request.path_info)
-
 		#delete boards
 		elif 'deleteboard' in request.POST:
 			board = get_object_or_404(Board, pk=request.POST.get("board_id",""))
@@ -98,7 +83,6 @@ def home(request):
 		'saved_board':saved_board,
 		'editable':editable,
 		'boards':boards,
-		'bgform':bgform,
 	}
 
 	return render(request, template, context_dict)
@@ -243,6 +227,7 @@ def update_profile(request):
 	user_form = UserForm(instance=user, label_suffix='')
 	profile_form = ProfileForm(instance=profile, label_suffix='')	
 	social_form = UpdateSocial(instance=profile, label_suffix='')
+	bgform = ChangeBackgroundForm(instance=profile)
 
 	if request.method == "POST":
 
@@ -262,8 +247,14 @@ def update_profile(request):
 				'b64image':b64image,
 			})
 
+		elif 'changebackground' in request.POST:
+			form = ChangeBackgroundForm(request.POST, request.FILES, instance=profile)
+			if form.is_valid():
+				form.save()
+				messages.info(request, 'Your profile background was updated.')
+				return HttpResponseRedirect(request.path_info)
 
-		if request.POST.get("updateprofile"):
+		elif request.POST.get("updateprofile"):
 			user_form = UserForm(request.POST, request.FILES, instance=user)
 			profile_form = ProfileForm(request.POST, request.FILES, instance=profile)
 
@@ -273,7 +264,7 @@ def update_profile(request):
 				messages.info(request, 'Your profile has been updated.')
 				return HttpResponseRedirect(request.path_info)
 
-		if request.POST.get("updatesocial"):
+		elif request.POST.get("updatesocial"):
 			form = UpdateSocial(request.POST, instance=profile) 
 
 			if form.is_valid():
@@ -286,6 +277,7 @@ def update_profile(request):
 		"user_form": user_form,
 		"profile_form": profile_form,
 		"social_form":social_form,
+		"bgform":bgform
 	})
 
 

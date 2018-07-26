@@ -21,17 +21,32 @@
 
 					<form action="#" method="POST">
 						{% csrf_token %}
-						<div class="image-editor">
-							<input type="file" class="cropit-image-input">
+						<div class="image-editor">							
 							<div class="cropit-preview"></div>
-							<div class="image-size-label">Resize image</div>
-							<input type="range" class="cropit-image-zoom-input">
+							<input type="file" class="cropit-image-input">
+							<div class="resizeSlide">
+								<input type="range" class="cropit-image-zoom-input">
+							</div>
 							<input type="hidden" name="image-data" class="hidden-image-data" />
-							<button type="submit" name="updatePpic" value="1">Submit</button>
+							<p><button type="submit" name="updatePpic" value="1">Apply new picture</button></p>
 						</div>
 					</form>
 
 				</div>
+
+				<h1>Change profile background</h1>
+
+				{% if profile.background %}
+				<div class="currentHero" style="background-image:url('{{ profile.background.url  }}"></div>
+				{% else %}
+				<div class="currentHero" style="background-image:url('{% static 'img/profile-hero.jpg' %}"></div>
+				{% endif %}
+
+				<form action="#" method="POST" enctype="multipart/form-data">
+					{% csrf_token %}
+					{{ bgform }}
+					<p><button name="changebackground" value="1">Apply new background</button></p>
+				</form>
 
 				<h1 style="margin-top:50px;">Edit profile</h1>
 
