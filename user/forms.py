@@ -35,6 +35,13 @@ class ProfileImageForm(forms.ModelForm):
 		model = Profile		
 		fields = ('picture',)
 
+
+class ChangeBackgroundForm(forms.ModelForm):
+	class Meta:
+		model = Profile		
+		fields = ['background',]
+
+
 class PrivacyForm(forms.ModelForm):	
 	class Meta:
 		model = Profile		
@@ -52,14 +59,6 @@ class SettingsForm(forms.ModelForm):
 			'alert_suggested_boards':forms.CheckboxInput(attrs={'hidden': 'hidden', 'id':'alert_sug_board'}),
 			'user':forms.HiddenInput(),
 		}
-
-
-class ChangeBackgroundForm(forms.ModelForm):
-	background = forms.ImageField(label=(''),required=False, widget=forms.FileInput(attrs={'class': "jfilestyle"}))
-	class Meta:
-		model = Profile		
-		fields = ['background', 'user']
-		widgets = {'user':forms.HiddenInput()}
 
 
 class UpdateSocial(forms.ModelForm):

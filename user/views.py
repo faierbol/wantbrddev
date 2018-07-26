@@ -232,25 +232,22 @@ def update_profile(request):
 	if request.method == "POST":
 
 		if 'updatePpic' in request.POST:
-			b64image = request.POST.get("image-data")
+			b64image = request.POST.get("b64image")
 			form = ProfileImageForm(request.POST, instance=profile)
 			if form.is_valid():
 				up = form.save(commit=False)
 				up.picture = decode_base64_file(b64image)
-				up.save()			
-
-			return render(request, template, {
-				"userid": user.id,
-				"user_form": user_form,
-				"profile_form": profile_form,
-				"social_form":social_form,
-				'b64image':b64image,
-			})
+				up.save()	
+				messages.info(request, 'Your profile picture was updated.')
+				return HttpResponseRedirect(request.path_info)		
 
 		elif 'changebackground' in request.POST:
-			form = ChangeBackgroundForm(request.POST, request.FILES, instance=profile)
+			b64pic = request.POST.get("b64pic")
+			form = ChangeBackgroundForm(request.POST, instance=profile)
 			if form.is_valid():
-				form.save()
+				ub = form.save(commit=False)
+				ub.background = decode_base64_file(b64pic)
+				ub.save()		
 				messages.info(request, 'Your profile background was updated.')
 				return HttpResponseRedirect(request.path_info)
 

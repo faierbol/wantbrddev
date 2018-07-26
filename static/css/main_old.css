@@ -1033,13 +1033,6 @@ UPDATE ACCOUNT
         float: left;
         width: 47.5%;
     }
-        .updateProfileImage {
-            width: 100px;
-            float: left;
-            text-align: center;
-            position: relative;
-            margin-right:20px;
-        }
     .profileRight {
         float: right;
         width: 47.5%;
@@ -1103,24 +1096,64 @@ UPDATE ACCOUNT
     #croppic {
         margin-bottom:40px;        
     }    
-    .fileuploader {
-        padding:0;
-        background:none;
+    .cropit-preview {
+      background-color: #f8f8f8;
+      background-size: cover;
+      border: 1px solid #ccc;
+      border-radius: 3px;
+      margin-top: 7px;
+      width: 200px;
+      height: 200px;
+      border-radius: 100px;
+      overflow: hidden;
+      margin-bottom:10px;
+      display: block;
     }
-    .fileuploader-input .fileuploader-input-caption {
-        color:#222;
-        border:1px solid #dbdbdb;
-        font-size: .8rem;
-        padding: 14px 16px;
+    .cropit-preview-image-container {
+      cursor: move;
     }
-
+    .image-size-label {
+      margin-top: 10px;
+    }
+    button {
+      margin-top: 10px;
+    }
+    .cropitMeta {
+        width: 200px;
+    }
+    .image-editor input[type="range" i] {
+        margin-top:10px;
+    }
+    button.rotate-ccw {
+        padding:10px;
+        margin-left:10px;
+        margin:5px 0 0 0;   
+        float: right; 
+    }
+    button.export {
+        clear: both;
+        display: block;
+        margin-top:0;
+        margin-bottom:20px;
+    }
+    .resizeSlide {
+        display: inline-block;
+        margin-left:10px;
+    }
+    .resizeSlide > div {
+        display: inline-block;
+        margin-right:5px;
+    }
+    .resizeSlide > input {
+        display: inline-block;
+        margin-top:10px;
+    }
     .currentHero {
         width: 100%;
         height: 125px;
         margin-bottom:10px;
         background-size: cover;
         background-position: center;
-        border-radius: 5px;
     }
 
     /*** social ***/
