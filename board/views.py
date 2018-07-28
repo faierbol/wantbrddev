@@ -417,7 +417,29 @@ def view_board(request, username, board_name):
 		if 'addtoboard' in request.POST:
 			# board to copy to
 			boardid = request.POST.get("board_id")
-			board = Board.objects.get(pk=boardid)
+
+			# if we're adding a new board
+			if boardid == 'newBoard':
+
+				#check the board name has not already been used
+				new_board_name = request.POST.get("addNewBoard")
+				user_boards = Board.objects.filter(user=request.user)
+
+				if user_boards.filter(board_name=new_board_name).exists():
+					messages.info(request, 'You already have a board with this name.')
+					return HttpResponseRedirect(request.path_info)
+
+				# if the name is not aready used by this user
+				else:
+					#create the board
+					board = Board.objects.create (
+						user = request.user,
+						board_name = new_board_name,
+					)
+			# otherwise get the board that was selected
+			else:
+				board = Board.objects.get(pk=boardid)
+
 			# get model of item connection we're copying
 			itemconxid =  request.POST.get("itemconx_id")
 			itemconx = ItemConnection.objects.get(pk=itemconxid)

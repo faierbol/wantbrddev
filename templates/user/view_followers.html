@@ -38,11 +38,7 @@
                             <p><a href="#">
                                 <span>{{ no_connections }}</span>FOLLOWING
                             </a></p>
-                            {% if editable %}
-                                <p><span>{{ the_boards|length|add:-1 }} {% if the_boards|length|add:-1 == 1 %}<span>BOARD{% else %}BOARDS{% endif %}</p>
-                            {% else %}
-                                <p><span>{{ the_boards|length }}{% if the_boards|length == 1 %}</span>BOARD{% else %}BOARDS{% endif %}</p>
-                            {% endif %}
+                            <p><span>{{ boards }}</span>{% if boards == 1 %}BOARD{% else %}BOARDS{% endif %}</p>
                         </div>                        
                         {% if profile.user == request.user %}
                             {% if request.path != '/u/' %}
@@ -108,111 +104,45 @@
     </div>
 </div>
 
-<section class="profileBoards">
+<section class="profileFollows">
     <div class="container clearfix">
 
-        {% if editable %}
+        {% if followers %}
 
-        <div class="profileBoardItem create match"> 
-            <strong>Create a Board</strong>
-            <form method="POST" name="add_board" id="add_board">
-                {% csrf_token %}
-                <p class="error">{{ error }}</p>
-                <input type="text" placeholder="Name your board..." name="boardname" id="boardname">
-                <p><button id="createwantboard" value="createwantboard" name="createwantboard" class="btn orange">Create a Board</button></p>                
-            </form>
-        </div>
+            {% for con in followers %}
 
-        {% endif %}
-
-        {% if the_boards %}
-
-	        {% for board in the_boards %}
-
-                {% if board.deleteable %}
-
-                    <div class="profileBoardItem match">
-                        <div class="profileBoardName">
-                            {% if not editable %}
-                            <a href="{% url 'b:view_board' board.user.username board.slug %}">{{ board.board_name }}</a>
-                            {% else %}
-                            <a href="{% url 'b:edit_board' board.id %}">{{ board.board_name }}</a>
-                            {% endif %}
-                        </div>
-                        <div class="profileBoardShare">
-                            <a href="https://twitter.com/home?status=Check out this board I found on Wantbrd: {{ board.board_name }} - https://www.wantbrd.com/{% url 'b:view_board' board.user.username board.slug %}{% if board.hero %} {{board.hero.url}}{% else %} {% static 'img/default-hero.png' %}{% endif %}" target="_blank" rel="nooperner nofollow">Share <i class="fas fa-share-alt"></i></a>
-                        </div>
-                        <div class="clearfix"></div>
-                        <div class="boardTags">
-                            {% for tag in board.thetags %}
-                                <a href="{% url 'search_board' %}?kw={{ tag }}">#{{ tag }} </a>
-                            {% endfor %}
-                        </div>
-                        
-                        {% if board.hero %}
-                        <div class="profileBoardHero" style="background-image:url('{{ board.hero.url }}')">
+                <div class="followCard">
+                    <a class="followProfile" href="#">
+                        {% if con.creator.profile.picture %}
+                            <div class="circle" style="background-image:url('{{ con.creator.profile.picture.url }}');"></div>
                         {% else %}
-                        <div class="profileBoardHero" style="background-image:url('{% static 'img/default-hero.png' %}')">
+                            <div class="circle" style="background-image:url('{% static 'img/default-hero.png' %}');"></div>
                         {% endif %}
-                        {% if editable %}
-
-
-                            <div class="profileLabel"><a href="#delete{{board.id}}" rel="modal:open">DELETE</a></div>
-                            <div id="delete{{board.id}}" class="modal">
-                                <h5>Delete "{{ board.board_name }}"</h5>
-                                <p>Are you sure you would like to delete the board <em><strong>{{ board.board_name }}</strong></em>? The board, all it's items and all the item comments will be permenantly removed. Don't forget you can always just make your boards private or inactive instead.</p>
-                                <form method="POST" id="deleteboard-{{board.id}}" name="deleteboard_{{board.id}}">
-                                    {% csrf_token %}                            
-                                    <input type="hidden" name="board_id" value="{{ board.id }}">
-                                    <button class="btn orange" name="deleteboard">Yes, delete this board</button>
+                    </a>
+                    <div class="followInfo">
+                        <div class="followCardBtn">
+                            {% if con.followed %}
+                                <form method="POST">
+                                    {% csrf_token %}
+                                    <button class="naked" name="unfollow"><i class="fas fa-times"></i> Unfollow</button>
                                 </form>
-                            </div>
-                        {% endif %}
-                        </div>
-                        
-                        <div class="trendingItems clearfix">
-                            {% if board.items.count < 3 and editable%}
-                                <a href="{% url 'b:edit_board' board.id %}" class="additembtn">
-                                    <span>+</span>
-                                </a>
+                            {% else %}
+                                <form method="POST">
+                                    {% csrf_token %}
+                                    <button class="naked" name="follow"><i class="fas fa-user-plus"></i></i> Follow</button>
+                                </form>
                             {% endif %}
-                            {% for item in board.items %}
-                            {% thumbnail item.image "300x300" as im %}
-                                {% if editable %}
-                                    <a style="background-image:url('{{ im.url }}');" href="{% url 'b:edit_board' board.id %}"></a>
-                                {% else %}
-                                    <a style="background-image:url('{{ im.url }}');" href="{% url 'b:view_board' board.user.username board.slug %}"></a>
-                                {% endif %}
-                            {% endthumbnail %}                                                
-                            {% endfor %}
                         </div>
-                        <div class="trendingFooter clearfix">
-                            <span>
-                                {{ board.count }}
-                                {% if board.count == 1 %}
-                                Item
-                                {% else %}
-                                Items
-                                {% endif %}
-                            </span>
-                            <span>
-                                {{ board.views }}
-                                {% if board.views > 1 or board.views == 0 %}
-                                Views
-                                {% else %}
-                                View
-                                {% endif %}
-                            </span>
-                        </div>
-
+                        <span><a href="#">@{{ con.creator.username }}</a></span>
+                        <strong><a href="#">{{ con.creator.get_full_name }}</a></strong>
                     </div>
+                    <div class="clearfix"></div>
+                </div>
 
-                {% endif %}
-	        {% endfor %}
-	    {% else %}
-        <div class="noboardsyet">
-            <strong>This user has not added any boards yet.</strong>            
-        </div>
+            {% endfor %}
+
+        {% else %}
+            <p>This user is has no followers</p>
         {% endif %}
 
     </div>

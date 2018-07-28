@@ -15,8 +15,7 @@
 
 	<link href="{% static 'css/normalize.css' %}" rel="stylesheet">	
 	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.9/css/all.css" crossorigin="anonymous">
-	<link href="//cdn.rawgit.com/noelboss/featherlight/1.7.13/release/featherlight.min.css" type="text/css" rel="stylesheet" />
-    <link href="//cdn.rawgit.com/noelboss/featherlight/1.7.13/release/featherlight.gallery.min.css" type="text/css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.css" />
     <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="{% static 'css/social-share-kit.css' %}" rel="stylesheet">
     <link href="{% static 'css/pnotify.custom.min.css' %}" rel="stylesheet"> 
@@ -72,7 +71,7 @@
                 {% endif %}
 
             {% else %}
-                <a href="#" class="btn orange" data-featherlight="#loginModal">Login / Register</a>
+                <a href="#loginModal" class="btn orange" rel="modal:open">Login / Register</a>
             {% endif %}
         </div>
     </div>
@@ -118,7 +117,7 @@
 </footer>
 
 
-<div id="loginModal" class="lightbox">
+<div id="loginModal" class="modal">
     <h4>Login</h4>    
     <form method="post" novalidate action="{% url 'login' %}">
         {% csrf_token %}
@@ -126,7 +125,7 @@
         <button type="submit" class="btn orange">Log in</button>        
         
         <div class="smallLinks">
-            <p><i class="fas fa-user-plus"></i> <a href="{% url 'signup' %}">Not yet registered? <u>Sign up here</u>.</a></p>
+            <a class="popRegister" href="{% url 'signup' %}">Not yet registered? <strong>Sign up here</strong></a>
             <p><i class="fas fa-unlock-alt"></i> <a href="{% url 'password_reset' %}" class="text-muted">Forgotten password? <u>Click here</u></a></p>
         </div>
 
@@ -169,63 +168,72 @@
 {% endif %}
 
 <!-- Constant JS -->
+<!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js" type="text/javascript"></script> -->
 <script src="{% static 'js/vendor/modernizr-3.5.0.min.js' %}" type="text/javascript"></script>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js" type="text/javascript"></script>
-<script src="https://cdn.rawgit.com/noelboss/featherlight/1.7.13/release/featherlight.min.js" type="text/javascript" charset="utf-8"></script>
-<script src="//cdn.rawgit.com/noelboss/featherlight/1.7.13/release/featherlight.gallery.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="https://code.jquery.com/jquery-3.2.1.min.js" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.js"></script>
 <script src="{% static 'js/jquery.matchHeight-min.js' %}" type="text/javascript"></script>
 <script src="{% static 'js/social-share-kit.min.js' %}" type="text/javascript"></script>
 <script src="{% static 'js/classie.js' %}" type="text/javascript"></script>
 <script src="{% static 'js/pnotify.custom.min.js' %}" type="text/javascript"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
 <script src="{% static 'js/slidein.js' %}" type="text/javascript"></script>
 <script src="{% static 'js/tooltip.js' %}" type="text/javascript"></script>
 
 <script type="text/javascript">    
-    SocialShareKit.init();
-    $(function() {
-        $('.match').matchHeight();
-    });
 
-    // sticky header
-    function init() {
-        window.addEventListener('scroll', function(e){
-            var distanceY = window.pageYOffset || document.documentElement.scrollTop,
-                shrinkOn = 100,
-                header = document.querySelector("header#main");
-            if (distanceY > shrinkOn) {
-                classie.add(header,"shrink");
-            } else {
-                if (classie.has(header,"shrink")) {
-                    classie.remove(header,"shrink");
-                }
-            }
-        });
-    }
-    window.onload = init();
-
-    // select 2
     $(document).ready(function() {
+
+        $("#fade").modal({
+            fadeDuration: 500
+        });
+
+        // select2
         $('select').select2();
+
+        // social
+        SocialShareKit.init();
+        $(function() {
+            $('.match').matchHeight();
+        });
+
+        // sticky
+        function init() {
+            window.addEventListener('scroll', function(e){
+                var distanceY = window.pageYOffset || document.documentElement.scrollTop,
+                    shrinkOn = 100,
+                    header = document.querySelector("header#main");
+                if (distanceY > shrinkOn) {
+                    classie.add(header,"shrink");
+                } else {
+                    if (classie.has(header,"shrink")) {
+                        classie.remove(header,"shrink");
+                    }
+                }
+            });
+        }
+        window.onload = init();
+
+        //tooltip
+        (function() {
+          $(function() {
+            $('.toggle').click(function() {
+              return $('.tip').toggle();
+            });
+            return $(document).mouseup(function(e) {
+              var container, popup;
+              container = $(".share");
+              popup = $('.tip');
+              if (container.is(e.target) || container.has(e.target).length) {
+                return;
+              }
+              return popup.hide();
+            });
+          });
+
+        }).call(this);
+
     });
-
-    (function() {
-      $(function() {
-        $('.toggle').click(function() {
-          return $('.tip').toggle();
-        });
-        return $(document).mouseup(function(e) {
-          var container, popup;
-          container = $(".share");
-          popup = $('.tip');
-          if (container.is(e.target) || container.has(e.target).length) {
-            return;
-          }
-          return popup.hide();
-        });
-      });
-
-    }).call(this);
     
 </script>
 

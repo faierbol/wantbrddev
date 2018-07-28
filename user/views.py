@@ -463,6 +463,105 @@ def profile(request, username):
 	return render(request, template, context_dict)
 
 
+# View comeones followers
+def profile_followers(request, username):
+	template = 'user/view_followers.html'	
+	user = get_object_or_404(User, username=username)
+
+	try:
+		boards = Board.objects.filter(user=user.id).exclude().count()
+		profile = user.profile
+		connections = profile.get_connections()
+		followers = profile.get_followers()
+		no_connections = profile.get_connections().count()
+		no_followers = profile.get_followers().count()
+
+		for auser in followers:
+			if request.user == auser.creator:
+				auser.followed = True
+			else:
+				auser.followed = False
+
+	except:
+		pass
+
+	# handle submissions
+	if request.method == 'POST':
+
+		# if user followed
+		if 'follow' in request.POST:
+			user.profile.make_connection(request)
+
+		#if user unfollowed
+		if 'unfollow' in request.POST:
+			user.profile.break_connection(request)
+
+		return HttpResponseRedirect(request.path_info)
+
+	context_dict = {
+		'profile': profile,
+		'no_followers': no_followers,
+		'followers': followers,
+		'boards':boards,
+		'no_connections': no_connections,
+		'connections': connections,
+		'followers': followers,
+		'boards':boards,
+	}
+
+	return render(request, template, context_dict)
+
+
+# View who someone is following
+def profile_following(request, username):
+	template = 'user/view_followers.html'	
+	user = get_object_or_404(User, username=username)
+
+	try:
+		boards = Board.objects.filter(user=user.id).exclude().count()
+		profile = user.profile
+		followers = profile.get_followers()		
+		connections = profile.get_connections()
+		followers = profile.get_followers()
+		no_connections = profile.get_connections().count()
+		no_followers = profile.get_followers().count()
+
+		for auser in followers:
+			if request.user == auser.creator:
+				auser.followed = True
+			else:
+				auser.followed = False
+
+	except:
+		pass
+
+	# handle submissions
+	if request.method == 'POST':
+
+		# if user followed
+		if 'follow' in request.POST:
+			user.profile.make_connection(request)
+
+		#if user unfollowed
+		if 'unfollow' in request.POST:
+			user.profile.break_connection(request)
+
+		return HttpResponseRedirect(request.path_info)
+
+	context_dict = {
+		'profile': profile,
+		'no_followers': no_followers,
+		'followers': followers,
+		'boards':boards,
+		'no_connections': no_connections,
+		'connections': connections,
+		'followers': followers,
+		'boards':boards,
+	}
+
+	return render(request, template, context_dict)
+
+
 def check_status(request):
 	user = request.user
 	

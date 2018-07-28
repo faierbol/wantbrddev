@@ -11,6 +11,9 @@
 /* ==========================================================================
    Base styles: opinionated defaults
    ========================================================================== */
+input:-webkit-autofill {
+   -webkit-box-shadow: 0 0 0px 1000px white inset;
+}
 
 html {
     color: #222;
@@ -236,6 +239,7 @@ MODALS
         float: right;
         margin-top:10px;
     }
+
 
 .deletepop {
     text-align: center;
@@ -809,6 +813,22 @@ PROFILE
             .profileStats {
                 font-size:.9rem;
             }
+            .profileStats p {
+                display: inline-block;
+                text-align: center;
+                margin-right:8px;
+            }
+            .profileStats p:last-child {
+                margin-right: 0;
+            }
+            .profileStats span {
+                display: block;
+                font-size: 1.5rem;
+            }
+            .profileStats a {
+                color:#fff;
+                text-decoration: none;
+            }
             .profileDetails .btn {
                 margin-top:20px;
                 font-size:1rem;
@@ -1106,6 +1126,25 @@ UPDATE ACCOUNT
     .fileuploader {
         padding:0;
         background:none;
+    }
+    .fileuploader-popup {
+        border-radius: 5px;
+        border: 10px solid #fff;
+        -webkit-box-shadow: 0px 0px 59px -10px rgba(0,0,0,0.35);
+        -moz-box-shadow: 0px 0px 59px -10px rgba(0,0,0,0.35);
+        box-shadow: 0px 0px 59px -10px rgba(0,0,0,0.35);
+        top: 10%;
+        left: 10%;
+        width: 80%;
+        height: 80%;
+    }
+    .fileupload-overlay {
+        background:rgba(0,0,0,0.5);
+        width: 100%;
+        height: 100%;
+        top:0;
+        left:0;
+        position: absolute;
     }
     .fileuploader-input .fileuploader-input-caption {
         color:#222;
@@ -1469,6 +1508,20 @@ BOARD
         }
         .addpop button {
             margin-top:10px;
+        }
+        .addNewBoard {
+            margin-top:10px;
+        }
+        .addNewBoard input {
+            background:#fff;
+            border-radius:0;
+            border:none;
+            border-bottom:1px dashed #999;
+            height: 50px;
+            line-height: 1;
+            padding:0;
+            width:100%;
+            margin-bottom:5px;
         }
 
 #theTags {
@@ -2006,6 +2059,28 @@ BOARD
         margin-top:0;
     }
 
+.profileFollows {
+    padding:3.5% 0;
+}
+    .profileFollows .followCard {
+        background:#fff;
+        border:1px solid #dbdbdb;
+        width: 23.5%;
+        float: left;
+        margin-right: 2%;
+        margin-bottom:2%;
+        border-radius: 3px;
+    }
+    .profileFollows .followCard:nth-child(4n){
+        margin-right:0;
+    }
+    .profileFollows .followCard:nth-child(4n+1){
+        clear: both;
+    }
+    .followCardBtn {
+        float: right;
+    }
+
 .searchTerm {
     padding:40px 0;
     text-align: center;
@@ -2289,6 +2364,26 @@ ITEM DETAILS
 /* ---------------- 
 MISC
 -----------------*/
+.blocker {
+    z-index: 99;
+}
+.modal {
+    padding:40px;
+    border-radius: 3px;
+}
+.modal p {
+    margin-bottom:15px;
+}
+.modal .btn {
+    margin-top:15px;
+}
+.modal h5 {
+    font-size: 2rem;
+    margin-bottom:15px;
+}
+.modal a.close-modal {
+
+}
 .circle {
     position: relative;
     width: 100%;
@@ -2306,13 +2401,6 @@ button.naked {
     border-radius:0;
     line-height: 1;
     padding:0;
-}
-div.jfilestyle input {
-    background:none;
-    border-radius:5px 0 0 5px;
-}
-div.jfilestyle input i {
-    color:#333;
 }
 .count-jfilestyle {
     display: none;
@@ -2375,11 +2463,29 @@ div.jfilestyle input i {
         margin-bottom:4px;
     }
 
-.smallLinks {
-    font-size: .85rem;
+.smallLinks .popRegister {
+    background:#8680B2;
+    float: left;
+    border-radius:7px;
+    line-height: 55px;
+    margin:4px 0 10px 0;
+    padding:0 20px;
     display: block;
-    margin-top:10px;
+    color:#fff;
+    font-size: 1rem;
 }
+    .smallLinks a.popRegiter:hover {
+        background:#333;
+        color:#fff;
+    }
+    .smallLinks {
+        font-size: .85rem;
+        display: block;
+        margin-top:10px;
+    }
+    .smallLinks p {
+        clear: both;
+    }
     .smallLinks a {
         text-decoration: none;
     }

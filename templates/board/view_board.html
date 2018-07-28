@@ -221,30 +221,41 @@
                                 <input type="hidden" name="itemconx_id" value="{{ itemconx.id }}">
                                 <button class="naked" name="savelater"><i class="far fa-bookmark"></i> Save</button>
                             </form>
-                            <a href="#" class="metalink" data-featherlight="#addToBoard{{itemconx.id}}"><i class="fas fa-plus"></i> Add to My Board</a>
-                            <div id="addToBoard{{ itemconx.id }}" class="lightbox addpop">
+
+                            <a href="#ex{{itemconx.id}}" class="metalink" rel="modal:open"><i class="fas fa-plus"></i> Add to My Board</a>
+                            <div id="ex{{itemconx.id}}" class="modal">
                                 <form method="POST" id="addtoboard-{{itemconx.id}}" name="addtoboard{{itemconx.id}}">
                                     {% csrf_token %}        
+                                    <h5>Add to your board</h5>
                                     <p>Select which of your boards you would like to copy this item to:</p>
-                                    <select name="board_id">
+                                    <select name="board_id" class="selectBoard">
                                         {% for board in user_boards %}
                                             <option value="{{board.id}}">{{board.board_name}}</option>
                                         {% endfor %}
+                                            <option value="newBoard">Create a new board</option>
                                     </select>
+                                    <div class="addNewBoard" style="display: none;">
+                                        <input type="text" name="addNewBoard" placeholder="Name your new board">
+                                    </div>
                                     <input type="hidden" name="itemconx_id" value="{{ itemconx.id }}">
                                     <p><button class="btn orange" name="addtoboard">Add to board</button></p>
                                 </form>
                             </div>
+
                         </div>
+
+
+
                         {% endif %}
                         {% if editable %}
                         <div class="featBoxMeta">
                             <a class="metalink" href="{% url 'b:edit_item' board.id itemconx.id %}"><i class="fas fa-share"></i> Edit</a>
-                            <a class="metalink" href="#" data-featherlight="#deleteModal{{ itemconx.id }}"><i class="far fa-bookmark"></i> Delete</a>
+                            <a href="#delete{{itemconx.id}}" class="metalink" rel="modal:open"><i class="far fa-bookmark"></i> Delete</a>
                         </div>
-                        <div id="deleteModal{{ itemconx.id }}" class="lightbox deletepop">
-                            <h4>Delete "{{ itemconx.item.item_name }}"</h4>
-                            <p>Are you sure you would like to delete the item <em>{{ itemconx.item.item_name }}</em>? The item and all it's comments will be permenantly removed. Don't forget you can always make your item inactive instead.</p>
+
+                        <div id="delete{{itemconx.id}}" class="modal">
+                            <h5>Delete "{{ itemconx.item.item_name }}"</h5>
+                            <p>Are you sure you would like to delete the item <em><strong>{{ itemconx.item.item_name }}</strong></em>? The item and all it's comments will be permenantly removed. Don't forget you can always just make your item inactive instead.</p>
                             <form method="POST" id="deleteitem-{{itemconx.id}}" name="deleteitem_{{itemconx.id}}">
                                 {% csrf_token %}                            
                                 <input type="hidden" name="item_id" value="{{ itemconx.id }}">
@@ -428,74 +439,75 @@
     {% endfor %}
 {% endif %}
 
-<!-- featerlight popup -->
+<script src="{% static 'js/macy.js' %}" type="text/javascript"></script>
+
 <script type="text/javascript">
-    $('a.gallery').featherlightGallery({
-        previousIcon: '«',
-        nextIcon: '»',
-        galleryFadeIn: 300,
-        openSpeed: 300
-    });
-    jQuery(function($) {
-        $('#show_video').click(function() {
-            var cb = $('#show_video').is(':checked');
-            $('#videoid').prop('disabled', !cb);
+    $(document).ready(function() {
+
+        // macy
+        var masonry = new Macy({
+            container: '#boardItems',
+            trueOrder: false,
+            waitForImages: false,
+            useOwnImageLoader: false,
+            debug: true,
+            mobileFirst: true,
+            columns: 1,
+            margin: 24,
+            breakAt: {
+                1200: 3,
+                940: 2,
+                520: 2,
+                400: 2
+            }
         });
+
+        // show desc edit
+        $('#showEditDesc').click(function(e){
+            $( "#theDesc" ).hide();
+            $( "#editDesc" ).show();
+            $( "#showEditDesc" ).hide();
+            $( "#hideEditDesc" ).show();        
+            e.preventDefault();
+        });
+
+        // hide desc edit
+        $('#hideEditDesc').click(function(e){
+            $( "#theDesc" ).show();
+            $( "#editDesc" ).hide();
+            $( "#showEditDesc" ).show();
+            $( "#hideEditDesc" ).hide();        
+            e.preventDefault();
+        });
+        
+        // show tag edit
+        $('#showEditTags').click(function(e){
+            $( "#theTags" ).hide();
+            $( "#editTags" ).show();
+            $( "#showEditTags" ).hide();
+            $( "#hideEditTags" ).show();
+            e.preventDefault();
+        });
+        
+        // hide tag edit
+        $('#hideEditTags').click(function(e){
+            $( "#theTags" ).show();
+            $( "#editTags" ).hide();
+            $( "#showEditTags" ).show();
+            $( "#hideEditTags" ).hide();
+            e.preventDefault();
+        });
+
+        // show field to add new board
+        $('.selectBoard').change(function(){
+            if ($(this).val() == 'newBoard') {
+                $('.addNewBoard').show();
+            } else {
+                $('.addNewBoard').hide();
+            }
+        })
+
     });
 </script>
 
-<!-- macy -->
-<script src="{% static 'js/macy.js' %}" type="text/javascript"></script>
-<script>
-    var masonry = new Macy({
-        container: '#boardItems',
-        trueOrder: false,
-        waitForImages: false,
-        useOwnImageLoader: false,
-        debug: true,
-        mobileFirst: true,
-        columns: 1,
-        margin: 24,
-        breakAt: {
-            1200: 3,
-            940: 2,
-            520: 2,
-            400: 2
-        }
-    });
-
-    // show desc edit
-    $('#showEditDesc').click(function(e){
-        $( "#theDesc" ).hide();
-        $( "#editDesc" ).show();
-        $( "#showEditDesc" ).hide();
-        $( "#hideEditDesc" ).show();        
-        e.preventDefault();
-    });
-    // hide desc edit
-    $('#hideEditDesc').click(function(e){
-        $( "#theDesc" ).show();
-        $( "#editDesc" ).hide();
-        $( "#showEditDesc" ).show();
-        $( "#hideEditDesc" ).hide();        
-        e.preventDefault();
-    });
-    // show tag edit
-    $('#showEditTags').click(function(e){
-        $( "#theTags" ).hide();
-        $( "#editTags" ).show();
-        $( "#showEditTags" ).hide();
-        $( "#hideEditTags" ).show();
-        e.preventDefault();
-    });
-    // hide tag edit
-    $('#hideEditTags').click(function(e){
-        $( "#theTags" ).show();
-        $( "#editTags" ).hide();
-        $( "#showEditTags" ).show();
-        $( "#hideEditTags" ).hide();
-        e.preventDefault();
-    });
-
-</script>  
 {% endblock %}
