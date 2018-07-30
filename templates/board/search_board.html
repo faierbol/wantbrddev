@@ -25,10 +25,10 @@
 	        
 	    	<div class="tabNav">
 	    	    <a href="{% url 'search_item' %}?kw={{search_term}}">
-	    	    	{% if item_results|length == 1 %}
-	    	    		{{ item_results|length }} Item
+	    	    	{% if item_count == 1 %}
+	    	    		{{ item_count }} Item
 	    	    	{% else %}
-	    	    		{{ item_results|length }} Items
+	    	    		{{ item_count }} Items
 	    	    	{% endif %}
 	    	    </a>
 	    	    <a href="{% url 'search_board' %}?kw={{search_term}}" class="tabOn">
@@ -39,10 +39,10 @@
 	    	    	{% endif %}
 	    	    </a>                
 	    	    <a href="{% url 'search_user' %}?kw={{search_term}}">
-	    	    	{% if user_results|length == 1 %}
-	    	    		{{ user_results|length }} User
+	    	    	{% if user_count == 1 %}
+	    	    		{{ user_count }} User
 	    	    	{% else %}
-	    	    		{{ user_results|length }} Users
+	    	    		{{ user_count }} Users
 	    	    	{% endif %}
 	    	    </a>
 	    	</div>
@@ -110,30 +110,6 @@
 		            <div class="noresults">
 		            	<i class="far fa-frown"></i>
 		            	<p>Sorry, no boards matched your search term.</p>
-	            		{% if item_results|length >= 1 or user_results|length >= 1 %}
-	            			<p>However we did find...</p>
-
-	            			{% if item_results|length >= 1 %}
-	            				<p><strong><a href="{% url 'search_item' %}?kw={{search_term}}">
-	            					{% if item_results|length == 1 %}
-	            						{{ item_results|length }} Item
-	            					{% else %}
-	            						{{ item_results|length }} Items
-	            					{% endif %}
-	            				</a></strong></p>
-	            			{% endif %}
-
-	            			{% if user_results|length >= 1 %}
-		            			<p><strong><a href="{% url 'search_user' %}?kw={{search_term}}">
-		            				{% if user_results|length == 1 %}
-		            					{{ user_results|length }} User
-		            				{% else %}
-		            					{{ user_results|length }} Users
-		            				{% endif %}
-		            			</a></strong></p>
-	            			{% endif %}
-
-	            		{% endif %}
 		            </div>
 
 	            {% endif %}

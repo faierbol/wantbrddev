@@ -12,7 +12,7 @@
    Base styles: opinionated defaults
    ========================================================================== */
 input:-webkit-autofill {
-   -webkit-box-shadow: 0 0 0px 1000px white inset;
+   -webkit-box-shadow: 0 0 0px 1000px #eee inset;
 }
 
 html {
@@ -267,6 +267,9 @@ header#main {
     .headerLeft {
         float: left;
     }
+        .mobSearch {
+            display: none;
+        }
         .logo, .search, .hlLink {
             float: left;
         }
@@ -304,8 +307,14 @@ header#main {
         }
     .headerRight {
         float: right;
-        padding-top:16px;
+        padding-top:11px;
     }
+        .loginregister i {
+            display: none;
+        }
+        .myhome i {
+            display: none;
+        }
         .headerRight i {
             color:#F97D1F;
         }
@@ -2451,7 +2460,6 @@ button.naked {
         }
 
 #loginModal input {
-    width: 400px;
     display: block;
 }
     #loginModal label, .loginPanel label, .accountUpdate label {
@@ -2776,11 +2784,6 @@ footer {
 
 
 
-
-
-
-
-
 /* ==========================================================================
    Helper classes
    ========================================================================== */
@@ -2955,5 +2958,111 @@ footer {
     h2,
     h3 {
         page-break-after: avoid;
+    }
+}
+
+
+/* ==========================================================================
+   MEDIA QUERIES
+   ========================================================================== */
+
+@media screen and (max-width: 900px) {
+    a.hlLink {
+        display: none;
+    }
+}
+
+@media screen and (max-width: 730px) {
+    a.influencerLink {
+        display: none;
+    }
+    .search {
+        display: none;
+    }
+    a.mobSearch {
+        display: inline-block;
+        border:1px solid #F97D1F;
+        background:#F97D1F;
+        border-radius:50%;
+        line-height: 33px;
+        padding:0 10px;
+    }
+    a.mobSearch i {
+        color:#fff;
+    }
+    a.mobSearch:hover {
+        background:#fff;
+        border:1px solid #2a2a2a;
+    }
+    a.mobSearch:hover i {
+        color:#333;
+    }
+}
+
+@media screen and (max-width: 560px) {
+    .modal {
+        padding:20px 20px;
+    }
+    .blocker {
+        padding:0;
+    }
+}
+
+@media screen and (max-width: 460px) {
+    .smallLinks .popRegister {
+        display: block;
+        float: none;
+        text-align: center;
+        padding:0 10px;
+    }
+    #loginModal button.btn {
+        display: block;
+        float: none;
+        border-radius: 7px;
+        line-height: 55px;
+        padding: 0 20px;
+        width: 100%;
+    }
+}
+
+@media screen and (max-width: 420px) {
+    a.myhome {
+        display: inline-block;
+        border:none;
+        border-radius:50%;
+        padding:0 10px;
+    }
+    a.myhome span {
+        display: none;
+    }
+    a.myhome i {
+        line-height: 33px;
+        display: block;
+        color:#fff;
+        font-size: 1rem;
+    }
+    a.myhome:hover i {
+        color:#333;
+    }
+    a.loginregister {
+        padding:0 10px;
+    }
+    a.loginregister span {
+        display: none;
+    }
+    a.loginregister i {
+        display: block;
+        line-height: 33px;
+        color:#fff;
+        font-size: 1rem;
+    }
+    a.loginregister:hover i {
+        color:#333;
+    }
+}
+
+@media screen and (max-width: 370px) {
+    .logo span {
+        display: none;
     }
 }

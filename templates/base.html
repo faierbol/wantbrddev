@@ -50,15 +50,16 @@
                         title="Please enter at least 3 characters"
                     >
                     <i class="fas fa-search"></i>
-                </form>
+                </form>                
             </div>
             <a href="#" class="hlLink">Top Creators</a>
             <a href="#" class="hlLink">Groups</a>
         </div>
         <div class="headerRight">
+            <a href="#" class="mobSearch"><i class="fas fa-search"></i></a>
             <a href="#" class="influencerLink">Influencer?</a>
             {% if request.user.is_authenticated %}
-                <a href="{% url 'my_home' %}" class="btn orange">My Home</a>
+                <a href="{% url 'my_home' %}" class="btn orange myhome"><span>My Home</span><i class="fas fa-home"></i></a>
                 <a href="#0" class="headerPpic js-cd-panel-trigger" data-panel="menu">
                     {% if user.profile.picture %}
                         <div class="circle" style="background-image:url('{{ user.profile.picture.url }}');"></div>
@@ -71,7 +72,10 @@
                 {% endif %}
 
             {% else %}
-                <a href="#loginModal" class="btn orange" rel="modal:open">Login / Register</a>
+                <a href="#loginModal" class="btn orange loginregister" rel="modal:open">
+                    <span>Login / Register</span>
+                    <i class="fas fa-user"></i>
+                </a>
             {% endif %}
         </div>
     </div>

@@ -818,62 +818,18 @@ def add_existing_item(request, board_id, item_id):
 	return render(request, template, context_dict)
 
 
-##### Search Items
-def search_item(request):
-	template = 'board/search_item.html'
+##### Search ALL
+def search(request):
+	template = 'board/search.html'
 
 	# set things up
+	all_results = []
 	item_results = []
 	search_term = request.GET.get('kw', '')
 	search_term = search_term.lower()
-
-	#items 
-	items = Item.objects.filter(item_name__icontains=search_term)
-	for item in items:
-		item_conxs = ItemConnection.objects.filter(item=item, active=True)
-		for item in item_conxs:
-			item.likes = ItemLike.objects.filter(item_conx=item).count()
-			item.is_liked = ItemLike.objects.filter(item_conx=item, user=request.user).exists()
-			item.views = ItemView.objects.filter(item_conx=item).count()
-			item_results.append(item)
-
-	# boards
-	all_boards = False
-	board_results = []
-	board_search_tags = Board.objects.filter(tags__name__in=[search_term])
-	board_search_names = Board.objects.filter(board_name__icontains=search_term)
-	
-	all_boards = board_search_tags | board_search_names
-	all_boards = all_boards.distinct()	
-	for board in all_boards:
-		if board.get_item_count() > 0 and not board.user_blocked(request.user) and not board.user == request.user:
-			board_results.append(board)
-	for board in board_results:
-		board.totalitems = board.get_item_count()
-
-
-	# users
-	user_results = False
-	user_results = User.objects.filter(username__icontains=search_term)
-
-	context_dict = {
-		'search_term':search_term,
-		'item_results':item_results,
-		'user_results':user_results,
-		'board_results':board_results,
-	}
-
-	return render(request, template, context_dict)
-
-
-##### Search Boards
-def search_board(request):
-	template = 'board/search_board.html'
-
-	# set things up
-	item_results = []
-	search_term = request.GET.get('kw', '')
-	search_term = search_term.lower()
+	board_count = 0
+	item_count = 0
+	user_count = 0
 
 	#items 
 	items = Item.objects.filter(item_name__icontains=search_term)
@@ -899,24 +855,61 @@ def search_board(request):
 		board.totalitems = board.get_item_count()
 		board.views = BoardView.objects.filter(board=board).count()
 		board.itemconxs = ItemConnection.objects.filter(board=board, active=True)[:5]
+	
 
 	# users
 	user_results = False
 	user_results = User.objects.filter(username__icontains=search_term)
+	for user in user_results:
+		# set things up
+		user.itemcount = 0
+		user.viewscount = 0
+		user.items = []
+
+		# get all boards
+		boards = Board.objects.filter(user=user)
+		# set board count
+		user.boardcount = boards.count()
+		# start the item count so we only get the initial display ones
+		x = 0
+		#cycle through boards
+		for board in boards:
+			# get the board views
+			boardviews = BoardView.objects.filter(board=board).count()
+			# get all items for this board and count 
+			boarditems = ItemConnection.objects.filter(board=board, active=True)			
+			user.itemcount+=boarditems.count()
+			itemviews = 0			
+			for item in boarditems:
+				itemviews += ItemView.objects.filter(item_conx=item).count()
+				if x < 2:
+					user.items.append(item)
+				x+=1				
+			user.viewscount = boardviews + itemviews
+
+	mixed = list(user_results) + list(board_results) + list(item_results)
+	random.shuffle(mixed)	
+	for item in mixed:
+		if item not in all_results:
+			all_results.append(item)
+
+	board_count = len(board_results)
+	item_count = len(item_results)
+	user_count = len(user_results)
 
 	context_dict = {
 		'search_term':search_term,
-		'item_results':item_results,
-		'user_results':user_results,
-		'board_results':board_results,
+		'all_results':all_results,
+		'user_count':user_count,
+		'item_count':item_count,
+		'board_count':board_count,
 	}
 
 	return render(request, template, context_dict)
 
-
-##### Search Users
-def search_user(request):
-	template = 'board/search_user.html'
+##### Search Items
+def search_item(request):
+	template = 'board/search_item.html'
 
 	# set things up
 	item_results = []
@@ -936,6 +929,7 @@ def search_user(request):
 	# boards
 	all_boards = False
 	board_results = []
+	board_count = 0
 	board_search_tags = Board.objects.filter(tags__name__in=[search_term])
 	board_search_names = Board.objects.filter(board_name__icontains=search_term)
 	
@@ -944,8 +938,101 @@ def search_user(request):
 	for board in all_boards:
 		if board.get_item_count() > 0 and not board.user_blocked(request.user) and not board.user == request.user:
 			board_results.append(board)
+	board_count = len(board_results)
+
+
+	# users
+	user_count = User.objects.filter(username__icontains=search_term).count()
+
+	context_dict = {
+		'search_term':search_term,
+		'item_results':item_results,
+		'user_count':user_count,
+		'board_count':board_count,
+	}
+
+	return render(request, template, context_dict)
+
+
+##### Search Boards
+def search_board(request):
+	template = 'board/search_board.html'
+
+	# set things up
+	item_results = []
+	search_term = request.GET.get('kw', '')
+	search_term = search_term.lower()
+
+	#items 
+	all_items = []
+	items = Item.objects.filter(item_name__icontains=search_term)
+	for item in items:
+		item_conxs = ItemConnection.objects.filter(item=item, active=True)
+		for item in item_conxs:
+			all_items.append(item)
+	item_count = len(all_items)
+
+	# boards
+	all_boards = False
+	board_results = []
+	board_search_tags = Board.objects.filter(tags__name__in=[search_term])
+	board_search_names = Board.objects.filter(board_name__icontains=search_term)
+	all_boards = board_search_tags | board_search_names
+	all_boards = all_boards.distinct()	
+	for board in all_boards:
+		if board.get_item_count() > 0 and not board.user_blocked(request.user) and not board.user == request.user:
+			board_results.append(board)
 	for board in board_results:
 		board.totalitems = board.get_item_count()
+		board.views = BoardView.objects.filter(board=board).count()
+		board.itemconxs = ItemConnection.objects.filter(board=board, active=True)[:5]
+
+	# users
+	user_count = User.objects.filter(username__icontains=search_term).count()
+
+	context_dict = {
+		'search_term':search_term,
+		'item_count':item_count,
+		'user_count':user_count,
+		'board_results':board_results,
+	}
+
+	return render(request, template, context_dict)
+
+
+##### Search Users
+def search_user(request):
+	template = 'board/search_user.html'
+
+	# set things up
+	item_count = 0
+	search_term = request.GET.get('kw', '')
+	search_term = search_term.lower()
+
+	#items 
+	all_items = []
+	items = Item.objects.filter(item_name__icontains=search_term)
+	for item in items:
+		item_conxs = ItemConnection.objects.filter(item=item, active=True)
+		for item in item_conxs:
+			all_items.append(item)
+	item_count = len(all_items)
+
+
+	# boards
+	all_boards = False
+	board_results = []
+	board_count = 0
+	board_search_tags = Board.objects.filter(tags__name__in=[search_term])
+	board_search_names = Board.objects.filter(board_name__icontains=search_term)
+	
+	all_boards = board_search_tags | board_search_names
+	all_boards = all_boards.distinct()	
+	for board in all_boards:
+		if board.get_item_count() > 0 and not board.user_blocked(request.user) and not board.user == request.user:
+			board_results.append(board)
+	board_count = len(board_results)
+
 
 	# users
 	user_results = False
@@ -979,9 +1066,9 @@ def search_user(request):
 
 	context_dict = {
 		'search_term':search_term,
-		'item_results':item_results,
+		'item_count':item_count,
 		'user_results':user_results,
-		'board_results':board_results,
+		'board_count':board_count,
 	}
 
 	return render(request, template, context_dict)
