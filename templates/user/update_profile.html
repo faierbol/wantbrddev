@@ -32,7 +32,7 @@
 						{% csrf_token %}
 					    <input type="file" name="files">
 					    <input type="hidden" id="b64image" name="b64image" value="">
-					    <button id="updatePpic" name="updatePpic" value="1">Apply new picture</button>
+					    <button class="btn large grey" id="updatePpic" name="updatePpic" value="1">Apply new picture</button>
 					</form>
 				</div>
 
@@ -48,7 +48,7 @@
 					{% csrf_token %}
 				    <input type="file" name="bgfiles">	
 				    <input type="hidden" id="b64pic" name="b64pic" value="">	    
-				    <button name="changebackground" value="1">Apply new picture</button>
+				    <button class="btn large grey" name="changebackground" value="1">Apply new background</button>
 				</form>
 
 				<h1 style="margin-top:50px;">Edit profile</h1>
@@ -72,7 +72,7 @@
 				    <p>{{ profile_form.phone_number }}</p>
 				    <label>Your website</label>
 				    <p>{{ profile_form.website }}</p>
-				    <button class="btn grey" type="submit" name="updateprofile" value="updateprofile">Update profile</button>
+				    <button class="btn grey large" type="submit" name="updateprofile" value="updateprofile">Update profile</button>
 				</form>
 
 			</div>
@@ -113,7 +113,7 @@
 					<p><span>https://www.vk.com/</span>{{ social_form.social_vk }}</p>
 
 					<input type="hidden" name="user" value="{{ user.id }}" id="id_user">
-					<button class="btn grey" name="updatesocial" value="updatesocial">Update social links</button>
+					<button class="btn grey large" name="updatesocial" value="updatesocial">Update social links</button>
 				</form>
 
 			</div>

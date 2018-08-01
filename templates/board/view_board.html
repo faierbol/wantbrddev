@@ -53,6 +53,61 @@
                     </a>
                 </div>
 
+                <div class="boardMeta">
+                    {% if not editable %}
+                        <div class="followButton">
+                            {% if board.user != request.user %}
+                                {% if is_followed %}
+                                    <form method="POST">
+                                        {% csrf_token %}
+                                        <button name="unfollow">Unfollow</button>
+                                    </form>
+                                {% else %}
+                                    <form method="POST">
+                                        {% csrf_token %}
+                                        <button name="follow">Follow</button>
+                                    </form>
+                                {% endif %}
+                            {% else %}
+                                <a class="edit_board" href="{% url 'b:edit_board' board.id %}" rel="tooltip" title="Edit this board"><i class="far fa-edit"></i></a>
+                            {% endif %}
+                        </div>                
+                        <div class="boardStats">
+                            <p>Created: {{ board.created|date:'d F o' }}</p>
+                            <a href=""><i class="fas fa-share-alt"></i> Share</a> 
+
+
+                            {% if board.is_liked %}
+                                <span>
+                                    <form class="inline" method="POST">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="board_id" value="{{ board.id }}">
+                                        <button class="naked" name="unlikeboard"><i class="fas fa-heart likeon"></i></a> {{ board.likes }}</button>
+                                    </form>
+                                </span>
+                            {% else %}                                
+                                <span>
+                                    <form class="inline" method="POST">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="board_id" value="{{ board.id }}">
+                                        <button class="naked" name="likeboard"><i class="far fa-heart"></i> {{ board.likes }}</button>
+                                    </form>
+                                </span>                                    
+                            {% endif %}
+
+                            <i class="fas fa-eye"></i> {{ board.views }}
+                        </div>
+                    {% else %}
+                        {% if not board.slug == 'your-saved-items' %}
+                            <div class="boardConfig">
+                                <a href="{% url 'b:view_board' board.user.username board.slug %}" title="View board as user" rel="tooltip"><i class="fas fa-user"></i></a>
+                                <a href="#0" class="js-cd-panel-trigger" data-panel="main" title="Board settings" rel="tooltip"><i class="fas fa-cog"></i></a>
+                            </div>
+                        {% endif %}
+                    {% endif %}
+
+                </div>
+
                 <h1>{{ board.board_name }}</h1>
                 {% if board.slug == 'your-saved-items' %}
                 <span class="type">Items you have saved</span>
@@ -82,61 +137,6 @@
                     {% endif %}
                 </div>
                 {% endif %}
-
-                <div class="boardMeta">
-                    {% if not editable %}
-                        <div class="followButton">
-                            {% if board.user != request.user %}
-            	                {% if is_followed %}
-            	                	<form method="POST">
-            	                		{% csrf_token %}
-            	                		<button name="unfollow">Unfollow</button>
-            	                	</form>
-            	                {% else %}
-            	                	<form method="POST">
-            	                		{% csrf_token %}
-            	                		<button name="follow">Follow</button>
-            	                	</form>
-            	                {% endif %}
-                            {% else %}
-                                <a class="edit_board" href="{% url 'b:edit_board' board.id %}" rel="tooltip" title="Edit this board"><i class="far fa-edit"></i></a>
-                            {% endif %}
-        	            </div>                
-                    	<div class="boardStats">
-        	                <p>Created: {{ board.created|date:'d F o' }}</p>
-        	                <a href=""><i class="fas fa-share-alt"></i> Share</a> 
-
-
-                            {% if board.is_liked %}
-                                <span>
-                                    <form class="inline" method="POST">
-                                        {% csrf_token %}
-                                        <input type="hidden" name="board_id" value="{{ board.id }}">
-                                        <button class="naked" name="unlikeboard"><i class="fas fa-heart likeon"></i></a> {{ board.likes }}</button>
-                                    </form>
-                                </span>
-                            {% else %}                                
-                                <span>
-                                    <form class="inline" method="POST">
-                                        {% csrf_token %}
-                                        <input type="hidden" name="board_id" value="{{ board.id }}">
-                                        <button class="naked" name="likeboard"><i class="far fa-heart"></i> {{ board.likes }}</button>
-                                    </form>
-                                </span>                                    
-                            {% endif %}
-
-        	                <i class="fas fa-eye"></i> {{ board.views }}
-        	            </div>
-                    {% else %}
-                        {% if not board.slug == 'your-saved-items' %}
-                            <div class="boardConfig">
-                                <a href="{% url 'b:view_board' board.user.username board.slug %}" title="View board as user" rel="tooltip"><i class="fas fa-user"></i></a>
-                                <a href="#0" class="js-cd-panel-trigger" data-panel="main" title="Board settings" rel="tooltip"><i class="fas fa-cog"></i></a>
-                            </div>
-                        {% endif %}
-                    {% endif %}
-
-                </div>
 
             </div>
 
@@ -455,10 +455,9 @@
             columns: 1,
             margin: 24,
             breakAt: {
-                1200: 3,
-                940: 2,
+                860: 3,
                 520: 2,
-                400: 2
+                320: 1
             }
         });
 

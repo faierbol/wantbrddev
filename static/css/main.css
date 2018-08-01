@@ -772,7 +772,7 @@ PROFILE
     }
     .profileImageDetails {
         float: left;
-        width:55%;
+        width:50%;
     }
         .profileImage {
             width:30%;
@@ -825,10 +825,15 @@ PROFILE
             .profileStats p {
                 display: inline-block;
                 text-align: center;
-                margin-right:8px;
+                margin-right:10px;
+                padding-right:10px;
+                border-right:1px solid;
+                border-color: rgba(255,255,255,0.2)
             }
             .profileStats p:last-child {
                 margin-right: 0;
+                border:none;
+                padding-right: 0;
             }
             .profileStats span {
                 display: block;
@@ -847,7 +852,7 @@ PROFILE
             }
     .profileBio {
         float: right;
-        width:40%;
+        width:45%;
         display: table;
         vertical-align: middle;
         position: relative;
@@ -1338,6 +1343,10 @@ BOARD
     .boardStats {
         float: right;
         margin-right:15px;
+        font-size: .8rem;
+    }
+    .boardStats a, .boardStats span {
+        margin-right:8px;
     }
     .followButton {
         float: right;
@@ -1393,7 +1402,6 @@ BOARD
     }
         .boardMeta a {
             text-decoration:none;
-            padding-left:10px;
         }    
         .boardMeta p {
             font-size:.75rem;
@@ -2965,11 +2973,125 @@ footer {
 /* ==========================================================================
    MEDIA QUERIES
    ========================================================================== */
+@media screen and (max-width: 1100px) {
+   .accountUpdate .panel {
+       padding:40px 30px;
+   }
+   .profileRight, .profileLeft {
+        width:48.5%; 
+   }
+}
+
+@media screen and (max-width: 1000px) {
+    .profileBoardItem {
+        width: 48.25%;
+    }
+    .profileBoardItem:nth-child(3n) {
+        margin-right: 3.5%;
+    }
+    .profileBoardItem:nth-child(3n+1) {
+        clear: none;
+    }
+    .profileBoardItem:nth-child(2n) {
+        margin-right: 0;
+    }
+    .profileBoardItem:nth-child(2n+1) {
+        clear: both;
+    }
+}
+
+@media screen and (max-width: 960px) {
+    .profileImageDetails, .profileBio {
+        width: 100%;
+        float: none;
+    }
+    .profileImageDetails {
+        margin-bottom:25px;
+    }
+    .profileBar {
+        padding:40px 20px;
+    }
+    .profileImage {
+        width: 200px; 
+        position: absolute;
+        float: none;       
+    }
+    .profileDetails {
+        float: none;
+        margin-left:240px;
+    }
+}   
+
+@media screen and (max-width: 920px) {
+    .fcol {
+        width: 100%;
+        float: none;
+        margin:0 0 30px 0;
+    }
+    .fcol:last-child {
+        margin-bottom:0;
+    }
+}
 
 @media screen and (max-width: 900px) {
     a.hlLink {
         display: none;
     }
+    .accountUpdate .panel {
+        padding:60px;
+        max-width: 100%;
+    }
+    .profileRight, .profileLeft {
+         width:100%; 
+         float: none;
+    }
+    .profileLeft {
+        margin-bottom:40px;
+    }
+    .itemDetails .panel {
+        padding:20px;
+    }
+}
+
+@media screen and (max-width: 740px) {
+    .boardUser, .boardMeta {
+        display: block;
+        position: relative;
+        float: left;
+        left:auto;
+        right: auto;
+        top:auto;
+        padding-bottom:10px;
+    }
+    .boardMeta {
+        float: right;
+    }
+    .boardHeader h1 {
+        clear: both;
+        margin:0;
+        padding:20px 0 10px 0;
+        border-top:1px solid #dbdbdb;
+    }
+    .boardHeader .tags {
+        padding:0;
+    }
+    .boardConfig {
+        margin-top:0;
+        padding-top:8px;
+    }
+    .boardConfig a {
+        font-size: 1.2rem;
+    }
+    .boardUser .trendingUserPic {
+        width: 30px;
+    }
+    .boardUser .trendingUserNames {
+        margin-top:0;
+    }
+    .boardUser .trendingUserNames span {
+        font-size: 1.2rem;
+    }
+
 }
 
 @media screen and (max-width: 730px) {
@@ -2997,6 +3119,60 @@ footer {
     a.mobSearch:hover i {
         color:#333;
     }
+    .profileBoards {
+        padding-top:40px;
+    }
+}
+
+@media screen and (max-width: 700px) {
+    .boardWrap .container {
+        padding:40px 10px 0;
+    }
+}
+
+@media screen and (max-width: 680px) {
+    .profileImage {
+        float:none;
+        width: 100%;
+        position: relative;
+        width: 150px;
+        margin: auto;
+    }
+    .profileDetails {
+        margin:20px 0 0 0;
+        text-align: center;
+        width: 100%;
+    }
+    .theBio p {
+        text-align:center;
+        display: none;
+    }
+    .pSocial {
+        text-align: center;
+        margin-top:0;
+    }
+    .pSocial a {
+        float: none;
+        display: inline-block;
+    }
+    .profileImageDetails {
+        margin-bottom:10px;
+    }
+    .profileBar .container {
+        padding:0;
+    }
+    .profileBoardHero {
+        height: 130px;
+    }
+}
+
+@media screen and (max-width: 620px) {
+    .trendingItems > a, .trendingItems > a.additembtn {
+        height: 60px;
+    }
+    .trendingItems > a.additembtn {
+        font-size: 2rem;
+    }
 }
 
 @media screen and (max-width: 560px) {
@@ -3005,6 +3181,41 @@ footer {
     }
     .blocker {
         padding:0;
+    }
+    .accountUpdate .panel {
+        padding:40px 30px;
+    }
+    .profileBoards .container {
+        padding:0 10px;
+    }
+    .profileBoardItem {
+        margin:0 0 30px 0;
+    }
+}
+
+@media screen and (max-width: 550px) {
+    .profileBoardItem {
+        float: none;
+        width: 100%;
+    }
+    .profileBoardHero {
+
+    }
+}
+
+@media screen and (max-width: 500px) {
+    .myNotifications .panel {
+        padding:40px 30px;
+    }
+    #updatesocialform span {
+        position: relative;
+    }
+    #updatesocialform input[type="text"] {
+        padding-left:0;
+        height: 30px;
+    }
+    #updatesocialform p, #updateprofileform p {
+        margin-bottom:30px;
     }
 }
 
@@ -3022,6 +3233,12 @@ footer {
         line-height: 55px;
         padding: 0 20px;
         width: 100%;
+    }
+    .updateProfileImage {
+        float: none;
+        display: block;
+        width: 200px;
+        margin: 0 auto 20px;
     }
 }
 
@@ -3064,5 +3281,8 @@ footer {
 @media screen and (max-width: 370px) {
     .logo span {
         display: none;
+    }
+    .myNotifications .panel {
+        padding:40px 20px;
     }
 }

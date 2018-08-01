@@ -39,9 +39,9 @@
                                 <span>{{ no_connections }}</span>FOLLOWING
                             </a></p>
                             {% if editable %}
-                                <p><span>{{ the_boards|length|add:-1 }} {% if the_boards|length|add:-1 == 1 %}<span>BOARD{% else %}BOARDS{% endif %}</p>
+                                <p><span>{{ the_boards|length|add:-1 }}</span>{% if the_boards|length|add:-1 == 1 %}BOARD{% else %}BOARDS{% endif %}</p>
                             {% else %}
-                                <p><span>{{ the_boards|length }}{% if the_boards|length == 1 %}</span>BOARD{% else %}BOARDS{% endif %}</p>
+                                <p><span>{{ the_boards|length }}</span>{% if the_boards|length == 1 %}BOARD{% else %}BOARDS{% endif %}</p>
                             {% endif %}
                         </div>                        
                         {% if profile.user == request.user %}
