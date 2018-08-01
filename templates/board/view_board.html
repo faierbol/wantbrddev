@@ -39,7 +39,7 @@
 
             <div class="boardHeader clearfix">
 
-                <div class="boardUser">                    
+                <div class="boardUser match">                    
                     <div class="trendingUserPic">
                         {% if board.user.profile.picture %}
                             <div class="circle" style="background-image:url('{{ board.user.profile.picture.url }}');"></div>
@@ -53,7 +53,7 @@
                     </a>
                 </div>
 
-                <div class="boardMeta">
+                <div class="boardMeta match">
                     {% if not editable %}
                         <div class="followButton">
                             {% if board.user != request.user %}
@@ -107,6 +107,13 @@
                     {% endif %}
 
                 </div>
+
+                {% if board.hero %}
+                <div class="mobileBoardBg" style="background-image:url('{{ board.hero.url }}')"></div>
+                {% else %}    
+                <div class="mobileBoardBg" style="background-image:url('{% static 'img/default-hero.png' %}')"></div>
+                {% endif %}
+
 
                 <h1>{{ board.board_name }}</h1>
                 {% if board.slug == 'your-saved-items' %}
@@ -281,6 +288,12 @@
                             </a>
                             <a href="{% url 'b:view_item' board.user board.slug itemconx.id %}" class="boardItemName">{{ itemconx.item.item_name }}</a>
 
+                        {% endif %}
+
+                        {% if itemconx.item_desc %}
+                        <div class="itemDesc">
+                            {{ itemconx.item_desc|truncatechars:75 }}
+                        </div>
                         {% endif %}
 
                         {% if not board.slug == 'your-saved-items' %}

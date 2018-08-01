@@ -209,7 +209,7 @@
                             <div class="recommendedImage" style="background-image:url('{% static 'img/default-hero.png' %}');"></div>
                         {% endif %}
                         <div class="recommendedText">
-                            <p>{{ hot.description }}</p>
+                            <p>{{ hot.description|truncatechars:75 }}</p>
                         </div>
                         <div class="recommendedMeta">
                             <span>{{ hot.totalitems }} {% if hot.totalitems > 1 or hot_items.totalitems == 0 %} Items {% else %} Item {% endif %}</span>

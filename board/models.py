@@ -18,7 +18,7 @@ class Board(models.Model):
 	board_name = models.CharField(null=False, max_length=255, blank=False)	
 	created = models.DateTimeField(auto_now_add=True)
 	private = models.BooleanField(default=False)
-	description = models.TextField(default='', max_length=1000, blank=True)
+	description = models.TextField(default='', max_length=500, blank=True)
 	video = models.CharField(max_length=50, blank=True)
 	hero = models.ImageField(upload_to = user_directory_path, blank=True, null=True)
 	show_video = models.BooleanField(default=False)

@@ -1321,6 +1321,9 @@ BOARD
         background-position: center center;
         width: 100%;
     }
+    .mobileBoardBg {
+        display: none;
+    }
     .boardWrap .container {
         max-width:1100px;
         padding-top:40px;
@@ -1441,6 +1444,10 @@ BOARD
             overflow: hidden;
             padding:20px;
         }
+        #boardItems .featBox.boardPic .itemDesc {
+            padding-bottom:10px;
+            font-size: .8rem;
+        }
         .boardPic img {
             width:100%;
             height: auto;
@@ -1455,6 +1462,7 @@ BOARD
             padding-bottom:20px;
             text-decoration: none;
             color:#121212;
+            line-height: 150%;
         }
         .boardItemStats {
             font-size:.8rem;
@@ -1464,6 +1472,9 @@ BOARD
                 display: inline-block;
                 padding:0 10px;
                 line-height: 28px;
+            }
+            .boardItemStats span:first-child {
+                padding-left:0;
             }
         .got {
             font-size:.85rem;
@@ -3054,6 +3065,26 @@ footer {
 }
 
 @media screen and (max-width: 740px) {
+    header#main {
+        -webkit-box-shadow: 0px 0px 54px -10px rgba(0,0,0,0.45);
+        -moz-box-shadow: 0px 0px 54px -10px rgba(0,0,0,0.45);
+        box-shadow: 0px 0px 54px -10px rgba(0,0,0,0.45);
+    }
+    .boardBg {
+        display: none;
+    }
+    .mobileBoardBg {
+        display: block;
+        height: 200px;
+        clear: both;
+    }
+    .boardHeader {
+        margin-top:0;
+        padding:0;
+    }
+    .boardWrap .container {
+        padding:0;
+    }
     .boardUser, .boardMeta {
         display: block;
         position: relative;
@@ -3061,7 +3092,9 @@ footer {
         left:auto;
         right: auto;
         top:auto;
-        padding-bottom:10px;
+        padding:30px 20px;
+        width: 50%;
+        background:#fff;
     }
     .boardMeta {
         float: right;
@@ -3069,11 +3102,13 @@ footer {
     .boardHeader h1 {
         clear: both;
         margin:0;
-        padding:20px 0 10px 0;
+        padding:20px 0 0 20px;
         border-top:1px solid #dbdbdb;
+        text-align: left;
     }
     .boardHeader .tags {
-        padding:0;
+        padding:10px 20px 20px 20px;
+        text-align: left;
     }
     .boardConfig {
         margin-top:0;
@@ -3083,7 +3118,7 @@ footer {
         font-size: 1.2rem;
     }
     .boardUser .trendingUserPic {
-        width: 30px;
+        width: 35px;
     }
     .boardUser .trendingUserNames {
         margin-top:0;
@@ -3091,7 +3126,30 @@ footer {
     .boardUser .trendingUserNames span {
         font-size: 1.2rem;
     }
-
+    #boardItems {
+        margin-left:20px;
+        margin:40px 20px 0;
+    }
+    .edit_board i {
+        font-size: 1rem;
+    }
+    .boardDescription {
+        border-bottom:2px solid #ebebeb;
+        background:#fff;
+        color:#333;
+        text-align: left;
+        padding:0 20px 20px 20px;
+    }
+    .boardVideo {
+        padding-bottom:20px;
+    }
+    .popImage {
+        margin-bottom:30px;
+    }
+    .popImage, .popDetails {
+        float: none;
+        width: 100%;
+    }
 }
 
 @media screen and (max-width: 730px) {
@@ -3121,12 +3179,6 @@ footer {
     }
     .profileBoards {
         padding-top:40px;
-    }
-}
-
-@media screen and (max-width: 700px) {
-    .boardWrap .container {
-        padding:40px 10px 0;
     }
 }
 
@@ -3198,8 +3250,40 @@ footer {
         float: none;
         width: 100%;
     }
-    .profileBoardHero {
+}
 
+@media screen and (max-width: 534px) {
+    #boardItems {
+        background:#fff;
+        margin:0;
+        padding:0;
+    }
+    #boardItems .featBox.boardPic {
+        border:none;
+        padding:40px 20px 40px 20px;
+        margin-bottom:40px;
+        border-bottom:1px solid #ebebeb;
+    }
+    a.boardItemName {
+        font-size: 1.5rem;
+        text-align: left;
+        border-bottom:none;
+        padding-bottom:0px;
+        margin-bottom:10px;
+        line-height: 1.9rem;
+    }
+    .boardItemStats span:first-child {
+        padding-left:0;
+    }
+    .itemDetails {
+        padding:0;
+    }
+    .itemDetails .container {
+        padding:0;
+    }
+    .itemDetails .panel {
+        border:none;
+        padding-top:40px;
     }
 }
 
