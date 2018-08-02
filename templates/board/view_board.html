@@ -60,7 +60,7 @@
                                 {% if is_followed %}
                                     <form method="POST">
                                         {% csrf_token %}
-                                        <button name="unfollow">Unfollow</button>
+                                        <button class="grey" name="unfollow">Unfollow</button>
                                     </form>
                                 {% else %}
                                     <form method="POST">
@@ -73,8 +73,8 @@
                             {% endif %}
                         </div>                
                         <div class="boardStats">
-                            <p>Created: {{ board.created|date:'d F o' }}</p>
-                            <a href=""><i class="fas fa-share-alt"></i> Share</a> 
+                            <p>Created on {{ board.created|date:'d F o' }}</p>
+                            <a href=""><i class="fal fa-share"></i> Share</a> 
 
 
                             {% if board.is_liked %}
@@ -90,12 +90,12 @@
                                     <form class="inline" method="POST">
                                         {% csrf_token %}
                                         <input type="hidden" name="board_id" value="{{ board.id }}">
-                                        <button class="naked" name="likeboard"><i class="far fa-heart"></i> {{ board.likes }}</button>
+                                        <button class="naked" name="likeboard"><i class="fal fa-heart"></i></i> {{ board.likes }}</button>
                                     </form>
                                 </span>                                    
                             {% endif %}
 
-                            <i class="fas fa-eye"></i> {{ board.views }}
+                            <i class="fal fa-eye"></i> {{ board.views }}
                         </div>
                     {% else %}
                         {% if not board.slug == 'your-saved-items' %}
@@ -209,51 +209,6 @@
 
                     <div class="featBox boardPic">                
 
-                        {% if not editable %}
-                        <div class="featBoxMeta">
-                            <div class="share-link">
-                                <a class="toggle metalink" href="javascript:void(0);"><i class="fas fa-share"></i> Share</a>
-                                <div class="tip">
-                                    <div class="ssk-group">
-                                        <a href="" class="ssk ssk-icon ssk-facebook"></a>
-                                        <a href="" class="ssk ssk-icon ssk-twitter"></a>
-                                        <a href="" class="ssk ssk-icon ssk-google-plus"></a>
-                                        <a href="" class="ssk ssk-icon ssk-pinterest"></a>
-                                        <a href="" class="ssk ssk-icon ssk-tumblr"></a>
-                                    </div>
-                                </div>
-                            </div>
-                            <form class="inline" method="POST">
-                                {% csrf_token %}
-                                <input type="hidden" name="itemconx_id" value="{{ itemconx.id }}">
-                                <button class="naked" name="savelater"><i class="far fa-bookmark"></i> Save</button>
-                            </form>
-
-                            <a href="#ex{{itemconx.id}}" class="metalink" rel="modal:open"><i class="fas fa-plus"></i> Add to My Board</a>
-                            <div id="ex{{itemconx.id}}" class="modal">
-                                <form method="POST" id="addtoboard-{{itemconx.id}}" name="addtoboard{{itemconx.id}}">
-                                    {% csrf_token %}        
-                                    <h5>Add to your board</h5>
-                                    <p>Select which of your boards you would like to copy this item to:</p>
-                                    <select name="board_id" class="selectBoard">
-                                        {% for board in user_boards %}
-                                            <option value="{{board.id}}">{{board.board_name}}</option>
-                                        {% endfor %}
-                                            <option value="newBoard">Create a new board</option>
-                                    </select>
-                                    <div class="addNewBoard" style="display: none;">
-                                        <input type="text" name="addNewBoard" placeholder="Name your new board">
-                                    </div>
-                                    <input type="hidden" name="itemconx_id" value="{{ itemconx.id }}">
-                                    <p><button class="btn orange" name="addtoboard">Add to board</button></p>
-                                </form>
-                            </div>
-
-                        </div>
-
-
-
-                        {% endif %}
                         {% if editable %}
                         <div class="featBoxMeta">
                             <a class="metalink" href="{% url 'b:edit_item' board.id itemconx.id %}"><i class="fas fa-share"></i> Edit</a>
@@ -297,43 +252,88 @@
                         {% endif %}
 
                         {% if not board.slug == 'your-saved-items' %}
-                        <div class="boardItemStats">
-                            <span><i class="far fa-comments"></i> 
-                            	{% get_comment_count for itemconx as comment_count %}
-                            	{{ comment_count }}                    	
-                            </span>
-                            <span><i class="fas fa-eye"></i> {{ itemconx.views }}</span>
 
-                            {% if itemconx.is_liked %}
-                                <span>
-                                    <form class="inline" method="POST">
-                                        {% csrf_token %}
-                                        <input type="hidden" name="itemconx_id" value="{{ itemconx.id }}">
-                                        <button class="naked" name="unlikeitem"><i class="fas fa-heart likeon"></i></a> {{ itemconx.likes }}</button>
-                                    </form>
-                                </span>
-                            {% else %}
-                                <span>
-                                    <form class="inline" method="POST">
-                                        {% csrf_token %}
-                                        <input type="hidden" name="itemconx_id" value="{{ itemconx.id }}">
-                                        <button class="naked" name="likeitem"><i class="far fa-heart"></i> {{ itemconx.likes }}</button>
-                                    </form>
-                                </span>                                    
-                            {% endif %}
-                            {% if itemconx.item_status == 'GOT' %}
-                                <div class="got">
-                                    <span>GOT THIS!</span>
-                                    {% if itemconx.rating == '3' %}
-                                        <i class="far fa-smile"></i>
-                                    {% elif itemconx.rating == '2' %}
-                                        <i class="far fa-meh"></i>
-                                    {% elif itemconx.rating == '1' %}
-                                        <i class="far fa-frown"></i>
-                                    {% endif %}
-                                </div>
-                            {% endif %}
-                        </div>
+                            <div class="boardItemStats">
+                                <span><a href="#"><i class="fal fa-comment"></i>
+                                	{% get_comment_count for itemconx as comment_count %}
+                                	{{ comment_count }}                    	
+                                </a></span>
+                                <span><i class="fal fa-eye"></i> {{ itemconx.views }}</span>
+
+                                {% if itemconx.is_liked %}
+                                    <span>
+                                        <form class="inline" method="POST">
+                                            {% csrf_token %}
+                                            <input type="hidden" name="itemconx_id" value="{{ itemconx.id }}">
+                                            <button class="naked" name="unlikeitem"><i class="fas fa-heart likeon"></i></i></i></a> {{ itemconx.likes }}</button>
+                                        </form>
+                                    </span>
+                                {% else %}
+                                    <span>
+                                        <form class="inline" method="POST">
+                                            {% csrf_token %}
+                                            <input type="hidden" name="itemconx_id" value="{{ itemconx.id }}">
+                                            <button class="naked" name="likeitem"><i class="fal fa-heart"></i> {{ itemconx.likes }}</button>
+                                        </form>
+                                    </span>                                    
+                                {% endif %}
+                                {% if itemconx.item_status == 'GOT' %}
+                                    <div class="got">
+                                        <span>GOT THIS!</span>
+                                        {% if itemconx.rating == '3' %}
+                                            <i class="far fa-smile"></i>
+                                        {% elif itemconx.rating == '2' %}
+                                            <i class="far fa-meh"></i>
+                                        {% elif itemconx.rating == '1' %}
+                                            <i class="far fa-frown"></i>
+                                        {% endif %}
+                                    </div>
+                                {% endif %}
+
+                                {% if not editable %}
+                                    <div class="itemTools">
+                                        <div class="share-link">
+                                            <a class="toggle metalink" rel="tooltip" title="Share" href="javascript:void(0);"><i class="fal fa-share"></i></a>
+                                            <div class="tip">
+                                                <div class="ssk-group">
+                                                    <a href="" class="ssk ssk-icon ssk-facebook"></a>
+                                                    <a href="" class="ssk ssk-icon ssk-twitter"></a>
+                                                    <a href="" class="ssk ssk-icon ssk-google-plus"></a>
+                                                    <a href="" class="ssk ssk-icon ssk-pinterest"></a>
+                                                    <a href="" class="ssk ssk-icon ssk-tumblr"></a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <form class="inline" method="POST">
+                                            {% csrf_token %}
+                                            <input type="hidden" name="itemconx_id" value="{{ itemconx.id }}">
+                                            <button class="naked" name="savelater" rel="tooltip" title="Add to your saved items"><i class="fal fa-bookmark"></i></button>
+                                        </form>
+
+                                        <a href="#ex{{itemconx.id}}" class="metalink" rel="modal:open tooltip" title="Add to your board"><i class="fal fa-plus"></i></a>
+                                        <div id="ex{{itemconx.id}}" class="modal">
+                                            <form method="POST" id="addtoboard-{{itemconx.id}}" name="addtoboard{{itemconx.id}}">
+                                                {% csrf_token %}        
+                                                <h5>Add to your board</h5>
+                                                <p>Select which of your boards you would like to copy this item to:</p>
+                                                <select name="board_id" class="selectBoard">
+                                                    {% for board in user_boards %}
+                                                        <option value="{{board.id}}">{{board.board_name}}</option>
+                                                    {% endfor %}
+                                                        <option value="newBoard">Create a new board</option>
+                                                </select>
+                                                <div class="addNewBoard" style="display: none;">
+                                                    <input type="text" name="addNewBoard" placeholder="Name your new board">
+                                                </div>
+                                                <input type="hidden" name="itemconx_id" value="{{ itemconx.id }}">
+                                                <p><button class="btn orange" name="addtoboard">Add to board</button></p>
+                                            </form>
+                                        </div>
+                                    </div>
+                                {% endif %}
+
+                            </div>
+
                         {% endif %}
 
                     </div>

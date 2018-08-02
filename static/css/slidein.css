@@ -87,7 +87,7 @@ Slide In Panel - by CodyHouse.co
 .cd-panel__header {
   color:#fff;
   position: fixed;
-  width: 90%;
+  width: 300px;
   padding:30px 30px;  
   -webkit-transform: translateY(0px);
       -ms-transform: translateY(0px);
@@ -261,7 +261,7 @@ Slide In Panel - by CodyHouse.co
 
 .cd-panel__container {
   position: fixed;
-  width: 90%;
+  width: 300px;
   height: 100%;
   top: 0;
   background: #fff;
@@ -275,8 +275,8 @@ Slide In Panel - by CodyHouse.co
   /*margin-top:30px;*/
 }
 .cd-panel__container.account_slide a i {
-  font-size: 1.2rem;
-  margin-right:5px;
+  font-size: 1.5rem;
+  margin-right:10px;
   -webkit-transition: all .3s;
   -moz-transition: all .3s;
   -o-transition: all .3s;

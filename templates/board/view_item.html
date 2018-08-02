@@ -28,13 +28,34 @@
 		
 		<div class="panel">
 
+			<h1 class="detailsMob">{{ itemconx.item.item_name }}</h1>
+	        <div class="itemMeta detailsMob">
+	    		<div class="itemMetaPic">
+	    			{% if itemconx.board.user.profile.picture %}
+	    			<div class="circle" style="background-image:url('{{ itemconx.board.user.profile.picture.url }}');"></div>
+	    			{% else %}
+	    			<div class="circle" style="background-image:url('{% static 'img/default-hero.png' %}');"></div>
+	    			{% endif %}
+	    		</div>
+	    		<div class="itemMetaFound">
+		    	    Found in <a href="{% url 'b:view_board' itemconx.board.user itemconx.board.slug %}">{{ itemconx.board.board_name }}</a> by 
+		    	    <a href="{% url 'u:profile' itemconx.board.user %}">
+		        	{% if itemconx.board.user.get_full_name %}
+		        		{{ itemconx.board.user.get_full_name }}	                                
+		        	{% else %}
+		        		@{{ itemconx.board.user }}
+		        	{% endif %}
+		        	</a>
+		        </div>
+		    </div>
+
 			<div class="popImage">
 			    {% thumbnail itemconx.image "600x600" as im %}
 			        <img src="{{ im.url }}">
 			    {% endthumbnail %}
 			    <div class="popMeta">
 			    	<div class="share-link">
-			    		<a class="toggle" href="javascript:void(0);"><i class="fas fa-share"></i> Share</a>
+			    		<a class="toggle" href="javascript:void(0);"><i class="fal fa-share"></i> Share</a>
 			    		<div class="tip">
 			    			<div class="ssk-group">
 			    			    <a href="" class="ssk ssk-icon ssk-facebook"></a>
@@ -45,14 +66,14 @@
 			    			</div>
 			    		</div>
 			    	</div>
-			        <a href="#"><i class="far fa-bookmark"></i> Save</a>
-			        <a href="#"><i class="fas fa-plus"></i> Add to My Board</a>
+			        <a href="#"><i class="fal fa-bookmark"></i> Save</a>
+			        <a href="#"><i class="fal fa-plus"></i> Add to My Board</a>
 			    </div>
 			</div>
 
 			<div class="popDetails">
 
-			    <h1>{{ itemconx.item.item_name }}</h1>
+			    <h1 class="detailsDesk">{{ itemconx.item.item_name }}</h1>
 
 		        <div class="itemMeta">
 		    		<div class="itemMetaPic">

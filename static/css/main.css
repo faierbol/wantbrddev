@@ -1373,8 +1373,9 @@ BOARD
     .boardHeader h1 {
         font-size:2.8rem;
         font-weight: lighter;
-        line-height: 1;
+        line-height: 3.2rem;
         margin-bottom:15px;
+        padding:0 270px;
     }
     .boardHeader span.type {
         font-size:.9rem;
@@ -1445,7 +1446,7 @@ BOARD
             padding:20px;
         }
         #boardItems .featBox.boardPic .itemDesc {
-            padding-bottom:10px;
+            padding-bottom:15px;
             font-size: .8rem;
         }
         .boardPic img {
@@ -1453,29 +1454,48 @@ BOARD
             height: auto;
         }
         a.boardItemName {
-            margin:20px 0;
+            margin:15px 0;
             text-align: center;
             display: block;
             font-weight: lighter;
-            font-size:1.1rem;
-            border-bottom:1px solid #ebebeb;
-            padding-bottom:20px;
+            font-size:1.1rem;            
             text-decoration: none;
             color:#121212;
             line-height: 150%;
         }
         .boardItemStats {
-            font-size:.8rem;
+            font-size:1rem;
             text-align: left;
+            color:#777;
+            border-top:1px solid #ebebeb;
+            padding-top:15px;
         }
+            .boardItemStats a {
+                text-decoration: none;
+                color:#777;
+            }
             .boardItemStats span {
                 display: inline-block;
-                padding:0 10px;
+                padding:0 0 0 10px;
                 line-height: 28px;
             }
             .boardItemStats span:first-child {
                 padding-left:0;
             }
+            .boardItemStats button {
+                font-size: 1rem;
+                color:#777;
+            }
+            .itemTools {
+                float: right;
+            }
+                .itemTools a {
+                    color:#777;
+                    padding-left:10px;
+                } 
+                .itemTools form {
+                    padding-left:10px;
+                }
         .got {
             font-size:.85rem;
             float: right;
@@ -2306,6 +2326,12 @@ ITEM DETAILS
         float: right;
         width:56%;
     }
+        h1.detailsMob {
+            display: none;
+        }
+        .itemMeta.detailsMob {
+            display: none;
+        }
         .itemMeta {
             margin:10px 0 20px;
         }
@@ -2441,6 +2467,7 @@ button.naked {
     position: absolute;
     z-index: 100;
     padding: 15px;
+    font-size: .8rem;
 }
  
     #tooltip:after /* triangle decoration */
@@ -3031,6 +3058,20 @@ footer {
         float: none;
         margin-left:240px;
     }
+    .boardUser, .boardMeta {
+        position: relative;
+        float: left;
+        top:auto;
+        left:auto;
+        right: auto;        
+    }
+    .boardMeta {
+        float: right;
+    }
+    .boardHeader h1 {
+        padding:10px 0 0 0;
+        clear: both;
+    }
 }   
 
 @media screen and (max-width: 920px) {
@@ -3245,6 +3286,31 @@ footer {
     .profileBoardItem {
         margin:0 0 30px 0;
     }
+    .itemDetails {
+        background:#fff;
+    }
+    .itemDetails .container {
+        padding:0;
+    }
+    .itemDetails .panel {
+        padding:0;
+        border:none;
+    }
+    .popDetails {
+        padding:0 20px;
+    }
+    .popDetails .itemMeta, .popDetails h1.detailsDesk {
+        display: none;
+    }
+    .itemMeta.detailsMob {
+        display: block;
+        padding:0 20px 20px 20px;
+        margin-top:0;
+    }
+    h1.detailsMob {
+        display: block;
+        padding:0 20px;
+    }
 }
 
 @media screen and (max-width: 550px) {
@@ -3268,6 +3334,10 @@ footer {
         padding:40px 20px 40px 20px;
         margin-bottom:40px;
         border-bottom:1px solid #ebebeb;
+    }
+    .boardItemStats {
+        border-top:none;
+        padding-top:0;
     }
     a.boardItemName {
         font-size: 1.5rem;

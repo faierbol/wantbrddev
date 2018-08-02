@@ -150,23 +150,23 @@
         <div class="cd-panel__container account_slide">
             <div class="cd-panel__content">
                 <ul>
-                    <li><a href="{% url 'u:home' %}"><i class="far fa-user"></i> <span>Profile</span></a></li>
-                    <li><a href="{% url 'b:edit_board' request.user.profile.get_saved_board %}"><i class="far fa-bookmark"></i> Saved Items</a></li>
+                    <li><a href="{% url 'u:home' %}"><i class="fal fa-user"></i> <span>Profile</span></a></li>
+                    <li><a href="{% url 'b:edit_board' request.user.profile.get_saved_board %}"><i class="fal fa-bookmark"></i> Saved Items</a></li>
                     {% if unread_followers or unread_likes %}
                     <li><a href="{% url 'my_notifications' %}" rel="tooltip" title="
                         {% if unread_likes %}
                         <i class='fas fa-heart likeon'></i> {{ unread_likes }} 
                         {% endif %}
                         {% if unread_followers %}
-                        <i class='fas fa-user'></i> {{ unread_followers }}
+                        <i class='fal fa-user'></i> {{ unread_followers }}
                         {% endif %}
-                    "><i class="far fa-flag"></i> Notifications <i class="fas fa-exclamation"></i></a></li>
+                    "><i class="fal fa-flag"></i> Notifications <i class="fas fa-exclamation"></i></a></li>
                     {% else %}
                     <li><a href="{% url 'my_notifications' %}"><i class="far fa-flag"></i> Notifications</a></li>
                     {% endif %}
-                    <li><a href="{% url 'update_profile' %}"><i class="fas fa-pencil-alt"></i> Edit Profile</a></li>
-                    <li><a href="{% url 'privacy_settings' %}"><i class="far fa-check-square"></i> Settings &amp; Privacy</a></li>
-                    <li><a href="{% url 'logout' %}"><i class="far fa-times-circle"></i> Logout</a></li>
+                    <li><a href="{% url 'update_profile' %}"><i class="fal fa-pen"></i> Edit Profile</a></li>
+                    <li><a href="{% url 'privacy_settings' %}"><i class="fal fa-cog"></i> Settings &amp; Privacy</a></li>
+                    <li><a href="{% url 'logout' %}"><i class="fal fa-sign-out-alt"></i> Logout</a></li>
                 </ul>            
             </div>
         </div>
