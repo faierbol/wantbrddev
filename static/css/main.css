@@ -3077,6 +3077,8 @@ footer {
         display: block;
         height: 200px;
         clear: both;
+        background-size: cover;
+        background-position: center;
     }
     .boardHeader {
         margin-top:0;
@@ -3250,6 +3252,9 @@ footer {
         float: none;
         width: 100%;
     }
+    .trendingItems > a, .trendingItems > a.additembtn {
+        height: 120px;
+    }
 }
 
 @media screen and (max-width: 534px) {
@@ -3359,6 +3364,9 @@ footer {
     }
     a.loginregister:hover i {
         color:#333;
+    }
+    .trendingItems > a, .trendingItems > a.additembtn {
+        height: 80px;
     }
 }
 
