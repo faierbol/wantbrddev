@@ -316,7 +316,7 @@ header#main {
             display: none;
         }
         .headerRight i {
-            color:#F97D1F;
+            color:#8680B2;
         }
         .influencerLink {
             color:#121212;
@@ -573,7 +573,7 @@ HOME
         text-transform: uppercase;
     }
         .trendingFooter span {
-            padding:0 5px;
+            padding:0 8px 0 0;
         }
         .trendingFooter a {
             text-decoration: none;
@@ -3012,12 +3012,95 @@ footer {
    MEDIA QUERIES
    ========================================================================== */
 @media screen and (max-width: 1100px) {
-   .accountUpdate .panel {
+    .accountUpdate .panel {
        padding:40px 30px;
-   }
-   .profileRight, .profileLeft {
+    }
+    .profileRight, .profileLeft {
         width:48.5%; 
-   }
+    }
+    .feedLeft, .discoveryFeed, .feedRight {
+        width: 100%;
+        float: none;
+        margin:0;
+    }
+    .discoveryFeed {
+        clear: both;
+    }
+    .discoveryWrap {
+        height: 280px;
+    }
+    #discoveryCont.container {
+        margin-top:-160px;
+    }
+    .feedLeft .profileImage {
+        margin: auto;
+    }
+    .discoveryUserInfo {
+        text-align: left;
+        float: left;  
+        margin:-40px 0 30px 0;
+    }
+    .discoveryUsername {
+        margin-top:0;
+    }
+    .recentActivity {
+        background:none;
+        border:none;
+        text-align: right;
+        margin:-40px 0 30px 0;
+        float:right;
+    }
+    .recentActivity h6 {
+        font-size: 2rem;
+    }
+    .recentActivity a {
+        border:none;
+        display: inline-block;
+        padding:0 5px;
+    }
+    .discoveryStats p {
+        display: inline-block;
+        padding-right:10px;
+    }
+    .discoveryFeed {
+        background:none;
+        -webkit-box-shadow: none;
+        -moz-box-shadow: none;
+        box-shadow: none; 
+    }
+    .discoveryFeedContent {
+        margin-top:30px;
+    }
+    .discoveryItem {
+        width: 31%;
+        float: left;
+        margin-right: 3.5%;
+        margin-bottom:30px;
+        padding:20px;
+        border-radius:3px;
+        background:#fff;
+        border:1px solid #ebebeb;
+    }
+    .discoveryItem:nth-child(3n){
+        margin-right: 0;
+    }
+    .discoveryItem:nth-child(3n+1){
+        clear: both;
+    }
+    .discoveryItem > a, .discoveryMeta {
+        float: none;        
+        margin:0;
+        width: 100%;
+    }
+    .discoveryMeta .trendingItemName, .discoveryMeta .trendingFooter, .discoveryMeta .trendingItemMeta {
+        padding:0;
+    }
+    .discoveryMeta .trendingFooter {
+        padding-top:20px;
+    }
+    .discoveryMeta {
+        margin-top:15px;
+    }
 }
 
 @media screen and (max-width: 1000px) {
@@ -3053,6 +3136,9 @@ footer {
         width: 200px; 
         position: absolute;
         float: none;       
+    }
+    .feedLeft .profileImage {
+        position: relative;
     }
     .profileDetails {
         float: none;
@@ -3250,14 +3336,57 @@ footer {
         float: none;
         display: inline-block;
     }
+    #discoveryCont.container {
+        margin-top:-30px;
+    }
+    .feedLeft .profileImage {
+        float: left;
+        margin:-8px 20px 0 0;
+    }
     .profileImageDetails {
         margin-bottom:10px;
+    }
+    .feedLeft .profileImage {
+        max-width: 150px;
     }
     .profileBar .container {
         padding:0;
     }
     .profileBoardHero {
         height: 130px;
+    }
+    .discoveryWrap {
+        height: 240px;
+    }
+    .discoveryUserInfo {
+        float: left;
+        margin:50px 0 0 0;
+    }
+    .recentActivity {
+        display: none;
+    }
+    .feedLeft {
+        margin-bottom:30px;
+    }
+    .feedLeft:after {
+        content:"";
+        display: table;
+        clear: both;
+    }
+    .discoveryItem {
+        width: 48.25%;
+    }
+    .discoveryItem:nth-child(3n){
+        margin-right: 3.5%;
+    }
+    .discoveryItem:nth-child(3n+1){
+        clear: none;
+    }
+    .discoveryItem:nth-child(2n){
+        margin-right: 0;
+    }
+    .discoveryItem:nth-child(2n+1){
+        clear: both;
     }
 }
 
@@ -3360,6 +3489,17 @@ footer {
         border:none;
         padding-top:40px;
     }
+    .feedLeft .profileImage {
+        max-width: 100px;
+        margin-top:-45px;
+        float: none;
+    }
+    .discoveryUserInfo {
+        margin-top:40px;
+    }
+    .discoveryStats {
+        margin-top:10px;
+    }
 }
 
 @media screen and (max-width: 500px) {
@@ -3398,6 +3538,15 @@ footer {
         display: block;
         width: 200px;
         margin: 0 auto 20px;
+    }
+    .discoveryItem {
+        width: 100%;
+    }
+    .discoveryItem:nth-child(3n){
+        margin-right: 0;
+    }
+    .discoveryItem:nth-child(2n){
+        margin-right: 0;
     }
 }
 

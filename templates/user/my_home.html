@@ -23,6 +23,7 @@
     <div id="discoveryCont" class="container clearfix">
         
         <div class="feedLeft">
+
             <div class="profileImage">
                 <a class="profileImage" href="{% url 'u:home' %}">
                     {% if profile.picture %}
@@ -32,13 +33,16 @@
                     {% endif %}
                 </a>                
             </div>
-            <div class="discoveryUsername">@{{ user.username }}</div>
-            <div class="discoveryName">{{ user.get_full_name }}</div>
-            <div class="discoveryStats">
-                <p><strong>{{ no_followers }}</strong> FOLLOWERS</p>
-                <p><strong>{{ no_connections }}</strong> FOLLOWING</p>
-                <p><strong>{{ boards.count }}</strong> {% if boards.count > 1 %}BOARDS{% else %}BOARD{% endif %}</p>
-                <p><strong>{{ no_items }}</strong> ITEMS</p>
+
+            <div class="discoveryUserInfo">
+                <div class="discoveryUsername">@{{ user.username }}</div>
+                <div class="discoveryName">{{ user.get_full_name }}</div>
+                <div class="discoveryStats">
+                    <p><strong>{{ no_followers }}</strong> FOLLOWERS</p>
+                    <p><strong>{{ no_connections }}</strong> FOLLOWING</p>
+                    <p><strong>{{ boards.count }}</strong> {% if boards.count > 1 %}BOARDS{% else %}BOARD{% endif %}</p>
+                    <p><strong>{{ no_items }}</strong> ITEMS</p>
+                </div>
             </div>
 
             <div class="recentActivity">
@@ -54,13 +58,13 @@
             
             <h3>Recent Activity</h3>
 
-            <div class="discoveryFeedContent">
+            <div class="discoveryFeedContent clearfix">
 
                 {% if itemconxs %}
 
                 	{% for item in itemconxs|dictsortreversed:"created" %}
                     
-    	                <div class="discoveryItem clearfix">
+    	                <div class="discoveryItem clearfix match">
     	                    <a href="{% url 'b:view_item' item.board.user item.board.slug item.id %}" class="discoveryImage">
     	                    	{% thumbnail item.image "300x300" as im %}
     	                    	    <img src="{{ im.url }}">
@@ -118,6 +122,7 @@
                                     {% endif %}
     	                            <span><i class="fas fa-eye"></i> {{ item.views }}</span>    
 
+                                    {% if comment_list %}
                                     <div class="myHomeComments">
 
                                         {% get_comment_list for item as comment_list %}
@@ -129,6 +134,7 @@
                                         {% endfor %}
 
                                     </div>
+                                    {% endif %}
 
                                     {% if comment_list %}
                                         <a href="{% url 'b:view_item' item.board.user item.board.slug item.id %}" class="viewComments">View comments</a>
