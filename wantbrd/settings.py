@@ -139,6 +139,8 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+AUTHENTICATION_BACKENDS = ('wantbrd.backends.CaseInsensitiveModelBackend', )
+
 
 # Internationalization
 # https://docs.djangoproject.com/en/2.0/topics/i18n/
@@ -163,7 +165,7 @@ USE_TZ = True
 STATICFILES_DIRS = [STATIC_DIR, ]
 
 # url definition for static files
-# STATIC_URL = '/static/' # <------- enable for local static
+#STATIC_URL = '/static/' # <------- enable for local static
 STATIC_ROOT = os.path.normpath(os.path.join(BASE_DIR, 'staticfiles'))
 
 

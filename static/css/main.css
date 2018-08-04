@@ -469,8 +469,9 @@ HOME
     .tabNav a {
         text-decoration: none;
         color:#777;
-        padding:0 15px;
-        font-size: 1.2rem
+        margin:0 15px;
+        padding-bottom:5px;
+        font-size: 1rem;
     }
     .tabNav a:hover {
         color:#000;
@@ -583,6 +584,13 @@ HOME
     .trendingItemItem {
         padding:20px 40px 0 40px;
     }
+        .trendingItemItem a {
+            display: block;
+            text-align: center;
+        }
+        .trendingItemItem a img {
+            max-width: 100%;
+        }
     .trendingItemName {
         text-align: center;
         padding:20px 20px 0 20px;
@@ -1761,7 +1769,7 @@ BOARD
         margin-bottom:10px;
     }
     .imageSlider {
-        padding:0 30px;
+        padding:0 15px;
         margin-top:10px;
     }
     .imageSlider .itemRight, .imageSlider .itemLeft {
@@ -1778,6 +1786,7 @@ BOARD
     }
     .imageSlider .slick-slide img {
         margin: auto;
+        max-width: 100%;
     }
     .imageSlider .itemLeft {
         position: absolute;
@@ -2133,14 +2142,19 @@ BOARD
     padding:40px 0;
     text-align: center;
     width: 100%;
-    background:#ebebeb;
-    color:#666;
+    /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#8680b2+0,7db9e8+100 */
+    background: rgb(134,128,178); /* Old browsers */
+    background: -moz-linear-gradient(left, rgba(134,128,178,1) 0%, rgba(125,185,232,1) 100%); /* FF3.6-15 */
+    background: -webkit-linear-gradient(left, rgba(134,128,178,1) 0%,rgba(125,185,232,1) 100%); /* Chrome10-25,Safari5.1-6 */
+    background: linear-gradient(to right, rgba(134,128,178,1) 0%,rgba(125,185,232,1) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#8680b2', endColorstr='#7db9e8',GradientType=1 ); /* IE6-9 */
+    color:#fff;
     font-size:2rem;
     font-weight: 300;
 }
     .searchResults .tabNav {
         margin:30px 0;
-    }
+    }    
     .searchResults .trendingBoardHero {
         margin-top:0;
     }
@@ -3101,6 +3115,9 @@ footer {
     .discoveryMeta {
         margin-top:15px;
     }
+    .addItem {
+        width: 100%;
+    }
 }
 
 @media screen and (max-width: 1000px) {
@@ -3390,12 +3407,34 @@ footer {
     }
 }
 
+@media screen and (max-width: 660px) {
+    .searchResults .tabNav a {
+        display: inline-block;        
+    }
+    .searchResults .tabNav span {
+        display: block;
+        font-weight: bold;
+        text-transform: uppercase;
+        color:#222;
+        font-size: .8rem;
+    }
+}
+
 @media screen and (max-width: 620px) {
     .trendingItems > a, .trendingItems > a.additembtn {
         height: 60px;
     }
     .trendingItems > a.additembtn {
         font-size: 2rem;
+    }
+}
+
+@media screen and (max-width: 580px) {
+    #discoveryCont.addNewItem.container {
+        padding:0;
+    }
+    .addItemContent {
+        padding:20px;
     }
 }
 
@@ -3547,6 +3586,9 @@ footer {
     }
     .discoveryItem:nth-child(2n){
         margin-right: 0;
+    }
+    .searchResults .tabNav a {
+        margin:0 10px;
     }
 }
 

@@ -25,25 +25,32 @@
 	    <div class="container clearfix">
 	        
 	        <div class="tabNav">
+	        	<a href="{% url 'search' %}?kw={{search_term}}">
+	        		{% if all_results == 1 %}
+	        			{{ all_results }} <span>result</span>
+	        		{% else %}
+	        			{{ all_results }} <span>results</span>
+	        		{% endif %}
+	        	</a>
 	            <a href="{% url 'search_item' %}?kw={{search_term}}" class="tabOn">
 	            	{% if item_results|length == 1 %}
-	            		{{ item_results|length }} Item
+	            		{{ item_results|length }} <span>item</span>
 	            	{% else %}
-	            		{{ item_results|length }} Items
+	            		{{ item_results|length }} <span>items</span>
 	            	{% endif %}
 	            </a>
 	            <a href="{% url 'search_board' %}?kw={{search_term}}">
 	            	{% if board_count == 1 %}
-	            		{{ board_count }} Board
+	            		{{ board_count }} <span>board</span>
 	            	{% else %}
-	            		{{ board_count }} Boards
+	            		{{ board_count }} <span>boards</span>
 	            	{% endif %}
 	            </a>                
 	            <a href="{% url 'search_user' %}?kw={{search_term}}">
 	            	{% if user_count == 1 %}
-	            		{{ user_count }} User
+	            		{{ user_count }} <span>user</span>
 	            	{% else %}
-	            		{{ user_count }} Users
+	            		{{ user_count }} <span>users</span>
 	            	{% endif %}
 	            </a>
 	        </div>

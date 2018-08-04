@@ -9,6 +9,13 @@ class SignUpForm(UserCreationForm):
 		model = User
 		fields = ('username', 'email', 'first_name', 'last_name', 'password1', 'password2')
 
+	def clean(self):
+		cleaned_data = super(SignUpForm, self).clean()
+		username = cleaned_data.get('username')
+		if username and User.objects.filter(username__iexact=username).exists():
+		    self.add_error('username', 'A user with that username already exists.')
+		return cleaned_data
+
 
 class UserForm(forms.ModelForm):
 	class Meta:

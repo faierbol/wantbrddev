@@ -25,38 +25,38 @@
 	    <div class="container clearfix">
 
 	        <div class="tabNav">
-				<a href="{% url 'search_item' %}?kw={{search_term}}" class="tabOn">
+				<a href="{% url 'search' %}?kw={{search_term}}" class="tabOn">
 					{% if all_results|length == 1 %}
-						{{ all_results|length }} Result
+						{{ all_results|length }} <span>result</span>
 					{% else %}
-						{{ all_results|length }} Results
+						{{ all_results|length }} <span>results</span>
 					{% endif %}
 				</a>
 	            <a href="{% url 'search_item' %}?kw={{search_term}}">
 	            	{% if item_count == 1 %}
-	            		{{ item_count }} Item
+	            		{{ item_count }} <span>item</span>
 	            	{% else %}
-	            		{{ item_count }} Items
+	            		{{ item_count }} <span>items</span>
 	            	{% endif %}
 	            </a>
 	            <a href="{% url 'search_board' %}?kw={{search_term}}">
 	            	{% if board_count == 1 %}
-	            		{{ board_count }} Board
+	            		{{ board_count }} <span>board</span>
 	            	{% else %}
-	            		{{ board_count }} Boards
+	            		{{ board_count }} <span>boards</span>
 	            	{% endif %}
 	            </a>                
 	            <a href="{% url 'search_user' %}?kw={{search_term}}">
 	            	{% if user_count == 1 %}
-	            		{{ user_count }} User
+	            		{{ user_count }} <span>user</span>
 	            	{% else %}
-	            		{{ user_count }} Users
+	            		{{ user_count }} <span>users</span>
 	            	{% endif %}
 	            </a>
 	        </div>
 
 
-	        <div id="searchItem">	        	
+	        <div id="searchItems">	        	
 	        
 	            {% if all_results %}
 
@@ -247,10 +247,9 @@
         columns: 1,
         margin: 24,
         breakAt: {
-            1200: 3,
-            940: 2,
+            860: 3,
             520: 2,
-            400: 2
+            320: 1
         }
     });
 </script>

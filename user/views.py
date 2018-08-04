@@ -71,6 +71,9 @@ def home(request):
 		elif 'deleteboard' in request.POST:
 			board = get_object_or_404(Board, pk=request.POST.get("board_id",""))
 			board.delete()
+			notifications = Notification.objects.filter(board_ref=request.POST.get("board_id",""))
+			for n in notifications:
+				n.delete()
 			return redirect('u:home')
 
 	context_dict = {

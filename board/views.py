@@ -232,7 +232,12 @@ def edit_board(request, board_id):
 					# is there less than one? If so, delete the item as well as we dont need it.
 					if items.count() < 1:
 						item.delete()	
-						messages.info(request, 'The item was deleted.')			
+						messages.info(request, 'The item was deleted.')
+
+					notifications = Notification.objects.filter(item_ref=request.POST.get("item_id",""))
+					for n in notifications:
+						n.delete()
+
 					return HttpResponseRedirect(request.path_info)
 				# if the current user is not the owner
 				else:
@@ -944,11 +949,14 @@ def search_item(request):
 	# users
 	user_count = User.objects.filter(username__icontains=search_term).count()
 
+	all_results = board_count + user_count + len(item_results)
+
 	context_dict = {
 		'search_term':search_term,
 		'item_results':item_results,
 		'user_count':user_count,
 		'board_count':board_count,
+		'all_results':all_results,
 	}
 
 	return render(request, template, context_dict)
@@ -990,11 +998,14 @@ def search_board(request):
 	# users
 	user_count = User.objects.filter(username__icontains=search_term).count()
 
+	all_results = item_count + user_count + len(board_results)
+
 	context_dict = {
 		'search_term':search_term,
 		'item_count':item_count,
 		'user_count':user_count,
 		'board_results':board_results,
+		'all_results':all_results,
 	}
 
 	return render(request, template, context_dict)
@@ -1064,11 +1075,14 @@ def search_user(request):
 				x+=1				
 			user.viewscount = boardviews + itemviews
 
+	all_results = item_count + board_count + len(user_results)
+
 	context_dict = {
 		'search_term':search_term,
 		'item_count':item_count,
 		'user_results':user_results,
 		'board_count':board_count,
+		'all_results':all_results,
 	}
 
 	return render(request, template, context_dict)

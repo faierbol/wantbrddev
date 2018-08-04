@@ -164,7 +164,6 @@ def get_notifications(request):
 		else:
 			old_notifications.append(n)
 
-
 	return new_notifications, old_notifications
 
 # Decode B64
