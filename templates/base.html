@@ -14,7 +14,7 @@
 	<link rel="apple-touch-icon" href="icon.png">
 
 	<link href="{% static 'css/normalize.css' %}" rel="stylesheet">	
-	<!-- <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.9/css/all.css" crossorigin="anonymous"> -->
+	<!-- <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css"> -->
     <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.2.0/css/all.css"
     integrity="sha384-TXfwrfuHVznxCssTxWoPZjhcss/hp38gEOH8UPZG/JcXonvBQ6SlsIF49wUzsGno" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.css" />
@@ -51,17 +51,17 @@
                         required
                         title="Please enter at least 3 characters"
                     >
-                    <i class="fas fa-search"></i>
+                    <i class="fal fa-search"></i>
                 </form>                
             </div>
             <a href="#" class="hlLink">Top Creators</a>
             <a href="#" class="hlLink">Groups</a>
         </div>
         <div class="headerRight">
-            <a href="#" class="mobSearch"><i class="fas fa-search"></i></a>
+            <a href="#" class="mobSearch"><i class="fal fa-search"></i></a>
             <a href="#" class="influencerLink">Influencer?</a>
             {% if request.user.is_authenticated %}
-                <a href="{% url 'my_home' %}" class="btn orange myhome"><span>My Home</span><i class="fas fa-home"></i></a>
+                <a href="{% url 'my_home' %}" class="btn orange myhome"><span>My Home</span><i class="fal fa-home"></i></a>
                 <a href="#0" class="headerPpic js-cd-panel-trigger" data-panel="menu">
                     {% if user.profile.picture %}
                         <div class="circle" style="background-image:url('{{ user.profile.picture.url }}');"></div>

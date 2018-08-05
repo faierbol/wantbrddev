@@ -27,7 +27,7 @@ class ItemForm(forms.ModelForm):
 		widgets = {
 	        'item_desc': Textarea(),
 	        'rating':forms.HiddenInput(),
-	        'active' : forms.CheckboxInput(attrs={'id': 'itemactive', 'hidden':'hidden'})        
+	        'active' : forms.CheckboxInput(attrs={'id': 'itemactive', 'hidden':'hidden'})
 	    }
 
 

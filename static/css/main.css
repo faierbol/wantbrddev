@@ -1,4 +1,5 @@
 @import url('https://fonts.googleapis.com/css?family=Open+Sans:400,600,700,800|Questrial');
+@import url("https://pro.fontawesome.com/releases/v5.2.0/css/all.css");
 
 /*! HTML5 Boilerplate v6.0.1 | MIT License | https://html5boilerplate.com/ */
 
@@ -773,7 +774,7 @@ PROFILE
         width:100%;
     }
     .profileBar {
-        background:rgba(0,0,0,0.5);
+        background:rgba(0,0,0,0.3);
         padding:20px;
         color:#fff;
         width:100%;
@@ -826,6 +827,14 @@ PROFILE
                 font-weight: lighter;
                 margin:0 0 20px 0;
                 line-height: 1;
+                overflow-wrap: break-word;
+                word-wrap: break-word;
+                -ms-word-break: break-all;
+                word-break: break-word;        
+                -ms-hyphens: auto;
+                -moz-hyphens: auto;
+                -webkit-hyphens: auto;
+                hyphens: auto;
             }
             .profileStats {
                 font-size:.9rem;
@@ -870,6 +879,16 @@ PROFILE
             vertical-align: middle;
             font-size:1rem;
         }
+        .theBio {
+            overflow-wrap: break-word;
+            word-wrap: break-word;
+            -ms-word-break: break-all;
+            word-break: break-word;        
+            -ms-hyphens: auto;
+            -moz-hyphens: auto;
+            -webkit-hyphens: auto;
+            hyphens: auto;
+        }
         .theBio p {
             display: inline-block;
         }
@@ -904,7 +923,7 @@ PROFILE
         }
         .pSocial a {
             display: inline-block;
-            padding:10px 0 0 0;
+            padding:10px 5px 0 0;
         }
         .pSocial i {
             margin:0 5px 0 0;
@@ -939,13 +958,21 @@ PROFILE
         }
         .profileBoardName {
             float: left;
-            padding:10px 0 0 20px;
+            padding:10px 20px 0 20px;
             font-size:1.5rem;
             font-weight: bold;
         }
             .profileBoardName a {
                 text-decoration: none;
                 color:#121212;
+                overflow-wrap: break-word;
+                word-wrap: break-word;
+                -ms-word-break: break-all;
+                word-break: break-word;        
+                -ms-hyphens: auto;
+                -moz-hyphens: auto;
+                -webkit-hyphens: auto;
+                hyphens: auto;
             }
         .profileBoardHero {
             height: 175px;
@@ -1384,6 +1411,14 @@ BOARD
         line-height: 3.2rem;
         margin-bottom:15px;
         padding:0 270px;
+        overflow-wrap: break-word;
+        word-wrap: break-word;
+        -ms-word-break: break-all;
+        word-break: break-word;        
+        -ms-hyphens: auto;
+        -moz-hyphens: auto;
+        -webkit-hyphens: auto;
+        hyphens: auto;
     }
     .boardHeader span.type {
         font-size:.9rem;
@@ -1394,14 +1429,32 @@ BOARD
     }
     .boardHeader .tags {
         font-size:.8rem;
-        width: 100%;
-        padding:0 150px 0 150px;
+        padding:0;
+        display: inline-block;
     }
     .boardUser {
         position: absolute;
         left:30px;
         top:30px;
         text-align: left;
+        max-width: 240px;
+    }
+    .boardUser .trendingUserPic {
+        position: absolute;
+        left:0;
+    }
+    .boardUser .trendingUserNames {
+        /* These are technically the same, but use both */
+        overflow-wrap: break-word;
+        word-wrap: break-word;
+        -ms-word-break: break-all;
+        word-break: break-word;        
+        -ms-hyphens: auto;
+        -moz-hyphens: auto;
+        -webkit-hyphens: auto;
+        hyphens: auto;
+        float: left;
+        padding-left:55px;
     }
     .boardUser a:hover {
         color:#000;
@@ -1423,7 +1476,7 @@ BOARD
         background:#1A2315;
         padding:30px;
         color:#fff;
-        text-align: center;
+        text-align: center;                
     }    
     #boardItems {
         margin-top:40px;
@@ -1447,6 +1500,13 @@ BOARD
             font-size: 7rem;
             display: block;
             margin-top:20px;
+            -webkit-transition: all .3s;
+            -moz-transition: all .3s;
+            -o-transition: all .3s;
+            transition: all .3s;
+        }
+        .featBox.add:hover i {
+            transform: rotate(360deg);
         }
         #boardItems .featBox.boardPic {
             position: relative;
@@ -1454,7 +1514,7 @@ BOARD
             padding:20px;
         }
         #boardItems .featBox.boardPic .itemDesc {
-            padding-bottom:15px;
+            padding-top:10px;
             font-size: .8rem;
         }
         .boardPic img {
@@ -1462,7 +1522,7 @@ BOARD
             height: auto;
         }
         a.boardItemName {
-            margin:15px 0;
+            margin:15px 0 0 0;
             text-align: center;
             display: block;
             font-weight: lighter;
@@ -1470,6 +1530,14 @@ BOARD
             text-decoration: none;
             color:#121212;
             line-height: 150%;
+            overflow-wrap: break-word;
+            word-wrap: break-word;
+            -ms-word-break: break-all;
+            word-break: break-word;
+            -ms-hyphens: auto;
+            -moz-hyphens: auto;
+            -webkit-hyphens: auto;
+            hyphens: auto;
         }
         .boardItemStats {
             font-size:1rem;
@@ -1477,6 +1545,7 @@ BOARD
             color:#777;
             border-top:1px solid #ebebeb;
             padding-top:15px;
+            margin-top:15px;
         }
             .boardItemStats a {
                 text-decoration: none;
@@ -1499,25 +1568,25 @@ BOARD
             }
                 .itemTools a {
                     color:#777;
-                    padding-left:10px;
+                    padding:10px 0 0 10px;
+                    line-height: 28px;
                 } 
                 .itemTools form {
                     padding-left:10px;
                 }
         .got {
             font-size:.85rem;
-            float: right;
             color:#121212;
-            padding:0 8px;
-            line-height: 28px;
+            padding:5px 0 0 0;
+            line-height:1;
+            text-align: center;
         }
             .got span {
                 padding:0;
             }
             .got i {
                 padding-left:5px;
-                font-size: 1.5rem;
-                line-height: 28px;
+                font-size: .8rem;
             }
         .boardPic .featBoxMeta {
             position: absolute;
@@ -1552,6 +1621,7 @@ BOARD
             display: inline-block;
             font-size: 2rem;
             color:#999;
+            padding-left: 5px;
         }
         .boardConfig a:hover {
             color:#F97D1F;
@@ -1592,17 +1662,28 @@ BOARD
         color:#000;
     }
     a#showEditTags, a#hideEditTags {
-        padding-left:5px;
         text-decoration: none;
     }
     #editDesc {
         display: inline-block;
+        width: 100%;
+        padding-right: 50px;
+        position: relative;
     }
-    #editDesc button.altbtn {
+    #editDesc button.altbtn, a#hideEditDesc {
         color:#ccc;
+        position: absolute;
+        right: 0;
+        top:10px;
+        line-height: 22px;
+    }
+    a#hideEditDesc {
+        right: 20px;
     }
     #editTags {
         display: inline-block;
+        width: 100%;
+        position: relative;
     }
     #editTags .helptext, #editTags label, #editTags br {
         display: none;
@@ -1619,14 +1700,17 @@ BOARD
         padding:10px 0;
         border:none;
         background:none;
-        border-bottom:1px solid #888;
-        color:#999;
-        width:500px;
+        border-bottom:1px solid #ccc;
+        color:#fff;
+        width:100%;
+    }
+    #editDesc input {
+        border-bottom:1px solid #555;
     }
     #editTags input {
         text-align: left;
-        width: 150px;
         color:#333;
+        padding-right: 50px;
     }
     #editTags input#id_tags {
         text-transform: lowercase;
@@ -1634,16 +1718,36 @@ BOARD
     #editTags button, #editDesc button {
         padding-left:5px;
     }
+    #editTags button, a#hideEditTags {
+        position: absolute;
+        right: 0;
+        top:8px;
+        line-height: 22px;
+    }
+    a#hideEditTags {
+        right: 20px;
+    }
 
 
 .addItem {
-    width: 60%;
+    width: 75%;
     margin: auto;
     background:#fff;
     -webkit-box-shadow: 0px 5px 73px -11px rgba(0,0,0,0.2);
     -moz-box-shadow: 0px 5px 73px -11px rgba(0,0,0,0.2);
     box-shadow: 0px 5px 73px -11px rgba(0,0,0,0.2);
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    -ms-word-break: break-all;
+    word-break: break-word;
+    -ms-hyphens: auto;
+    -moz-hyphens: auto;
+    -webkit-hyphens: auto;
+    hyphens: auto;
 }
+    #addeditright button {
+        margin-top:20px;
+    }
     #addeditright {
         float: right;
         width: 48%;
@@ -1743,17 +1847,115 @@ BOARD
         margin-top:20px;
     }
     .addItemFields .rate, .rateitem .rate {
-        font-size: 2rem;
+        font-size: 1.2rem;
         display: inline-block;
         padding-right:5px;
         color:#999
     }
-    .addItemFields .rate:hover, .rateitem .rate:hover, .addItemFields .rate.on:hover, .rateitem .rate.on:hover {
-        color:#222;
-    }
     .addItemFields .rate.on, .rateitem .rate.on  {
         color:#F97D1F;
     }
+
+    /**** rating ****/
+    .star-ratings h1 {
+        font-size: 1.5em;
+        line-height: 2;
+        margin-top: 3em;
+        color: #757575;
+    }
+    .star-ratings p {
+        margin-bottom: 3em;
+        line-height: 1.2;
+    }
+    .star-ratings h1,
+    .star-ratings p {
+        text-align: center;
+    }
+    .star-ratings .stars {
+        width: 120px;
+        text-align: center;
+        margin: auto;
+        padding: 0 95px;
+    }
+    .star-ratings .stars .title {
+        font-size: 14px;
+        color: #cccccc;
+        line-height: 3;
+    }
+    .star-ratings .stars select {
+        width: 120px;
+        font-size: 16px;
+    }
+    .stars-example-fontawesome .select2 {
+        display: none;
+    }
+    .star-ratings .stars-example-fontawesome,
+    .star-ratings .stars-example-css,
+    .star-ratings .stars-example-bootstrap {
+        float: left;
+    }
+    .star-ratings .stars-example-fontawesome-o {
+        width: 200px;
+    }
+    .star-ratings .stars-example-fontawesome-o select {
+        width: 200px;
+    }
+    .start-ratings-main {
+        margin-bottom: 3em;
+    }
+    .br-theme-fontawesome-stars .br-widget {
+      height: 28px;
+      white-space: nowrap;
+    }
+    .br-theme-fontawesome-stars .br-widget a {
+      font: normal normal normal 20px/1 'Font Awesome 5 Pro';
+      font-weight: 500;
+      text-rendering: auto;
+      -webkit-font-smoothing: antialiased;
+      text-decoration: none;
+      color: #edb867;
+      margin-right: 2px;
+    }
+    .br-theme-fontawesome-stars .br-widget a:after {
+      font-family: "Font Awesome 5 Pro";
+      font-weight: 500;
+      content: '\f005';
+      color: #d2d2d2;
+    }
+    .br-theme-fontawesome-stars .br-widget a.br-active:after {
+      font-family: 'Font Awesome 5 Pro';
+      font-weight: 900;
+      content: '\f005';
+      color: #edb867;
+    }
+    .br-theme-fontawesome-stars .br-widget a.br-selected:after {
+      font-family: 'Font Awesome 5 Pro';
+      font-weight: 900;
+      content: '\f005';
+      color: #edb867;
+    }
+    .br-theme-fontawesome-stars .br-widget .br-current-rating {
+      display: none;
+    }
+    .br-theme-fontawesome-stars .br-readonly a {
+      cursor: default;
+    }
+    @media print {
+      .br-theme-fontawesome-stars .br-widget a:after {
+        font-family: 'Font Awesome 5 Pro';
+        font-weight: 500;
+        content: '\f005';
+        color: black;
+      }
+      .br-theme-fontawesome-stars .br-widget a.br-active:after,
+      .br-theme-fontawesome-stars .br-widget a.br-selected:after {
+        font-family: 'Font Awesome 5 Pro';
+        font-weight: 900;
+        content: '\f005';
+        color: black;
+      }
+    }
+
     #addItemForm {
         text-align: center;
     }
@@ -1858,6 +2060,9 @@ BOARD
     }
     .foundItem:nth-child(3n) {
         margin-right:0;        
+    }
+    .foundItem:nth-child(3n+1) {
+        clear: both;  
     }
     .foundItem h4 {
         line-height: 1.2;
@@ -2142,7 +2347,6 @@ BOARD
     padding:40px 0;
     text-align: center;
     width: 100%;
-    /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#8680b2+0,7db9e8+100 */
     background: rgb(134,128,178); /* Old browsers */
     background: -moz-linear-gradient(left, rgba(134,128,178,1) 0%, rgba(125,185,232,1) 100%); /* FF3.6-15 */
     background: -webkit-linear-gradient(left, rgba(134,128,178,1) 0%,rgba(125,185,232,1) 100%); /* Chrome10-25,Safari5.1-6 */
@@ -2432,6 +2636,14 @@ ITEM DETAILS
 /* ---------------- 
 MISC
 -----------------*/
+u.tooLong {
+    text-decoration: none;
+    font-size: 1.2rem;
+    letter-spacing: 1px;
+    cursor: pointer;
+    margin-left:5px;
+    font-weight: 400;
+}
 .blocker {
     z-index: 99;
 }
@@ -2480,8 +2692,18 @@ button.naked {
     background: #111;
     position: absolute;
     z-index: 100;
-    padding: 15px;
+    padding: 20px;
     font-size: .8rem;
+    border-radius:4px;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    -ms-word-break: break-all;
+    word-break: break-word;
+    -ms-hyphens: auto;
+    -moz-hyphens: auto;
+    -webkit-hyphens: auto;
+    hyphens: auto;
+    max-width: 225px;
 }
  
     #tooltip:after /* triangle decoration */
@@ -2839,7 +3061,9 @@ footer {
     .twitterLink {
         background:url(../img/logo-twitter.png) left center no-repeat;
         padding-left:55px;
-
+    }
+    p.copy {
+        margin-top:10px;
     }
 
 
@@ -3118,6 +3342,10 @@ footer {
     .addItem {
         width: 100%;
     }
+    .wantResults {
+        width: 100%;
+    }
+
 }
 
 @media screen and (max-width: 1000px) {
@@ -3169,11 +3397,22 @@ footer {
         right: auto;        
     }
     .boardMeta {
-        float: right;
+        position: absolute;
+        right: 20px;
+        top:20px;
     }
     .boardHeader h1 {
         padding:10px 0 0 0;
         clear: both;
+    }
+    .boardUser {
+        position: relative;
+        left:0px;
+        top:0px;
+        margin-top:5px;
+        text-align: left;
+        max-width: 100%;
+        padding-right:70px;
     }
 }   
 
@@ -3208,11 +3447,32 @@ footer {
     }
 }
 
+@media screen and (max-width: 760px) {
+    #addeditleft, #addeditright {
+        width: 100%;
+        float: none;
+    }
+    #addeditleft {
+        max-width: 400px;
+        margin: auto;
+    }
+}
+
 @media screen and (max-width: 740px) {
     header#main {
         -webkit-box-shadow: 0px 0px 54px -10px rgba(0,0,0,0.45);
         -moz-box-shadow: 0px 0px 54px -10px rgba(0,0,0,0.45);
         box-shadow: 0px 0px 54px -10px rgba(0,0,0,0.45);
+    }
+    .boardHeader {
+        text-align: left;
+    }
+    .bTags {
+        padding:10px 20px 20px 20px;
+        text-align:left;
+    }
+    a#showEditTags {
+        position: absolute;
     }
     .boardBg {
         display: none;
@@ -3231,43 +3491,33 @@ footer {
     .boardWrap .container {
         padding:0;
     }
-    .boardUser, .boardMeta {
-        display: block;
-        position: relative;
-        float: left;
-        left:auto;
-        right: auto;
-        top:auto;
-        padding:30px 20px;
-        width: 50%;
-        background:#fff;
-    }
-    .boardMeta {
-        float: right;
-    }
     .boardHeader h1 {
         clear: both;
         margin:0;
-        padding:20px 0 0 20px;
+        padding:20px 20px 0 20px;
         border-top:1px solid #dbdbdb;
         text-align: left;
     }
-    .boardHeader .tags {
-        padding:10px 20px 20px 20px;
-        text-align: left;
+    .boardHeader .tags {                
+        padding-left:40px;
     }
     .boardConfig {
         margin-top:0;
-        padding-top:8px;
+        padding-top:20px;
     }
     .boardConfig a {
         font-size: 1.2rem;
     }
+    .boardUser  {
+        padding:20px 70px 20px 20px;
+    }
     .boardUser .trendingUserPic {
         width: 35px;
+        left: 20px;
     }
     .boardUser .trendingUserNames {
         margin-top:0;
+        padding-left:40px;
     }
     .boardUser .trendingUserNames span {
         font-size: 1.2rem;
@@ -3284,7 +3534,7 @@ footer {
         background:#fff;
         color:#333;
         text-align: left;
-        padding:0 20px 20px 20px;
+        padding:0 20px 20px 20px;        
     }
     .boardVideo {
         padding-bottom:20px;
@@ -3418,6 +3668,22 @@ footer {
         color:#222;
         font-size: .8rem;
     }
+    .foundItem {
+        width: 49%;
+        margin-right: 2%;
+    }
+    .foundItem:nth-child(3n) {
+        margin-right:2%;        
+    }
+    .foundItem:nth-child(3n+1) {
+        clear: none;  
+    }
+    .foundItem:nth-child(2n) {
+        margin-right:0;        
+    }
+    .foundItem:nth-child(2n+1) {
+        clear: both;  
+    }
 }
 
 @media screen and (max-width: 620px) {
@@ -3427,6 +3693,9 @@ footer {
     .trendingItems > a.additembtn {
         font-size: 2rem;
     }
+    .addItem h3 {
+        font-size: 1.25rem;
+    }
 }
 
 @media screen and (max-width: 580px) {
@@ -3435,6 +3704,9 @@ footer {
     }
     .addItemContent {
         padding:20px;
+    }
+    .wantResults {
+        padding:0 20px;
     }
 }
 
@@ -3539,6 +3811,55 @@ footer {
     .discoveryStats {
         margin-top:10px;
     }
+    #boardItems .featBox.add {
+        border:none;
+        padding:60px 30px;
+    }
+    .featBox.add i {
+        margin-top:0;
+    }
+}
+
+@media screen and (max-width: 520px) {
+    .accountUpdate .panel, .myNotifications .panel {
+        border:none;
+        background:none;
+        padding:0 0 40px 0;
+    }
+    .aNotification, .aNotification:last-child {
+        background:#fff;
+        border:1px solid #dbdbdb;
+        border-radius:5px;
+        padding:20px;
+        margin-bottom:15px;
+    }
+
+    .accountUpdate h1 {
+        font-size: 1.3rem;
+        font-weight: 600;
+        margin-bottom:20px;
+    }
+    .privacysettings form {
+        border-bottom:1px solid #dbdbdb;
+        padding-bottom:40px;
+        margin-bottom:40px;
+    }
+    .privacysettings form:last-child {
+        border:none;
+        padding:0;
+        margin:0;
+    }
+    #updateprofileform input[type="text"],
+    #updateprofileform input[type="url"],
+    #updateprofileform input[type="tel"],
+    #updateprofileform input[type="email"],
+    #updateprofileform textarea,
+    #updatesocialform input[type="text"] {
+        background:none;
+    }
+    #updatesocialform p, #updateprofileform p {
+        border-bottom:1px solid #ccc;
+    }
 }
 
 @media screen and (max-width: 500px) {
@@ -3590,6 +3911,7 @@ footer {
     .searchResults .tabNav a {
         margin:0 10px;
     }
+
 }
 
 @media screen and (max-width: 420px) {
@@ -3629,6 +3951,17 @@ footer {
     .trendingItems > a, .trendingItems > a.additembtn {
         height: 80px;
     }
+    .foundItem {
+        width: 100%;
+        margin-right: 0;
+        float: none;
+    }
+    .foundItem:nth-child(3n) {
+        margin-right:0;        
+    }
+    .foundItem:nth-child(2n+1) {
+        clear: none;  
+    }
 }
 
 @media screen and (max-width: 370px) {
@@ -3637,5 +3970,8 @@ footer {
     }
     .myNotifications .panel {
         padding:40px 20px;
+    }
+    .pSocial i {
+        font-size: 1rem;
     }
 }

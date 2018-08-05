@@ -48,8 +48,18 @@
                         {% endif %}
                     </div>
                     <a class="trendingUserNames" href="{% url 'u:profile' board.user.username %}">
-                        <strong>@{{ board.user }}</strong>
-                        <span>{{ board.user.first_name }} {{ board.user.last_name }}</span>
+                        
+                        {% if board.user.username|length > 30 %}
+                            <strong>@{{ board.user.username|slice:":30" }}<u class="tooLong" rel="tooltip" title="{{ board.user.username }}">...</u></strong>
+                        {% else %}
+                            <strong>@{{ board.user.username }}</strong>
+                        {% endif %}
+
+                        {% if board.user.get_full_name|length > 60 %}    
+                            <span>{{ board.user.get_full_name|slice:":60" }}<u class="tooLong" rel="tooltip" title="{{ board.user.get_full_name }}">...</u></span>
+                        {% else %}
+                            <span>{{ board.user.get_full_name }}</span>
+                        {% endif %}
                     </a>
                 </div>
 
@@ -100,8 +110,8 @@
                     {% else %}
                         {% if not board.slug == 'your-saved-items' %}
                             <div class="boardConfig">
-                                <a href="{% url 'b:view_board' board.user.username board.slug %}" title="View board as user" rel="tooltip"><i class="fas fa-user"></i></a>
-                                <a href="#0" class="js-cd-panel-trigger" data-panel="main" title="Board settings" rel="tooltip"><i class="fas fa-cog"></i></a>
+                                <a href="{% url 'b:view_board' board.user.username board.slug %}" title="View board as user" rel="tooltip"><i class="fal fa-user"></i></a>
+                                <a href="#0" class="js-cd-panel-trigger" data-panel="main" title="Board settings" rel="tooltip"><i class="fal fa-cog"></i></a>
                             </div>
                         {% endif %}
                     {% endif %}
@@ -115,35 +125,42 @@
                 {% endif %}
 
 
-                <h1>{{ board.board_name }}</h1>
+                {% if board.board_name|length > 50 %}
+                    <h1>{{ board.board_name|slice:":50" }}<u class="tooLong" rel="tooltip" title="{{ board.board_name }}">...</u></h1>
+                {% else %}
+                    <h1>{{ board.board_name }}</h1>
+                {% endif %}
+
                 {% if board.slug == 'your-saved-items' %}
                 <span class="type">Items you have saved</span>
                 {% endif %}
 
-                {% if not board.slug == 'your-saved-items' %}
-                <div class="tags">    
-                    <div id="theTags">
-                    	{% for tag in board.thetags %}
-                    		<span><a href="{% url 'search_board' %}?kw={{ tag }}">#{{ tag }}</a></span>
-                    	{% endfor %}
-                    </div>
-
+                <div class="bTags clearfix" {% if not editable and not board.thetags %}style="padding:0"{% endif %}>
+                    {% if not board.slug == 'your-saved-items' %}
                     {% if editable %}
                         <div id="editTags" style="display: none;">
                             <form method="POST">
                                 {% csrf_token %}
                                 {{ tagform }}
                                 <button class="altbtn" name="updatetags" value="1"><i class="fas fa-check"></i></button>
+                                <a href="#" id="hideEditTags" style="display: none;"><i class="fas fa-times"></i></a>
                             </form>                
                         </div>
                         
                         <a href="#" id="showEditTags" rel="tooltip" title="Set the board tags">
                             {% if not board.thetags %} Tags {% endif %} &nbsp; <i class="fas fa-pencil-alt"></i>
-                        </a>
-                        <a href="#" id="hideEditTags" style="display: none;"><i class="fas fa-times"></i></a>
+                        </a>                        
                     {% endif %}
+                    <div class="tags" {% if not editable %} style="padding-left:0" {% endif %}>    
+                        <div id="theTags">
+                        	{% for tag in board.thetags %}
+                        		<span><a href="{% url 'search_board' %}?kw={{ tag }}">#{{ tag }}</a></span>
+                        	{% endfor %}
+                        </div>
+                    </div>
+                    {% endif %}
+
                 </div>
-                {% endif %}
 
             </div>
 
@@ -166,13 +183,13 @@
                                 {% csrf_token %}
                                 <input type="text" id="boardDesc" name="boardDesc" value="{{ board.description }}">
                                 <button class="altbtn" name="updatedescription" value="1"><i class="fas fa-check"></i></button>
+                                <a href="#" id="hideEditDesc" style="display: none;"><i class="fas fa-times"></i></a>
                             </form>                
                         </div>                    
                         <a href="#" id="showEditDesc" rel="tooltip" title="Add a board description">
                             {% if not board.description %}Board description {% endif %}
                             <i class="fas fa-pencil-alt"></i>
-                        </a>
-                        <a href="#" id="hideEditDesc" style="display: none;"><i class="fas fa-times"></i></a>
+                        </a>                        
                     {% endif %}
                 </div>
             {% else %}
@@ -199,7 +216,7 @@
                 {% if editable and not board.slug == 'your-saved-items' %}
                 <a class="featBox add" href="{% url 'b:add_item' board.id %}">
                     <strong>Add Item</strong>
-                    <i class="far fa-smile"></i>
+                    <i class="fal fa-plus"></i>
                 </a>
                 {% endif %}                
 
@@ -210,29 +227,35 @@
                     <div class="featBox boardPic">                
 
                         {% if editable %}
-                        <div class="featBoxMeta">
-                            <a class="metalink" href="{% url 'b:edit_item' board.id itemconx.id %}"><i class="fas fa-share"></i> Edit</a>
-                            <a href="#delete{{itemconx.id}}" class="metalink" rel="modal:open"><i class="far fa-bookmark"></i> Delete</a>
-                        </div>
-
-                        <div id="delete{{itemconx.id}}" class="modal">
-                            <h5>Delete "{{ itemconx.item.item_name }}"</h5>
-                            <p>Are you sure you would like to delete the item <em><strong>{{ itemconx.item.item_name }}</strong></em>? The item and all it's comments will be permenantly removed. Don't forget you can always just make your item inactive instead.</p>
-                            <form method="POST" id="deleteitem-{{itemconx.id}}" name="deleteitem_{{itemconx.id}}">
-                                {% csrf_token %}                            
-                                <input type="hidden" name="item_id" value="{{ itemconx.id }}">
-                                <button class="btn orange" name="deleteitem">Yes, delete this item</button>
-                            </form>
-                        </div>
-                        {% endif %}
-
-                        {% if editable %}
                             <a href="{% url 'b:edit_item' board.id itemconx.id %}">
                                 {% thumbnail itemconx.image "300x300" as im %}
                                     <img src="{{ im.url }}">
                                 {% endthumbnail %}
                             </a>
-                            <a href="{% url 'b:edit_item' board.id itemconx.id %}" class="boardItemName">{{ itemconx.item.item_name }}</a>
+
+                            {% if itemconx.item.item_name|length > 75 %}
+                                <a href="{% url 'b:edit_item' board.id itemconx.id %}" class="boardItemName">
+                                    {{ itemconx.item.item_name|slice:":75" }}<u class="tooLong" rel="tooltip" title="{{itemconx.item.item_name}}">...</u>
+                                </a>
+                            {% else %}                                
+                                <a href="{% url 'b:edit_item' board.id itemconx.id %}" class="boardItemName">{{ itemconx.item.item_name }}</a>
+                            {% endif %}
+
+                            {% if itemconx.item_status == 'GOT' %}
+                                <div class="got">
+                                    {% if itemconx.rating == 5 %}
+                                        <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                                    {% elif itemconx.rating == 4 %}
+                                        <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                                    {% elif itemconx.rating == 3 %}
+                                        <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                                    {% elif itemconx.rating == 2 %}
+                                        <i class="fas fa-star"></i><i class="fas fa-star"></i>
+                                    {% elif itemconx.rating == 1 %}
+                                        <i class="fas fa-star"></i>
+                                    {% endif %}
+                                </div>
+                            {% endif %}
 
                         {% else %}
                         
@@ -242,6 +265,21 @@
                                 {% endthumbnail %}
                             </a>
                             <a href="{% url 'b:view_item' board.user board.slug itemconx.id %}" class="boardItemName">{{ itemconx.item.item_name }}</a>
+                            {% if itemconx.item_status == 'GOT' %}
+                                <div class="got">
+                                    {% if itemconx.rating == 5 %}
+                                        <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                                    {% elif itemconx.rating == 4 %}
+                                        <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                                    {% elif itemconx.rating == 3 %}
+                                        <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                                    {% elif itemconx.rating == 2 %}
+                                        <i class="fas fa-star"></i><i class="fas fa-star"></i>
+                                    {% elif itemconx.rating == 1 %}
+                                        <i class="fas fa-star"></i>
+                                    {% endif %}
+                                </div>
+                            {% endif %}
 
                         {% endif %}
 
@@ -254,6 +292,7 @@
                         {% if not board.slug == 'your-saved-items' %}
 
                             <div class="boardItemStats">
+
                                 <span><a href="#"><i class="fal fa-comment"></i>
                                 	{% get_comment_count for itemconx as comment_count %}
                                 	{{ comment_count }}                    	
@@ -277,16 +316,21 @@
                                         </form>
                                     </span>                                    
                                 {% endif %}
-                                {% if itemconx.item_status == 'GOT' %}
-                                    <div class="got">
-                                        <span>GOT THIS!</span>
-                                        {% if itemconx.rating == '3' %}
-                                            <i class="far fa-smile"></i>
-                                        {% elif itemconx.rating == '2' %}
-                                            <i class="far fa-meh"></i>
-                                        {% elif itemconx.rating == '1' %}
-                                            <i class="far fa-frown"></i>
-                                        {% endif %}
+
+                                {% if editable %}
+                                    <div class="itemTools">
+                                        <a class="metalink" rel="tooltip" title="Edit item" href="{% url 'b:edit_item' board.id itemconx.id %}"><i class="fas fa-pencil-alt"></i></a>
+                                        <a href="#delete{{itemconx.id}}" rel="tooltip" title="Delete item" class="metalink" rel="modal:open"><i class="fal fa-trash-alt"></i></a>
+                                    </div>
+
+                                    <div id="delete{{itemconx.id}}" class="modal">
+                                        <h5>Delete "{{ itemconx.item.item_name }}"</h5>
+                                        <p>Are you sure you would like to delete the item <em><strong>{{ itemconx.item.item_name }}</strong></em>? The item and all it's comments will be permenantly removed. Don't forget you can always just make your item inactive instead.</p>
+                                        <form method="POST" id="deleteitem-{{itemconx.id}}" name="deleteitem_{{itemconx.id}}">
+                                            {% csrf_token %}                            
+                                            <input type="hidden" name="item_id" value="{{ itemconx.id }}">
+                                            <button class="btn orange" name="deleteitem">Yes, delete this item</button>
+                                        </form>
                                     </div>
                                 {% endif %}
 

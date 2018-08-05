@@ -29,8 +29,17 @@
                         {% endif %}
                     </a>
                     <div class="profileDetails">
-                        <span>@{{ profile.user.username }}</span>
-                        <h3>{{ profile.user.first_name }} {{ profile.user.last_name }}</h3>
+                        {% if profile.user.username|length > 40 %}
+                        <span>@{{ profile.user.username|slice:":40" }}<u class="tooLong" rel="tooltip" title="{{ profile.user.username }}">...</u></span>
+                        {% else %}
+                        <span>@{{ profile.user.username}}</span>
+                        {% endif %}
+
+                        {% if profile.user.get_full_name|length > 50 %}
+                        <h3>{{ profile.user.get_full_name|slice:":50" }}<u class="tooLong" rel="tooltip" title="{{ profile.user.get_full_name }}">...</u></h3>
+                        {% else %}
+                        <h3>{{ profile.user.get_full_name }}</h3>
+                        {% endif %}
                         <div class="profileStats">
                             <p><a href="#">
                                 <span>{{ no_followers }}</span>FOLLOWERS
@@ -133,11 +142,25 @@
 
                     <div class="profileBoardItem match">
                         <div class="profileBoardName">
+                            
+                            {% if board.board_name|length > 50 %}
+                            <a href="
                             {% if not editable %}
-                            <a href="{% url 'b:view_board' board.user.username board.slug %}">{{ board.board_name }}</a>
+                                {% url 'b:view_board' board.user.username board.slug %}
                             {% else %}
-                            <a href="{% url 'b:edit_board' board.id %}">{{ board.board_name }}</a>
+                                {% url 'b:edit_board' board.id %}
                             {% endif %}
+                            ">{{ board.board_name|slice:":50" }}<u class="tooLong" rel="tooltip" title="{{ board.board_name }}">...</u></a>
+                            {% else %}
+                            <a href="
+                            {% if not editable %}
+                                {% url 'b:view_board' board.user.username board.slug %}
+                            {% else %}
+                                {% url 'b:edit_board' board.id %}
+                            {% endif %}
+                            ">{{ board.board_name }}</a>
+                            {% endif %}
+
                         </div>
                         <div class="profileBoardShare">
                             <a href="https://twitter.com/home?status=Check out this board I found on Wantbrd: {{ board.board_name }} - https://www.wantbrd.com/{% url 'b:view_board' board.user.username board.slug %}{% if board.hero %} {{board.hero.url}}{% else %} {% static 'img/default-hero.png' %}{% endif %}" target="_blank" rel="nooperner nofollow">Share <i class="fas fa-share-alt"></i></a>

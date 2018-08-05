@@ -15,16 +15,16 @@ def user_directory_path(instance, filename):
 ##### Board Model
 class Board(models.Model):
 	user = models.ForeignKey(User, on_delete=models.CASCADE)
-	board_name = models.CharField(null=False, max_length=255, blank=False)	
+	board_name = models.CharField(null=False, max_length=100, blank=False)	
 	created = models.DateTimeField(auto_now_add=True)
 	private = models.BooleanField(default=False)
 	description = models.TextField(default='', max_length=500, blank=True)
-	video = models.CharField(max_length=50, blank=True)
+	video = models.CharField(max_length=11, blank=True)
 	hero = models.ImageField(upload_to = user_directory_path, blank=True, null=True)
 	show_video = models.BooleanField(default=False)
 	tags = TaggableManager(blank=True)
 	active = models.BooleanField(default=False)	
-	slug = models.SlugField(default='')
+	slug = models.SlugField(default='', max_length=255)
 	deleteable = models.BooleanField(default=True)
 	recommended = models.BooleanField(default=False)
 
@@ -90,14 +90,14 @@ class ItemConnection(models.Model):
 	image = ImageField(upload_to = 'uploads/items/', default = 'defaults/no-item.png')
 	img_own = models.BooleanField(default=False)
 	item = models.ForeignKey(Item, on_delete=models.CASCADE)
-	slug = models.SlugField(default='')
+	slug = models.SlugField(default='', max_length=255)
 	created = models.DateTimeField(auto_now_add=True)
 	allow_comments = models.BooleanField('allow comments', default=True)
-	purchase_url = models.URLField(max_length=255, blank=True)
-	original_purchase_url = models.URLField(max_length=255, blank=True)
+	purchase_url = models.URLField(max_length=2000, blank=True)
+	original_purchase_url = models.URLField(max_length=2000, blank=True)
 	item_desc = models.CharField(max_length=1000, blank=True)
 	review = models.CharField(max_length=1000, blank=True, default='')
-	rating = models.CharField(null=False, max_length=500, blank=False, default=0)
+	rating = models.IntegerField(null=False, blank=False, default=1)
 	WANT = 'WNT'
 	GOT = 'GOT'
 	ITEM_STATUS_CHOICES = (

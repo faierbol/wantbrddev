@@ -55,7 +55,7 @@
 	    	</div>
 
 
-	        <div id="homeBoardItems">
+	        <div id="searchItems">
 	        
 	            {% if board_results %}
 	            	{% for board in board_results %}
@@ -131,4 +131,25 @@
 	</section>
 
 
+{% endblock %}
+
+{% block extra-js %}
+<script src="{% static 'js/macy.js' %}" type="text/javascript"></script>
+<script>
+    var masonry = new Macy({
+        container: '#searchItems',
+        trueOrder: false,
+        waitForImages: false,
+        useOwnImageLoader: false,
+        debug: true,
+        mobileFirst: true,
+        columns: 1,
+        margin: 24,
+        breakAt: {
+            860: 3,
+            520: 2,
+            320: 1
+        }
+    });
+</script>
 {% endblock %}

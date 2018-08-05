@@ -282,6 +282,7 @@ def edit_item(request, board_id, itemconx_id):
 			form = ItemForm(request.POST, instance=itemconx)
 			item_name = request.POST.get("item_name")
 			current_board = request.POST.get("currentBoard")
+			rating = request.POST.get("your_rating")
 			board_assign = Board.objects.get(id=current_board)
 
 			if form.is_valid():
@@ -305,6 +306,7 @@ def edit_item(request, board_id, itemconx_id):
 						# we can update the original item
 						item.item_name = item_name
 						item.save()
+				itemconx.rating = rating
 				itemconx.board = board_assign
 				form.save()		
 
@@ -675,7 +677,7 @@ def add_item(request, board_id):
 			item_status = request.POST.get("item_status")
 			item_desc = request.POST.get("item_desc")
 			item_active = request.POST.get("item_active")
-			rating = request.POST.get("rating")
+			rating = request.POST.get("your_rating")
 			review = request.POST.get("review")
 			current_board = request.POST.get("currentBoard")
 			board_assign = Board.objects.get(id=current_board)
@@ -693,9 +695,10 @@ def add_item(request, board_id):
 					proxy = 'yes'
 				fp = BytesIO()
 				fp.write(resp.content)
-				file_name = url.split("/")[-1]
+				full_file_name = url.split("/")[-1]
+				file_name = full_file_name[0:25]
 
-			if form.is_valid():		
+			if form.is_valid():
 				# create a new item with this item name and save it
 				new_item = Item()
 				new_item.item_name = item_name
@@ -703,6 +706,8 @@ def add_item(request, board_id):
 				
 				# save the model form
 				new_item_conx = form.save(commit=False)
+				if item_status == 'GOT':
+					new_item_conx.rating = rating
 				new_item_conx.board = board
 				new_item_conx.item = new_item
 				if imgsrc == 'own':
@@ -714,22 +719,10 @@ def add_item(request, board_id):
 					new_item_conx.image.save(file_name, files.File(fp))
 				new_item_conx.board = board_assign
 				new_item_conx.original_purchase_url = new_item_conx.purchase_url
-				new_item_conx.save()					
+				new_item_conx.save()	
 
 				return redirect('b:edit_board', board_id=board_id)
-
-				# context_dict = {
-				# 	'board':board,
-				# 	'form':form,
-				# 	'user_boards':user_boards,
-				# 	'imgsrc':imgsrc,
-				# 	'resp':resp,
-				# 	'ogimg':url,
-				# 	'status':resp.status_code,
-				# 	'proxy':proxy,
-				# }
-
-				# return render(request, template, context_dict)
+				
 
 	context_dict = {
 		'board':board,
