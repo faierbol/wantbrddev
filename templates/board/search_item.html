@@ -61,7 +61,7 @@
 	            {% if item_results %}
 	            	{% for item in item_results %}
 
-	            		<div class="featBox trendingItem match">
+	            		<div class="featBox trendingItem">
 	            		    <div class="trendingItemItem">
 	            		        {% thumbnail item.image "300x300" as im %}
 	            		            <a href="{% url 'b:view_item' item.board.user item.board.slug item.id %}"">
@@ -70,16 +70,45 @@
 	            		        {% endthumbnail %}
 	            		    </div>
 	            		    <div class="trendingItemName">
-	            		        <a href="{% url 'b:view_item' item.board.user item.board.slug item.id %}">{{ item.item.item_name }}</a>
+	            		    	
+	            		    	{% if item.item.item_name|length > 40 %}
+	            		    		<a href="{% url 'b:view_item' item.board.user item.board.slug item.id %}">{{ item.item.item_name|slice:":40" }}
+	            		    			<u class="tooLong" rel="tooltip" title="{{ item.item.item_name }}">...</u>
+	            		    		</a>
+	            		    	{% else %}
+	            		    		<a href="{% url 'b:view_item' item.board.user item.board.slug item.id %}">{{ item.item.item_name }}</a>
+	            		    	{% endif %}
+
 	            		        <div class="trendingItemMeta">
-	            		            Found in <a href="{% url 'b:view_board' item.board.user.username item.board.slug %}">{{ item.board.board_name }}</a> by <a href="{% url 'u:profile' item.board.user.username %}">
-	            		            	{% if item.board.user.get_full_name %}
-	            		            		{{ item.board.user.get_full_name }}	                                
-	            		            	{% else %}
-	            		            		@{{ item.board.user }}
-	            		            	{% endif %}
-	            		            </a>
+
+	            		        	 Found in 
+	            		        	 <a href="{% url 'b:view_board' item.board.user.username item.board.slug %}">
+	            		        	 	{% if item.board.board_name|length > 30 %}
+	            		        	 		{{ item.board.board_name|slice:":30" }}<u class="tooLong" rel="tooltip" title="{{ item.board.board_name }}">...</u>
+	            		        	 	{% else %}
+	            		        	 		{{ item.board.board_name }}
+	            		        	 	{% endif %}
+	            		        		</a> 
+	            		        		
+	            		        		&nbsp;by
+	            		        		<a href="{% url 'u:profile' item.board.user.username %}">
+
+	            		        	 	{% if item.board.user.get_full_name %}
+	            		        	 	
+	            		        	 		{% if item.board.user.get_full_name|length > 30 %}
+	            		        	 			{{ item.board.user.get_full_name|slice:":30" }}<u class="tooLong" rel="tooltip" title="{{ item.board.user.get_full_name }}">...</u>
+	            		        	 		{% else %}
+	            		        	 			{{ item.board.user.get_full_name }}
+	            		        	 		{% endif %}
+	            		        	 		
+	            		        	 	{% else %}
+	            		        	 		@{{ item.board.user.get_full_name }}
+	            		        	 	{% endif %}
+
+	            		        	 </a>
+	            		        
 	            		        </div>
+
 	            		    </div>              
 	            		    <div class="trendingFooter">
 

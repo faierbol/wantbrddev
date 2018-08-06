@@ -133,6 +133,22 @@ Slide In Panel - by CodyHouse.co
   background: -webkit-linear-gradient(-45deg, #f77c40 0%,#eb3b33 100%); /* Chrome10-25,Safari5.1-6 */
   background: linear-gradient(135deg, #f77c40 0%,#eb3b33 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f77c40', endColorstr='#eb3b33',GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
+  word-wrap: break-word;
+  -ms-word-break: break-all;
+  word-break: break-word;        
+  -ms-hyphens: auto;
+  -moz-hyphens: auto;
+  -webkit-hyphens: auto;
+  hyphens: auto;
+  padding-bottom:60px;
+}
+.cd-panel--is-visible .cd-panel__header h1 {
+  line-height: 1;
+  padding-right:50px;
+  margin-bottom:10px;
+}
+.cd-panel--is-visible .cd-panel__header span {
+  padding-right: 50px;
 }
 
 @media only screen and (min-width: 768px) {
@@ -324,6 +340,9 @@ Slide In Panel - by CodyHouse.co
   overflow: auto;
   /* smooth scrolling on touch devices */
   -webkit-overflow-scrolling: touch;
+}
+.js-cd-panel-menu .cd-panel__content {
+  padding-top:250px;
 }
 
 .cd-panel__content button {

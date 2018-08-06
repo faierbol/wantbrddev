@@ -847,7 +847,7 @@ def search(request):
 	all_boards = board_search_tags | board_search_names
 	all_boards = all_boards.distinct()	
 	for board in all_boards:
-		if board.get_item_count() > 0 and not board.user_blocked(request.user) and not board.user == request.user:
+		if board.get_item_count() > 0 and not board.user_blocked(request.user):
 			board_results.append(board)
 	for board in board_results:
 		board.totalitems = board.get_item_count()
@@ -934,7 +934,7 @@ def search_item(request):
 	all_boards = board_search_tags | board_search_names
 	all_boards = all_boards.distinct()	
 	for board in all_boards:
-		if board.get_item_count() > 0 and not board.user_blocked(request.user) and not board.user == request.user:
+		if board.get_item_count() > 0 and not board.user_blocked(request.user):
 			board_results.append(board)
 	board_count = len(board_results)
 
@@ -981,7 +981,7 @@ def search_board(request):
 	all_boards = board_search_tags | board_search_names
 	all_boards = all_boards.distinct()	
 	for board in all_boards:
-		if board.get_item_count() > 0 and not board.user_blocked(request.user) and not board.user == request.user:
+		if board.get_item_count() > 0 and not board.user_blocked(request.user):
 			board_results.append(board)
 	for board in board_results:
 		board.totalitems = board.get_item_count()
@@ -1033,7 +1033,7 @@ def search_user(request):
 	all_boards = board_search_tags | board_search_names
 	all_boards = all_boards.distinct()	
 	for board in all_boards:
-		if board.get_item_count() > 0 and not board.user_blocked(request.user) and not board.user == request.user:
+		if board.get_item_count() > 0 and not board.user_blocked(request.user):
 			board_results.append(board)
 	board_count = len(board_results)
 

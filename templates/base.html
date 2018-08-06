@@ -142,8 +142,16 @@
 {% if request.user.is_authenticated %}
     <div class="cd-panel cd-panel--from-right js-cd-panel-menu">
         <header class="cd-panel__header">
-            <h1>{{ request.user.get_full_name}}</h1>
-            <span class="popUser">@{{ request.user.username }}</span>
+            {% if request.user.get_full_name|length > 30 %}
+                <h1>{{ request.user.get_full_name|slice:":30" }}<u class="tooLong" rel="tooltip" title="{{ request.user.get_full_name }}">...</u></h1>
+            {% else %}
+                <h1>{{ request.user.get_full_name}}</h1>
+            {% endif %}
+            {% if request.user.username|length > 40 %}
+                <span>@{{ request.user.username|slice:":40" }}<u class="tooLong" rel="tooltip" title="{{ request.user.username }}">...</u></span>
+            {% else %}
+                <span class="popUser">@{{ request.user.username }}</span>
+            {% endif %}            
             <a href="#0" class="cd-panel__close js-cd-close">Close</a>
         </header>
 

@@ -60,7 +60,7 @@
 	            {% if user_results %}
 	            	{% for user in user_results %}
 
-	            		<div class="featBox trendingUser match">
+	            		<div class="featBox trendingUser">
 	            		    <a class="trendingUserUser" href="{% url 'u:profile' user.username  %}">
 	            		        <div class="trendingUserUserWrap clearfix">
 	            		            <div class="trendingUserPic">
@@ -71,8 +71,17 @@
 	            		            	{% endif %}
 	            		            </div>
 	            		            <div class="trendingUserNames">
-	            		                <strong>@{{ user.username }}</strong>
-	            		                <span>{{ user.get_full_name }}</span>
+	            		            	{% if user.username|length > 30 %}
+	            		            		<strong>@{{ user.username|slice:":30" }}<u class="tooLong" rel="tooltip" title="{{ user.username }}">...</u></strong>
+	            		            	{% else %}
+	            		            		<strong>@{{ user.username }}</strong>
+	            		            	{% endif %}
+
+	            		            	{% if user.get_full_name|length > 30 %}
+	            		            		<span>{{ user.get_full_name|slice:":30" }}<u class="tooLong" rel="tooltip" title="{{ user.get_full_name }}">...</u></span>
+	            		            	{% else %}
+	            		            		<span>{{ user.get_full_name }}</span>
+	            		            	{% endif %}
 	            		            </div>
 	            		        </div>
 	            		    </a>

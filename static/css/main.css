@@ -522,15 +522,20 @@ HOME
         }
         .trendingUserNames {
             float:left;
-            margin:5px 0 0 10px;   
             text-decoration: none;
             color:#121212;         
+            overflow-wrap: break-word;
+            word-wrap: break-word;
+            -ms-word-break: break-all;
+            word-break: break-word;
+            padding-left:65px;
         }
             .trendingUserNames strong, .trendingUserNames span {
                 display: block;
             }
             .trendingUserNames strong {
                 font-size:.8rem;
+                margin-bottom:10px;
             }
             .trendingUserNames span {
                 font-size:1.5rem;
@@ -538,7 +543,9 @@ HOME
             }
         .trendingUserPic {
             width:50px;
-            float: left;
+            position: absolute;
+            left:20px;
+            top:20px;
         }
     a.trendingUserHero {
         margin-top:20px;
@@ -596,6 +603,10 @@ HOME
         text-align: center;
         padding:20px 20px 0 20px;
         font-size:1.5rem;
+        overflow-wrap: break-word;
+        word-wrap: break-word;
+        -ms-word-break: break-all;
+        word-break: break-word;
     }
         .trendingItemName a {
             text-decoration: none;
@@ -611,6 +622,7 @@ HOME
     .trendingItemMeta {
         text-align: center;
         font-size:.75rem;
+        line-height: 1rem;
     }
 
     /** recommended board **/
@@ -692,6 +704,9 @@ HOME
             right: auto;
             margin:20px 0 20px 20px;
         }
+    .trendingBoard .trendingUserNames {
+        padding-left:0;
+    }
     .trendingBoardHero {
         margin-top:20px;
         background-size:cover;
@@ -706,11 +721,12 @@ HOME
         .trendingBoardMeta {
             display: table-cell;
             vertical-align:top;
-            padding:20px;
+            padding:20px 20px 20px 90px;
             color:#fff;
             font-size:2rem;
             font-weight: lighter;
             position: relative;
+            line-height: 2.3rem;
         }
         .trendingBoardMeta span {
             position: absolute;
@@ -831,10 +847,7 @@ PROFILE
                 word-wrap: break-word;
                 -ms-word-break: break-all;
                 word-break: break-word;        
-                -ms-hyphens: auto;
-                -moz-hyphens: auto;
-                -webkit-hyphens: auto;
-                hyphens: auto;
+
             }
             .profileStats {
                 font-size:.9rem;
@@ -884,10 +897,7 @@ PROFILE
             word-wrap: break-word;
             -ms-word-break: break-all;
             word-break: break-word;        
-            -ms-hyphens: auto;
-            -moz-hyphens: auto;
-            -webkit-hyphens: auto;
-            hyphens: auto;
+
         }
         .theBio p {
             display: inline-block;
@@ -969,10 +979,7 @@ PROFILE
                 word-wrap: break-word;
                 -ms-word-break: break-all;
                 word-break: break-word;        
-                -ms-hyphens: auto;
-                -moz-hyphens: auto;
-                -webkit-hyphens: auto;
-                hyphens: auto;
+
             }
         .profileBoardHero {
             height: 175px;
@@ -1002,7 +1009,7 @@ PROFILE
             display: block;
         }
         .profileBoardItem .trendingFooter span:nth-child(even) {
-            float: right;
+            margin-left:10px;
         }
         .profileBoardSaved {
             padding:20px;
@@ -1018,10 +1025,16 @@ PROFILE
                 margin-top:0;
                 padding-top:0;
             }
+        .deleteBoard {
+            float: right;
+        }
+        .deleteBoard i {
+            margin-right: 5px;
+        }
         .noboardsyet {
             padding:60px;
             text-align: center;
-        }
+        }        
 
     .profileBoardItem.create {
         text-align: center;
@@ -1394,7 +1407,8 @@ BOARD
         line-height: 1;
     }
     .edit_board {
-        font-size: 2rem;
+        /*font-size: 2rem;*/
+        margin-left:10px;
     }
 
 .boardHeader {
@@ -1415,10 +1429,6 @@ BOARD
         word-wrap: break-word;
         -ms-word-break: break-all;
         word-break: break-word;        
-        -ms-hyphens: auto;
-        -moz-hyphens: auto;
-        -webkit-hyphens: auto;
-        hyphens: auto;
     }
     .boardHeader span.type {
         font-size:.9rem;
@@ -1444,17 +1454,13 @@ BOARD
         left:0;
     }
     .boardUser .trendingUserNames {
-        /* These are technically the same, but use both */
         overflow-wrap: break-word;
         word-wrap: break-word;
         -ms-word-break: break-all;
         word-break: break-word;        
-        -ms-hyphens: auto;
-        -moz-hyphens: auto;
-        -webkit-hyphens: auto;
-        hyphens: auto;
         float: left;
         padding-left:55px;
+        line-height: 115%;
     }
     .boardUser a:hover {
         color:#000;
@@ -1534,10 +1540,7 @@ BOARD
             word-wrap: break-word;
             -ms-word-break: break-all;
             word-break: break-word;
-            -ms-hyphens: auto;
-            -moz-hyphens: auto;
-            -webkit-hyphens: auto;
-            hyphens: auto;
+
         }
         .boardItemStats {
             font-size:1rem;
@@ -1740,10 +1743,7 @@ BOARD
     word-wrap: break-word;
     -ms-word-break: break-all;
     word-break: break-word;
-    -ms-hyphens: auto;
-    -moz-hyphens: auto;
-    -webkit-hyphens: auto;
-    hyphens: auto;
+
 }
     #addeditright button {
         margin-top:20px;
@@ -2135,7 +2135,7 @@ BOARD
         text-align: left;
     }
     .discoveryMeta .trendingItemName, .discoveryMeta .trendingFooter, .discoveryMeta .trendingItemMeta {
-        text-align: left;
+        text-align: left;        
     }
     .discoveryMeta a.trendName {
         line-height: 1;
@@ -2544,6 +2544,9 @@ ITEM DETAILS
         float: right;
         width:56%;
     }
+        h1.detailsDesk, h1.detailsMob {
+            line-height: 2.5rem;
+        }
         h1.detailsMob {
             display: none;
         }
@@ -2560,7 +2563,11 @@ ITEM DETAILS
         }
         .itemMetaFound {
             font-size: .8rem;
-            line-height: 30px;
+            line-height: 20px;
+            overflow-wrap: break-word;
+            word-wrap: break-word;
+            -ms-word-break: break-all;
+            word-break: break-word;
         }
         .popDetails .btn.large {
             margin:20px 0 30px 0;
@@ -2699,10 +2706,7 @@ button.naked {
     word-wrap: break-word;
     -ms-word-break: break-all;
     word-break: break-word;
-    -ms-hyphens: auto;
-    -moz-hyphens: auto;
-    -webkit-hyphens: auto;
-    hyphens: auto;
+
     max-width: 225px;
 }
  
@@ -3546,6 +3550,19 @@ footer {
         float: none;
         width: 100%;
     }
+    .popDetails .itemMeta, .popDetails h1.detailsDesk {
+        display: none;
+    }
+    .itemMeta.detailsMob {
+        display: block;
+        padding:0 20px 20px 20px;
+        margin-top:0;
+    }
+    h1.detailsMob {
+        display: block;
+        padding:0 20px;
+        margin-bottom:20px;
+    }
 }
 
 @media screen and (max-width: 730px) {
@@ -3737,18 +3754,6 @@ footer {
         border:none;
     }
     .popDetails {
-        padding:0 20px;
-    }
-    .popDetails .itemMeta, .popDetails h1.detailsDesk {
-        display: none;
-    }
-    .itemMeta.detailsMob {
-        display: block;
-        padding:0 20px 20px 20px;
-        margin-top:0;
-    }
-    h1.detailsMob {
-        display: block;
         padding:0 20px;
     }
 }
@@ -3961,6 +3966,10 @@ footer {
     }
     .foundItem:nth-child(2n+1) {
         clear: none;  
+    }
+    h1.detailsMob {
+        font-size: 1.6rem;
+        line-height: 1.9rem;
     }
 }
 

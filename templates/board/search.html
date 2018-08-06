@@ -74,7 +74,13 @@
 			            	    {% endif %}
 
 			            	        <div class="trendingBoardMeta">
-			            	            <strong>{{ item.board_name }}</strong>
+
+			            	        	{% if item.board_name|length > 30 %}
+			            	            	<strong>{{ item.board_name|slice:":30" }}<u class="tooLong" rel="tooltip" title="{{ item.board_name }}">...</u></strong>
+			            	            {% else %}
+			            	            	<strong>{{ item.board_name }}</strong>
+			            	            {% endif %}
+			            	            
 			            	            <span><i class="fas fa-eye"></i> {{ item.views }}</span>
 			            	        </div>
 			            	    </a>
@@ -105,9 +111,18 @@
 
 			            	            </div>
 			            	            <div class="trendingUserNames">
-			            	                <strong>@{{ item.user.username }}</strong>
+		            	            		{% if item.user.username|length > 30 %}
+		            	            	    	<strong>@{{ item.user.username|slice:":30" }}<u class="tooLong" rel="tooltip" title="{{ item.user.username }}">...</u></strong>
+		            	            	    {% else %}
+		            	            	    	<strong>@{{ item.user.username }}</strong>
+		            	            	    {% endif %}
+
 			            	                {% if item.user.get_full_name %}
-			            	                	<span>{{ item.user.get_full_name }}</span>
+			            	                	{% if item.user.username|length > 40 %}
+			            	                		<span>{{ item.user.get_full_name|slice:":40" }}<u class="tooLong" rel="tooltip" title="{{ item.user.get_full_name }}">...</u></span>
+			            	                	{% else %}
+			            	                		<span>{{ item.user.get_full_name }}</span>
+			            	                	{% endif %}
 			            	                {% endif %}
 			            	            </div>
 			            	        </div>
@@ -131,8 +146,19 @@
 		            		            	{% endif %}
 		            		            </div>
 		            		            <div class="trendingUserNames">
-		            		                <strong>@{{ item.username }}</strong>
-		            		                <span>{{ item.get_full_name }}</span>
+
+		            		                {% if item.username|length > 30 %}
+		            		                	<strong>@{{ item.username|slice:":30" }}<u class="tooLong" rel="tooltip" title="{{ item.username }}">...</u></strong>
+		            		                {% else %}
+		            		                	<strong>@{{ item.username }}</strong>
+		            		                {% endif %}
+
+		            		                {% if item.get_full_name|length > 30 %}
+		            		                	<span>{{ item.get_full_name|slice:":30" }}<u class="tooLong" rel="tooltip" title="{{ item.get_full_name }}">...</u></span>
+		            		                {% else %}
+		            		                	<span>{{ item.get_full_name }}</span>
+		            		                {% endif %}
+
 		            		            </div>
 		            		        </div>
 		            		    </a>
@@ -181,14 +207,41 @@
 		            		        {% endthumbnail %}
 		            		    </div>
 		            		    <div class="trendingItemName">
-		            		        <a href="{% url 'b:view_item' item.board.user item.board.slug item.id %}">{{ item.item.item_name }}</a>
+
+		            		    	{% if item.item.item_name|length > 40 %}
+		            		    		<a href="{% url 'b:view_item' item.board.user item.board.slug item.id %}">{{ item.item.item_name|slice:":40" }}
+		            		    			<u class="tooLong" rel="tooltip" title="{{ item.item.item_name }}">...</u>
+		            		    		</a>
+		            		    	{% else %}
+		            		    		<a href="{% url 'b:view_item' item.board.user item.board.slug item.id %}">{{ item.item.item_name }}</a>
+		            		    	{% endif %}
+
 		            		        <div class="trendingItemMeta">
-		            		            Found in <a href="{% url 'b:view_board' item.board.user.username item.board.slug %}">{{ item.board.board_name }}</a> by <a href="{% url 'u:profile' item.board.user.username %}">
-		            		            	{% if item.board.user.get_full_name %}
-		            		            		{{ item.board.user.get_full_name }}	                                
+
+		            		            Found in 
+		            		            <a href="{% url 'b:view_board' item.board.user.username item.board.slug %}">
+		            		            	{% if item.board.board_name|length > 30 %}
+		            		            		{{ item.board.board_name|slice:":30" }}<u class="tooLong" rel="tooltip" title="{{ item.board.board_name }}">...</u>
 		            		            	{% else %}
-		            		            		@{{ item.board.user }}
+		            		            		{{ item.board.board_name }}
 		            		            	{% endif %}
+		            		           	</a> 
+		            		           	
+		            		           	&nbsp;by
+		            		           	<a href="{% url 'u:profile' item.board.user.username %}">
+
+		            		            	{% if item.board.user.get_full_name %}
+
+		            		            		{% if item.board.user.get_full_name|length > 30 %}
+		            		            			{{ item.board.user.get_full_name|slice:":30" }}<u class="tooLong" rel="tooltip" title="{{ item.board.user.get_full_name }}">...</u>
+		            		            		{% else %}
+		            		            			{{ item.board.user.get_full_name }}
+		            		            		{% endif %}
+		            		            		
+		            		            	{% else %}
+		            		            		@{{ item.board.user.get_full_name }}
+		            		            	{% endif %}
+
 		            		            </a>
 		            		        </div>
 		            		    </div>              

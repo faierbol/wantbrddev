@@ -77,9 +77,7 @@
                                         {% csrf_token %}
                                         <button name="follow">Follow</button>
                                     </form>
-                                {% endif %}
-                            {% else %}
-                                <a class="edit_board" href="{% url 'b:edit_board' board.id %}" rel="tooltip" title="Edit this board"><i class="far fa-edit"></i></a>
+                                {% endif %}                                
                             {% endif %}
                         </div>                
                         <div class="boardStats">
@@ -106,6 +104,13 @@
                             {% endif %}
 
                             <i class="fal fa-eye"></i> {{ board.views }}
+
+                            {% if not editable %}
+                                {% if board.user == request.user %}
+                                    <a class="edit_board" href="{% url 'b:edit_board' board.id %}" rel="tooltip" title="Edit this board"><i class="far fa-edit"></i></a>
+                                {% endif %}
+                            {% endif %}
+
                         </div>
                     {% else %}
                         {% if not board.slug == 'your-saved-items' %}

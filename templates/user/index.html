@@ -162,9 +162,11 @@
                             {% endif %}
 
                         </div>
+                        {% if not editable %}
                         <div class="profileBoardShare">
                             <a href="https://twitter.com/home?status=Check out this board I found on Wantbrd: {{ board.board_name }} - https://www.wantbrd.com/{% url 'b:view_board' board.user.username board.slug %}{% if board.hero %} {{board.hero.url}}{% else %} {% static 'img/default-hero.png' %}{% endif %}" target="_blank" rel="nooperner nofollow">Share <i class="fas fa-share-alt"></i></a>
                         </div>
+                        {% endif %}
                         <div class="clearfix"></div>
                         <div class="boardTags">
                             {% for tag in board.thetags %}
@@ -177,20 +179,7 @@
                         {% else %}
                         <div class="profileBoardHero" style="background-image:url('{% static 'img/default-hero.png' %}')">
                         {% endif %}
-                        {% if editable %}
 
-
-                            <div class="profileLabel"><a href="#delete{{board.id}}" rel="modal:open">DELETE</a></div>
-                            <div id="delete{{board.id}}" class="modal">
-                                <h5>Delete "{{ board.board_name }}"</h5>
-                                <p>Are you sure you would like to delete the board <em><strong>{{ board.board_name }}</strong></em>? The board, all it's items and all the item comments will be permenantly removed. Don't forget you can always just make your boards private or inactive instead.</p>
-                                <form method="POST" id="deleteboard-{{board.id}}" name="deleteboard_{{board.id}}">
-                                    {% csrf_token %}                            
-                                    <input type="hidden" name="board_id" value="{{ board.id }}">
-                                    <button class="btn orange" name="deleteboard">Yes, delete this board</button>
-                                </form>
-                            </div>
-                        {% endif %}
                         </div>
                         
                         <div class="trendingItems clearfix">
@@ -226,6 +215,22 @@
                                 View
                                 {% endif %}
                             </span>
+                            {% if editable %}                            
+                                <div class="deleteBoard">
+                                    <a class="metalink" rel="tooltip" title="Edit board" href="{% url 'b:edit_board' board.id %}"><i class="fas fa-pencil-alt"></i></a>
+                                    <a href="#delete{{board.id}}" rel="modal:open tooltip" title="Delete board" ><i class="fal fa-trash-alt"></i></a>
+                                    <div id="delete{{board.id}}" class="modal">
+                                        <h5>Delete "{{ board.board_name }}"</h5>
+                                        <p>Are you sure you would like to delete the board <em><strong>{{ board.board_name }}</strong></em>? The board, all it's items and all the item comments will be permenantly removed. Don't forget you can always just make your boards private or inactive instead.</p>
+                                        <form method="POST" id="deleteboard-{{board.id}}" name="deleteboard_{{board.id}}">
+                                            {% csrf_token %}                            
+                                            <input type="hidden" name="board_id" value="{{ board.id }}">
+                                            <button class="btn orange" name="deleteboard">Yes, delete this board</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            {% endif %}
+
                         </div>
 
                     </div>

@@ -59,7 +59,7 @@
 	        
 	            {% if board_results %}
 	            	{% for board in board_results %}
-		            	<div class="featBox trendingBoard match">
+		            	<div class="featBox trendingBoard">
 
 		            	    {% if board.hero %}
 		            	    <a class="trendingBoardHero" style="background-image:url('{{ board.hero.url }}');" href="{% url 'b:view_board' board.user.username board.slug %}">
@@ -68,8 +68,11 @@
 		            	    {% endif %}
 
 		            	        <div class="trendingBoardMeta">
-		            	            <strong>{{ board.board_name }}</strong>
-		            	            <span><i class="fas fa-eye"></i> {{ board.views }}</span>
+	            	        		{% if board.board_name|length > 30 %}
+	            	        	    	<strong>{{ board.board_name|slice:":30" }}<u class="tooLong" rel="tooltip" title="{{ board.board_name }}">...</u></strong>
+	            	        	    {% else %}
+	            	        	    	<strong>{{ board.board_name }}</strong>
+	            	        	    {% endif %}
 		            	        </div>
 		            	    </a>
 		            	    <div class="trendingItems clearfix">	
@@ -99,9 +102,18 @@
 
 		            	            </div>
 		            	            <div class="trendingUserNames">
-		            	                <strong>@{{ board.user.username }}</strong>
+	            	            		{% if board.user.username|length > 30 %}
+	            	            	    	<strong>@{{ board.user.username|slice:":30" }}<u class="tooLong" rel="tooltip" title="{{ board.user.username }}">...</u></strong>
+	            	            	    {% else %}
+	            	            	    	<strong>@{{ board.user.username }}</strong>
+	            	            	    {% endif %}
+
 		            	                {% if board.user.get_full_name %}
-		            	                	<span>{{ board.user.get_full_name }}</span>
+		            	                	{% if board.user.username|length > 40 %}
+		            	                		<span>{{ board.user.get_full_name|slice:":40" }}<u class="tooLong" rel="tooltip" title="{{ board.user.get_full_name }}">...</u></span>
+		            	                	{% else %}
+		            	                		<span>{{ board.user.get_full_name }}</span>
+		            	                	{% endif %}
 		            	                {% endif %}
 		            	            </div>
 		            	        </div>
