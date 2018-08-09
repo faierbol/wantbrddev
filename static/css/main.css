@@ -271,7 +271,7 @@ header#main {
         .mobSearch {
             display: none;
         }
-        .logo, .search, .hlLink {
+        .logo, .headersearch, .hlLink {
             float: left;
         }
         header#main a.logo {
@@ -284,17 +284,17 @@ header#main {
             text-decoration: none;
             color:#121212;
         }
-        .search {
+        .headersearch {
             margin:6px 20px 0 20px;
             position: relative;
         }
-            .search i {
+            .headersearch i {
                 position: absolute;
                 left:17px;
                 top:16px;
                 font-size:.8rem;
             }
-            .search input[type=search] {
+            .headersearch input[type=search] {
                 border-radius:100px;
                 border:1px solid #ccc;
                 font-size:.8rem;
@@ -372,7 +372,7 @@ header#main.shrink {
         height: 40px;
         padding:0;
     }
-    header#main.shrink .search {
+    header#main.shrink .headersearch {
         margin:0 20px 0 10px;
     }
     header#main.shrink a.hlLink {
@@ -834,20 +834,19 @@ PROFILE
             float: left;
             width:60%;
             margin-left:10%;
+            overflow-wrap: break-word;
+            word-wrap: break-word;
+            -ms-word-break: break-all;
+            word-break: break-word;        
         }
             .profileDetails span {
-                font-size:.9rem;
+                font-size:.9rem;            
             }
             .profileDetails h3 {
                 font-size:3rem;
                 font-weight: lighter;
                 margin:0 0 20px 0;
                 line-height: 1;
-                overflow-wrap: break-word;
-                word-wrap: break-word;
-                -ms-word-break: break-all;
-                word-break: break-word;        
-
             }
             .profileStats {
                 font-size:.9rem;
@@ -1407,7 +1406,6 @@ BOARD
         line-height: 1;
     }
     .edit_board {
-        /*font-size: 2rem;*/
         margin-left:10px;
     }
 
@@ -2105,6 +2103,15 @@ BOARD
     #discoveryCont.container {
         margin-top:-100px;
         margin-bottom:60px;
+    }
+.discoveryUserInfo {
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    -ms-word-break: break-all;
+    word-break: break-word;        
+}
+    .discoveryUsername {
+        margin-bottom:10px;
     }
 .discoveryFeed {
     text-align: center;
@@ -3281,6 +3288,8 @@ footer {
         text-align: left;
         float: left;  
         margin:-40px 0 30px 0;
+        width: 50%;
+        padding-right:100px;
     }
     .discoveryUsername {
         margin-top:0;
@@ -3291,6 +3300,8 @@ footer {
         text-align: right;
         margin:-40px 0 30px 0;
         float:right;
+        width: 50%;
+        padding-left:100px;
     }
     .recentActivity h6 {
         font-size: 2rem;
@@ -3569,7 +3580,7 @@ footer {
     a.influencerLink {
         display: none;
     }
-    .search {
+    .headersearch {
         display: none;
     }
     a.mobSearch {
@@ -3593,6 +3604,179 @@ footer {
     .profileBoards {
         padding-top:40px;
     }
+
+    /**** search ****/
+
+    .search-overlay {
+        z-index: -1000;
+        overflow: hidden;
+        position: fixed;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+    }
+    .search-overlay.s--active {
+        z-index: 9999;
+    }
+    .search {
+        position: relative;
+        display: inline-block;        
+        width: 33px;
+        height: 33px;
+        -webkit-perspective: 1000px;
+              perspective: 1000px;
+    }
+    .search:not(.s--active) {
+        cursor: pointer;
+    }
+    .search.s--hidden {
+        opacity: 0;
+    }
+    .search.s--cloned {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        right: auto;
+        bottom: auto;
+        margin-left: -58px;
+        margin-top: -58px;
+        margin-right: 0;
+        margin-bottom: 0;
+    }
+    .search.s--moving {
+        transition: -webkit-transform 0.4s cubic-bezier(0.56, -0.49, 0.58, 0.9);
+        transition: transform 0.4s cubic-bezier(0.56, -0.49, 0.58, 0.9);
+        transition: transform 0.4s cubic-bezier(0.56, -0.49, 0.58, 0.9), -webkit-transform 0.4s cubic-bezier(0.56, -0.49, 0.58, 0.9);
+    }
+    .search__bg {
+        position: absolute;
+        right: -15px;
+        top: 27px;
+        border-radius: 50%;
+        transition: all 0.6s ease;
+        -webkit-transform: translate3d(-50%, -50%, 0);
+              transform: translate3d(-50%, -50%, 0);
+        will-change: transform;
+        border:1px solid #F97D1F;
+        background:#F97D1F;
+        border-radius:50%;
+        line-height: 33px;
+        padding:0 10px;
+    }
+    .search__bg i {
+        color:#fff;
+    }
+    .search.s--active .search__bg {
+        -webkit-transform: translate3d(-50%, -50%, 0) scale(48);
+              transform: translate3d(-50%, -50%, 0) scale(48);
+        height: 100%;
+        width: 100%;
+    }
+    .search.s--active .search__bg i {
+        display: none;
+    }
+    .search__box {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        border:none;
+        border-radius: 25px;
+        -webkit-transform: translate(-50%, -50%);
+              transform: translate(-50%, -50%);
+        transition: all 0.45s ease;
+    }
+    .search.s--active .search__box {
+        width: 510px;
+        height: 100px;
+        border-radius: 50px;
+    }
+    .search__input {
+        width: 100%;
+        height: 100%;
+        background: transparent;
+        border: none;
+        outline: none;
+        pointer-events: none;
+        opacity: 0;
+        color: #fff;
+        font-size: 40px;
+        transition: opacity 0s;
+    }
+    .search__input::-webkit-input-placeholder {
+        color: rgba(255, 255, 255, 0.4);
+    }
+    .search__input:-ms-input-placeholder {
+        color: rgba(255, 255, 255, 0.4);
+    }
+    .search__input::-ms-input-placeholder {
+        color: rgba(255, 255, 255, 0.4);
+    }
+    .search__input::placeholder {
+        color: rgba(255, 255, 255, 0.4);
+    }
+    .search.s--active .search__input {
+        padding: 23px 90px 23px 40px;
+        pointer-events: auto;
+        opacity: 1;
+        transition: opacity 0.18s 0.48s;
+    }
+    .search__line {
+        display: none;
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        width: 20px;
+        height: 4px;
+        border-radius: 2px;
+        background: #fff;
+        -webkit-transform-origin: 0 50%;
+              transform-origin: 0 50%;
+        -webkit-transform: translate(14px, 14px) rotate(45deg);
+              transform: translate(14px, 14px) rotate(45deg);
+        transition: all 0.48s;
+    }
+    .search__line:before {
+        content: "";
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        width: inherit;
+        height: inherit;
+        background: inherit;
+        border-radius: inherit;
+        -webkit-transform: rotate(90deg);
+              transform: rotate(90deg);
+        opacity: 0;
+        transition: opacity 0.3s;
+    }
+    .search.s--active .search__line:before {
+        opacity: 1;
+        transition: opacity 0.3s 0.42s;
+    }
+    .search.s--active .search__line {
+        display: block;
+        width: 36px;
+        height: 6px;
+        -webkit-transform: translate(180px, 11px) rotate(-45deg);
+              transform: translate(180px, 11px) rotate(-45deg);
+    }
+    .search__close {
+        position: absolute;
+        right: 0;
+        top: 0;
+        width: 30px;
+        height: 30px;
+        pointer-events: none;
+    }
+    .search.s--active .search__close {
+        right: 44px;
+        top: 33px;
+        pointer-events: auto;
+        cursor: pointer;
+    }
+
+
 }
 
 @media screen and (max-width: 680px) {
@@ -3624,8 +3808,8 @@ footer {
         margin-top:-30px;
     }
     .feedLeft .profileImage {
-        float: left;
-        margin:-8px 20px 0 0;
+        position: absolute;
+        left:10px;
     }
     .profileImageDetails {
         margin-bottom:10px;
@@ -3645,6 +3829,8 @@ footer {
     .discoveryUserInfo {
         float: left;
         margin:50px 0 0 0;
+        padding:0 0 0 175px;
+        width: 100%;
     }
     .recentActivity {
         display: none;
@@ -3807,11 +3993,12 @@ footer {
     }
     .feedLeft .profileImage {
         max-width: 100px;
-        margin-top:-45px;
-        float: none;
+        top:-45px;
     }
     .discoveryUserInfo {
         margin-top:40px;
+        float: none;
+        padding-left:0;
     }
     .discoveryStats {
         margin-top:10px;
@@ -3904,8 +4091,22 @@ footer {
         width: 200px;
         margin: 0 auto 20px;
     }
+    #discoveryCont {
+        padding:0;
+    }
+    .feedLeft, .feedRight {
+        padding:0 20px;
+    }
     .discoveryItem {
         width: 100%;
+        float: none;
+        background:none;
+        padding:0;
+        border:none;
+        margin-bottom:60px;
+    }
+    .discoveryMeta {
+        padding:0 20px;
     }
     .discoveryItem:nth-child(3n){
         margin-right: 0;
@@ -3970,6 +4171,9 @@ footer {
     h1.detailsMob {
         font-size: 1.6rem;
         line-height: 1.9rem;
+    }
+    .profileDetails h3 {
+        font-size: 2rem;
     }
 }
 

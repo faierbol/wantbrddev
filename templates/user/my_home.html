@@ -35,8 +35,20 @@
             </div>
 
             <div class="discoveryUserInfo">
-                <div class="discoveryUsername">@{{ user.username }}</div>
-                <div class="discoveryName">{{ user.get_full_name }}</div>
+                <div class="discoveryUsername">
+                {% if user.username|length > 30 %}                    
+                    @{{ user.username|slice:":30" }}<u class="tooLong" rel="tooltip" title="{{ user.username }}">...</u>
+                {% else %}
+                    @{{ user.username }}
+                {% endif %}
+                </div>
+                <div class="discoveryName">
+                    {% if user.get_full_name|length > 50 %}
+                        {{ user.get_full_name|slice:":50" }}<u class="tooLong" rel="tooltip" title="{{user.get_full_name}}">...</u>
+                    {% else %}
+                        {{ user.get_full_name }}
+                    {% endif %}
+                </div>
                 <div class="discoveryStats">
                     <p><strong>{{ no_followers }}</strong> FOLLOWERS</p>
                     <p><strong>{{ no_connections }}</strong> FOLLOWING</p>

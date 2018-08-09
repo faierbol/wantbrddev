@@ -84,14 +84,10 @@ Slide In Panel - by CodyHouse.co
   transition: background 0.3s 0s;
 }
 
-.cd-panel__header {
+.slide-header {
   color:#fff;
-  position: fixed;
-  width: 300px;
-  padding:30px 30px;  
-  -webkit-transform: translateY(0px);
-      -ms-transform: translateY(0px);
-          transform: translateY(0px);
+  width: 100%;
+  padding:30px 80px 60px 30px;  
   -webkit-clip-path: polygon(0 0, 100% 0, 100% 56%, 0 100%);
   clip-path: polygon(0 0, 100% 0, 100% 66%, 0 100%);  
   background: #f77c40; /* Old browsers */
@@ -99,14 +95,14 @@ Slide In Panel - by CodyHouse.co
   background: -webkit-linear-gradient(-45deg, #f77c40 0%,#eb3b33 100%); /* Chrome10-25,Safari5.1-6 */
   background: linear-gradient(135deg, #f77c40 0%,#eb3b33 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f77c40', endColorstr='#eb3b33',GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
-  z-index: 2;
-  -webkit-transition: -webkit-transform 0.3s 0s;
-  transition: -webkit-transform 0.3s 0s;
-  transition: transform 0.3s 0s;
-  transition: transform 0.3s 0s, -webkit-transform 0.3s 0s;
-  -webkit-transform: translateY(-130px);
-      -ms-transform: translateY(-130px);
-          transform: translateY(-130px);
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  -ms-word-break: break-all;
+  word-break: break-word;
+}
+.slide-header h1 {
+  line-height: 1;
+  margin-bottom:10px;
 }
 
 .cd-panel--from-right .cd-panel__header {
@@ -331,18 +327,12 @@ Slide In Panel - by CodyHouse.co
 }
 
 .cd-panel__content {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  padding: 150px 40px 30px 30px;
+  padding: 30px 40px 30px 30px;
   overflow: auto;
-  /* smooth scrolling on touch devices */
   -webkit-overflow-scrolling: touch;
 }
 .js-cd-panel-menu .cd-panel__content {
-  padding-top:250px;
+  padding-top:20px 0 0 0;
 }
 
 .cd-panel__content button {
