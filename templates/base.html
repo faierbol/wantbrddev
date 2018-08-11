@@ -42,7 +42,7 @@
                 <form method="GET" action="{% url 'search' %}">
                     <input
                         type="search"
-                        placeholder="Search for item, user or category"
+                        placeholder="Search for item, user or keyword"
                         name="kw"
                         id="kw"
                         value=""
@@ -58,29 +58,7 @@
         </div>
         <div class="headerRight">
 
-<!--             <a href="#" class="mobSearch"><i class="fal fa-search"></i></a> -->
-
-            <div class="search">
-                <div class="search__bg"><i class="fal fa-search"></i></div>
-                <div class="search__box">                    
-                    <form method="GET" action="{% url 'search' %}">
-                        <input 
-                            type="text"
-                            class="search__input"
-                            placeholder="Search for item, user or category"
-                            name="kw"
-                            id="kw"
-                            value=""
-                            pattern=".{3,}"
-                            required
-                            title="Please enter at least 3 characters"
-                        />
-                        <i class="fal fa-search"></i>
-                    </form>                
-                    <div class="search__line"></div>
-                    <div class="search__close"></div>
-                </div>
-            </div>
+            <a href="#0" class="mobSearch md-trigger" data-modal="modal-12"><i class="fal fa-search"></i></a>
 
             <a href="#" class="influencerLink">Influencer?</a>
             {% if request.user.is_authenticated %}
@@ -111,8 +89,6 @@
 <section id="maincontent">
 	{% block body %}{% endblock %}
 </section>
-
-<div class="search-overlay"></div>
 
 <footer>
     <div class="container clearfix">
@@ -204,6 +180,30 @@
     </div>
 {% endif %}
 
+<div class="md-modal md-effect-12">
+    <div class="md-content">
+        <h3>Search</h3>
+        <div>
+            <form method="GET" action="{% url 'search' %}">
+                <input
+                    type="search"
+                    placeholder="Search for item, user or keyword"
+                    name="kw"
+                    id="kw"
+                    value=""
+                    pattern=".{3,}"
+                    required
+                    title="Please enter at least 3 characters"
+                >
+                <i class="fal fa-search"></i>
+            </form>                
+            <button class="md-close"><i class="fal fa-times"></i></button>
+        </div>
+    </div>
+</div>
+
+<div class="md-overlay"></div>
+
 <!-- Constant JS -->
 <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js" type="text/javascript"></script> -->
 <script src="{% static 'js/vendor/modernizr-3.5.0.min.js' %}" type="text/javascript"></script>
@@ -272,89 +272,17 @@
 
     });
 
-    $(document).ready(function() {
-      $('#close-btn').click(function() {
-        $('#search-overlay').fadeOut();
-        $('#search-btn').show();
+    $(function () {
+      
+      $('.md-trigger').on('click', function() {
+        $('.md-modal').addClass('md-show');
       });
-      $('#search-btn').click(function() {
-        $(this).hide();
-        $('#search-overlay').fadeIn();
+      
+      $('.md-close').on('click', function() {
+        $('.md-modal').removeClass('md-show');
       });
+      
     });
-
-    (function() {
-      var $searchOverlay = document.querySelector(".search-overlay");
-      var $search = document.querySelector(".search");
-      var $clone, offsetX, offsetY;
-
-      $search.addEventListener("click", function() {
-        var $original = this;
-        $clone = this.cloneNode(true);
-
-        $searchOverlay.classList.add("s--active");
-
-        $clone.classList.add("s--cloned", "s--hidden");
-        $searchOverlay.appendChild($clone);
-
-        var triggerLayout = $searchOverlay.offsetTop;
-
-        var originalRect = $original.getBoundingClientRect();
-        var cloneRect = $clone.getBoundingClientRect();
-
-        offsetX = originalRect.left - cloneRect.left;
-        offsetY = originalRect.top - cloneRect.top;
-
-        $clone.style.transform = "translate("+ offsetX +"px, "+ offsetY +"px)";
-        $original.classList.add("s--hidden");
-        $clone.classList.remove("s--hidden");
-
-        var triggerLayout = $searchOverlay.offsetTop;
-
-        $clone.classList.add("s--moving");
-
-        $clone.setAttribute("style", "");
-
-        $clone.addEventListener("transitionend", openAfterMove);
-      });
-
-      function openAfterMove() {
-        $clone.classList.add("s--active");
-        $clone.querySelector("input").focus();
-
-        addCloseHandler($clone);
-        $clone.removeEventListener("transitionend", openAfterMove);
-      };
-      
-      function addCloseHandler($parent) {
-        var $closeBtn = $parent.querySelector(".search__close");
-        $closeBtn.addEventListener("click", closeHandler);
-      };
-
-      /* close handler functions */
-      function closeHandler(e) {
-        $clone.classList.remove("s--active");
-        e.stopPropagation();
-        
-        var $cloneBg = $clone.querySelector(".search__bg");
-
-        $cloneBg.addEventListener("transitionend", moveAfterClose);
-      };
-      
-      function moveAfterClose(e) {
-        e.stopPropagation(); // prevents from double transitionend even fire on parent $clone
-        
-        $clone.classList.add("s--moving");
-        $clone.style.transform = "translate("+ offsetX +"px, "+ offsetY +"px)";
-        $clone.addEventListener("transitionend", terminateSearch);
-      };
-      
-      function terminateSearch(e) {
-        $search.classList.remove("s--hidden");
-        $clone.remove();
-        $searchOverlay.classList.remove("s--active");
-      };
-    }());
     
 </script>
 
