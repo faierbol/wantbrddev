@@ -9,6 +9,8 @@
 
 {% block extra-css %}
 	<link type="text/css" href="{% static 'css/macy.css' %}" rel="stylesheet" />
+    <link href="{% static 'css/font/font-fileuploader.css' %}" media="all" rel="stylesheet">
+    <link href="{% static 'css/jquery.fileuploader.min.css' %}" media="all" rel="stylesheet">
     {% if board.isblocked %}
         {% if refer %}
             <meta http-equiv="refresh" content="3;url={{ refer }}" />
@@ -81,8 +83,19 @@
                             {% endif %}
                         </div>                
                         <div class="boardStats">
-                            <p>Created on {{ board.created|date:'d F o' }}</p>
-                            <a href=""><i class="fal fa-share"></i> Share</a> 
+                            <p>Created on {{ board.created|date:'d F o' }}</p>                            
+                            <div class="share-link">
+                                <a class="toggle metalink" rel="tooltip" title="Share" href="javascript:void(0);"><i class="fal fa-share"></i> Share</a>
+                                <div class="tip">
+                                    <div class="ssk-group">
+                                        <a href="" class="ssk ssk-icon ssk-facebook"></a>
+                                        <a href="" class="ssk ssk-icon ssk-twitter"></a>
+                                        <a href="" class="ssk ssk-icon ssk-google-plus"></a>
+                                        <a href="" class="ssk ssk-icon ssk-pinterest"></a>
+                                        <a href="" class="ssk ssk-icon ssk-tumblr"></a>
+                                    </div>
+                                </div>
+                            </div>
 
 
                             {% if board.is_liked %}
@@ -212,6 +225,7 @@
                         <a href="#" id="showEditDesc"><i class="fas fa-pencil-alt"></i></a>
                         <a href="#" id="hideEditDesc" style="display: none;"><i class="fas fa-times"></i></a>
                     {% endif %}
+
                 </div>
                 {% endif %}
             {% endif %}
@@ -298,7 +312,7 @@
 
                             <div class="boardItemStats">
 
-                                <span><a href="#"><i class="fal fa-comment"></i>
+                                <span><a href="{% url 'b:view_item' board.user board.slug itemconx.id %}"><i class="fal fa-comment"></i>
                                 	{% get_comment_count for itemconx as comment_count %}
                                 	{{ comment_count }}                    	
                                 </a></span>
@@ -325,7 +339,7 @@
                                 {% if editable %}
                                     <div class="itemTools">
                                         <a class="metalink" rel="tooltip" title="Edit item" href="{% url 'b:edit_item' board.id itemconx.id %}"><i class="fas fa-pencil-alt"></i></a>
-                                        <a href="#delete{{itemconx.id}}" rel="tooltip" title="Delete item" class="metalink" rel="modal:open"><i class="fal fa-trash-alt"></i></a>
+                                        <a href="#delete{{itemconx.id}}" rel="modal:open tooltip" title="Delete item" class="metalink"><i class="fal fa-trash-alt"></i></a>
                                     </div>
 
                                     <div id="delete{{itemconx.id}}" class="modal">
@@ -383,6 +397,23 @@
 
                             </div>
 
+                        {% else %}
+
+                            <div class="itemTools">
+                                <a class="metalink" rel="tooltip" title="Edit item" href="{% url 'b:edit_item' board.id itemconx.id %}"><i class="fas fa-pencil-alt"></i></a>
+                                <a href="#delete{{itemconx.id}}" rel="modal:open tooltip" title="Delete item" class="metalink"><i class="fal fa-trash-alt"></i></a>
+                            </div>
+
+                            <div id="delete{{itemconx.id}}" class="modal">
+                                <h5>Delete "{{ itemconx.item.item_name }}"</h5>
+                                <p>Are you sure you would like to delete the item <em><strong>{{ itemconx.item.item_name }}</strong></em> from your Saved Items?</p>
+                                <form method="POST" id="deleteitem-{{itemconx.id}}" name="deleteitem_{{itemconx.id}}">
+                                    {% csrf_token %}                            
+                                    <input type="hidden" name="item_id" value="{{ itemconx.id }}">
+                                    <button class="btn orange" name="deleteitem">Yes, delete this item</button>
+                                </form>
+                            </div>
+
                         {% endif %}
 
                     </div>
@@ -416,20 +447,25 @@
 {% endif %}
 
 <div class="cd-panel cd-panel--from-right js-cd-panel-main">
-    <header class="cd-panel__header">
-        <h1>Board Options</h1>
-        <a href="#0" class="cd-panel__close js-cd-close">Close</a>
-    </header>
 
     <div class="cd-panel__container">
+
+        <div class="slide-header">
+            <h1>Board Options</h1>
+            <a href="#0" class="cd-panel__close js-cd-close">Close</a>
+        </div>
+
         <div class="cd-panel__content">
             <div class="optionsPanel setBackground">
                 <h4>Set Background</h4>
                 <form method="POST" enctype="multipart/form-data">
                     {% csrf_token %}
-                    {{ bgform }}
-                    <p><button class="btn grey" name="changebackground" value="changebackground">Use Background</button></p>
+                    <input type="file" name="bgfiles">  
+                    <input type="hidden" name="user" id="id_user" value="{{ board.user.id }}">
+                    <input type="hidden" id="b64pic" name="b64pic" value="">        
+                    <button class="btn large grey" name="changebackground" value="1">Apply new background</button>
                 </form>
+
             </div>
 
             <div class="optionsPanel manageVideo">
@@ -481,29 +517,41 @@
 
 {% block extra-js %}
 
-<!--- alerts -->
-{% if messages %}
-    {% for message in messages %}    
-        <script type="text/javascript">
-        $(function(){
-          new PNotify({
-            title: false,
-            type: "success",
-            text: {{ message }},
-            shadow: false,
-            delay: 5000,
-            buttons: {
-                sticker: false,
-            }
-          });
-        });
-        </script>
-    {% endfor %}
-{% endif %}
-
 <script src="{% static 'js/macy.js' %}" type="text/javascript"></script>
+<script src="{% static 'js/jquery.fileuploader.min.js' %}" type="text/javascript"></script> 
 
 <script type="text/javascript">
+
+    // enable fileuploader plugin for background picture
+    $('input[name="bgfiles"]').fileuploader({
+        inputNameBrackets: false,
+        extensions: ['jpg', 'jpeg', 'png', 'gif'],
+        addMore: false,
+        limit: 1,
+        fileMaxSize:2,
+        quality:75,
+        thumbnails: {
+            onImageLoaded: function(item) {
+                if (!item.html.find('.fileuploader-action-edit').length)
+                    item.html.find('.fileuploader-action-remove').before('<a class="fileuploader-action fileuploader-action-popup fileuploader-action-edit" title="Edit"><i></i></a>');
+            }
+        },
+        editor: {
+            cropper: {
+                ratio: '3:1',
+                minWidth: 1000,
+                minHeight: 600,
+                showGrid: true
+            },
+            onSave: function(blobOrDataUrl, item, listEl, parentEl, newInputEl, inputEl) {
+                $('#b64pic').val(blobOrDataUrl)
+            },
+        },
+        onFileRead: function(item, listEl, parentEl, newInputEl, inputEl) {
+            $('#b64pic').val(item.reader.src);
+        },
+    });
+
     $(document).ready(function() {
 
         // macy
@@ -569,6 +617,26 @@
         })
 
     });
+
 </script>
+
+{% if messages %}
+    {% for message in messages %}    
+    <script>
+        $(function(){
+            new PNotify({
+                title: false,
+                type: "warning",
+                text: '{{ message }}',
+                shadow: false,
+                delay: 5000,
+                buttons: {
+                    sticker: false,
+                }
+            }); 
+        });
+    </script>
+    {% endfor %}
+{% endif %}
 
 {% endblock %}

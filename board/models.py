@@ -78,17 +78,13 @@ class Item(models.Model):
 	def __str__(self):
 		return self.item_name
 
-	# def get_absolute_url(self):
-	#     return reverse('board:view_item',
-	#                    kwargs={'board_id': self.board.id,
-	#                            'item_id': self.id})
-
 
 ##### Item Connections
 class ItemConnection(models.Model):
 	board = models.ForeignKey(Board, on_delete=models.CASCADE)
 	image = ImageField(upload_to = 'uploads/items/', default = 'defaults/no-item.png')
 	img_own = models.BooleanField(default=False)
+	itook = models.BooleanField(default=False)
 	item = models.ForeignKey(Item, on_delete=models.CASCADE)
 	slug = models.SlugField(default='', max_length=255)
 	created = models.DateTimeField(auto_now_add=True)
@@ -98,6 +94,7 @@ class ItemConnection(models.Model):
 	item_desc = models.CharField(max_length=1000, blank=True)
 	review = models.CharField(max_length=1000, blank=True, default='')
 	rating = models.IntegerField(null=False, blank=False, default=1)
+	image_owner = models.IntegerField(null=True, blank=True)
 	WANT = 'WNT'
 	GOT = 'GOT'
 	ITEM_STATUS_CHOICES = (
@@ -126,13 +123,62 @@ class ItemConnection(models.Model):
 		clone = copy.copy(itemconx)
 		# remove pk and add destination board to clone
 		clone.pk = None
-		clone.board = board			
+		clone.board = board	
+		clone.review = ''
+		clone.item_status = 'WNT'
+		clone.item_desc = ''		
+		clone.rating = 1
+		clone.purchase_url = itemconx.original_purchase_url		
 		# remove prefetch cache, becuase...
 		try:
 		    delattr(clone, '_prefetched_objects_cache')
 		except AttributeError:
 		    pass
-		clone.save()		
+		clone.save()	
+
+	def copy_to_board(boardid, new_board_name, itemconxid, request):
+		# if we're adding a new board
+		if boardid == 'newBoard':
+
+			#check the board name has not already been used
+			new_board_name = request.POST.get("addNewBoard")
+			user_boards = Board.objects.filter(user=request.user)
+
+			if user_boards.filter(board_name=new_board_name).exists():
+				messages.info(request, 'You already have a board with this name.')
+				return HttpResponseRedirect(request.path_info)
+
+			# if the name is not aready used by this user
+			else:
+				#create the board
+				board = Board.objects.create (
+					user = request.user,
+					board_name = new_board_name,
+				)
+		# otherwise get the board that was selected
+		else:
+			board = Board.objects.get(pk=boardid)
+
+		# get model of item connection we're copying
+		itemconxid =  request.POST.get("itemconx_id")
+		itemconx = ItemConnection.objects.get(pk=itemconxid)
+		# create clone
+		clone = copy.copy(itemconx)
+		# remove pk and add destination board to clone
+		clone.pk = None
+		clone.board = board	
+		clone.item_status = 'WNT'
+		clone.purchase_url = itemconx.original_purchase_url
+		clone.review = ''
+		clone.rating = 1
+		clone.item_desc = ''
+		# remove prefetch cache, becuase...
+		try:
+		    delattr(clone, '_prefetched_objects_cache')
+		except AttributeError:
+		    pass
+		clone.save()
+		return itemconx
 		
 
 ##### Item Like Model
@@ -159,10 +205,8 @@ class ItemLike(models.Model):
 
 # Track item views
 class ItemView(models.Model):
-	item_conx = models.ForeignKey(ItemConnection, on_delete=models.PROTECT)
+	item_conx = models.ForeignKey(ItemConnection, on_delete=models.CASCADE)
 	ip = models.CharField(max_length=16)
-	user = models.ForeignKey(User, on_delete=models.PROTECT)	
-
 
 # Privacy
 class BoardPrivacy(models.Model):

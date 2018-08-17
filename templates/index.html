@@ -275,6 +275,14 @@
             slidesToShow: 1,
             autoplay: false,
             dots: true,            
+            responsive: [
+                {
+                  breakpoint: 1200,
+                  settings: {
+                    centerPadding: '0px',
+                  }
+                },
+            ],
         });
         $('.slickLeft').click(function(){
             $('.homeSlider').slick('slickPrev');

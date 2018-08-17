@@ -18,6 +18,7 @@
 	<div class="searchTerm">
 	    <div class="container">            
 	        You searched for: {% if search_term %}"{{ search_term }}"{% endif %}
+	        {{ pri }}
 	    </div>
 	</div>
 
@@ -68,9 +69,9 @@
 			            	<div class="featBox trendingBoard">
 
 			            	    {% if item.hero %}
-			            	    <a class="trendingBoardHero" style="background-image:url('{{ item.hero.url }}');" href="#">
+			            	    <a class="trendingBoardHero" style="background-image:url('{{ item.hero.url }}');" href="{% url 'b:view_board' item.user.username item.slug %}">
 			            	    {% else %}    
-			            	    <a class="trendingBoardHero" style="background-image:url('{% static 'img/default-hero.png' %}');" href="#">
+			            	    <a class="trendingBoardHero" style="background-image:url('{% static 'img/default-hero.png' %}');" href="{% url 'b:view_board' item.user.username item.slug %}">
 			            	    {% endif %}
 
 			            	        <div class="trendingBoardMeta">
@@ -171,11 +172,13 @@
     		            		        {% endthumbnail %}
     	            		        {% endfor %}
 
-                		        	{% if item.items != 3 %}
+                		        	{% if item.items > 3 %}
                 		        		<a class="plusMore" href="{% url 'u:profile' item.username  %}">
                 		            		<div class="plusMoreNumber">+{{ item.itemcount|add:"-2" }}</div>
                 		            	</a>
-                		            {% endif %}
+                		            {% else %}
+                		            	<div class="noitemspush"></div>
+                		           	{% endif %}
     	            		    </div>
 
     	            		    <div class="trendingFooter">
@@ -239,7 +242,7 @@
 		            		            		{% endif %}
 		            		            		
 		            		            	{% else %}
-		            		            		@{{ item.board.user.get_full_name }}
+		            		            		@{{ item.board.user }}
 		            		            	{% endif %}
 
 		            		            </a>

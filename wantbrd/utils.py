@@ -1,7 +1,7 @@
 import requests, urllib, datetime, base64
 from django.shortcuts import get_object_or_404
 from django.contrib.auth.models import User
-from board.models import ItemLike, BoardLike, ItemConnection, ItemView, BoardView, Board
+from board.models import ItemLike, BoardLike, ItemConnection, ItemView, BoardView, Board, BoardPrivacy
 from user.models import Notification
 
 
@@ -203,3 +203,11 @@ def decode_base64_file(data):
         complete_file_name = "%s.%s" % (file_name, file_extension, )
 
         return ContentFile(decoded_file, name=complete_file_name)
+
+### IS BLOCKED
+def is_blocked(board, user):
+	try:
+		BoardPrivacy.objects.get(board=board, user=user)
+		return True
+	except:
+		return False

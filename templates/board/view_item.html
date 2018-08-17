@@ -51,7 +51,12 @@
 
 			<div class="popImage">
 			    {% thumbnail itemconx.image "600x600" as im %}
-			        <img src="{{ im.url }}">
+			    	<div style="position: relative;">
+			        	<img src="{{ im.url }}">
+			        	{% if linkback %}
+			        		<div class="linkback"><a href="{% url 'u:profile' linkback %}">Image credit @{{ linkback }}</a></div>
+			        	{% endif %}
+			        </div>
 			    {% endthumbnail %}
 			    <div class="popMeta">
 			    	<div class="share-link">
@@ -66,8 +71,30 @@
 			    			</div>
 			    		</div>
 			    	</div>
-			        <a href="#"><i class="fal fa-bookmark"></i> Save</a>
-			        <a href="#"><i class="fal fa-plus"></i> Add to My Board</a>
+			    	<form class="inline" method="POST">
+			    	    {% csrf_token %}
+			    	    <input type="hidden" name="itemconx_id" value="{{ itemconx.id }}">
+			    	    <button class="naked" name="savelater" rel="tooltip" title="Add to your saved items"><i class="fal fa-bookmark"></i> Save</button>
+			    	</form>			        
+			        <a href="#ex{{itemconx.id}}" class="metalink" rel="modal:open tooltip" title="Add to your board"><i class="fal fa-plus"></i> Add to Board</a>
+			        <div id="ex{{itemconx.id}}" class="modal">
+			            <form method="POST" id="addtoboard-{{itemconx.id}}" name="addtoboard{{itemconx.id}}">
+			                {% csrf_token %}        
+			                <h5>Add to your board</h5>
+			                <p>Select which of your boards you would like to copy this item to:</p>
+			                <select name="board_id" class="selectBoard">
+			                    {% for board in user_boards %}
+			                        <option value="{{board.id}}">{{board.board_name}}</option>
+			                    {% endfor %}
+			                        <option value="newBoard">Create a new board</option>
+			                </select>
+			                <div class="addNewBoard" style="display: none;">
+			                    <input type="text" name="addNewBoard" placeholder="Name your new board">
+			                </div>
+			                <input type="hidden" name="itemconx_id" value="{{ itemconx.id }}">
+			                <p><button class="btn orange" name="addtoboard">Add to board</button></p>
+			            </form>
+			        </div>
 			    </div>
 			</div>
 
@@ -103,7 +130,27 @@
 				    </div>
 			    {% endif %}
 
-			    <a href="#" class="btn orange large">Buy now</a>        
+			    <a href="{{ itemconx.purchase_url }}" class="btn orange large" target="_blank" rel="nofollow">More Info</a>
+
+			    {% if itemconx.item_status == 'GOT' %}
+			    	<div class="itemReview">
+				        {% if itemconx.review %}			        	
+			        		<strong>Item review</strong>
+			        		<p>{{ itemconx.review }}</p>
+				        {% endif %}
+				        {% if itemconx.rating == 5 %}
+				            <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+				        {% elif itemconx.rating == 4 %}
+				            <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+				        {% elif itemconx.rating == 3 %}
+				            <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+				        {% elif itemconx.rating == 2 %}
+				            <i class="fas fa-star"></i><i class="fas fa-star"></i>
+				        {% elif itemconx.rating == 1 %}
+				            <i class="fas fa-star"></i>
+				        {% endif %}
+				    </div>
+			    {% endif %}
 
 			    <div class="itemComments">
 				    <h2>Join the discussion</h2>
@@ -134,5 +181,23 @@
      $('[data-toggle="tooltip"]').tooltip({html: true})
  })</script>
 
+ {% if messages %}
+     {% for message in messages %}    
+     <script>
+         $(function(){
+             new PNotify({
+                 title: false,
+                 type: "warning",
+                 text: '{{ message }}',
+                 shadow: false,
+                 delay: 5000,
+                 buttons: {
+                     sticker: false,
+                 }
+             }); 
+         });
+     </script>
+     {% endfor %}
+ {% endif %}
 
 {% endblock %}

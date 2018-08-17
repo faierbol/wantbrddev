@@ -258,7 +258,7 @@
               new PNotify({
                 title: false,
                 type: "success",
-                text: {{ message }},
+                text: '{{ message }}',
                 shadow: false,
                 delay: 5000,
                 buttons: {
@@ -275,7 +275,7 @@
             if(!$('#boardname').val()){
                 new PNotify({
                   title: false,
-                  type: "error",
+                  type: "warning",
                   text: 'You need to enter a name for your board',
                   shadow: false,
                   delay: 5000,

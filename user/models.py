@@ -119,8 +119,7 @@ class Profile(models.Model):
         return the_tags
 
 
-
-    ##### !!!!! NEED TO MAKE SURE BLOCKING BLOCKED USERS FROM BELOW !!!!! #####        
+    
     def get_suggested_boards(self, qty, request):    
         user_tags = []
         our_user = User.objects.get(pk=request.user.id)

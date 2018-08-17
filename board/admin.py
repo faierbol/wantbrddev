@@ -8,14 +8,16 @@ class BoardAdmin(admin.ModelAdmin):
 		)
 	}
 	readonly_fields=('id',)
+	list_display = ('id', 'board_name', 'user')
 admin.site.register(Board, BoardAdmin)
 
-# class ItemAdmin(admin.ModelAdmin):
-# 	readonly_fields = ('created',)
+class ItemAdmin(admin.ModelAdmin):
+	list_display = ('id','item_name')
 admin.site.register(Item)
 
 class ItemConxAdmin(admin.ModelAdmin):
 	readonly_fields=('id',)
+	list_display = ('id', 'board', 'item_id')
 admin.site.register(ItemConnection, ItemConxAdmin)
 
 admin.site.register(BoardLike)

@@ -258,18 +258,6 @@ def edit_board(request, board_id):
 				else:
 					return HttpResponseRedirect(request.path_info)
 
-			# like item
-			if 'likeitem' in request.POST:
-				itemconx_id = request.POST.get("itemconx_id")						
-				like_item(itemconx_id, request.user)
-				return HttpResponseRedirect(request.path_info)
-
-			# unlike item
-			if 'unlikeitem' in request.POST:
-				itemconx_id = request.POST.get("itemconx_id")
-				unlike_item(itemconx_id, request.user)
-				return HttpResponseRedirect(request.path_info)
-
 			# otherwise				
 			else:
 				form = EditBoardForm(request.POST, request.FILES, instance=board)
@@ -363,13 +351,8 @@ def view_board(request, username, board_name):
 	template = 'board/view_board.html'	
 	board_owner = get_object_or_404(User, username=username)
 	user = request.user
-	board = get_object_or_404(Board, slug=board_name, user=board_owner)
 
-	if is_blocked(board, request.user):
-		return redirect('home')
-	else:
-		pass
-		
+	board = get_object_or_404(Board, slug=board_name, user=board_owner)
 	board.thetags = board.tags.all()
 	board.likes = BoardLike.objects.filter(board=board).count()
 	try:
@@ -384,6 +367,9 @@ def view_board(request, username, board_name):
 		board.blocked = True
 	else:
 		board.blocked = False
+
+	userip = request.META['REMOTE_ADDR']
+	refer = request.META.get('HTTP_REFERER')
 
 	items = []
 	item_conxs = ItemConnection.objects.filter(board=board.id, active=True)		
@@ -403,8 +389,6 @@ def view_board(request, username, board_name):
 		user_boards = []
 
 	# create new board view instance if not exsists, count views
-	userip = request.META['REMOTE_ADDR']
-	refer = request.META.get('HTTP_REFERER')
 	board_view, created = BoardView.objects.get_or_create(board=board, ip=userip)
 	board.views = BoardView.objects.filter(board=board).count()
 
@@ -457,14 +441,50 @@ def view_board(request, username, board_name):
 
 		# if add to board
 		if 'addtoboard' in request.POST:
+			# board to copy to
 			boardid = request.POST.get("board_id")
-			new_board_name = ''
+
+			# if we're adding a new board
+			if boardid == 'newBoard':
+
+				#check the board name has not already been used
+				new_board_name = request.POST.get("addNewBoard")
+				user_boards = Board.objects.filter(user=request.user)
+
+				if user_boards.filter(board_name=new_board_name).exists():
+					messages.info(request, 'You already have a board with this name.')
+					return HttpResponseRedirect(request.path_info)
+
+				# if the name is not aready used by this user
+				else:
+					#create the board
+					board = Board.objects.create (
+						user = request.user,
+						board_name = new_board_name,
+					)
+			# otherwise get the board that was selected
+			else:
+				board = Board.objects.get(pk=boardid)
+
+			# get model of item connection we're copying
 			itemconxid =  request.POST.get("itemconx_id")
-			itemconx = ItemConnection.copy_to_board(boardid, new_board_name, itemconxid, request)
+			itemconx = ItemConnection.objects.get(pk=itemconxid)
+			# create clone
+			clone = copy.copy(itemconx)
+			# remove pk and add destination board to clone
+			clone.pk = None
+			clone.board = board	
+			clone.item_status = 'WNT'
+			clone.item_desc = ''
+			# remove prefetch cache, becuase...
+			try:
+			    delattr(clone, '_prefetched_objects_cache')
+			except AttributeError:
+			    pass
+			clone.save()
 			messages.info(request, '"{0}" was added to the board, "{1}".'.format(itemconx.item.item_name, board.board_name))
 			return HttpResponseRedirect(request.path_info)
 
-		# if save later
 		if 'savelater' in request.POST:
 			itemconx = request.POST.get("itemconx_id")
 			ItemConnection.save_item(itemconx, request)							
@@ -487,17 +507,8 @@ def view_board(request, username, board_name):
 ##### View item
 def view_item(request, username, board_name, itemconx_id):
 	template = 'board/view_item.html'
+
 	itemconx = ItemConnection.objects.get(pk=itemconx_id)
-
-	# is the user blocked from this board?
-	if is_blocked(itemconx.board, request.user):
-		return redirect('home')	
-
-	# start the fun
-
-	userip = request.META['REMOTE_ADDR']
-	item_view, created = ItemView.objects.get_or_create(item_conx=itemconx, ip=userip)
-
 	user_boards = Board.objects.filter(user=request.user)
 	linkback = False
 	if itemconx.image_owner:
@@ -506,50 +517,74 @@ def view_item(request, username, board_name, itemconx_id):
 	# handle submissions
 	if request.method == 'POST':
 
-		# like item
-		if 'likeitem' in request.POST:
-			itemconx_id = request.POST.get("itemconx_id")						
-			like_item(itemconx_id, request.user)
-			return HttpResponseRedirect(request.path_info)
+		# # like item
+		# if 'likeitem' in request.POST:
+		# 	itemconx_id = request.POST.get("itemconx_id")						
+		# 	like_item(itemconx_id, request.user)
+		# 	return HttpResponseRedirect(request.path_info)
 
-		# unlike item
-		if 'unlikeitem' in request.POST:
-			itemconx_id = request.POST.get("itemconx_id")
-			unlike_item(itemconx_id, request.user)
-			return HttpResponseRedirect(request.path_info)
+		# # unlike item
+		# if 'unlikeitem' in request.POST:
+		# 	itemconx_id = request.POST.get("itemconx_id")
+		# 	unlike_item(itemconx_id, request.user)
+		# 	return HttpResponseRedirect(request.path_info)
 
-		# like board
-		if 'likeboard' in request.POST:
-			board_id = request.POST.get("board_id")
-			like_board(board_id, request.user)
-			return HttpResponseRedirect(request.path_info)
+		# # if user followed
+		# if 'follow' in request.POST:
+		# 	board.user.profile.make_connection(request)
+		# 	return HttpResponseRedirect(request.path_info)
 
-		# unlike board
-		if 'unlikeboard' in request.POST:
-			board_id = request.POST.get("board_id")
-			unlike_board(board_id, request.user)	
-			return HttpResponseRedirect(request.path_info)
-
-		# if user followed
-		if 'follow' in request.POST:
-			board.user.profile.make_connection(request)
-			return HttpResponseRedirect(request.path_info)
-
-		# if user unfollowed
-		if 'unfollow' in request.POST:
-			board.user.profile.break_connection(request)
-			return HttpResponseRedirect(request.path_info)
+		# # if user unfollowed
+		# if 'unfollow' in request.POST:
+		# 	board.user.profile.break_connection(request)
+		# 	return HttpResponseRedirect(request.path_info)
 
 		# if add to board
 		if 'addtoboard' in request.POST:
+			# board to copy to
 			boardid = request.POST.get("board_id")
-			new_board_name = ''
+
+			# if we're adding a new board
+			if boardid == 'newBoard':
+
+				#check the board name has not already been used
+				new_board_name = request.POST.get("addNewBoard")
+				user_boards = Board.objects.filter(user=request.user)
+
+				if user_boards.filter(board_name=new_board_name).exists():
+					messages.info(request, 'You already have a board with this name.')
+					return HttpResponseRedirect(request.path_info)
+
+				# if the name is not aready used by this user
+				else:
+					#create the board
+					board = Board.objects.create (
+						user = request.user,
+						board_name = new_board_name,
+					)
+			# otherwise get the board that was selected
+			else:
+				board = Board.objects.get(pk=boardid)
+
+			# get model of item connection we're copying
 			itemconxid =  request.POST.get("itemconx_id")
-			ItemConnection.copy_to_board(boardid, new_board_name, itemconxid, request)
-			messages.info(request, '"{0}" was added to the board, "{1}".'.format(itemconx.item.item_name, itemconx.board.board_name))
+			itemconx = ItemConnection.objects.get(pk=itemconxid)
+			# create clone
+			clone = copy.copy(itemconx)
+			# remove pk and add destination board to clone
+			clone.pk = None
+			clone.board = board	
+			clone.item_status = 'WNT'
+			clone.item_desc = ''
+			# remove prefetch cache, becuase...
+			try:
+			    delattr(clone, '_prefetched_objects_cache')
+			except AttributeError:
+			    pass
+			clone.save()
+			messages.info(request, '"{0}" was added to the board, "{1}".'.format(itemconx.item.item_name, board.board_name))
 			return HttpResponseRedirect(request.path_info)
 
-		# if save later
 		if 'savelater' in request.POST:
 			itemconx = request.POST.get("itemconx_id")
 			ItemConnection.save_item(itemconx, request)							
@@ -578,65 +613,69 @@ def add_item(request, board_id):
 	api = 'aaF7juZfhdnyptXo4Kjm6A'
 	jsapi = 'vBlWMcz5CXvV4A-YnXhhag'
 	proxy = 'no'
-	cuser = request.user
 
 	if request.method == 'GET' and 'find' in request.GET:
 
 		find_item = request.GET.get('find', '')
 		find_item = find_item.lower()
 		item_results = []
-		final_results = []
 		results = 'no'
 
+		# get all matching items
 		found_items = Item.objects.filter(item_name__icontains=find_item)
 
-		# loop through all Items that match this keyword
-		for found_item in found_items:
-			# get all ItemConnections that link to this Item
-			found_itemconxs = ItemConnection.objects.filter(item=found_item, active=True).exclude(board__user=request.user)
-			# loop through all ItemConnections we retrieved
-			for found_itemconx in found_itemconxs:
-				# is the current user blocked?
-				if is_blocked(found_itemconx.board, request.user):
-					pass				
-				else:					
-					# get the view count for the ItemConnection
-					found_itemconx.views = ItemView.objects.filter(item_conx=found_itemconx).count()				
-					# add the ItemConnection to our results list
-					item_results.append(found_itemconx)
+		# loop through all matching items
+		for item in found_items:
 
-		# loop through all ItemConnections we have collected
-		for itemconx in item_results:
-			# check if we are the first item
-			if final_results:			
-				# loop through the existing items
-				for existing_itemconx in final_results:
-					# does the item we're looking to add have the same Item_name as this existing one?
-					if itemconx.item.item_name == existing_itemconx.item.item_name:
-						# does the item we're looking to add have more views than the existing one?
-						if itemconx.views > existing_itemconx.views:
-							# remove the old one, add the new one
-							final_results.remove(existing_itemconx)
-							final_results.append(itemconx)
-					# this is a unique item, add it to the list
+			# get the item connection for the item, must be active, must not belong to the person searching
+			item_conx = ItemConnection.objects.filter(item=item, active=True).exclude(board__user=request.user)[0]
+
+			# check if we have any results:
+			if item_results:
+				# loop through the current list of items
+				for citem in item_results:
+					# assume we cannot use it
+					useit = False
+					# if this list item has the same name as our item
+					if citem.item.item_name == item_conx.item.item_name:
+						# if it has less views
+						if citem.views > item_conx.views:
+							useit = False
+						else:
+							useit = True
+					# else if it does not have the same name, we're good
 					else:
-						final_results.append(itemconx)
-			# we're the first, add it to the list
+						useit = True
+				
+				# if at the end of it all, this item is the highest viewed with this name, add it to the list
+				if useit == True:
+					item_results.append(item_conx)
+			# its the first item in the list, so append it
 			else:
-				final_results.append(itemconx)
+				item_results.append(item_conx)
 
+
+
+			#### THIS IS FROM WHEN WE WERE PREFERRING ITEMS WHICH HAD NON UPLOADED IMAGES
+			# try:
+			# 	item_conx = ItemConnection.objects.filter(item=item, active=True, img_own=False).exclude(board__user=request.user)[0]				
+			# 	item_results.append(item_conx)
+			# except IndexError:
+			# 	try:
+			# 		item_conx = ItemConnection.objects.filter(item=item, active=True, img_own=True).exclude(board__user=request.user)[0]
+			# 		item_results.append(item_conx)
+			# 	except:
+			# 		pass
 
 		if item_results:
 			results = 'yes'
 
 		context_dict = {
 			'find_item':find_item,
+			'item_results':item_results,
 			'board':board,
 			'user_boards':user_boards,
 			'results':results,
-			'item_results':item_results,
-			'found_items':found_items,
-			'final_results':final_results
 		}
 
 		return render(request, template, context_dict)
@@ -977,18 +1016,15 @@ def search(request):
 	#items 
 	items = Item.objects.filter(item_name__icontains=search_term)
 	for item in items:
-		item_conxs = ItemConnection.objects.filter(item=item, active=True).exclude(board__slug='your-saved-items')
+		item_conxs = ItemConnection.objects.filter(item=item, active=True)
 		for item in item_conxs:
-			if is_blocked(item.board, request.user):
-				pass
-			else:
-				item.likes = ItemLike.objects.filter(item_conx=item).count()
-				try:
-					item.is_liked = ItemLike.objects.filter(item_conx=item, user=request.user).exists()
-				except:
-					item.is_liked = False
-				item.views = ItemView.objects.filter(item_conx=item).count()
-				item_results.append(item)			
+			item.likes = ItemLike.objects.filter(item_conx=item).count()
+			try:
+				item.is_liked = ItemLike.objects.filter(item_conx=item, user=request.user).exists()
+			except:
+				item.is_liked = False
+			item.views = ItemView.objects.filter(item_conx=item).count()
+			item_results.append(item)
 
 	# boards
 	all_boards = False
@@ -1072,18 +1108,15 @@ def search_item(request):
 	#items 
 	items = Item.objects.filter(item_name__icontains=search_term)
 	for item in items:
-		item_conxs = ItemConnection.objects.filter(item=item, active=True).exclude(board__slug='your-saved-items')
+		item_conxs = ItemConnection.objects.filter(item=item, active=True)
 		for item in item_conxs:
-			if is_blocked(item.board, request.user):
-				pass
-			else:
-				item.likes = ItemLike.objects.filter(item_conx=item).count()
-				try:
-					item.is_liked = ItemLike.objects.filter(item_conx=item, user=request.user).exists()
-				except:
-					item.is_liked = False
-				item.views = ItemView.objects.filter(item_conx=item).count()
-				item_results.append(item)
+			item.likes = ItemLike.objects.filter(item_conx=item).count()
+			try:
+				item.is_liked = ItemLike.objects.filter(item_conx=item, user=request.user).exists()
+			except:
+				item.is_liked = False
+			item.views = ItemView.objects.filter(item_conx=item).count()
+			item_results.append(item)
 
 	# boards
 	all_boards = False
@@ -1133,14 +1166,10 @@ def search_board(request):
 	all_items = []
 	items = Item.objects.filter(item_name__icontains=search_term)
 	for item in items:
-		item_conxs = ItemConnection.objects.filter(item=item, active=True).exclude(board__slug='your-saved-items')
+		item_conxs = ItemConnection.objects.filter(item=item, active=True)
 		for item in item_conxs:
-			if is_blocked(item.board, request.user):
-				pass
-			else:
-				all_items.append(item)
+			all_items.append(item)
 	item_count = len(all_items)
-
 
 	# boards
 	all_boards = False
@@ -1172,7 +1201,6 @@ def search_board(request):
 		'user_count':user_count,
 		'board_results':board_results,
 		'all_results':all_results,
-		'pri':isprivate,
 	}
 
 	return render(request, template, context_dict)
@@ -1191,12 +1219,9 @@ def search_user(request):
 	all_items = []
 	items = Item.objects.filter(item_name__icontains=search_term)
 	for item in items:
-		item_conxs = ItemConnection.objects.filter(item=item, active=True).exclude(board__slug='your-saved-items')
+		item_conxs = ItemConnection.objects.filter(item=item, active=True)
 		for item in item_conxs:
-			if is_blocked(item.board, request.user):
-				pass
-			else:
-				all_items.append(item)
+			all_items.append(item)
 	item_count = len(all_items)
 
 

@@ -231,6 +231,7 @@ def update_profile(request):
 	profile_form = ProfileForm(instance=profile, label_suffix='')	
 	social_form = UpdateSocial(instance=profile, label_suffix='')
 	bgform = ChangeBackgroundForm(instance=profile)
+	remaining = 500 - len(profile.bio)
 
 	if request.method == "POST":
 
@@ -277,7 +278,8 @@ def update_profile(request):
 		"user_form": user_form,
 		"profile_form": profile_form,
 		"social_form":social_form,
-		"bgform":bgform
+		"bgform":bgform,
+		'remaining':remaining,
 	})
 
 

@@ -95,11 +95,13 @@
 		            		        {% endthumbnail %}
 	            		        {% endfor %}
 
-            		        	{% if user.items != 3 %}
-            		        		<a class="plusMore" href="{% url 'u:profile' user.username  %}">
-            		            		<div class="plusMoreNumber">+{{ user.itemcount|add:"-2" }}</div>
+            		        	{% if item.items > 3 %}
+            		        		<a class="plusMore" href="{% url 'u:profile' item.username  %}">
+            		            		<div class="plusMoreNumber">+{{ item.itemcount|add:"-2" }}</div>
             		            	</a>
-            		            {% endif %}
+            		            {% else %}
+            		            	<div class="noitemspush"></div>
+            		           	{% endif %}
 	            		    </div>
 
 	            		    <div class="trendingFooter">

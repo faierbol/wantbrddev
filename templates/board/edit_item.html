@@ -52,6 +52,7 @@
             			
             			<label>About this item:</label>
                         {{ form.item_desc }}
+                        <span class="charsLeft"><span id="chars">{{ desc_remain }}</span> characters remaining</span>
 
                         <label>Board:</label>
                         <select id="currentBoard" name="currentBoard">
@@ -84,6 +85,7 @@
 
                             <label>Review this item:</label>
                             <textarea name="review" id="review" placeholder="Write a short review for others, explaining what you like or dislike about this item.">{{ itemconx.review }}</textarea>
+                            <span class="charsLeft"><span id="chars">{{ rev_remain }}</span> characters remaining</span>
                         </div>
 
             			<label>Make active</label>                        
@@ -184,6 +186,13 @@
             } else {
                 $('.gotThisExtra').hide();
             }
+        });
+
+        var maxLength = 1000;
+        $('textarea').keyup(function() {
+          var length = $(this).val().length;
+          var length = maxLength-length;
+          $('#chars').text(length);
         });
     });
 </script>

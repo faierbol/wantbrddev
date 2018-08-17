@@ -8,7 +8,9 @@
 
 
 {% block extra-css %}
-	<link type="text/css" href="{% static 'css/slick.css' %}" rel="stylesheet" />    
+	<link type="text/css" href="{% static 'css/slick.css' %}" rel="stylesheet" />   
+    <link href="{% static 'css/font/font-fileuploader.css' %}" media="all" rel="stylesheet">
+    <link href="{% static 'css/jquery.fileuploader.min.css' %}" media="all" rel="stylesheet"> 
 {% endblock %}
 
 
@@ -26,78 +28,45 @@
         
         <h3>Add an item to <em>'{{ board.board_name }}'</em></h3>
 
-        {% if messages %}
-          <ul class="messages">
-            {% for message in messages %}
-              <li class="{{ message.tags }}">{{ message }}</li>
-            {% endfor %}
-          </ul>
-        {% endif %}
-
-        {% if messages %}
-          {% for message in messages %}
-            <div class="alert {% if message.tags %} alert-{{ message.tags }}{% endif %}">{{ message|safe }}</div>
-          {% endfor %}
-        {% endif %}
-
         {% if form.errors %}
-          <div class="alert alert-error">
             <h4>Please fix the following errors</h4>
-            <ul>
-              {% for field in form %}
-                {% if field.errors %}
-                  {% for error in field.errors %}
-                    <li><a href="#id_{{ field.name }}" class="error">{{ error|escape }}</a></li>
-                  {% endfor %}
-                {% endif %}
-              {% endfor %}
-            </ul>
-            {% if form.non_field_errors %}
-              {{ form.non_field_errors }}
-            {% endif %}
+            {{ form.errors }}
           </div>
         {% endif %}
-
-<!--         <div style="padding:30px; border:1px solid #ccc; margin:10px 30px 0;">
-            <p>PROXY: {{ proxy }}</p>
-            <p>STATUS: {{ status }}</p>
-            {% if status == 200 %}
-            <p>IS 200</p>
-            {% else %}
-            <p>NOT 200</p>
-            {% endif %}
-            <p>Image src: {{ imgsrc }}</p>
-            <p>Method: {{ method }}</p>
-            <p>Image URL: {{ ogimg }}</p>
-            <p>Resp: {{ resp.content }}</p>
-        </div> -->
 
         <div class="addItemContent">
 
             {% if not ogimg or not output %}
-            <strong class="formtitle">Search wantbrd for an item:</strong>
-            <form method="GET" action="{% url 'b:add_item' board.id %}" id="finditem">
-                <input
-                    type="search"
-                    placeholder="Search for an item by name"
-                    name="find"
-                    id="find"
-                    value=""
-                    pattern=".{3,}"
-                    required
-                    title="Please enter at least 3 characters"
-                    class="scrapeUrl"
-                >
-                <button name="geturl" class="getItem">Search</button>
-            </form>
-            {% endif %}
 
-            <strong class="formtitle">Enter the website address where we can find this item:</strong>
-        	<form method="POST" id="scrapeitem">
-        		{% csrf_token %}
-        		<input type="text" name="targeturl" placeholder="Enter url of the item" value="{{ url }}" class="scrapeUrl">
-        		<button name="geturl" class="getItem">Get item</button>
-        	</form>
+            <div class="searchWnt">
+                <strong class="formtitle">Search wantbrd for an item:</strong>
+                <form method="GET" action="{% url 'b:add_item' board.id %}" id="finditem">
+                    <input
+                        type="search"
+                        placeholder="Search for an item by name"
+                        name="find"
+                        id="find"
+                        value=""
+                        pattern=".{3,}"
+                        required
+                        title="Please enter at least 3 characters"
+                        class="scrapeUrl"
+                    >
+                    <button name="geturl" class="getItem">Search</button>
+                </form>
+                {% endif %}
+            </div>
+
+            <div class="searchWeb">
+                <strong class="formtitle">Enter the URL where we can find your item:</strong>
+            	<form method="POST" id="scrapeitem">
+            		{% csrf_token %}
+            		<input type="text" name="targeturl" placeholder="Enter url of the item" value="{{ url }}" class="scrapeUrl">
+            		<button name="geturl" class="getItem">Get item</button>
+            	</form>
+            </div>
+
+            <div class="clearfix"></div>
 
             <div class="gettingContentLoader" style="display: none;">
                 <div class="spinner">
@@ -116,6 +85,8 @@
             	<form method="POST" enctype="multipart/form-data">
             		{% csrf_token %}
             		<div id="addItemForm">
+
+                        <h4>Item Image</h4>                        
 
             			<section id="uploadFromSite">
                             <p><strong>Click to select the image you would like to use.</strong></p>
@@ -143,15 +114,25 @@
                         <a href="#" id="uploadown">Or, upload your own image</a>
 
             			<section id="uploadOwnImage" style="display: none;">
-                            <p>Select an image from your device.</p>
-            				<input type="file" name="ownimage" id="ownimage">
+                            <p><strong>Select an image from your device.</strong></p>
+                            <input type="file" name="ownimage" id="ownimage">  
+                            <input type="hidden" id="b64pic" name="b64pic" value="">
+                            <label>I took this picture</label>                        
+                            <input type="checkbox" name="itook" id="itook" hidden="hidden" value="itook">
+                            <label class="switch" for="itook" rel="tooltip" title="Only select this option if you took this photo / created this image and it was not download from another website"></label>
             			</section>
 
-                        <a href="#" id="uploadweb" style="display: none;">Or, get images from URL</a>
+                        {% if existing_item %}
+                            <a href="#" id="uploadweb" style="display: none;">Use the original image</a>
+                        {% else %}
+                            <a href="#" id="uploadweb" style="display: none;">Or, get images from URL</a>
+                        {% endif %}
 
             		</div>
 
             		<div class="addItemFields">
+
+                        <h4>Item Details</h4>
 
     	        		<label>Item name:</label>
     	        		<input type="text" name="item_name" value="{{ page_title }}">
@@ -160,7 +141,8 @@
     	        		<input type="text" name="purchase_url" value="{{ url }}"><br>
 
     	        		<label>About this item:</label>
-    	        		<textarea name="item_desc"></textarea>
+    	        		<textarea name="item_desc" id="item_desc"></textarea>
+                        <span class="charsLeft"><span id="desc_chars">1000</span> characters remaining</span>
 
                         <label>Board:</label>
                         <select id="currentBoard" name="currentBoard">
@@ -180,7 +162,7 @@
                             <label>How would you rate this item?</label>
 
                             <div class="stars stars-example-fontawesome">
-                                <select id="example-fontawesome" name="your_rating" autocomplete="off">
+                                <select id="example-fontawesome" name="rating" autocomplete="off">
                                     <option value="1">1</option>
                                     <option value="2">2</option>
                                     <option value="3">3</option>
@@ -190,18 +172,20 @@
                             </div>
 
                             <label>Review this item:</label>
-                            <textarea name="review" id="review" placeholder="Write a short review for others, explaining what you like or dislike about this item.">{{ itemconx.review }}</textarea>
+                            <textarea name="review" id="review" placeholder="Write a review to help others, explaining what you like or dislike about this item."></textarea>
+                            <span class="charsLeft"><span id="rev_chars">1000</span> characters remaining</span>
                         </div>
 
                         <label>Make active</label>                        
-                        <input type="checkbox" name="active" id="itemactive" hidden="hidden" checked>
+                        <input type="checkbox" name="active" id="itemactive" value="active" hidden="hidden" checked>
                         <label class="switch" for="itemactive"></label>
 
     	        		<input type="hidden" name="scrapedimg" value="" id="scrapedimg">
     	        		<input type="hidden" name="imgsrc" value="web" id="imgsrc">
                         <input type="hidden" name="boardid" value="{{ board.id }}" id="board">
                         <input type="hidden" name="domain" value="{{ domain }}" id="domain">
-                        {{ form.rating }}
+                        <input type="hidden" name="copied_item" value="{{ itemconx.item }}">
+                        <input type="hidden" name="original_url" value={{ url }}>
     	        		<button class="grey large submit" name="additem" id="additem" value="1">Add item</button>
 
     	        	</div>
@@ -213,30 +197,34 @@
     </div>
 
     {% if item_results %}
-        <div class="wantResults">
+
+        <div class="wantResults">            
+
             <p><strong>Not what you were looking for?</strong> No problem, search the internet for the item and paste the web address above.</p>
             <div class="foundItems">                
-                {% for item in item_results %}
-
-                    <div class="foundItem match">
-                        {% thumbnail item.image "300x300" as im %}
-                            <a href="{% url 'b:add_existing_item' board.id item.id %}" class="addExistingItem">
+                {% for itemconx in final_results %}                    
+                    <div class="foundItem match" rel="tooltip" title="Select this item">
+                        {% thumbnail itemconx.image "300x300" as im %}
+                            <a href="{% url 'b:add_existing_item' board.id itemconx.id %}" class="addExistingItem">
                                 <img src="{{ im.url }}">
                             </a>
                         {% endthumbnail %}
-                        <h4>{{ item.item.item_name }}</h4>
-                        <a href="#" class="btn grey addExisting">Add item</a>
+                        <h4>{{ itemconx.item.item_name }}</h4>                        
                     </div>
                 {% endfor %}
                 <div class="clearfix"></div>
             </div>
-        {% else %}
+        </div>
+    
+    {% else %}
+        <div class="wantResults">
             {% if results == 'no' %}
                 <p><strong>Sorry, no one has added this item to wantbrd yet.</strong></p>
                 <p>Try searching the internet for the item and paste the web address above.</p>
             {% endif %}
         </div>
     {% endif %}
+
 </div>
 
 {% endblock %}
@@ -244,7 +232,39 @@
 {% block extra-js %}
 <script src="{% static 'js/jquery.barrating.js' %}" type="text/javascript"></script>
 <script src="{% static 'js/slick.min.js' %}" type="text/javascript"></script>
-<script>
+<script src="{% static 'js/jquery.fileuploader.min.js' %}" type="text/javascript"></script> 
+
+<script type="text/javascript">
+
+    // enable fileuploader plugin for background picture
+    $('input[name="ownimage"]').fileuploader({
+        inputNameBrackets: false,
+        extensions: ['jpg', 'jpeg', 'png', 'gif'],
+        addMore: false,
+        limit: 1,
+        fileMaxSize:2,
+        quality:75,
+        thumbnails: {
+            onImageLoaded: function(item) {
+                if (!item.html.find('.fileuploader-action-edit').length)
+                    item.html.find('.fileuploader-action-remove').before('<a class="fileuploader-action fileuploader-action-popup fileuploader-action-edit" title="Edit"><i></i></a>');
+            }
+        },
+        editor: {
+            cropper: {
+                ratio: '3:1',
+                minWidth: 1000,
+                minHeight: 600,
+                showGrid: true
+            },
+            onSave: function(blobOrDataUrl, item, listEl, parentEl, newInputEl, inputEl) {
+                $('#b64pic').val(blobOrDataUrl)
+            },
+        },
+        onFileRead: function(item, listEl, parentEl, newInputEl, inputEl) {
+            $('#b64pic').val(item.reader.src);
+        },
+    });
 
     // star rating
     $(function() {
@@ -267,7 +287,7 @@
         $('.imageSlider').slick({
             arrows:true,
             slidesToShow: 1,
-            dots: false,
+            dots: true,
             nextArrow: '<i class="itemLeft fa fa-chevron-right"></i>',
             prevArrow: '<i class="itemRight fa fa-chevron-left"></i>',
         });
@@ -320,6 +340,14 @@
                         sticker: false,
                     }
                 });
+                var offset = $('#imageSlider').offset();
+                var hash = '#scrapeitem';
+                var offset = $(hash).offset();
+                if (offset) {
+                    $('html, body').animate({ scrollTop: offset.top }, 'slow');
+                    location.hash = hash;
+                    return false;
+                }
 		    } else {
 		    	return true
 		    }
@@ -331,6 +359,21 @@
                 $('.gotThisExtra').hide();
             }
         })
+
+        var maxLength = 1000;
+
+        $('textarea#item_desc').keyup(function() {
+          var length = $(this).val().length;
+          var length = maxLength-length;
+          $('#desc_chars').text(length);
+        });
+
+        $('textarea#review').keyup(function() {
+          var length = $(this).val().length;
+          var length = maxLength-length;
+          $('#rev_chars').text(length);
+        });
+
     });
 </script>
 {% endblock %}

@@ -13,11 +13,31 @@
 		<div class="panel privacysettings">
 
 			<h2>Create an account</h2>
+			<p>Enter your details below to sign up and start creating your boards!</p>
 
-			<form method="post" novalidate>
+			<form method="post" novalidate id="signupform">
 				{% csrf_token %}
-				{{ form.as_p }}
-				<button type="submit">Create an account</button>		
+				<label>Username*</label>
+				<p rel="tooltip" title="Letters, digits and @/./+/-/_ only">{{ form.username }}</p>
+
+				<label>Email address*</label>
+				<p rel="tooltip" title="Must be a valid email address">{{ form.email }}</p>
+
+				<label>First name*</label>
+				<p>{{ form.first_name }}</p>
+
+				<label>Last name/s</label>
+				<p>{{ form.last_name }}</p>
+
+				<label>Create a password*</label>
+				<p rel="tooltip" title="Password must contain at least 8 characters, cannot be entirely numeric &amp; cannot be a commonly used password">{{ form.password1 }}</p>
+
+				<label>Confirm password*</label>
+				<p>{{ form.password2 }}</p>
+
+				<p id="agreeterms"><input type="checkbox" name="terms" id="terms"> <span>I agree to the Wantbrd <a href="#">Terms &amp; Conditions</a></span></p>
+
+				<button type="submit" class="large grey">Create your account</button>		
 			</form>
 
 		</div>
@@ -25,5 +45,98 @@
 	</div>
 
 </section>
+
+{% endblock %}
+
+{% block extra-js %}
+
+	<script type="text/javascript">
+		var sform = $('#signupform');
+		var subbtn = $('#signupform button');
+		var username = $('#id_username');
+		var email = $('#id_email');
+		var fname = $('#id_first_name');
+		var p1 = $('#id_password1');
+		var p2 = $('#id_password2');
+		var terms = $('#terms');
+		var sendit = false;
+		var x = 0;
+		var errors = [];
+
+		function isEmail(email) {
+			var regex = /^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+			return regex.test(email);
+		}
+
+		subbtn.click(function(e){
+			e.preventDefault();
+
+			// validate user
+			if (username.val() == ''){
+				errors.push('You must enter a username');
+			} else {
+				x ++;
+			}
+
+			// validate email
+			if (email.val() == ''){
+				errors.push('You must provide an email address');
+			} else if (!isEmail(email.val())) {
+				errors.push('You must provide a valid email address');
+			} else {
+				x ++;
+			}
+
+			// validate first name
+			if (fname.val() == ''){
+				errors.push('You must provide a first name');
+			} else {
+				x ++;
+			}
+
+			// validate password
+			if(p1.val() == '') {
+				errors.push('Please set a password');
+			} else if (p2.val() == '') {
+				errors.push('Please confirm your password');
+			} else if (p2.val().length < 8) {
+				errors.push('Your password must be at least 8 characters long');
+			} else if (p1.val() !== p2.val()) {
+				errors.push('Confirm password must match');
+			} else {
+				x++;
+			}
+
+			// validate terms
+			if (terms.is(':checked')) {
+				x++;
+			} else {
+				errors.push('You must agree to our Terms and Conditions');
+			}
+
+			if(x<5){
+				console.log(x)
+				errors.forEach(function(error) {
+				   new PNotify({
+				       title: false,
+				       type: "warning",
+				       text: error,
+				       shadow: false,
+				       delay: 5000,
+				       buttons: {
+				           sticker: false,
+				       }
+				   }); 
+				});
+				errors = [];
+				x = 0;
+			} else {
+				console.log(x);
+				sform.submit();
+			}
+
+		});
+
+	</script>
 
 {% endblock %}
