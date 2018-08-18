@@ -4008,29 +4008,18 @@ footer {
 }
 
 @media screen and (max-width: 534px) {
-    #boardItems {
-        background:#fff;
-        margin:0;
-        padding:0;
-    }
-    #boardItems .featBox.boardPic {
-        border:none;
-        padding:40px 20px 40px 20px;
-        margin-bottom:40px;
-        border-bottom:1px solid #ebebeb;
-    }
     .boardItemStats {
         border-top:none;
         padding-top:0;
     }
-    a.boardItemName {
+/*    a.boardItemName {
         font-size: 1.5rem;
         text-align: left;
         border-bottom:none;
         padding-bottom:0px;
         margin-bottom:10px;
         line-height: 1.9rem;
-    }
+    }*/
     .boardItemStats span:first-child {
         padding-left:0;
     }
@@ -4123,6 +4112,15 @@ footer {
     }
     #updatesocialform p, #updateprofileform p {
         margin-bottom:30px;
+    }
+    #boardItems {
+        margin:10px;
+        padding:10px;
+    }
+    #boardItems .featBox.boardPic {
+        padding:20px 10px 20px 10px;
+        margin-bottom:40px;
+        border-bottom:1px solid #ebebeb;
     }
 }
 
@@ -4238,6 +4236,19 @@ footer {
     }
     .md-modal input[type="search"]{        
         font-size: 1rem;
+    }
+}
+
+@media screen and (max-width: 415px) {
+    #boardItems {
+        margin:0;
+        padding:0;
+        background: #fff;
+    }
+    #boardItems .featBox.boardPic {
+        border:none;
+        padding-bottom:30px;
+        margin-bottom:30px;
     }
 }
 
