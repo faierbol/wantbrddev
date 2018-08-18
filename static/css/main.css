@@ -2333,10 +2333,14 @@ BOARD
         border-bottom:none;
     }
     .discoveryFeed h3 {
-        background:#444;
         color:#fff;
         padding:15px 20px;
         font-weight: lighter;
+        background: rgb(134,128,178); /* Old browsers */
+        background: -moz-linear-gradient(left, rgba(134,128,178,1) 0%, rgba(125,185,232,1) 100%); /* FF3.6-15 */
+        background: -webkit-linear-gradient(left, rgba(134,128,178,1) 0%,rgba(125,185,232,1) 100%); /* Chrome10-25,Safari5.1-6 */
+        background: linear-gradient(to right, rgba(134,128,178,1) 0%,rgba(125,185,232,1) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+        filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#8680b2', endColorstr='#7db9e8',GradientType=1 ); /* IE6-9 */
     }
     .discoveryImage {
         display: block;
@@ -3555,9 +3559,9 @@ footer {
         margin-top:30px;
     }
     .discoveryItem {
-        width: 31%;
+        width: 32.33333%;
         float: left;
-        margin-right: 3.5%;
+        margin-right: 2%;
         margin-bottom:30px;
         padding:20px;
         border-radius:3px;
@@ -3780,7 +3784,7 @@ footer {
         background:#fff;
         color:#333;
         text-align: center;
-        padding:0 20px 20px 20px;        
+        padding:0 20px 40px 20px;        
     }
     .boardVideo {
         padding-bottom:20px;
@@ -3985,6 +3989,12 @@ footer {
     .wantResults {
         padding:0 20px;
     }
+    .boardItemStats {
+        text-align: center;
+    }
+    .boardItemStats .itemTools {
+        float: none;
+    }
 }
 
 @media screen and (max-width: 560px) {
@@ -4038,11 +4048,14 @@ footer {
     }    
     .profileBoardItem, .profileBoardItem.create {
         border:none;
-        margin-bottom:40px;
-    }
-    .profileBoardItem.create {
+        margin-bottom:30px;
+        padding-bottom:30px;
         border-bottom:1px solid #dbdbdb;
-        padding-bottom:40px;
+    }
+    .profileBoardItem:last-child {
+        margin-bottom:0;
+        padding-bottom:0;
+        border:none;
     }
     .profileBoardName a {
         font-size: 2rem;
@@ -4194,6 +4207,11 @@ footer {
     .feedLeft, .feedRight {
         padding:0 20px;
     }
+    .discoveryFeedContent {
+        background:#fff;
+        margin-top:0;
+        padding-top:30px;
+    }
     .discoveryItem {
         width: 100%;
         float: none;
@@ -4311,7 +4329,7 @@ footer {
     .boardConfig {
         position: absolute;
         right: 10px;
-        top:-55px;
+        top:-35px;
         position: absolute;
     }
 }
@@ -4322,8 +4340,9 @@ footer {
         padding:0;
         background: #fff;
     }
-    #boardItems .featBox.boardPics {
+    #boardItems .featBox.boardPic {
         border:none;
+        border-bottom:1px solid #dbdbdb;
         padding-bottom:30px;
         margin-bottom:30px;
     }
