@@ -546,7 +546,7 @@ def view_item(request, username, board_name, itemconx_id):
 			new_board_name = ''
 			itemconxid =  request.POST.get("itemconx_id")
 			ItemConnection.copy_to_board(boardid, new_board_name, itemconxid, request)
-			messages.info(request, '"{0}" was added to the board, "{1}".'.format(itemconx.item.item_name, itemconx.board.board_name))
+			messages.info(request, '"{0}" was added to your board.'.format(itemconx.item.item_name))
 			return HttpResponseRedirect(request.path_info)
 
 		# if save later
@@ -1172,7 +1172,6 @@ def search_board(request):
 		'user_count':user_count,
 		'board_results':board_results,
 		'all_results':all_results,
-		'pri':isprivate,
 	}
 
 	return render(request, template, context_dict)

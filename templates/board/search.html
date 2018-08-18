@@ -81,8 +81,7 @@
 			            	            {% else %}
 			            	            	<strong>{{ item.board_name }}</strong>
 			            	            {% endif %}
-			            	            
-			            	            <span><i class="fas fa-eye"></i> {{ item.views }}</span>
+			            	            			            	            
 			            	        </div>
 			            	    </a>
 			            	    <div class="trendingItems clearfix">	
@@ -130,6 +129,7 @@
 			            	    </a>
 			            	    <div class="trendingFooter">
 			            	        <span>{{ item.totalitems }} {% if item.totalitems > 1 or item.totalitems == 0 %} Items {% else %} Item {% endif %}</span>
+			            	        <span>{{ item.views }} {% if item.views > 1 or item.views == 0 %} Views {% else %} View {% endif %}</span>
 			            	    </div>
 			            	</div>
 
@@ -188,11 +188,11 @@
     	            		        </span>
     	            		        <span>
     	            		        	{{ item.itemcount }}
-    	            		        	{% if item.itemcount|add:"-1" == 1 %}Item{% else %}Items{% endif %}
+    	            		        	{% if item.itemcount == 1 %}Item{% else %}Items{% endif %}
     	            		        </span>
     	            		        <span>
     	            		        	{{ item.viewscount }}
-    	            		        	{% if item.viewscount|add:"-1" == 1 %}View{% else %}Views{% endif %}
+    	            		        	{% if item.viewscount == 1 %}View{% else %}Views{% endif %}
     	            		        </span>
     	            		    </div>		            		    
 

@@ -177,9 +177,18 @@
 {% block extra-js %}
 <script type="text/javascript" src="{% static 'fluent_comments/js/ajaxcomments.js' %}"></script>
 <script>
- $(function () {
-     $('[data-toggle="tooltip"]').tooltip({html: true})
- })</script>
+	$(function () {
+		$('[data-toggle="tooltip"]').tooltip({html: true})
+	});
+	// show field to add new board
+	$('.selectBoard').change(function(){
+	    if ($(this).val() == 'newBoard') {
+	        $('.addNewBoard').show();
+	    } else {
+	        $('.addNewBoard').hide();
+	    }
+	})
+</script>
 
  {% if messages %}
      {% for message in messages %}    

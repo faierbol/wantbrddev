@@ -89,6 +89,7 @@
 .slick-slide img
 {
     display: block;
+    border-radius: 9px;
 }
 .slick-slide.slick-loading img
 {
@@ -101,6 +102,7 @@
 .slick-initialized .slick-slide
 {
     display: block;
+    padding:0 5px;
 }
 .slick-loading .slick-slide
 {
@@ -119,7 +121,7 @@
 }
 
 .slick-dots {
-    position: absolute;
+    /*position: absolute;*/
     bottom: -45px;
     display: block;
     width: 100%;
