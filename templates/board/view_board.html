@@ -144,9 +144,29 @@
 
 
                 {% if board.board_name|length > 50 %}
-                    <h1>{{ board.board_name|slice:":50" }}<u class="tooLong" rel="tooltip" title="{{ board.board_name }}">...</u></h1>
+                    <h1>
+                        {{ board.board_name|slice:":50" }}<u class="tooLong" rel="tooltip" title="{{ board.board_name }}">...</u>                        
+                        {% if editable %}
+                            <i class="fas fa-pencil-alt editBoardDesc"></i>
+                        {% endif %}
+                    </h1>
                 {% else %}
-                    <h1>{{ board.board_name }}</h1>
+                    <h1>
+                        <span id="theBoardTitle">{{ board.board_name }}</span>                        
+                        
+                        {% if editable %}
+                            <div id="editBoardName" style="display: none;">
+                                <form method="POST">
+                                    {% csrf_token %}
+                                    <input type="text" id="boardName" name="boardName" value="{{ board.board_name }}">
+                                    <button class="altbtn" name="updateboardname" value="1"><i class="fas fa-check"></i></button>
+                                    <a href="#" id="hideEditName" style="display: none;"><i class="fas fa-times"></i></a>
+                                </form>                
+                            </div>                    
+                            <a href="#" id="editBoardTitle" rel="tooltip" title="Edit the board name"><i class="fas fa-pencil-alt"></i></a>
+                        {% endif %}
+
+                    </h1>
                 {% endif %}
 
                 {% if board.slug == 'your-saved-items' %}
@@ -568,6 +588,23 @@
                 726: 3,
                 400: 2
             }
+        });
+
+        // show title edit
+        $('#editBoardTitle').click(function(e){
+            $( "#theBoardTitle" ).hide();
+            $( "#editBoardName" ).show();
+            $( "#hideEditName" ).show();        
+            $( "#editBoardTitle" ).hide();
+            e.preventDefault();
+        });
+
+        // hide title edit
+        $('#hideEditName').click(function(e){
+            $( "#theBoardTitle" ).show();
+            $( "#editBoardName" ).hide();
+            $( "#editBoardTitle" ).show();
+            e.preventDefault();
         });
 
         // show desc edit

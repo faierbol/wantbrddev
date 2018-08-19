@@ -225,6 +225,13 @@ def edit_board(request, board_id):
 				messages.info(request, 'Your board description was updated.')
 				return HttpResponseRedirect(request.path_info)
 
+			# update name
+			if request.POST.get("updateboardname"):
+				new_name = request.POST.get("boardName")
+				Board.objects.filter(pk=board.id).update(board_name=new_name)
+				messages.info(request, 'Your board name was updated.')
+				return HttpResponseRedirect(request.path_info)
+
 			# update tags
 			if request.POST.get("updatetags"):
 				form = UpdateTags(request.POST, instance=board)

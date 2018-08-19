@@ -1545,6 +1545,10 @@ BOARD
         margin-right:15px;
         font-size: .8rem;
     }
+    #editBoardName input[type=text]{
+        border:none;
+        border-bottom:1px solid #dbdbdb;
+    }
     .boardStats a, .boardStats span {
         margin-right:8px;
     }
@@ -1577,6 +1581,9 @@ BOARD
         word-wrap: break-word;
         -ms-word-break: break-all;
         word-break: break-word;        
+    }
+    .boardHeader h1 i {
+        font-size: .95rem;
     }
     .boardHeader span.type {
         font-size:.9rem;
