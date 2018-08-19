@@ -155,27 +155,27 @@
 
                 <div class="bTags clearfix" {% if not editable and not board.thetags %}style="padding:0"{% endif %}>
                     {% if not board.slug == 'your-saved-items' %}
-                    {% if editable %}
-                        <div id="editTags" style="display: none;">
-                            <form method="POST">
-                                {% csrf_token %}
-                                {{ tagform }}
-                                <button class="altbtn" name="updatetags" value="1"><i class="fas fa-check"></i></button>
-                                <a href="#" id="hideEditTags" style="display: none;"><i class="fas fa-times"></i></a>
-                            </form>                
+                        <div class="tags" {% if not editable %} style="padding-left:0" {% endif %}>    
+                            <div id="theTags">
+                            	{% for tag in board.thetags %}
+                            		<span><a href="{% url 'search_board' %}?kw={{ tag }}">#{{ tag }}</a></span>
+                            	{% endfor %}
+                            </div>
                         </div>
-                        
-                        <a href="#" id="showEditTags" rel="tooltip" title="Set the board tags">
-                            {% if not board.thetags %} Tags {% endif %} &nbsp; <i class="fas fa-pencil-alt"></i>
-                        </a>                        
-                    {% endif %}
-                    <div class="tags" {% if not editable %} style="padding-left:0" {% endif %}>    
-                        <div id="theTags">
-                        	{% for tag in board.thetags %}
-                        		<span><a href="{% url 'search_board' %}?kw={{ tag }}">#{{ tag }}</a></span>
-                        	{% endfor %}
-                        </div>
-                    </div>
+                        {% if editable %}
+                            <div id="editTags" style="display: none;">
+                                <form method="POST">
+                                    {% csrf_token %}
+                                    {{ tagform }}
+                                    <button class="altbtn" name="updatetags" value="1"><i class="fas fa-check"></i></button>
+                                    <a href="#" id="hideEditTags" style="display: none;"><i class="fas fa-times"></i></a>
+                                </form>                
+                            </div>
+                            
+                            <a href="#" id="showEditTags" rel="tooltip" title="Set the board tags">
+                                {% if not board.thetags %} Tags {% endif %} &nbsp; <i class="fas fa-pencil-alt"></i>
+                            </a>                        
+                        {% endif %}
                     {% endif %}
 
                 </div>
