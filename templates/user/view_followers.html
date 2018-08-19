@@ -29,16 +29,25 @@
                         {% endif %}
                     </a>
                     <div class="profileDetails">
-                        <span>@{{ profile.user.username }}</span>
-                        <h3>{{ profile.user.first_name }} {{ profile.user.last_name }}</h3>
+                        {% if profile.user.username|length > 40 %}
+                        <span>@{{ profile.user.username|slice:":40" }}<u class="tooLong" rel="tooltip" title="{{ profile.user.username }}">...</u></span>
+                        {% else %}
+                        <span>@{{ profile.user.username}}</span>
+                        {% endif %}
+
+                        {% if profile.user.get_full_name|length > 50 %}
+                        <h3>{{ profile.user.get_full_name|slice:":50" }}<u class="tooLong" rel="tooltip" title="{{ profile.user.get_full_name }}">...</u></h3>
+                        {% else %}
+                        <h3>{{ profile.user.get_full_name }}</h3>
+                        {% endif %}
                         <div class="profileStats">
-                            <p><a href="#">
+                            <p><a href="{% url 'u:profile_followers' profile.user.username %}">
                                 <span>{{ no_followers }}</span>FOLLOWERS
                             </a></p>
-                            <p><a href="#">
+                            <p><a href="{% url 'u:profile_following' profile.user.username %}">
                                 <span>{{ no_connections }}</span>FOLLOWING
                             </a></p>
-                            <p><span>{{ boards }}</span>{% if boards == 1 %}BOARD{% else %}BOARDS{% endif %}</p>
+                            <p><a href="{% url 'u:profile' profile.user.username %}"><span>{{ boards }}</span>{% if boards == 1 %}BOARD{% else %}BOARDS{% endif %}</a></p>
                         </div>                        
                         {% if profile.user == request.user %}
                             {% if request.path != '/u/' %}
@@ -109,32 +118,47 @@
 
         {% if followers %}
 
-            {% for con in followers %}
+            {% for auser in followers %}
 
-                <div class="followCard">
+                <div class="followCard match">
                     <a class="followProfile" href="#">
-                        {% if con.creator.profile.picture %}
-                            <div class="circle" style="background-image:url('{{ con.creator.profile.picture.url }}');"></div>
+                        {% if auser.creator.profile.picture %}
+                            <div class="circle" style="background-image:url('{{ auser.creator.profile.picture.url }}');"></div>
                         {% else %}
                             <div class="circle" style="background-image:url('{% static 'img/default-hero.png' %}');"></div>
                         {% endif %}
                     </a>
                     <div class="followInfo">
-                        <div class="followCardBtn">
-                            {% if con.followed %}
-                                <form method="POST">
-                                    {% csrf_token %}
-                                    <button class="naked" name="unfollow"><i class="fas fa-times"></i> Unfollow</button>
-                                </form>
-                            {% else %}
-                                <form method="POST">
-                                    {% csrf_token %}
-                                    <button class="naked" name="follow"><i class="fas fa-user-plus"></i></i> Follow</button>
-                                </form>
-                            {% endif %}
-                        </div>
-                        <span><a href="#">@{{ con.creator.username }}</a></span>
-                        <strong><a href="#">{{ con.creator.get_full_name }}</a></strong>
+
+                        {% if request.user != auser.creator %}
+                            <div class="followCardBtn">
+                                {{ auser.followers }}
+                                {% if auser.followed %}
+                                    <form method="POST">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="auser" value="{{ auser.creator.id }}">
+                                        <button class="naked" name="unfollowcard"><i class="fas fa-times"></i> Unfollow</button>
+                                    </form>
+                                {% else %}
+                                    <form method="POST">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="auser" value="{{ auser.creator.id }}">
+                                        <button class="naked" name="followardc"><i class="fas fa-user-plus"></i></i> Follow</button>
+                                    </form>
+                                {% endif %}
+                            </div>
+                        {% endif %}
+                        {% if auser.creator.username|length > 40 %}
+                            <span><a href="{% url 'u:profile' auser.creator.username %}">@{{ auser.creator.username|slice:":40" }}<u class="tooLong" rel="tooltip" title="{{ auser.creator.username }}">...</u></a></span>
+                        {% else %}
+                            <span><a href="{% url 'u:profile' auser.creator.username %}">@{{ auser.creator.username }}</a></span>
+                        {% endif %}
+
+                        {% if auser.creator.get_full_name > 50 %}
+                            <strong><a href="{% url 'u:profile' auser.creator.username %}">{{ auser.creator.get_full_name|slice:":50" }}<u class="tooLong" rel="tooltip" title="{{ auser.creator.get_full_name }}">...</u></a></strong>
+                        {% else %}
+                            <strong><a href="{% url 'u:profile' auser.creator.username %}">{{ auser.creator.get_full_name }}</a></strong>
+                        {% endif %}
                     </div>
                     <div class="clearfix"></div>
                 </div>
@@ -142,7 +166,7 @@
             {% endfor %}
 
         {% else %}
-            <p>This user is has no followers</p>
+            <p><strong>{{ profile.user.get_full_name }}</strong> has no followers right now.</p>
         {% endif %}
 
     </div>

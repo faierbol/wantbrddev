@@ -1545,9 +1545,29 @@ BOARD
         margin-right:15px;
         font-size: .8rem;
     }
+    #editBoardName {
+        width: 100%;
+        max-width: 450px;
+        position: relative;
+        margin: auto;
+    }
     #editBoardName input[type=text]{
+        width:100%;
         border:none;
         border-bottom:1px solid #dbdbdb;
+        padding-right: 50px;
+    }
+    #editBoardName button, #editBoardName #hideEditName {
+        position: absolute;
+        right:0;
+        top:19px;
+        height: 15px;
+        line-height: 15px;
+        font-size: .85rem;
+    }
+    #editBoardName button {
+        right:15px;
+        top:20px;
     }
     .boardStats a, .boardStats span {
         margin-right:8px;
@@ -1637,7 +1657,8 @@ BOARD
         background:#1A2315;
         padding:30px;
         color:#fff;
-        text-align: center;                
+        text-align: center;  
+        border-radius: 0 0 3px 3px;              
     }    
     #boardItems {
         margin-top:40px;
@@ -2475,6 +2496,11 @@ BOARD
     }
     .followInfo {
         padding-left:65px;
+        padding-right:60px;
+        overflow-wrap: break-word;
+        word-wrap: break-word;
+        -ms-word-break: break-all;
+        word-break: break-word;
     }
         #followall {
             font-size: 1.3rem;
@@ -2530,6 +2556,7 @@ BOARD
         margin-right: 2%;
         margin-bottom:2%;
         border-radius: 3px;
+        position: relative;
     }
     .profileFollows .followCard:nth-child(4n){
         margin-right:0;
@@ -2538,7 +2565,9 @@ BOARD
         clear: both;
     }
     .followCardBtn {
-        float: right;
+        position: absolute;
+        right:15px;
+        top:15px;
     }
 
 .searchTerm {
@@ -2854,6 +2883,7 @@ ITEM DETAILS
             color:#333;
             border:1px solid #999;
             padding:20px 30px;
+            border-radius: 100px;
         }
         .popComments input[type=submit]:hover {
             color:#000;
@@ -3495,6 +3525,25 @@ footer {
 /* ==========================================================================
    MEDIA QUERIES
    ========================================================================== */
+
+@media screen and (max-width: 1280px) {
+   .profileFollows .followCard {
+       width: 32%;
+   }
+   .profileFollows .followCard:nth-child(4n){
+       margin-right:2%;
+   }
+   .profileFollows .followCard:nth-child(4n+1){
+       clear: none;
+   }
+   .profileFollows .followCard:nth-child(3n){
+       margin-right:0;
+   }
+   .profileFollows .followCard:nth-child(3n+1){
+       clear: both;
+   }
+}
+
 @media screen and (max-width: 1200px) {
     .rightFade, .leftFade {
         display: none;
@@ -3680,6 +3729,21 @@ footer {
     }
     .fcol:last-child {
         margin-bottom:0;
+    }
+    .profileFollows .followCard {
+        width: 49%;
+    }
+    .profileFollows .followCard:nth-child(3n){
+        margin-right:2%;
+    }
+    .profileFollows .followCard:nth-child(3n+1){
+        clear: none;
+    }
+    .profileFollows .followCard:nth-child(2n){
+        margin-right:0;
+    }
+    .profileFollows .followCard:nth-child(2n+1){
+        clear: both;
     }
 }
 
@@ -3976,6 +4040,17 @@ footer {
     }
     .foundItem:nth-child(2n+1) {
         clear: both;  
+    }
+    .profileFollows .followCard {
+        width: 100%;
+        margin:0 0 10px 0;
+        float: none;
+    }
+    .profileFollows .followCard:nth-child(2n){
+        margin-right:0;
+    }
+    .profileFollows .followCard:nth-child(2n+1){
+        clear: none;
     }
 }
 

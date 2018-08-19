@@ -19,7 +19,7 @@ def home(request):
 	template = "user/index.html"	
 	editable = True
 	user = request.user
-	boards = Board.objects.filter(user=user.id)
+	boards = Board.objects.filter(user=user.id).exclude(slug='your-saved-items')
 	
 	for board in boards:
 		board.items = []
@@ -468,25 +468,31 @@ def profile(request, username):
 	return render(request, template, context_dict)
 
 
-# View comeones followers
+# View someones followers
 def profile_followers(request, username):
 	template = 'user/view_followers.html'	
 	user = get_object_or_404(User, username=username)
 
 	try:
-		boards = Board.objects.filter(user=user.id).exclude().count()
+		boards = Board.objects.filter(user=user.id).exclude(slug='your-saved-items').count()
 		profile = user.profile
 		connections = profile.get_connections()
 		followers = profile.get_followers()
 		no_connections = profile.get_connections().count()
 		no_followers = profile.get_followers().count()
 
-		for auser in followers:
-			if request.user == auser.creator:
-				auser.followed = True
-			else:
-				auser.followed = False
+		is_followed = False
+		for x in followers:
+			if x.creator == request.user:
+				is_followed = True
 
+		for auser in followers:
+			auserfollowers = auser.creator.profile.get_followers()
+			for x in auserfollowers:
+				if x.creator == request.user:
+					auser.followed = True
+				else:
+					auser.followed = False
 	except:
 		pass
 
@@ -501,16 +507,28 @@ def profile_followers(request, username):
 		if 'unfollow' in request.POST:
 			user.profile.break_connection(request)
 
+		# if user followed
+		if 'followcard' in request.POST:
+			userid = request.POST.get("auser")
+			auser = User.objects.get(pk=userid)
+			auser.profile.make_connection(request)
+
+		#if user unfollowed
+		if 'unfollowcard' in request.POST:
+			userid = request.POST.get("auser")
+			auser = User.objects.get(pk=userid)
+			auser.profile.break_connection(request)
+
 		return HttpResponseRedirect(request.path_info)
 
 	context_dict = {
 		'profile': profile,
 		'no_followers': no_followers,
 		'followers': followers,
-		'boards':boards,
 		'no_connections': no_connections,
 		'connections': connections,
 		'followers': followers,
+		'is_followed':is_followed,
 		'boards':boards,
 	}
 
@@ -519,19 +537,23 @@ def profile_followers(request, username):
 
 # View who someone is following
 def profile_following(request, username):
-	template = 'user/view_followers.html'	
+	template = 'user/view_following.html'	
 	user = get_object_or_404(User, username=username)
 
 	try:
-		boards = Board.objects.filter(user=user.id).exclude().count()
+		boards = Board.objects.filter(user=user.id).exclude(slug='your-saved-items').count()
 		profile = user.profile
 		followers = profile.get_followers()		
 		connections = profile.get_connections()
-		followers = profile.get_followers()
 		no_connections = profile.get_connections().count()
 		no_followers = profile.get_followers().count()
 
-		for auser in followers:
+		is_followed = False
+		for x in followers:
+			if x.creator == request.user:
+				is_followed = True
+
+		for auser in connections:
 			if request.user == auser.creator:
 				auser.followed = True
 			else:
@@ -551,16 +573,28 @@ def profile_following(request, username):
 		if 'unfollow' in request.POST:
 			user.profile.break_connection(request)
 
+		# if user followed
+		if 'followcard' in request.POST:
+			userid = request.POST.get("auser")
+			auser = User.objects.get(pk=userid)
+			auser.profile.make_connection(request)
+
+		#if user unfollowed
+		if 'unfollowcard' in request.POST:
+			userid = request.POST.get("auser")
+			auser = User.objects.get(pk=userid)
+			auser.profile.break_connection(request)
+
 		return HttpResponseRedirect(request.path_info)
 
 	context_dict = {
 		'profile': profile,
 		'no_followers': no_followers,
 		'followers': followers,
-		'boards':boards,
 		'no_connections': no_connections,
 		'connections': connections,
 		'followers': followers,
+		'is_followed':is_followed,
 		'boards':boards,
 	}
 
