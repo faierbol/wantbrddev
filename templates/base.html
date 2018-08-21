@@ -93,7 +93,7 @@
 <footer>
     <div class="container clearfix">
         
-        <div class="fcol">
+<!--         <div class="fcol">
             <a href="#" class="instagramLink">follow us</a>
             < insta feed >
         </div>
@@ -101,19 +101,19 @@
         <div class="fcol">
             <a href="#" class="twitterLink">follow us</a>
             < twitter feed >
-        </div>
+        </div> -->
 
         <div class="fcol">
             <h5>Explore</h5>
             <nav class="clearfix">
                 <ul>
-                    <li><a href="#">Home</a></li>
-                    <li><a href="#">Login</a></li>
-                    <li><a href="#">Register</a></li>
-                    <li><a href="#">Influencers</a></li>
-                    <li><a href="#">Contact us</a></li>
-                    <li><a href="#">Blog</a></li>
-                    <li><a href="#">Terms of Use</a></li>
+                    <li><a href="/">Home</a></li>
+                    <li><a href="{% url 'login' %}">Login</a></li>
+                    <li><a href="{% url 'signup' %}">Register</a></li>
+                    <li><a href="{% url 'influencers' %}">Influencers</a></li>
+                    <!-- <li><a href="#">Contact us</a></li> -->
+                    <!-- <li><a href="#">Blog</a></li> -->
+                    <li><a href="{% url 'terms' %}">Terms of Use</a></li>
                 </ul>
             </nav>
             <p class="copy">&copy; {% now "Y" %} Wantbrd | All rights reserved</p>
@@ -230,6 +230,8 @@
 
         // social
         SocialShareKit.init();
+
+        // match height
         $(function() {
             $('.match').matchHeight();
         });
@@ -255,7 +257,7 @@
         (function() {
           $(function() {
             $('.toggle').click(function() {
-              return $('.tip').toggle();
+              return $(this).next('.tip').toggle();
             });
             return $(document).mouseup(function(e) {
               var container, popup;

@@ -173,21 +173,21 @@ def my_home(request):
 		if 'likeitem' in request.POST:
 			itemconx_id = request.POST.get("itemconx_id")						
 			like_item(itemconx_id, request.user)
-			messages.info(request, 'Item liked')
+			# messages.info(request, 'Item liked')
 			return HttpResponseRedirect(request.path_info)
 
 		# unlike item
 		if 'unlikeitem' in request.POST:
 			itemconx_id = request.POST.get("itemconx_id")
 			unlike_item(itemconx_id, request.user)
-			messages.info(request, 'Item unliked')
+			# messages.info(request, 'Item unliked')
 			return HttpResponseRedirect(request.path_info)
 
 		# save item
 		if 'savelater' in request.POST:
 			itemconx = request.POST.get("itemconx_id")
 			ItemConnection.save_item(itemconx, request)
-			messages.info(request, 'This item has been added to your Saved Items collection')
+			messages.info(request, 'This item has been added to your Saved Items')
 			return HttpResponseRedirect(request.path_info)
 
 	context_dict = {
@@ -669,3 +669,13 @@ def my_notifications(request):
 	}
 
 	return render(request, template, context_dict)
+
+
+def terms(request):
+	template = 'terms.html'
+	return render(request, template)
+
+
+def influencers(request):
+	template = 'influencers.html'
+	return render(request, template)

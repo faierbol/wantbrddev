@@ -14,6 +14,8 @@ urlpatterns = [
     path('b/', include('board.urls')),
     path('admin/', admin.site.urls),
     path('', board_views.home, name='home'),
+    path('terms/', user_views.terms, name="terms"),
+    path('influencers/', user_views.influencers, name="influencers"),
     path('checkstatus/', user_views.check_status, name='check_status'),
     path('initial/', user_views.initial, name='initial'),
     path('trending/items', board_views.trending_items, name='trending_items'),

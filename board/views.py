@@ -24,6 +24,7 @@ import opengraph_py3
 import metadata_parser
 from amazon.api import AmazonAPI
 import bottlenose.api
+from django.template.defaultfilters import slugify
 
 
 ##### HOME PAGE
@@ -228,7 +229,8 @@ def edit_board(request, board_id):
 			# update name
 			if request.POST.get("updateboardname"):
 				new_name = request.POST.get("boardName")
-				Board.objects.filter(pk=board.id).update(board_name=new_name)
+				newslug = slugify(new_name)
+				Board.objects.filter(pk=board.id).update(board_name=new_name, slug=newslug)
 				messages.info(request, 'Your board name was updated.')
 				return HttpResponseRedirect(request.path_info)
 

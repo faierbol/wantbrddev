@@ -4,7 +4,7 @@
 {% load thumbnail %}
 
 {% block title %}
-	Home
+	{{ board.board_name }} by {{ board.user.username }} | Wantbrd
 {% endblock %}
 
 {% block extra-css %}
@@ -88,11 +88,26 @@
                                 <a class="toggle metalink" rel="tooltip" title="Share" href="javascript:void(0);"><i class="fal fa-share"></i> Share</a>
                                 <div class="tip">
                                     <div class="ssk-group">
-                                        <a href="" class="ssk ssk-icon ssk-facebook"></a>
-                                        <a href="" class="ssk ssk-icon ssk-twitter"></a>
-                                        <a href="" class="ssk ssk-icon ssk-google-plus"></a>
-                                        <a href="" class="ssk ssk-icon ssk-pinterest"></a>
-                                        <a href="" class="ssk ssk-icon ssk-tumblr"></a>
+                                        <a href="" class="ssk ssk-icon ssk-facebook"
+                                            data-url="{{ request.build_absolute_uri }}"
+                                            data-text="Checkout {{ board.board_name }} by {{ board.user.username }}!"
+                                        ></a>
+                                        <a href="" class="ssk ssk-icon ssk-twitter"
+                                            data-url="{{ request.build_absolute_uri }}"
+                                            data-text="Checkout {{ board.board_name }} by {{ board.user.username }}!"
+                                        ></a>
+                                        <a href="" class="ssk ssk-icon ssk-google-plus"
+                                            data-url="{{ request.build_absolute_uri }}"
+                                            data-text="Checkout {{ board.board_name }} by {{ board.user.username }}!"
+                                        ></a>
+                                        <a href="" class="ssk ssk-icon ssk-pinterest"   
+                                            data-url="{{ request.build_absolute_uri }}"
+                                            data-text="Checkout {{ board.board_name }} by {{ board.user.username }}!"
+                                        ></a>
+                                        <a href="" class="ssk ssk-icon ssk-tumblr"
+                                            data-url="{{ request.build_absolute_uri }}"
+                                            data-text="Checkout {{ board.board_name }} by {{ board.user.username }}!"
+                                        ></a>
                                     </div>
                                 </div>
                             </div>
@@ -379,11 +394,26 @@
                                             <a class="toggle metalink" rel="tooltip" title="Share" href="javascript:void(0);"><i class="fal fa-share"></i></a>
                                             <div class="tip">
                                                 <div class="ssk-group">
-                                                    <a href="" class="ssk ssk-icon ssk-facebook"></a>
-                                                    <a href="" class="ssk ssk-icon ssk-twitter"></a>
-                                                    <a href="" class="ssk ssk-icon ssk-google-plus"></a>
-                                                    <a href="" class="ssk ssk-icon ssk-pinterest"></a>
-                                                    <a href="" class="ssk ssk-icon ssk-tumblr"></a>
+                                                    <a href="" class="ssk ssk-icon ssk-facebook"
+                                                        data-url="{% url 'b:view_item' board.user board.slug itemconx.id %}"
+                                                        data-text="Checkout this item I found on Wantbrd: {{ itemconx.item.item_name }} - https://www.wantbrd.com{% url 'b:view_item' board.user board.slug itemconx.id %}"
+                                                    ></a>
+                                                    <a href="" class="ssk ssk-icon ssk-twitter"
+                                                        data-url="{% url 'b:view_item' board.user board.slug itemconx.id %}"
+                                                        data-text="Checkout this item I found on Wantbrd: {{ itemconx.item.item_name }} - https://www.wantbrd.com{% url 'b:view_item' board.user board.slug itemconx.id %}"
+                                                    ></a>
+                                                    <a href="" class="ssk ssk-icon ssk-google-plus"
+                                                        data-url="{% url 'b:view_item' board.user board.slug itemconx.id %}"
+                                                        data-text="Checkout this item I found on Wantbrd: {{ itemconx.item.item_name }} - https://www.wantbrd.com{% url 'b:view_item' board.user board.slug itemconx.id %}"
+                                                    ></a>
+                                                    <a href="" class="ssk ssk-icon ssk-pinterest"   
+                                                        data-url="{% url 'b:view_item' board.user board.slug itemconx.id %}"
+                                                        data-text="Checkout this item I found on Wantbrd: {{ itemconx.item.item_name }} - https://www.wantbrd.com{% url 'b:view_item' board.user board.slug itemconx.id %}"
+                                                    ></a>
+                                                    <a href="" class="ssk ssk-icon ssk-tumblr"
+                                                        data-url="{% url 'b:view_item' board.user board.slug itemconx.id %}"
+                                                        data-text="Checkout this item I found on Wantbrd: {{ itemconx.item.item_name }} - https://www.wantbrd.com{% url 'b:view_item' board.user board.slug itemconx.id %}"
+                                                    ></a>
                                                 </div>
                                             </div>
                                         </div>

@@ -13,7 +13,7 @@ admin.site.register(Board, BoardAdmin)
 
 class ItemAdmin(admin.ModelAdmin):
 	list_display = ('id','item_name')
-admin.site.register(Item)
+admin.site.register(Item, ItemAdmin)
 
 class ItemConxAdmin(admin.ModelAdmin):
 	readonly_fields=('id',)

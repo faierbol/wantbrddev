@@ -48,11 +48,26 @@
                             <a class="toggle" href="javascript:void(0);"><i class="fas fa-share-alt"></i> Share</a>
                             <div class="tip">
                                 <div class="ssk-group">
-                                    <a href="" class="ssk ssk-icon ssk-facebook"></a>
-                                    <a href="" class="ssk ssk-icon ssk-twitter"></a>
-                                    <a href="" class="ssk ssk-icon ssk-google-plus"></a>
-                                    <a href="" class="ssk ssk-icon ssk-pinterest"></a>
-                                    <a href="" class="ssk ssk-icon ssk-tumblr"></a>
+                                    <a href="" class="ssk ssk-icon ssk-facebook"
+                                        data-url="{% url 'u:profile' user.username %}"
+                                        data-text="Checkout {{ user.username }} on Wantbrd: https://www.wantbrd.com{% url 'u:profile' user.username %}"
+                                    ></a>
+                                    <a href="" class="ssk ssk-icon ssk-twitter"
+                                    data-url="{% url 'u:profile' user.username %}"
+                                    data-text="Checkout {{ user.username }} on Wantbrd: https://www.wantbrd.com{% url 'u:profile' user.username %}"
+                                    ></a>
+                                    <a href="" class="ssk ssk-icon ssk-google-plus"
+                                    data-url="{% url 'u:profile' user.username %}"
+                                    data-text="Checkout {{ user.username }} on Wantbrd: https://www.wantbrd.com{% url 'u:profile' user.username %}"
+                                    ></a>
+                                    <a href="" class="ssk ssk-icon ssk-pinterest"   
+                                    data-url="{% url 'u:profile' user.username %}"
+                                    data-text="Checkout {{ user.username }} on Wantbrd: https://www.wantbrd.com{% url 'u:profile' user.username %}"
+                                    ></a>
+                                    <a href="" class="ssk ssk-icon ssk-tumblr"
+                                    data-url="{% url 'u:profile' user.username %}"
+                                    data-text="Checkout {{ user.username }} on Wantbrd: https://www.wantbrd.com{% url 'u:profile' user.username %}"
+                                    ></a>
                                 </div>
                             </div>
                         </div>
@@ -117,10 +132,9 @@
         columns: 1,
         margin: 24,
         breakAt: {
-            1200: 3,
-            940: 2,
+            860: 3,
             520: 2,
-            400: 2
+            320: 1
         }
     });
     $(document).ready(function(){

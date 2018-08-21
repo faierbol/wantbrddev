@@ -1692,7 +1692,7 @@ BOARD
         }
         #boardItems .featBox.boardPic {
             position: relative;
-            overflow: hidden;
+            /*overflow: hidden;*/
             padding:20px;
         }
         #boardItems .featBox.boardPic .itemDesc {
@@ -2318,9 +2318,9 @@ BOARD
     -ms-word-break: break-all;
     word-break: break-word;        
 }
-    .discoveryUsername {
+/*    .discoveryUsername {
         margin-bottom:10px;
-    }
+    }*/
 .discoveryFeed {
     text-align: center;
     width: 48%;
@@ -2455,8 +2455,11 @@ BOARD
         display:block;
         text-decoration: none;
     }
+    .recentActivity a strong {
+        color:#F97D1F;
+    }
     .recentActivity i {
-        margin-right:10px;
+        margin-right:0px;
     }
     .suggestedBoards .featBox {
         margin-top:20px;
@@ -3248,13 +3251,17 @@ div.spinner i:nth-child(8) {
     position: absolute;
     background:#fff;
     border-radius:5px;
-    padding:5px;
-    width: 180px;
+    padding:0;
+    width: 115px;
     transform: translate(-31px, 0);
     -webkit-box-shadow: 0px 5px 73px -11px rgba(0,0,0,0.55);
     -moz-box-shadow: 0px 5px 73px -11px rgba(0,0,0,0.55);
     box-shadow: 0px 5px 73px -11px rgba(0,0,0,0.55);
-    top:30px;
+    top:30px;    
+    z-index: 9;
+}
+.share-link .ssk:before, .ssk .glyphicon, .ssk .fa {
+    font-size: 1.2rem;
 }
 .share-link .tip.up {
     display: block;
@@ -3262,6 +3269,36 @@ div.spinner i:nth-child(8) {
 .share-link .tip a {
     border:none;
 }
+.boardStats a.ssk {
+    margin:0;
+}
+
+.staticHeader {
+    padding-top:140px;
+    height: 400px;
+    background:#ccc;
+}
+    .staticHeader.terms {
+        background-image:url('../img/banner-terms.jpg');
+        background-size: cover;
+        background-position: center;
+    }
+    .staticHeader.influencer {
+        background-image:url('../img/banner-influencer.jpg');
+        background-size: cover;
+        background-position: center;
+    }
+#innerContent {
+    padding:40px 0;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    -ms-word-break: break-all;
+    word-break: break-word;
+}
+    #innerContent h1 {
+        margin-bottom:20px;
+    }
+
 
 
 /* ---------------- 
@@ -3288,9 +3325,9 @@ footer {
     background:#fff;
 }
     .fcol {
-        width:31%;
+/*        width:31%;
         margin-right:3.5%;
-        float: right;
+        float: right;*/
     }
     .fcol:nth-child(3n){
         margin-right:0;
@@ -3306,13 +3343,15 @@ footer {
         padding:0;
     }
     footer nav ul li {
-        width: 47%;
+/*        width: 47%;
         float: left;
-        margin-right:6%;        
+        margin-right:6%;        */
+        margin-right: 15px;
+        display: inline-block;
     }
-    footer nav ul li:nth-child(even){
+/*    footer nav ul li:nth-child(even){
         margin-right:0;
-    }
+    }*/
     footer nav a {
         color:#121212;
         text-decoration: none;
@@ -3615,7 +3654,7 @@ footer {
         margin-top:30px;
     }
     .discoveryItem {
-        width: 32.33333%;
+        width: 32%;
         float: left;
         margin-right: 2%;
         margin-bottom:30px;
@@ -3768,6 +3807,12 @@ footer {
     .searchWnt, .searchWeb {
         width: 100%;
         float: none;
+    }
+}
+
+@media screen and (max-width: 800px) {
+    .discoveryMeta a.trendName {
+        font-size: 1.1rem;
     }
 }
 
@@ -4077,10 +4122,22 @@ footer {
         padding:0 20px;
     }
     .boardItemStats {
-        text-align: center;
+        text-align: center;        
+    }
+    .boardItemStats, .boardItemStats button {
+        font-size: .8rem;
     }
     .boardItemStats .itemTools {
         float: none;
+    }
+    .boardItemStats .itemTools .share-link .toggle {
+        padding-left:0;
+    }
+    .boardItemStats span {
+        line-height: 20px;
+    }
+    .boardItemStats span, .itemTools form, .itemTools a {
+        padding:0px 0 0 8px;
     }
 }
 
@@ -4243,9 +4300,9 @@ footer {
 }
 
 @media screen and (max-width: 500px) {
-    .myNotifications .panel {
+/*    .myNotifications .panel {
         padding:40px 30px;
-    }
+    }*/
     #updatesocialform span {
         position: relative;
     }
@@ -4303,12 +4360,19 @@ footer {
         width: 100%;
         float: none;
         background:none;
-        padding:0;
         border:none;
-        margin-bottom:60px;
+        margin-bottom:30px;
+        border-bottom:1px solid #ebebeb;
+        padding:0 0 30px 0;
     }
     .discoveryMeta {
         padding:0 20px;
+    }
+    .discoveryMeta .trendingItemName, .discoveryMeta .trendingFooter, .discoveryMeta .trendingItemMeta {
+        text-align: center;
+    }
+    .discoveryMeta a.trendName {
+        font-size: 1.4rem;
     }
     .discoveryItem:nth-child(3n){
         margin-right: 0;
@@ -4324,6 +4388,12 @@ footer {
     }
     .slick-initialized .slick-slide {
         padding:0;
+    }
+    .discoveryItem > a img {
+        width: auto;
+        max-width: 300px;
+        height: auto;
+        margin:auto;        
     }
 }
 
@@ -4439,9 +4509,9 @@ footer {
     .logo span {
         display: none;
     }
-    .myNotifications .panel {
+/*    .myNotifications .panel {
         padding:40px 20px;
-    }
+    }*/
     .pSocial i {
         font-size: 1rem;
     }
