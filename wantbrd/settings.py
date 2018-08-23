@@ -34,7 +34,7 @@ SECRET_KEY = '3i22t4vm=tnjqp%w@ye^n=zo=z$12=f=)bi_sw0ij9a2mup(o-'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1', '.herokuapp.com', '0.0.0.0', 'localhost']
+ALLOWED_HOSTS = ['127.0.0.1', '.herokuapp.com', '0.0.0.0', 'localhost', '.wantbrd.com']
 CORS_ORIGIN_ALLOW_ALL=True
 
 # Application definition
@@ -167,7 +167,7 @@ USE_TZ = True
 STATICFILES_DIRS = [STATIC_DIR, ]
 
 # url definition for static files
-#STATIC_URL = '/static/' # <------- enable for local static
+# STATIC_URL = '/static/' # <------- enable for local static
 STATIC_ROOT = os.path.normpath(os.path.join(BASE_DIR, 'staticfiles'))
 
 
