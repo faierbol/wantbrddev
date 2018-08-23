@@ -271,7 +271,7 @@ def update_profile(request):
 			if form.is_valid():
 				form.save()
 				messages.info(request, 'Your social profiles have been updated.')
-				send_mail('You did it!', 'My god, it worked', 'noreply@wantbrd.com', ['iamholdsworth@gmail.com'])
+				# send_mail('You did it!', 'My god, it worked', 'noreply@wantbrd.com', ['iamholdsworth@gmail.com'])
 				return HttpResponseRedirect(request.path_info)
 
 	return render(request, template, {
