@@ -1,5 +1,6 @@
 import datetime, base64
 from django.contrib import messages
+from django.core.mail import send_mail
 from django.contrib.auth import login, update_session_auth_hash
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth.decorators import login_required
@@ -267,10 +268,10 @@ def update_profile(request):
 
 		elif request.POST.get("updatesocial"):
 			form = UpdateSocial(request.POST, instance=profile) 
-
 			if form.is_valid():
 				form.save()
 				messages.info(request, 'Your social profiles have been updated.')
+				send_mail('You did it!', 'My god, it worked', 'noreply@wantbrd.com', ['iamholdsworth@gmail.com'])
 				return HttpResponseRedirect(request.path_info)
 
 	return render(request, template, {

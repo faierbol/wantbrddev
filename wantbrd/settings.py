@@ -167,12 +167,8 @@ USE_TZ = True
 STATICFILES_DIRS = [STATIC_DIR, ]
 
 # url definition for static files
-# STATIC_URL = '/static/' # <------- enable for local static
+#STATIC_URL = '/static/' # <------- enable for local static
 STATIC_ROOT = os.path.normpath(os.path.join(BASE_DIR, 'staticfiles'))
-
-SECURE_SSL_REDIRECT = True
-SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
-
 
 # Media Files definition
 MEDIA_ROOT = MEDIA_DIR
@@ -189,7 +185,9 @@ AWS_S3_OBJECT_PARAMETERS = {
 
 AWS_LOCATION = 'static'
 STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage' # <------- enable for AWS static
-    STATIC_URL = "https://%s/%s/" % (AWS_S3_CUSTOM_DOMAIN, AWS_LOCATION) # <------- enable for AWS static
+STATIC_URL = "https://%s/%s/" % (AWS_S3_CUSTOM_DOMAIN, AWS_LOCATION) # <------- enable for AWS static
+SECURE_SSL_REDIRECT = True
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 DEFAULT_FILE_STORAGE = 'wantbrd.storage_backends.MediaStorage'  # <-- here is where we reference it
 
@@ -201,7 +199,13 @@ LOGIN_REDIRECT_URL = '/checkstatus/'
 # where to redirect after logout
 LOGOUT_REDIRECT_URL = 'home'
 
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+# EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+EMAIL_HOST = 'smtp.mailgun.org'
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'mailsend@mg.wantbrd.com'
+EMAIL_HOST_PASSWORD = config('MAILGUN_SMTP_PASSWORD')
+EMAIL_USE_TLS = True
 
 THUMBNAIL_ALIASES = {
     '': {
