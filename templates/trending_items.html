@@ -94,7 +94,23 @@
                                 0
                             {% endif %}
                         </span>
-                        <span><i class="far fa-heart"></i> {{ item.likes }}</span>
+                        <form class="inline unlikeitem" method="POST" data-id="{{item.id }}" style="display:{% if item.is_liked %} inline-block {% else %} none {% endif %}">
+                            {% csrf_token %}
+                            <input type="hidden" class="unlike_item_id" name="item_id" value="{{ item.id }}">
+                            <button class="naked unlikeitembutton" data-id="{{item.id }}" name="unlikeitem">
+                                <i class="fas fa-heart likeon"></i>
+                                <span>{{ item.likes }}</span>
+                            </button>
+                        </form>
+
+                        <form class="inline likeitem" method="POST"  data-id="{{item.id }}" style="display:{% if item.is_liked %} none {% else %} inline-block {% endif %}">
+                            {% csrf_token %}
+                            <input type="hidden" class="like_item_id" name="item_id" value="{{ item.id }}">
+                            <button class="naked likeitembutton" data-id="{{item.id }}" name="likeitem">
+                                <i class="fal fa-heart"></i>
+                                <span>{{ item.likes }}</span>
+                            </button>
+                        </form>
                         <span><i class="fas fa-eye"></i> {{ item.views }}</span>
                     </div>
                 </div>
@@ -111,6 +127,7 @@
 {% block extra-js %}
 <script src="{% static 'js/slick.min.js' %}" type="text/javascript"></script>
 <script src="{% static 'js/macy.js' %}" type="text/javascript"></script>
+<script type="text/javascript" src="{% static 'js/ajaxactions.js' %}"></script>
 <script>
     var masonry = new Macy({
         container: '#homeBoardItems',

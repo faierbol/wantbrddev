@@ -252,23 +252,23 @@
                                 {% endif %}
                             </span>
                             
-                            {% if hot.is_liked %}
-                                <span>
-                                    <form class="inline" method="POST">
-                                        {% csrf_token %}
-                                        <input type="hidden" name="itemconx_id" value="{{ hot.id }}">
-                                        <button class="naked" name="unlikeitem"><i class="fas fa-heart likeon"></i> {{ hot.likes }}</button>
-                                    </form>
-                                </span>
-                            {% else %}
-                                <span>
-                                    <form class="inline" method="POST">
-                                        {% csrf_token %}
-                                        <input type="hidden" name="itemconx_id" value="{{ hot.id }}">
-                                        <button class="naked" name="likeitem"><i class="far fa-heart"></i> {{ hot.likes }}</button>                                
-                                    </form>
-                                </span>                                    
-                            {% endif %}
+                            <form class="inline unlikeitem" method="POST" data-id="{{hot.id }}" style="display:{% if hot.is_liked %} inline-block {% else %} none {% endif %}">
+                                {% csrf_token %}
+                                <input type="hidden" class="unlike_item_id" name="item_id" value="{{ hot.id }}">
+                                <button class="naked unlikeitembutton" data-id="{{hot.id }}" name="unlikeitem">
+                                    <i class="fas fa-heart likeon"></i>
+                                    <span>{{ hot.likes }}</span>
+                                </button>
+                            </form>
+
+                            <form class="inline likeitem" method="POST"  data-id="{{hot.id }}" style="display:{% if hot.is_liked %} none {% else %} inline-block {% endif %}">
+                                {% csrf_token %}
+                                <input type="hidden" class="like_item_id" name="item_id" value="{{ hot.id }}">
+                                <button class="naked likeitembutton" data-id="{{hot.id }}" name="likeitem">
+                                    <i class="fal fa-heart"></i>
+                                    <span>{{ hot.likes }}</span>
+                                </button>
+                            </form>
 
                             <span><i class="fas fa-eye"></i> {{ hot.views }}</span>
                         </div>
@@ -329,6 +329,7 @@
 {% block extra-js %}
 <script src="{% static 'js/slick.min.js' %}" type="text/javascript"></script>
 <script src="{% static 'js/macy.js' %}" type="text/javascript"></script>
+<script type="text/javascript" src="{% static 'js/ajaxactions.js' %}"></script>
 <script>
     var masonry = new Macy({
         container: '#homeBoardItems',
