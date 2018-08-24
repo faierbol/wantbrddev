@@ -430,16 +430,6 @@ def view_board(request, username, board_name):
 	# handle submissions
 	if request.method == 'POST':
 
-		# if user followed
-		if 'follow' in request.POST:
-			board.user.profile.make_connection(request)
-			return HttpResponseRedirect(request.path_info)
-
-		# if user unfollowed
-		if 'unfollow' in request.POST:
-			board.user.profile.break_connection(request)
-			return HttpResponseRedirect(request.path_info)
-
 		# if add to board
 		if 'addtoboard' in request.POST:
 			boardid = request.POST.get("board_id")
@@ -449,13 +439,16 @@ def view_board(request, username, board_name):
 			messages.info(request, '"{0}" was added to the board, "{1}".'.format(itemconx.item.item_name, board.board_name))
 			return HttpResponseRedirect(request.path_info)
 
-		# if save later
-		if 'savelater' in request.POST:
-			itemconx = request.POST.get("itemconx_id")
-			ItemConnection.save_item(itemconx, request)							
-			copied_item = ItemConnection.objects.get(pk=itemconx)
-			messages.info(request, '"%s" was added to your saved items board.' % copied_item.item.item_name)
-			return HttpResponseRedirect(request.path_info)
+		# # if user followed
+		# if 'follow' in request.POST:
+		# 	board.user.profile.make_connection(request)
+		# 	return HttpResponseRedirect(request.path_info)
+
+		# # if user unfollowed
+		# if 'unfollow' in request.POST:
+		# 	board.user.profile.break_connection(request)
+		# 	return HttpResponseRedirect(request.path_info)
+
 
 	context_dict = {
 		'is_followed': is_followed,
@@ -1315,4 +1308,59 @@ def unlike_board(request):
 		return HttpResponse(
 			json.dumps({"nothing to see": "this isn't happening"}),
 			content_type="application/json"
+		)	
+
+
+#### FOLLOW USER
+def follow_user(request):
+	if request.method == 'POST':
+		response_data = {}
+		userid = request.POST.get("userid")
+		user = User.objects.get(pk=userid)
+		user.profile.make_connection(request)
+		response_data['result'] = 'User followed.'
+		return HttpResponse(
+			json.dumps(response_data),
+			content_type="application/json"
+		)
+	else:
+		return HttpResponse(
+			json.dumps({"nothing to see": "this isn't happening"}),
+			content_type="application/json"
+		)	
+
+#### UNFOLLOW USER
+def unfollow_user(request):
+	if request.method == 'POST':		
+		response_data = {}
+		userid = request.POST.get("userid")
+		user = User.objects.get(pk=userid)
+		user.profile.break_connection(request)
+		response_data['result'] = 'User unfollowed.'
+		return HttpResponse(
+			json.dumps(response_data),
+			content_type="application/json"
+		)
+	else:
+		return HttpResponse(
+			json.dumps({"nothing to see": "this isn't happening"}),
+			content_type="application/json"
 		)	      
+
+#### SAVE ITEM
+def save_item(request):
+	if request.method == 'POST':
+		response_data = {}
+		itemconx = request.POST.get("itemid")
+		ItemConnection.save_item(itemconx, request)							
+		copied_item = ItemConnection.objects.get(pk=itemconx)
+		response_data['result'] = 'Item saved.'
+		return HttpResponse(
+			json.dumps(response_data),
+			content_type="application/json"
+		)
+	else:
+		return HttpResponse(
+			json.dumps({"nothing to see": "this isn't happening"}),
+			content_type="application/json"
+		)

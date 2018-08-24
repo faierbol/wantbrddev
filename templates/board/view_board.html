@@ -69,17 +69,23 @@
                     {% if not editable %}
                         <div class="followButton">
                             {% if board.user != request.user %}
-                                {% if is_followed %}
-                                    <form method="POST">
-                                        {% csrf_token %}
-                                        <button class="grey" name="unfollow">Unfollow</button>
-                                    </form>
-                                {% else %}
-                                    <form method="POST">
-                                        {% csrf_token %}
-                                        <button name="follow">Follow</button>
-                                    </form>
-                                {% endif %}                                
+                                
+                                <form method="POST" class="unfollowuser"
+                                    data-id="{{ board.user.id }}"
+                                    style="display: {% if is_followed %} inline-block {% else %} none {% endif %};">
+                                    {% csrf_token %}
+                                    <input type="hidden" class="unfollow_user_id" value="{{ board.user.id }}">
+                                    <button class="btn grey">Unfollow</button>
+                                </form>
+
+                                <form method="POST" class="followuser"
+                                    data-id="{{ board.user.id }}"
+                                    style="display: {% if is_followed %} none {% else %} inline-block {% endif %};">
+                                    {% csrf_token %}
+                                    <input type="hidden" class="follow_user_id" value="{{ board.user.id }}">
+                                    <button class="btn orange">Follow</button>
+                                </form>
+
                             {% endif %}
                         </div>                
                         <div class="boardStats">
@@ -416,10 +422,13 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <form class="inline" method="POST">
+
+                                        <form class="inline saveitem" method="POST" data-id="{{ itemconx.id }}">
                                             {% csrf_token %}
-                                            <input type="hidden" name="itemconx_id" value="{{ itemconx.id }}">
-                                            <button class="naked" name="savelater" rel="tooltip" title="Add to your saved items"><i class="fal fa-bookmark"></i></button>
+                                            <input type="hidden" class="save_item_id" name="itemconx_id" value="{{ itemconx.id }}">
+                                            <button class="naked saveitembutton" data-id="{{ itemconx.id }}" name="savelater" rel="tooltip" title="Add to your saved items">
+                                                <i class="fal fa-bookmark"></i>
+                                            </button>
                                         </form>
 
                                         <a href="#ex{{itemconx.id}}" class="metalink" rel="modal:open tooltip" title="Add to your board"><i class="fal fa-plus"></i></a>

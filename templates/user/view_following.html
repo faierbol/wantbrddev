@@ -56,17 +56,23 @@
                                 <a href="{% url 'update_profile' %}" class="btn orange" title="Update your profile settings" rel="tooltip">Update profile</a>
                             {% endif %}
                         {% else %}
-                            {% if is_followed %}
-                                <form method="POST">
-                                    {% csrf_token %}
-                                    <button class="btn orange" name="unfollow"><i class="fas fa-times"></i> Unfollow</button>
-                                </form>
-                            {% else %}
-                                <form method="POST">
-                                    {% csrf_token %}
-                                    <button class="btn orange" name="follow"><i class="fas fa-user-plus"></i></i> Follow</button>
-                                </form>
-                            {% endif %}
+
+                            <form method="POST" class="unfollowuser"
+                                data-id="{{ profile.user.id }}"
+                                style="display: {% if is_followed %} inline-block {% else %} none {% endif %};">
+                                {% csrf_token %}
+                                <input type="hidden" class="unfollow_user_id" value="{{ profile.user.id }}">
+                                <button class="btn orange" name="unfollow"><i class="fas fa-times"></i> Unfollow</button>
+                            </form>
+
+                            <form method="POST" class="followuser"
+                                data-id="{{ profile.user.id }}"
+                                style="display: {% if is_followed %} none {% else %} inline-block {% endif %};">
+                                {% csrf_token %}
+                                <input type="hidden" class="follow_user_id" value="{{ profile.user.id }}">
+                                <button class="btn orange" name="follow"><i class="fas fa-user-plus"></i></i> Follow</button>
+                            </form>
+
                             <div class="clearfix"></div>
                         {% endif %}
                     </div>
@@ -116,6 +122,7 @@
 <section class="profileFollows">
     <div class="container clearfix">
 
+
         {% if connections %}
 
             {% for auser in connections %}
@@ -129,22 +136,28 @@
                         {% endif %}
                     </a>
                     
-                    <div class="followInfo">
+                    <div class="followInfo">           
+
+                        <!-- check we are not this user -->             
                         {% if request.user != auser.following %}
                             <div class="followCardBtn">
-                                {% if auser.followed %}
-                                    <form method="POST">
-                                        {% csrf_token %}
-                                        <input type="hidden" name="auser" value="{{ auser.following.id }}">
-                                        <button class="naked" name="unfollowcard"><i class="fas fa-times"></i> Unfollow</button>
-                                    </form>
-                                {% else %}
-                                    <form method="POST">
-                                        {% csrf_token %}
-                                        <input type="hidden" name="auser" value="{{ auser.following.id }}">
-                                        <button class="naked" name="followcard"><i class="fas fa-user-plus"></i></i> Follow</button>
-                                    </form>
-                                {% endif %}
+
+                                <form method="POST" class="unfollowuser"
+                                    data-id="{{ auser.following.id }}"
+                                    style="display: {% if auser.followed %} inline-block {% else %} none {% endif %};">
+                                    {% csrf_token %}
+                                    <input type="hidden" class="unfollow_user_id" value="{{ auser.following.id }}">
+                                    <button class="naked" name="unfollowcard"><i class="fas fa-times"></i> Unfollow</button>
+                                </form>
+
+                                <form method="POST" class="followuser"
+                                    data-id="{{ auser.following.id }}"
+                                    style="display: {% if auser.followed %} none {% else %} inline-block {% endif %};">
+                                    {% csrf_token %}
+                                    <input type="hidden" class="follow_user_id" value="{{ auser.following.id }}">
+                                    <button class="naked" name="followcard"><i class="fas fa-user-plus"></i></i> Follow</button>
+                                </form>
+
                             </div>
                         {% endif %}
 
@@ -177,6 +190,8 @@
 {% endblock %}
 
 {% block extra-js %}
+
+    <script type="text/javascript" src="{% static 'js/ajaxactions.js' %}"></script>
 
     <!--- succes alert -->
     {% if messages %}

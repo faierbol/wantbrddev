@@ -1,4 +1,122 @@
-// like item ajax request
+/*****************
+FOLLOW USER
+*****************/
+$('.followuser').on('submit', function(event){
+    event.preventDefault();        
+    var userid = $('.follow_user_id',this).val();   
+    var followuser = $('.followuser[data-id='+ userid +']');
+    var unfollowuser = $('.unfollowuser[data-id='+ userid +']');    
+    console.log("Start following user: " + userid);
+    follow_user(followuser, unfollowuser, userid);
+});
+
+function follow_user(followuser, unfollowuser, userid) {
+    console.log('Follow user ' + userid)
+    $.ajax({
+        url : "/b/follow/", // the endpoint
+        type : "POST", // http method
+        data : { userid : userid }, // data sent with the post request
+
+        // handle a successful response
+        success : function(json) {
+            followuser.fadeToggle('fast', function(){
+                unfollowuser.fadeToggle();
+            });
+        },
+
+        // handle a non-successful response
+        error : function(xhr,errmsg,err) {
+            $('#results').html("<div class='alert-box alert radius' data-alert>Oops! We have encountered an error: "+errmsg+
+                " <a href='#' class='close'>&times;</a></div>"); // add the error to the dom
+            console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+        }
+    });
+};
+
+
+/*****************
+UNFOLLOW USER
+*****************/
+$('.unfollowuser').on('submit', function(event){
+    event.preventDefault();        
+    var userid = $('.unfollow_user_id',this).val();   
+    var followuser = $('.followuser[data-id='+ userid +']');
+    var unfollowuser = $('.unfollowuser[data-id='+ userid +']');    
+    console.log("Start unfollowing user: " + userid);
+    unfollow_user(followuser, unfollowuser, userid);
+});
+
+function unfollow_user(followuser, unfollowuser, userid) {
+    console.log('Unfollow user ' + userid)
+    $.ajax({
+        url : "/b/unfollow/", // the endpoint
+        type : "POST", // http method
+        data : { userid : userid }, // data sent with the post request
+
+        // handle a successful response
+        success : function(json) {
+            unfollowuser.fadeToggle('fast', function(){
+                followuser.fadeToggle();
+            });
+        },
+
+        // handle a non-successful response
+        error : function(xhr,errmsg,err) {
+            console.log('broken');
+            $('#results').html("<div class='alert-box alert radius' data-alert>Oops! We have encountered an error: "+errmsg+
+                " <a href='#' class='close'>&times;</a></div>"); // add the error to the dom
+            console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+        }
+    });
+};
+
+
+/*****************
+SAVE ITEM
+*****************/
+$('.saveitem').on('submit', function(event){
+    event.preventDefault();    
+    var itemid = $('.save_item_id',this).val();   
+    console.log('item id is: ' + itemid);
+    save_item(itemid);
+});
+
+function save_item(itemid) {
+    console.log("Now save the item...")
+    $.ajax({
+        url : "/b/save_item/", // the endpoint
+        type : "POST", // http method
+        data : { itemid : itemid }, // data sent with the post request
+
+        // handle a successful response
+        success : function(json) {
+            $(function(){
+                new PNotify({
+                    title: false,
+                    type: "success",
+                    text: 'The item was successfully added to your saved items.',
+                    shadow: false,
+                    delay: 5000,
+                    buttons: {
+                        sticker: false,
+                    }
+                }); 
+            });
+        },
+
+        // handle a non-successful response
+        error : function(xhr,errmsg,err) {
+            $('#results').html("<div class='alert-box alert radius' data-alert>Oops! We have encountered an error: "+errmsg+
+                " <a href='#' class='close'>&times;</a></div>"); // add the error to the dom
+            console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+        }
+    });
+};
+
+
+/*****************
+LIKE ITEM
+*****************/
 $('.likeitem').on('submit', function(event){
     event.preventDefault();    
     var itemid = $('.like_item_id',this).val();   
@@ -36,7 +154,9 @@ function like_item(likeitem, unlikeitem, itemid) {
     });
 };
 
-// unlike item ajax request
+/*****************
+UNLIKE ITEM
+*****************/
 $('.unlikeitem').on('submit', function(event){
     event.preventDefault();
     var itemid = $('.unlike_item_id',this).val();   
@@ -74,7 +194,9 @@ function unlike_item(unlikeitem, likeitem, itemid) {
     });
 };
 
-// like board ajax request
+/*****************
+LIKE BOARD
+*****************/
 $('#likeboard').on('submit', function(event){
     event.preventDefault();
     console.log("form submitted!")  // sanity check
@@ -112,7 +234,9 @@ function like_board() {
 };
 
 
-// unlike board ajax request
+/*****************
+UNLIKE BOARD
+*****************/
 $('#unlikeboard').on('submit', function(event){
     event.preventDefault();
     console.log("form submitted!")  // sanity check

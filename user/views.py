@@ -555,10 +555,14 @@ def profile_following(request, username):
 				is_followed = True
 
 		for auser in connections:
-			if request.user == auser.creator:
-				auser.followed = True
-			else:
-				auser.followed = False
+			auser_profile = auser.following.profile
+			auser_connections = auser_profile.get_followers()
+			for x in auser_connections:
+				if x.creator == request.user:
+					auser.followed = True
+					break
+				else:
+					auser.followed = False
 
 	except:
 		pass
@@ -597,6 +601,7 @@ def profile_following(request, username):
 		'followers': followers,
 		'is_followed':is_followed,
 		'boards':boards,
+		'auser_connections':auser_connections,
 	}
 
 	return render(request, template, context_dict)

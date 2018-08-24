@@ -98,10 +98,12 @@
     	                        </div>              
     	                        <div class="trendingFooter">
                                     <span>
-                                        <form class="inline" method="POST">
+                                        <form class="inline saveitem" method="POST" data-id="{{ item.id }}">
                                             {% csrf_token %}
-                                            <input type="hidden" name="itemconx_id" value="{{ item.id }}">
-                                            <button class="naked" name="savelater"><i class="far fa-bookmark"></i></button>
+                                            <input type="hidden" class="save_item_id" name="itemconx_id" value="{{ item.id }}">
+                                            <button class="naked saveitembutton" data-id="{{ item.id }}" name="savelater" rel="tooltip" title="Add to your saved items">
+                                                <i class="fal fa-bookmark"></i>
+                                            </button>
                                         </form>
                                     </span>
     	                            <span>
