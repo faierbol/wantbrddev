@@ -4,7 +4,7 @@ from django.template import RequestContext
 from django.shortcuts import render, redirect, get_object_or_404
 from django.core.files.storage import FileSystemStorage
 from django.db.models import Q
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.auth.models import User
 from .models import Board, Item, BoardLike, ItemLike, BoardView, ItemView, ItemConnection, BoardPrivacy
 from user.models import Notification
@@ -398,7 +398,7 @@ def view_board(request, username, board_name):
 	item_conxs = ItemConnection.objects.filter(board=board.id, active=True)		
 	for item in item_conxs:
 		if item.active:
-			item.likes = ItemLike.objects.filter(item_conx=item).count()
+			item.likes = ItemLike.objects.filter(item_conx=item).count()			
 			try:
 				item.is_liked = ItemLike.objects.filter(item_conx=item, user=request.user).exists()
 			except:
@@ -429,30 +429,6 @@ def view_board(request, username, board_name):
 
 	# handle submissions
 	if request.method == 'POST':
-
-		# like item
-		if 'likeitem' in request.POST:
-			itemconx_id = request.POST.get("itemconx_id")						
-			like_item(itemconx_id, request.user)
-			return HttpResponseRedirect(request.path_info)
-
-		# unlike item
-		if 'unlikeitem' in request.POST:
-			itemconx_id = request.POST.get("itemconx_id")
-			unlike_item(itemconx_id, request.user)
-			return HttpResponseRedirect(request.path_info)
-
-		# like board
-		if 'likeboard' in request.POST:
-			board_id = request.POST.get("board_id")
-			like_board(board_id, request.user)
-			return HttpResponseRedirect(request.path_info)
-
-		# unlike board
-		if 'unlikeboard' in request.POST:
-			board_id = request.POST.get("board_id")
-			unlike_board(board_id, request.user)	
-			return HttpResponseRedirect(request.path_info)
 
 		# if user followed
 		if 'follow' in request.POST:
@@ -1268,3 +1244,75 @@ def search_user(request):
 	}
 
 	return render(request, template, context_dict)
+
+
+#### LIKE AN ITEM
+def like_item(request):
+	if request.method == 'POST':
+		itemconx_id = request.POST.get("itemconx_id")						
+		response_data = {}
+		like_an_item(itemconx_id, request.user)		
+		response_data['result'] = 'Item was liked.'
+		return HttpResponse(
+			json.dumps(response_data),
+			content_type="application/json"
+		)
+	else:
+		return HttpResponse(
+			json.dumps({"nothing to see": "this isn't happening"}),
+			content_type="application/json"
+		)
+
+
+#### UNLIKE AN ITEM
+def unlike_item(request):
+	if request.method == 'POST':
+		itemconx_id = request.POST.get("itemconx_id")						
+		response_data = {}
+		unlike_an_item(itemconx_id, request.user)		
+		response_data['result'] = 'Item was unliked.'
+		return HttpResponse(
+			json.dumps(response_data),
+			content_type="application/json"
+		)
+	else:
+		return HttpResponse(
+			json.dumps({"nothing to see": "this isn't happening"}),
+			content_type="application/json"
+		)
+
+
+#### LIKE A BOARD
+def like_board(request):
+	if request.method == 'POST':
+		board_id = request.POST.get('board_id')
+		response_data = {}
+		like_a_board(board_id, request.user)
+		response_data['result'] = 'Board was liked.'
+		return HttpResponse(
+			json.dumps(response_data),
+			content_type="application/json"
+		)
+	else:
+		return HttpResponse(
+			json.dumps({"nothing to see": "this isn't happening"}),
+			content_type="application/json"
+		)
+
+
+#### UNLIKE A BOARD
+def unlike_board(request):
+	if request.method == 'POST':
+		board_id = request.POST.get('board_id')
+		response_data = {}
+		unlike_a_board(board_id, request.user)
+		response_data['result'] = 'Board was unliked.'
+		return HttpResponse(
+			json.dumps(response_data),
+			content_type="application/json"
+		)
+	else:
+		return HttpResponse(
+			json.dumps({"nothing to see": "this isn't happening"}),
+			content_type="application/json"
+		)	      

@@ -100,7 +100,7 @@ def get_recommended_boards(request):
 
 
 # Like item & notify
-def like_item(itemconx_id, user):			
+def like_an_item(itemconx_id, user):			
 	itemconx = get_object_or_404(ItemConnection, pk=itemconx_id)		
 	try:
 		ItemLike.objects.get(user=user, item_conx=itemconx)
@@ -113,7 +113,7 @@ def like_item(itemconx_id, user):
 		Notification.create_itemlike_notify(user, user_to_notify, itemconx_id)	
 
 # Unlike item
-def unlike_item(itemconx_id, user):
+def unlike_an_item(itemconx_id, user):
 	itemconx = get_object_or_404(ItemConnection, pk=itemconx_id)
 	like = ItemLike.objects.filter(
 		user=user,
@@ -123,7 +123,7 @@ def unlike_item(itemconx_id, user):
 
 
 # Like board and notify
-def like_board(board_id, user):
+def like_a_board(board_id, user):
 	board = get_object_or_404(Board, pk=board_id)	
 	try:
 		BoardLike.objects.get(user=user, board=board)
@@ -136,7 +136,7 @@ def like_board(board_id, user):
 		Notification.create_boardlike_notify(user, user_to_notify, board_id)
 
 # Unlike board
-def unlike_board(board_id, user):
+def unlike_a_board(board_id, user):
 	board = get_object_or_404(Board, pk=board_id)
 	
 	like = BoardLike.objects.filter(

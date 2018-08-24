@@ -113,23 +113,18 @@
                             </div>
 
 
-                            {% if board.is_liked %}
-                                <span>
-                                    <form class="inline" method="POST">
-                                        {% csrf_token %}
-                                        <input type="hidden" name="board_id" value="{{ board.id }}">
-                                        <button class="naked" name="unlikeboard"><i class="fas fa-heart likeon"></i></a> {{ board.likes }}</button>
-                                    </form>
-                                </span>
-                            {% else %}                                
-                                <span>
-                                    <form class="inline" method="POST">
-                                        {% csrf_token %}
-                                        <input type="hidden" name="board_id" value="{{ board.id }}">
-                                        <button class="naked" name="likeboard"><i class="fal fa-heart"></i></i> {{ board.likes }}</button>
-                                    </form>
-                                </span>                                    
-                            {% endif %}
+                        
+                            <form class="inline" method="POST" id="unlikeboard" style="display:{% if board.is_liked %} inline-block {% else %} none {% endif %}">
+                                {% csrf_token %}
+                                <input type="hidden" id="unlike_board_id" name="board_id" value="{{ board.id }}">
+                                <button class="naked" name="unlikeboard" id="unlikeboardbutton"><i class="fas fa-heart likeon"></i> <span>{{ board.likes }}</span></button>
+                            </form>
+
+                            <form class="inline" method="POST" id="likeboard" style="display:{% if board.is_liked %} none {% else %} inline-block {% endif %}">
+                                {% csrf_token %}
+                                <input type="hidden" id="like_board_id" name="board_id" value="{{ board.id }}">
+                                <button class="naked" name="likeboard" id="likeboardbutton"><i class="fal fa-heart"></i> <span>{{ board.likes }}</span></button>
+                            </form>
 
                             <i class="fal fa-eye"></i> {{ board.views }}
 
@@ -289,10 +284,10 @@
 
                             {% if itemconx.item.item_name|length > 75 %}
                                 <a href="{% url 'b:edit_item' board.id itemconx.id %}" class="boardItemName">
-                                    {{ itemconx.item.item_name|slice:":75" }}<u class="tooLong" rel="tooltip" title="{{itemconx.item.item_name}}">...</u>
+                                    {{ itemconx.item.item_name|slice:":75" }}<u class="tooLong" rel="tooltip" title="{{itemconx.item.item_name}}">...</u>                                    
                                 </a>
                             {% else %}                                
-                                <a href="{% url 'b:edit_item' board.id itemconx.id %}" class="boardItemName">{{ itemconx.item.item_name }}</a>
+                                <a href="{% url 'b:edit_item' board.id itemconx.id %}" class="boardItemName">{{ itemconx.item.item_name }}</a>                                
                             {% endif %}
 
                             {% if itemconx.item_status == 'GOT' %}
@@ -318,7 +313,9 @@
                                     <img src="{{ im.url }}">
                                 {% endthumbnail %}
                             </a>
+
                             <a href="{% url 'b:view_item' board.user board.slug itemconx.id %}" class="boardItemName">{{ itemconx.item.item_name }}</a>
+
                             {% if itemconx.item_status == 'GOT' %}
                                 <div class="got">
                                     {% if itemconx.rating == 5 %}
@@ -353,23 +350,25 @@
                                 </a></span>
                                 <span><i class="fal fa-eye"></i> {{ itemconx.views }}</span>
 
-                                {% if itemconx.is_liked %}
-                                    <span>
-                                        <form class="inline" method="POST">
-                                            {% csrf_token %}
-                                            <input type="hidden" name="itemconx_id" value="{{ itemconx.id }}">
-                                            <button class="naked" name="unlikeitem"><i class="fas fa-heart likeon"></i></i></i></a> {{ itemconx.likes }}</button>
-                                        </form>
-                                    </span>
-                                {% else %}
-                                    <span>
-                                        <form class="inline" method="POST">
-                                            {% csrf_token %}
-                                            <input type="hidden" name="itemconx_id" value="{{ itemconx.id }}">
-                                            <button class="naked" name="likeitem"><i class="fal fa-heart"></i> {{ itemconx.likes }}</button>
-                                        </form>
-                                    </span>                                    
-                                {% endif %}
+
+                                <form class="inline unlikeitem" method="POST" data-id="{{itemconx.id }}" style="display:{% if itemconx.is_liked %} inline-block {% else %} none {% endif %}">
+                                    {% csrf_token %}
+                                    <input type="hidden" class="unlike_item_id" name="item_id" value="{{ itemconx.id }}">
+                                    <button class="naked unlikeitembutton" data-id="{{itemconx.id }}" name="unlikeitem">
+                                        <i class="fas fa-heart likeon"></i>
+                                        <span>{{ itemconx.likes }}</span>
+                                    </button>
+                                </form>
+
+                                <form class="inline likeitem" method="POST"  data-id="{{itemconx.id }}" style="display:{% if itemconx.is_liked %} none {% else %} inline-block {% endif %}">
+                                    {% csrf_token %}
+                                    <input type="hidden" class="like_item_id" name="item_id" value="{{ itemconx.id }}">
+                                    <button class="naked likeitembutton" data-id="{{itemconx.id }}" name="likeitem">
+                                        <i class="fal fa-heart"></i>
+                                        <span>{{ itemconx.likes }}</span>
+                                    </button>
+                                </form>
+
 
                                 {% if editable %}
                                     <div class="itemTools">
@@ -685,6 +684,8 @@
     });
 
 </script>
+
+<script type="text/javascript" src="{% static 'js/ajaxactions.js' %}"></script>
 
 {% if messages %}
     {% for message in messages %}    

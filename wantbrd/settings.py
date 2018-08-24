@@ -167,7 +167,7 @@ USE_TZ = True
 STATICFILES_DIRS = [STATIC_DIR, ]
 
 # url definition for static files
-#STATIC_URL = '/static/' # <------- enable for local static
+STATIC_URL = '/static/' # <------- enable for local static
 STATIC_ROOT = os.path.normpath(os.path.join(BASE_DIR, 'staticfiles'))
 
 # Media Files definition
@@ -184,10 +184,10 @@ AWS_S3_OBJECT_PARAMETERS = {
 }
 
 AWS_LOCATION = 'static'
-STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage' # <------- enable for AWS static
-STATIC_URL = "https://%s/%s/" % (AWS_S3_CUSTOM_DOMAIN, AWS_LOCATION) # <------- enable for AWS static
-SECURE_SSL_REDIRECT = True
-SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+#STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage' # <------- enable for AWS static
+#STATIC_URL = "https://%s/%s/" % (AWS_S3_CUSTOM_DOMAIN, AWS_LOCATION) # <------- enable for AWS static
+#SECURE_SSL_REDIRECT = True
+#SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 DEFAULT_FILE_STORAGE = 'wantbrd.storage_backends.MediaStorage'  # <-- here is where we reference it
 
