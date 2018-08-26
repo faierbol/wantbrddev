@@ -3,7 +3,7 @@
 {% load thumbnail %}
 
 {% block title %}
-	Home
+	{{ profile.user.username }} | {{ profile.user.get_full_name }} | Wantbrd
 {% endblock %}
 
 {% block body %}
