@@ -25,6 +25,24 @@
 	{% block extra-css %}{% endblock %}
 	<link href="{% static 'css/main.css' %}" rel="stylesheet">
 
+    <script>
+        // GA
+        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+        ga('create', 'UA-84673865-1', 'auto');
+        ga('send', 'pageview');
+
+        // VIG
+        var vglnk = { key: '9701e1c5dd52a3ac2a37a4d1e12ca37f' };
+        (function(d, t) {
+        var s = d.createElement(t); s.type = 'text/javascript'; s.async = true;
+        s.src = '//cdn.viglink.com/api/vglnk.js';
+        var r = d.getElementsByTagName(t)[0]; r.parentNode.insertBefore(s, r);
+        }(document, 'script'));
+    </script>
+
 </head>
 
 <body>
@@ -220,7 +238,6 @@
 
 <!-- Extra JS -->
 {% block extra-js %}{% endblock %}
-
 
 </body>
 </html
