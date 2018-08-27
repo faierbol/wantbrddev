@@ -42,10 +42,10 @@
                         {% endif %}
                         <div class="profileStats">
                             <p><a href="{% url 'u:profile_followers' profile.user.username %}">
-                                <span>{{ no_followers }}</span>FOLLOWERS
+                                <span class="totFollowers">{{ no_followers }}</span>FOLLOWERS
                             </a></p>
                             <p><a href="{% url 'u:profile_following' profile.user.username %}">
-                                <span>{{ no_connections }}</span>FOLLOWING
+                                <span class="totFollowing">{{ no_connections }}</span>FOLLOWING
                             </a></p>
                             <p><a href="{% url 'u:profile' profile.user.username %}"><span>{{ boards }}</span>{% if boards == 1 %}BOARD{% else %}BOARDS{% endif %}</a></p>
                         </div>                        

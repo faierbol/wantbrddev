@@ -22,6 +22,10 @@ function follow_user(followuser, unfollowuser, userid) {
             followuser.fadeToggle('fast', function(){
                 unfollowuser.fadeToggle();
             });
+            var currentfollowing = $('.totFollowing').text();            
+            currentfollowing = parseInt(currentfollowing);
+            var newfollowing = currentfollowing+1;
+            $('.totFollowing').text(newfollowing);
         },
 
         // handle a non-successful response
@@ -58,6 +62,10 @@ function unfollow_user(followuser, unfollowuser, userid) {
             unfollowuser.fadeToggle('fast', function(){
                 followuser.fadeToggle();
             });
+            var currentfollowing = $('.totFollowing').text();            
+            currentfollowing = parseInt(currentfollowing);
+            var newfollowing = currentfollowing-1;
+            $('.totFollowing').text(newfollowing);
         },
 
         // handle a non-successful response

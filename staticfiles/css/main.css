@@ -397,6 +397,8 @@ header#main {
             color:#fff;
             font-size: 2rem;
             padding-left:50px;
+            border-radius: 0;
+            line-height: 1;
         }
         .md-modal ::-webkit-input-placeholder { /* Chrome/Opera/Safari */
           color: #fff;
@@ -413,7 +415,7 @@ header#main {
         .md-close {
             position: absolute;
             right:0;
-            top:0;
+            top:-50px;
             background:none;
             border-radius: 0;
             color:#fff;
@@ -534,37 +536,22 @@ header#main.shrink {
 /* ---------------- 
 HOME
 -----------------*/
+.homeBanner.mobile {
+    display: none;
+}
+.homeBanner.desktop {
+    display: block;
+}
 .homeBanner {    
     position: relative;
 }
     .homeBannerPush {
         padding-top:140px;
     }
-    .leftFade, .rightFade {
-        height: 100%;
-        width: 200px;
-        position: absolute;
-        z-index: 9;        
-        top:0;
-    }
-    .leftFade {
-        left:0;
-        background: -moz-linear-gradient(left, rgba(255,255,255,1) 0%, rgba(255,255,255,0) 100%); /* FF3.6-15 */
-        background: -webkit-linear-gradient(left, rgba(255,255,255,1) 0%,rgba(255,255,255,0) 100%); /* Chrome10-25,Safari5.1-6 */
-        background: linear-gradient(to right, rgba(255,255,255,1) 0%,rgba(255,255,255,0) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-        filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#00ffffff',GradientType=1 ); /* IE6-9 */
-    }
-    .rightFade {
-        right:0;
-        background: -moz-linear-gradient(left, rgba(255,255,255,0) 0%, rgba(255,255,255,1) 100%); /* FF3.6-15 */
-        background: -webkit-linear-gradient(left, rgba(255,255,255,0) 0%,rgba(255,255,255,1) 100%); /* Chrome10-25,Safari5.1-6 */
-        background: linear-gradient(to right, rgba(255,255,255,0) 0%,rgba(255,255,255,1) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-        filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00ffffff', endColorstr='#ffffff',GradientType=1 ); /* IE6-9 */
-    }
     .slickLeft, .slickRight {
         position: absolute;
         z-index: 99;
-        bottom:50%;
+        bottom:55%;
         font-size: 4rem;
         cursor: pointer;
         margin-bottom:-40px;
@@ -607,6 +594,12 @@ HOME
     }
     #homeBoardItems {
         margin-top:25px;
+    }
+    #homeBoardItems .trendingUserUser .trendingUserPic {
+        top:50px;
+    }
+    #homeBoardItems .trendingBoard .trendingUserPic {
+        top:65px;
     }
     .featBox {
         border-radius:3px;
@@ -1537,6 +1530,30 @@ BOARD
         margin-right:15px;
         font-size: .8rem;
     }
+    #editBoardName {
+        width: 100%;
+        max-width: 450px;
+        position: relative;
+        margin: auto;
+    }
+    #editBoardName input[type=text]{
+        width:100%;
+        border:none;
+        border-bottom:1px solid #dbdbdb;
+        padding-right: 50px;
+    }
+    #editBoardName button, #editBoardName #hideEditName {
+        position: absolute;
+        right:0;
+        top:19px;
+        height: 15px;
+        line-height: 15px;
+        font-size: .85rem;
+    }
+    #editBoardName button {
+        right:15px;
+        top:20px;
+    }
     .boardStats a, .boardStats span {
         margin-right:8px;
     }
@@ -1569,6 +1586,9 @@ BOARD
         word-wrap: break-word;
         -ms-word-break: break-all;
         word-break: break-word;        
+    }
+    .boardHeader h1 i {
+        font-size: .95rem;
     }
     .boardHeader span.type {
         font-size:.9rem;
@@ -1622,7 +1642,8 @@ BOARD
         background:#1A2315;
         padding:30px;
         color:#fff;
-        text-align: center;                
+        text-align: center;  
+        border-radius: 0 0 3px 3px;              
     }    
     #boardItems {
         margin-top:40px;
@@ -1656,7 +1677,7 @@ BOARD
         }
         #boardItems .featBox.boardPic {
             position: relative;
-            overflow: hidden;
+            /*overflow: hidden;*/
             padding:20px;
         }
         #boardItems .featBox.boardPic .itemDesc {
@@ -1702,6 +1723,12 @@ BOARD
             }
             .boardItemStats span:first-child {
                 padding-left:0;
+            }
+            .boardItemStats .likeitem, .boardItemStats .unlikeitem {
+                padding-left:10px;
+            }
+            .boardItemStats .likeitem span, .boardItemStats .unlikeitem span {
+                padding:0;
             }
             .boardItemStats button {
                 font-size: 1rem;
@@ -2282,9 +2309,9 @@ BOARD
     -ms-word-break: break-all;
     word-break: break-word;        
 }
-    .discoveryUsername {
+/*    .discoveryUsername {
         margin-bottom:10px;
-    }
+    }*/
 .discoveryFeed {
     text-align: center;
     width: 48%;
@@ -2325,10 +2352,14 @@ BOARD
         border-bottom:none;
     }
     .discoveryFeed h3 {
-        background:#444;
         color:#fff;
         padding:15px 20px;
         font-weight: lighter;
+        background: rgb(134,128,178); /* Old browsers */
+        background: -moz-linear-gradient(left, rgba(134,128,178,1) 0%, rgba(125,185,232,1) 100%); /* FF3.6-15 */
+        background: -webkit-linear-gradient(left, rgba(134,128,178,1) 0%,rgba(125,185,232,1) 100%); /* Chrome10-25,Safari5.1-6 */
+        background: linear-gradient(to right, rgba(134,128,178,1) 0%,rgba(125,185,232,1) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+        filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#8680b2', endColorstr='#7db9e8',GradientType=1 ); /* IE6-9 */
     }
     .discoveryImage {
         display: block;
@@ -2415,8 +2446,11 @@ BOARD
         display:block;
         text-decoration: none;
     }
+    .recentActivity a strong {
+        color:#F97D1F;
+    }
     .recentActivity i {
-        margin-right:10px;
+        margin-right:0px;
     }
     .suggestedBoards .featBox {
         margin-top:20px;
@@ -2456,6 +2490,11 @@ BOARD
     }
     .followInfo {
         padding-left:65px;
+        padding-right:60px;
+        overflow-wrap: break-word;
+        word-wrap: break-word;
+        -ms-word-break: break-all;
+        word-break: break-word;
     }
         #followall {
             font-size: 1.3rem;
@@ -2511,6 +2550,7 @@ BOARD
         margin-right: 2%;
         margin-bottom:2%;
         border-radius: 3px;
+        position: relative;
     }
     .profileFollows .followCard:nth-child(4n){
         margin-right:0;
@@ -2519,7 +2559,9 @@ BOARD
         clear: both;
     }
     .followCardBtn {
-        float: right;
+        position: absolute;
+        right:15px;
+        top:15px;
     }
 
 .searchTerm {
@@ -2572,6 +2614,9 @@ BOARD
     .noitemspush {
         height: 50px;
         display: block;
+    }
+    #searchItems .trendingUserPic {
+        top: 15px;
     }
 
 .newUserIntro {
@@ -2832,6 +2877,7 @@ ITEM DETAILS
             color:#333;
             border:1px solid #999;
             padding:20px 30px;
+            border-radius: 100px;
         }
         .popComments input[type=submit]:hover {
             color:#000;
@@ -3196,13 +3242,19 @@ div.spinner i:nth-child(8) {
     position: absolute;
     background:#fff;
     border-radius:5px;
-    padding:5px;
-    width: 180px;
+    border:1px solid #e9e9e9;
+    padding:5px 0;
+    width: 115px;
     transform: translate(-31px, 0);
     -webkit-box-shadow: 0px 5px 73px -11px rgba(0,0,0,0.55);
     -moz-box-shadow: 0px 5px 73px -11px rgba(0,0,0,0.55);
     box-shadow: 0px 5px 73px -11px rgba(0,0,0,0.55);
-    top:30px;
+    top:20px;
+    z-index: 9;
+    right:-35px;
+}
+.share-link .ssk:before, .ssk .glyphicon, .ssk .fa {
+    font-size: 1.2rem;
 }
 .share-link .tip.up {
     display: block;
@@ -3210,6 +3262,36 @@ div.spinner i:nth-child(8) {
 .share-link .tip a {
     border:none;
 }
+.boardStats a.ssk {
+    margin:0;
+}
+
+.staticHeader {
+    padding-top:140px;
+    height: 400px;
+    background:#ccc;
+}
+    .staticHeader.terms {
+        background-image:url('../img/banner-terms.jpg');
+        background-size: cover;
+        background-position: center;
+    }
+    .staticHeader.influencer {
+        background-image:url('../img/banner-influencer.jpg');
+        background-size: cover;
+        background-position: center;
+    }
+#innerContent {
+    padding:40px 0;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    -ms-word-break: break-all;
+    word-break: break-word;
+}
+    #innerContent h1 {
+        margin-bottom:20px;
+    }
+
 
 
 /* ---------------- 
@@ -3236,9 +3318,9 @@ footer {
     background:#fff;
 }
     .fcol {
-        width:31%;
+/*        width:31%;
         margin-right:3.5%;
-        float: right;
+        float: right;*/
     }
     .fcol:nth-child(3n){
         margin-right:0;
@@ -3254,13 +3336,15 @@ footer {
         padding:0;
     }
     footer nav ul li {
-        width: 47%;
+/*        width: 47%;
         float: left;
-        margin-right:6%;        
+        margin-right:6%;        */
+        margin-right: 15px;
+        display: inline-block;
     }
-    footer nav ul li:nth-child(even){
+/*    footer nav ul li:nth-child(even){
         margin-right:0;
-    }
+    }*/
     footer nav a {
         color:#121212;
         text-decoration: none;
@@ -3473,6 +3557,25 @@ footer {
 /* ==========================================================================
    MEDIA QUERIES
    ========================================================================== */
+
+@media screen and (max-width: 1280px) {
+   .profileFollows .followCard {
+       width: 32%;
+   }
+   .profileFollows .followCard:nth-child(4n){
+       margin-right:2%;
+   }
+   .profileFollows .followCard:nth-child(4n+1){
+       clear: none;
+   }
+   .profileFollows .followCard:nth-child(3n){
+       margin-right:0;
+   }
+   .profileFollows .followCard:nth-child(3n+1){
+       clear: both;
+   }
+}
+
 @media screen and (max-width: 1200px) {
     .rightFade, .leftFade {
         display: none;
@@ -3544,9 +3647,9 @@ footer {
         margin-top:30px;
     }
     .discoveryItem {
-        width: 31%;
+        width: 32%;
         float: left;
-        margin-right: 3.5%;
+        margin-right: 2%;
         margin-bottom:30px;
         padding:20px;
         border-radius:3px;
@@ -3659,6 +3762,21 @@ footer {
     .fcol:last-child {
         margin-bottom:0;
     }
+    .profileFollows .followCard {
+        width: 49%;
+    }
+    .profileFollows .followCard:nth-child(3n){
+        margin-right:2%;
+    }
+    .profileFollows .followCard:nth-child(3n+1){
+        clear: none;
+    }
+    .profileFollows .followCard:nth-child(2n){
+        margin-right:0;
+    }
+    .profileFollows .followCard:nth-child(2n+1){
+        clear: both;
+    }
 }
 
 @media screen and (max-width: 900px) {
@@ -3678,6 +3796,16 @@ footer {
     }
     .itemDetails .panel {
         padding:20px;
+    }
+    .searchWnt, .searchWeb {
+        width: 100%;
+        float: none;
+    }
+}
+
+@media screen and (max-width: 800px) {
+    .discoveryMeta a.trendName {
+        font-size: 1.1rem;
     }
 }
 
@@ -3699,7 +3827,7 @@ footer {
         box-shadow: 0px 0px 54px -10px rgba(0,0,0,0.45);
     }
     .bTags {
-        padding:10px 20px 20px 20px;
+        padding:10px 20px 20px 0px;
     }
     a#showEditTags {
         position: absolute;
@@ -3730,7 +3858,7 @@ footer {
         text-align: center;
     }
     .boardHeader .tags {                
-        padding-left:40px;
+        padding-left:0px;
     }
     .boardConfig {
         margin-top:0;
@@ -3765,7 +3893,7 @@ footer {
         background:#fff;
         color:#333;
         text-align: center;
-        padding:0 20px 20px 20px;        
+        padding:0 20px 40px 20px;        
     }
     .boardVideo {
         padding-bottom:20px;
@@ -3792,6 +3920,7 @@ footer {
     }
     #editTags, #editDesc {
         width: 100%;
+        padding-left:20px;
     }
     a#showEditDesc, a#hideEditDesc {
         padding-left:0;
@@ -3805,6 +3934,10 @@ footer {
     }
     .trendingUserPic {
         top:20px;
+    }
+    #editDesc input {
+        border-bottom:1px solid #ccc;
+        color:#333;
     }
 }
 
@@ -3946,6 +4079,17 @@ footer {
     .foundItem:nth-child(2n+1) {
         clear: both;  
     }
+    .profileFollows .followCard {
+        width: 100%;
+        margin:0 0 10px 0;
+        float: none;
+    }
+    .profileFollows .followCard:nth-child(2n){
+        margin-right:0;
+    }
+    .profileFollows .followCard:nth-child(2n+1){
+        clear: none;
+    }
 }
 
 @media screen and (max-width: 620px) {
@@ -3969,6 +4113,24 @@ footer {
     }
     .wantResults {
         padding:0 20px;
+    }
+    .boardItemStats {
+        text-align: center;        
+    }
+    .boardItemStats, .boardItemStats button {
+        font-size: .8rem;
+    }
+    .boardItemStats .itemTools {
+        float: none;
+    }
+    .boardItemStats .itemTools .share-link .toggle {
+        padding-left:0;
+    }
+    .boardItemStats span {
+        line-height: 20px;
+    }
+    .boardItemStats span, .itemTools form, .itemTools a {
+        padding:0px 0 0 8px;
     }
 }
 
@@ -4005,6 +4167,12 @@ footer {
         min-width: 100%;
         padding-right: 200px;
     }
+    .homeBanner.mobile {
+        display: block;
+    }
+    .homeBanner.desktop {
+        display: none;
+    }
 }
 
 @media screen and (max-width: 550px) {
@@ -4014,6 +4182,27 @@ footer {
     }
     .trendingItems > a, .trendingItems > a.additembtn {
         height: 120px;
+    }
+    .profileBoards {
+        background:#fff;
+    }
+    .profileBoards .container {
+        padding:0;
+    }    
+    .profileBoardItem, .profileBoardItem.create {
+        border:none;
+        margin-bottom:30px;
+        padding-bottom:30px;
+        border-bottom:1px solid #dbdbdb;
+    }
+    .profileBoardItem:last-child {
+        margin-bottom:0;
+        padding-bottom:0;
+        border:none;
+    }
+    .profileBoardName a {
+        font-size: 2rem;
+        font-weight: lighter;
     }
 }
 
@@ -4110,9 +4299,9 @@ footer {
 }
 
 @media screen and (max-width: 500px) {
-    .myNotifications .panel {
+/*    .myNotifications .panel {
         padding:40px 30px;
-    }
+    }*/
     #updatesocialform span {
         position: relative;
     }
@@ -4161,16 +4350,28 @@ footer {
     .feedLeft, .feedRight {
         padding:0 20px;
     }
+    .discoveryFeedContent {
+        background:#fff;
+        margin-top:0;
+        padding-top:30px;
+    }
     .discoveryItem {
         width: 100%;
         float: none;
         background:none;
-        padding:0;
         border:none;
-        margin-bottom:60px;
+        margin-bottom:30px;
+        border-bottom:1px solid #ebebeb;
+        padding:0 0 30px 0;
     }
     .discoveryMeta {
         padding:0 20px;
+    }
+    .discoveryMeta .trendingItemName, .discoveryMeta .trendingFooter, .discoveryMeta .trendingItemMeta {
+        text-align: center;
+    }
+    .discoveryMeta a.trendName {
+        font-size: 1.4rem;
     }
     .discoveryItem:nth-child(3n){
         margin-right: 0;
@@ -4186,6 +4387,12 @@ footer {
     }
     .slick-initialized .slick-slide {
         padding:0;
+    }
+    .discoveryItem > a img {
+        width: auto;
+        max-width: 300px;
+        height: auto;
+        margin:auto;        
     }
 }
 
@@ -4278,7 +4485,7 @@ footer {
     .boardConfig {
         position: absolute;
         right: 10px;
-        top:-55px;
+        top:-35px;
         position: absolute;
     }
 }
@@ -4289,8 +4496,9 @@ footer {
         padding:0;
         background: #fff;
     }
-    #boardItems .featBox.boardPics {
+    #boardItems .featBox.boardPic {
         border:none;
+        border-bottom:1px solid #dbdbdb;
         padding-bottom:30px;
         margin-bottom:30px;
     }
@@ -4300,9 +4508,9 @@ footer {
     .logo span {
         display: none;
     }
-    .myNotifications .panel {
+/*    .myNotifications .panel {
         padding:40px 20px;
-    }
+    }*/
     .pSocial i {
         font-size: 1rem;
     }
