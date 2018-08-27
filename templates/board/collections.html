@@ -1,0 +1,312 @@
+{% extends 'base.html' %}
+{% load comments %}
+{% load staticfiles %}
+{% load thumbnail %}
+
+{% block title %}
+	Searching everywhere for {{ search_term }} | Wantbrd
+{% endblock %}
+
+{% block extra-css %}
+	<link type="text/css" href="{% static 'css/macy.css' %}" rel="stylesheet" />
+{% endblock %}
+
+{% block body %}
+
+	<div class="profilePush"></div>
+
+	<div class="searchTerm">
+	    <div class="container">            
+	        You searched for: {% if search_term %}"{{ search_term }}"{% endif %}
+	        {{ pri }}
+	    </div>
+	</div>
+
+	<section class="searchResults">
+	    <div class="container clearfix">
+
+	        <div class="tabNav">
+				<a href="{% url 'search' %}?kw={{search_term}}" class="tabOn">
+					{% if all_results|length == 1 %}
+						{{ all_results|length }} <span>result</span>
+					{% else %}
+						{{ all_results|length }} <span>results</span>
+					{% endif %}
+				</a>
+	            <a href="{% url 'search_item' %}?kw={{search_term}}">
+	            	{% if item_count == 1 %}
+	            		{{ item_count }} <span>item</span>
+	            	{% else %}
+	            		{{ item_count }} <span>items</span>
+	            	{% endif %}
+	            </a>
+	            <a href="{% url 'search_board' %}?kw={{search_term}}">
+	            	{% if board_count == 1 %}
+	            		{{ board_count }} <span>board</span>
+	            	{% else %}
+	            		{{ board_count }} <span>boards</span>
+	            	{% endif %}
+	            </a>                
+	            <a href="{% url 'search_user' %}?kw={{search_term}}">
+	            	{% if user_count == 1 %}
+	            		{{ user_count }} <span>user</span>
+	            	{% else %}
+	            		{{ user_count }} <span>users</span>
+	            	{% endif %}
+	            </a>
+	        </div>
+
+
+	        <div id="searchItems">	        	
+	        
+	            {% if all_results %}
+
+	            	{% for item in all_results %}
+
+	            		<!-- BOARDS -->
+
+	            		{% if item.board_name %}
+			            	<div class="featBox trendingBoard">
+
+			            	    {% if item.hero %}
+			            	    <a class="trendingBoardHero" style="background-image:url('{{ item.hero.url }}');" href="{% url 'b:view_board' item.user.username item.slug %}">
+			            	    {% else %}    
+			            	    <a class="trendingBoardHero" style="background-image:url('{% static 'img/default-hero.png' %}');" href="{% url 'b:view_board' item.user.username item.slug %}">
+			            	    {% endif %}
+
+			            	        <div class="trendingBoardMeta">
+
+			            	        	{% if item.board_name|length > 30 %}
+			            	            	<strong>{{ item.board_name|slice:":30" }}<u class="tooLong" rel="tooltip" title="{{ item.board_name }}">...</u></strong>
+			            	            {% else %}
+			            	            	<strong>{{ item.board_name }}</strong>
+			            	            {% endif %}
+			            	            			            	            
+			            	        </div>
+			            	    </a>
+			            	    <div class="trendingItems clearfix">	
+
+			            	    	{% for itemconx in item.itemconxs %}
+			            	    		{% thumbnail itemconx.image "300x300" as im %}
+			            	    		    <a style="background-image:url('{{ im.url }}');" href="#"></a>
+			            	    		{% endthumbnail %}		            	        
+			            	        {% endfor %}		            	        
+
+		            	        	{% if item.board.totalitems > 5 %}
+		            	        		<a class="plusMore" href="#">
+		            	            		<div class="plusMoreNumber">+{{ item.totalitems|add:"-5" }}</div>
+		            	            	</a>
+		            	            {% endif %}
+			            	        
+			            	    </div>
+			            	    <a class="trendingUserUser" href="#">
+			            	        <div class="trendingUserUserWrap clearfix">
+			            	            <div class="trendingUserPic">
+
+			            	            	{% if item.user.profile.picture %}
+			            	            	    <div class="circle" style="background-image:url('{{ item.user.profile.picture.url }}');"></div>
+			            	            	{% else %}
+			            	            	    <div class="circle" style="background-image:url('{% static 'img/default-hero.png' %}');"></div>
+			            	            	{% endif %}
+
+			            	            </div>
+			            	            <div class="trendingUserNames">
+		            	            		{% if item.user.username|length > 30 %}
+		            	            	    	<strong>@{{ item.user.username|slice:":30" }}<u class="tooLong" rel="tooltip" title="{{ item.user.username }}">...</u></strong>
+		            	            	    {% else %}
+		            	            	    	<strong>@{{ item.user.username }}</strong>
+		            	            	    {% endif %}
+
+			            	                {% if item.user.get_full_name %}
+			            	                	{% if item.user.username|length > 40 %}
+			            	                		<span>{{ item.user.get_full_name|slice:":40" }}<u class="tooLong" rel="tooltip" title="{{ item.user.get_full_name }}">...</u></span>
+			            	                	{% else %}
+			            	                		<span>{{ item.user.get_full_name }}</span>
+			            	                	{% endif %}
+			            	                {% endif %}
+			            	            </div>
+			            	        </div>
+			            	    </a>
+			            	    <div class="trendingFooter">
+			            	        <span>{{ item.totalitems }} {% if item.totalitems > 1 or item.totalitems == 0 %} Items {% else %} Item {% endif %}</span>
+			            	        <span>{{ item.views }} {% if item.views > 1 or item.views == 0 %} Views {% else %} View {% endif %}</span>
+			            	    </div>
+			            	</div>
+
+			            <!-- USERS -->
+
+	            		{% elif item.username %}
+		            		<div class="featBox trendingUser">
+		            		    <a class="trendingUserUser" href="{% url 'u:profile' item.username %}">
+		            		        <div class="trendingUserUserWrap clearfix">
+		            		            <div class="trendingUserPic">
+		            		            	{% if item.profile.picture %}
+		            		            	<div class="circle" style="background-image:url('{{ item.profile.picture.url }}');"></div>
+		            		            	{% else %}
+		            		            	<div class="circle" style="background-image:url('{% static 'img/default-hero.png' %}');"></div>
+		            		            	{% endif %}
+		            		            </div>
+		            		            <div class="trendingUserNames">
+
+		            		                {% if item.username|length > 30 %}
+		            		                	<strong>@{{ item.username|slice:":30" }}<u class="tooLong" rel="tooltip" title="{{ item.username }}">...</u></strong>
+		            		                {% else %}
+		            		                	<strong>@{{ item.username }}</strong>
+		            		                {% endif %}
+
+		            		                {% if item.get_full_name|length > 30 %}
+		            		                	<span>{{ item.get_full_name|slice:":30" }}<u class="tooLong" rel="tooltip" title="{{ item.get_full_name }}">...</u></span>
+		            		                {% else %}
+		            		                	<span>{{ item.get_full_name }}</span>
+		            		                {% endif %}
+
+		            		            </div>
+		            		        </div>
+		            		    </a>
+    	            		    <a class="trendingUserHero" href="{% url 'u:profile' item.username  %}" style="background-image:url('{% static 'img/profile-hero.jpg' %}')"></a>
+
+    	            		    <div class="trendingItems clearfix">	            		    	
+    	            		    	{% for item in item.items %}
+    		            		        {% thumbnail item.image "300x300" as im %}
+    		            		            <a style="background-image:url('{{ im.url }}');" href="{% url 'u:profile' item.board.user.username  %}"></a>
+    		            		        {% endthumbnail %}
+    	            		        {% endfor %}
+
+                		        	{% if item.items > 3 %}
+                		        		<a class="plusMore" href="{% url 'u:profile' item.username  %}">
+                		            		<div class="plusMoreNumber">+{{ item.itemcount|add:"-2" }}</div>
+                		            	</a>
+                		            {% else %}
+                		            	<div class="noitemspush"></div>
+                		           	{% endif %}
+    	            		    </div>
+
+    	            		    <div class="trendingFooter">
+    	            		        <span>
+    	            		        	{{ item.boardcount|add:"-1" }}
+    	            		        	{% if item.boardcount|add:"-1" == 1 %}Board{% else %}Boards{% endif %}
+    	            		        </span>
+    	            		        <span>
+    	            		        	{{ item.itemcount }}
+    	            		        	{% if item.itemcount == 1 %}Item{% else %}Items{% endif %}
+    	            		        </span>
+    	            		        <span>
+    	            		        	{{ item.viewscount }}
+    	            		        	{% if item.viewscount == 1 %}View{% else %}Views{% endif %}
+    	            		        </span>
+    	            		    </div>		            		    
+
+		            		</div>
+
+		            	<!-- ITEM CONNECTIONS -->
+
+	            		{% elif item.item.item_name %}
+		            		<div class="featBox trendingItem">
+		            		    <div class="trendingItemItem">
+		            		        {% thumbnail item.image "300x300" as im %}
+		            		            <a href="{% url 'b:view_item' item.board.user item.board.slug item.id %}"">
+		            		            	<img src="{{ im.url }}">
+		            		            </a>
+		            		        {% endthumbnail %}
+		            		    </div>
+		            		    <div class="trendingItemName">
+
+		            		    	{% if item.item.item_name|length > 40 %}
+		            		    		<a href="{% url 'b:view_item' item.board.user item.board.slug item.id %}">{{ item.item.item_name|slice:":40" }}
+		            		    			<u class="tooLong" rel="tooltip" title="{{ item.item.item_name }}">...</u>
+		            		    		</a>
+		            		    	{% else %}
+		            		    		<a href="{% url 'b:view_item' item.board.user item.board.slug item.id %}">{{ item.item.item_name }}</a>
+		            		    	{% endif %}
+
+		            		        <div class="trendingItemMeta">
+
+		            		            Found in 
+		            		            <a href="{% url 'b:view_board' item.board.user.username item.board.slug %}">
+		            		            	{% if item.board.board_name|length > 30 %}
+		            		            		{{ item.board.board_name|slice:":30" }}<u class="tooLong" rel="tooltip" title="{{ item.board.board_name }}">...</u>
+		            		            	{% else %}
+		            		            		{{ item.board.board_name }}
+		            		            	{% endif %}
+		            		           	</a> 
+		            		           	
+		            		           	&nbsp;by
+		            		           	<a href="{% url 'u:profile' item.board.user.username %}">
+
+		            		            	{% if item.board.user.get_full_name %}
+
+		            		            		{% if item.board.user.get_full_name|length > 30 %}
+		            		            			{{ item.board.user.get_full_name|slice:":30" }}<u class="tooLong" rel="tooltip" title="{{ item.board.user.get_full_name }}">...</u>
+		            		            		{% else %}
+		            		            			{{ item.board.user.get_full_name }}
+		            		            		{% endif %}
+		            		            		
+		            		            	{% else %}
+		            		            		@{{ item.board.user }}
+		            		            	{% endif %}
+
+		            		            </a>
+		            		        </div>
+		            		    </div>              
+		            		    <div class="trendingFooter">
+
+		                            <span><i class="far fa-comments"></i>
+		                            	{% get_comment_count for item as comment_count %}
+										{% if comment_count %}
+											{{ comment_count }}
+										{% else %}
+											0
+										{% endif %}
+		                            </span>
+	                                {% if item.is_liked %}
+	                                    <span><i class="fas fa-heart likeon"></i></a> {{ item.likes }}</span>
+	                                {% else %}
+	                                    <span><i class="far fa-heart"></i> {{ item.likes }}</span>                                    
+	                                {% endif %}
+		                            <span><i class="fas fa-eye"></i> {{ item.views }}</span>
+
+		            		    </div>
+		            		</div>
+
+	            		{% endif %}
+
+	            	{% endfor %}
+	            	<div class="clearfix"></div>
+	            {% else %}
+
+		            <div class="noresults">
+		            	<i class="fal fa-sad-cry"></i>
+		            	<p>Sorry, no items matched your search term.</p>
+		            </div>
+
+	            {% endif %}
+
+
+	        </div>
+
+	    </div>
+	</section>
+
+
+{% endblock %}
+
+{% block extra-js %}
+<script src="{% static 'js/macy.js' %}" type="text/javascript"></script>
+<script>
+    var masonry = new Macy({
+        container: '#searchItems',
+        trueOrder: false,
+        waitForImages: false,
+        useOwnImageLoader: false,
+        debug: true,
+        mobileFirst: true,
+        columns: 1,
+        margin: 24,
+        breakAt: {
+            860: 3,
+            520: 2,
+            320: 1
+        }
+    });
+</script>
+{% endblock %}

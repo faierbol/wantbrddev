@@ -6,7 +6,7 @@ from django.core.files.storage import FileSystemStorage
 from django.db.models import Q
 from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.auth.models import User
-from .models import Board, Item, BoardLike, ItemLike, BoardView, ItemView, ItemConnection, BoardPrivacy
+from .models import Board, Item, BoardLike, ItemLike, BoardView, ItemView, ItemConnection, BoardPrivacy, Collection
 from user.models import Notification
 from user.views import Connection
 from .forms import BoardForm, ItemForm, EditBoardForm, ChangeBackgroundForm, UpdateTags
@@ -935,6 +935,55 @@ def add_existing_item(request, board_id, item_id):
 					'form':form,
 				}
 				return render(request, template, context_dict)
+
+	return render(request, template, context_dict)
+
+
+
+##### COLLECTIONS
+def collection(request, collection_slug):
+	template = 'board/collection.html'
+	collection = Collection.objects.get(slug=collection_slug)
+	
+	### items
+	items = collection.item_conx.all()
+	item_results = []
+	for item in items:
+		if is_blocked(item.board, request.user):
+			pass
+		else:
+			item.likes = ItemLike.objects.filter(item_conx=item).count()
+			try:
+				item.is_liked = ItemLike.objects.filter(item_conx=item, user=request.user).exists()
+			except:
+				item.is_liked = False
+			item.views = ItemView.objects.filter(item_conx=item).count()
+			item_results.append(item)
+
+
+	### boards
+	boards = collection.board.all()
+	board_results = []
+	for board in boards:
+		try:
+			if board.get_item_count() > 0 and not board.user_blocked(request.user):
+				board_results.append(board)
+		except:
+			if board.get_item_count() > 0:
+				board_results.append(board)
+	for board in board_results:
+		board.totalitems = board.get_item_count()
+		board.views = BoardView.objects.filter(board=board).count()
+		board.likes = BoardLike.objects.filter(board=board).count()
+		board.itemconxs = ItemConnection.objects.filter(board=board, active=True)[:5]
+
+	mixed = list(item_results) + list(board_results)
+	random.shuffle(mixed)	
+
+	context_dict = {
+		'collection':collection,
+		'mixed':mixed,
+	}
 
 	return render(request, template, context_dict)
 

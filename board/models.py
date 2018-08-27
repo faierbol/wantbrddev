@@ -108,6 +108,9 @@ class ItemConnection(models.Model):
 	)
 	active = models.BooleanField(default=True)
 
+	def __str__(self):
+		return self.item.item_name
+
 	def save(self, *args, **kwargs):
 		self.slug = slugify(self.item.item_name)
 		super(ItemConnection, self).save(*args, **kwargs)
@@ -181,6 +184,7 @@ class ItemConnection(models.Model):
 		return itemconx
 		
 
+
 ##### Item Like Model
 class ItemLike(models.Model):
 	item_conx = models.ForeignKey(ItemConnection, on_delete=models.CASCADE)
@@ -203,10 +207,27 @@ class ItemLike(models.Model):
 		like.delete()	    				
 
 
+# Collections
+class Collection(models.Model):
+	name = models.CharField(null=False, max_length=100, blank=False)
+	description = models.TextField(default='', blank=True)
+	item_conx = models.ManyToManyField(ItemConnection)
+	board = models.ManyToManyField(Board)
+	slug = models.SlugField(default='', max_length=255)
+
+	def __str__(self):
+		return self.name
+
+	def save(self, *args, **kwargs):
+		self.slug = slugify(self.name)
+		super(Collection, self).save(*args, **kwargs)
+
+
 # Track item views
 class ItemView(models.Model):
 	item_conx = models.ForeignKey(ItemConnection, on_delete=models.CASCADE)
 	ip = models.CharField(max_length=16)
+
 
 # Privacy
 class BoardPrivacy(models.Model):

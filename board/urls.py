@@ -15,6 +15,6 @@ urlpatterns = [
 	path('unlike_item/', views.unlike_item, name='unlike_item'),
 	path('save_item/', views.save_item, name='save_item'),
 	path('follow/', views.follow_user, name='follow_user'),
-	path('unfollow/', views.unfollow_user, name='unfollow_user'),
+	path('unfollow/', views.unfollow_user, name='unfollow_user'),	
 	path('my_boards/edit/<board_id>/add_item/<item_id>', views.add_existing_item, name='add_existing_item'),
 ]
