@@ -2918,6 +2918,9 @@ ITEM DETAILS
 /* ---------------- 
 COLLECTIONS
 -----------------*/
+#collectionItems .trendingUserPic {
+    top:14px;
+}
 .collectionDescription {
     padding:40px 0;
     text-align: center;
