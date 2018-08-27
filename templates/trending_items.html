@@ -16,15 +16,27 @@
 
 {% block body %}   
 
-<section class="homeBanner clearfix">
-        
+<div class="homeBannerPush"></div>
+<section class="homeBanner desktop clearfix">
     <div class="homeSlider">
-        <div><img src="{% static 'img/tmp-banner1.jpg' %}" alt=""></div>
-        <div><img src="{% static 'img/tmp-banner1.jpg' %}" alt=""></div>
-        <div><img src="{% static 'img/tmp-banner1.jpg' %}" alt=""></div>
-        <div><img src="{% static 'img/tmp-banner1.jpg' %}" alt=""></div>
+        <div><img src="{% static 'img/banner-6.jpg' %}" alt=""></div>
+        <div><img src="{% static 'img/banner-3.jpg' %}" alt=""></div>
+        <div><img src="{% static 'img/banner-4.jpg' %}" alt=""></div>
+        <div><img src="{% static 'img/banner-1.jpg' %}" alt=""></div>
+        <div><img src="{% static 'img/banner-5.jpg' %}" alt=""></div>
     </div>
+    <div class="slickLeft"><i class="fas fa-chevron-right"></i></div>
+    <div class="slickRight"><i class="fas fa-chevron-left"></i></div>
+</section>
 
+<section class="homeBanner mobile clearfix">
+    <div class="homeSliderMobile">
+        <div><img src="{% static 'img/banner-6b.jpg' %}" alt=""></div>
+        <div><img src="{% static 'img/banner-3b.jpg' %}" alt=""></div>
+        <div><img src="{% static 'img/banner-4b.jpg' %}" alt=""></div>
+        <div><img src="{% static 'img/banner-1b.jpg' %}" alt=""></div>
+        <div><img src="{% static 'img/banner-5b.jpg' %}" alt=""></div>
+    </div>
 </section>
 
 
@@ -32,10 +44,10 @@
     <div class="container">
 
         <div class="tabNav">
-            <a href="/">Hot</a>
-            <a href="/trending/users">Trending users</a>
-            <a href="/trending/boards">Trending boards</a>
-            <a href="/trending/items" class="tabOn">Trending items</a>
+            <a href="/"><i class="fas fa-fire"></i> <span>Hot</span></a>
+            <a href="/trending/users">Trending <span>users</span></a>
+            <a href="/trending/boards">Trending <span>boards</span></a>
+            <a href="/trending/items" class="tabOn">Trending <span>items</span></a>
         </div>
 
         <div id="homeBoardItems">            
@@ -150,9 +162,40 @@
             arrows:false,
             centerPadding: '200px',
             slidesToShow: 1,
-            autoplay: true,
-            autoplaySpeed: 4000,
-            dots: true,
+            autoplay: false,
+            dots: true,            
+            responsive: [
+                {
+                  breakpoint: 1200,
+                  settings: {
+                    centerPadding: '0px',
+                  }
+                },
+            ],
+        });
+        $('.slickRight').click(function(){
+            $('.homeSlider').slick('slickPrev');
+        })
+
+        $('.slickLeft').click(function(){
+            $('.homeSlider').slick('slickNext');
+        })
+
+        $('.homeSliderMobile').slick({
+            centerMode: true,
+            arrows:false,
+            centerPadding: '200px',
+            slidesToShow: 1,
+            autoplay: false,
+            dots: true,            
+            responsive: [
+                {
+                  breakpoint: 1200,
+                  settings: {
+                    centerPadding: '0px',
+                  }
+                },
+            ],
         });
     });
 </script>
