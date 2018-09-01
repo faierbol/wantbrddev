@@ -463,9 +463,9 @@ def view_board(request, username, board_name):
 
 
 ##### View item
-def view_item(request, username, board_name, itemconx_id):
+def view_item(request, username, board_name, item_id, item_slug):
 	template = 'board/view_item.html'
-	itemconx = ItemConnection.objects.get(pk=itemconx_id)
+	itemconx = ItemConnection.objects.get(pk=item_id)
 	itemconx.thetags = itemconx.tags.all()
 
 	# is the user blocked from this board?

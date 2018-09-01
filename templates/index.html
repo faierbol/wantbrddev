@@ -216,24 +216,24 @@
                                 <div class="tip">
                                     <div class="ssk-group">
                                         <a href="" class="ssk ssk-icon ssk-facebook"
-                                            data-udrl="{% url 'b:view_item' hot.board.user hot.board.slug hot.id %}"
-                                            data-text="Checkout this item I found on Wantbrd: {{ hot.item.item_name }} - https://www.wantbrd.com{% url 'b:view_item' hot.board.user hot.board.slug hot.id %}"
+                                            data-udrl="{% url 'b:view_item' hot.board.user hot.board.slug hot.id hot.slug %}"
+                                            data-text="Checkout this item I found on Wantbrd: {{ hot.item.item_name }} - https://www.wantbrd.com{% url 'b:view_item' hot.board.user hot.board.slug hot.id hot.slug %}"
                                         ></a>
                                         <a href="" class="ssk ssk-icon ssk-twitter"
-                                        data-udrl="{% url 'b:view_item' hot.board.user hot.board.slug hot.id %}"
-                                        data-text="Checkout this item I found on Wantbrd: {{ hot.item.item_name }} - https://www.wantbrd.com{% url 'b:view_item' hot.board.user hot.board.slug hot.id %}"
+                                        data-udrl="{% url 'b:view_item' hot.board.user hot.board.slug hot.id hot.slug %}"
+                                        data-text="Checkout this item I found on Wantbrd: {{ hot.item.item_name }} - https://www.wantbrd.com{% url 'b:view_item' hot.board.user hot.board.slug hot.id hot.slug %}"
                                         ></a>
                                         <a href="" class="ssk ssk-icon ssk-google-plus"
-                                        data-udrl="{% url 'b:view_item' hot.board.user hot.board.slug hot.id %}"
-                                        data-text="Checkout this item I found on Wantbrd: {{ hot.item.item_name }} - https://www.wantbrd.com{% url 'b:view_item' hot.board.user hot.board.slug hot.id %}"
+                                        data-udrl="{% url 'b:view_item' hot.board.user hot.board.slug hot.id hot.slug %}"
+                                        data-text="Checkout this item I found on Wantbrd: {{ hot.item.item_name }} - https://www.wantbrd.com{% url 'b:view_item' hot.board.user hot.board.slug hot.id hot.slug %}"
                                         ></a>
                                         <a href="" class="ssk ssk-icon ssk-pinterest"
-                                        data-udrl="{% url 'b:view_item' hot.board.user hot.board.slug hot.id %}"
-                                        data-text="Checkout this item I found on Wantbrd: {{ hot.item.item_name }} - https://www.wantbrd.com{% url 'b:view_item' hot.board.user hot.board.slug hot.id %}"
+                                        data-udrl="{% url 'b:view_item' hot.board.user hot.board.slug hot.id hot.slug %}"
+                                        data-text="Checkout this item I found on Wantbrd: {{ hot.item.item_name }} - https://www.wantbrd.com{% url 'b:view_item' hot.board.user hot.board.slug hot.id hot.slug %}"
                                         ></a>
                                         <a href="" class="ssk ssk-icon ssk-tumblr"
-                                            data-udrl="{% url 'b:view_item' hot.board.user hot.board.slug hot.id %}"
-                                            data-text="Checkout this item I found on Wantbrd: {{ hot.item.item_name }} - https://www.wantbrd.com{% url 'b:view_item' hot.board.user hot.board.slug hot.id %}"
+                                            data-udrl="{% url 'b:view_item' hot.board.user hot.board.slug hot.id hot.slug %}"
+                                            data-text="Checkout this item I found on Wantbrd: {{ hot.item.item_name }} - https://www.wantbrd.com{% url 'b:view_item' hot.board.user hot.board.slug hot.id hot.slug %}"
                                         ></a>
                                     </div>
                                 </div>
@@ -241,18 +241,18 @@
                         </div>
                         <div class="trendingItemItem">
                             {% thumbnail hot.image "300x300" as im %}
-                                <a href="{% url 'b:view_item' hot.board.user hot.board.slug hot.id %}"><img src="{{ im.url }}"></a>
+                                <a href="{% url 'b:view_item' hot.board.user hot.board.slug hot.id hot.slug %}"><img src="{{ im.url }}"></a>
                             {% endthumbnail %}
                         </div>
                         <div class="trendingItemName">
-                            <a href="{% url 'b:view_item' hot.board.user hot.board.slug hot.id %}">{{ hot.item.item_name }}</a>
+                            <a href="{% url 'b:view_item' hot.board.user hot.board.slug hot.id hot.slug %}">{{ hot.item.item_name }}</a>
                             <div class="trendingItemMeta">
                                 Found on <a href="{% url 'b:view_board' hot.board.user hot.board.slug %}">{{ hot.board.board_name }}</a>
                                 by <a href="{% url 'u:profile' hot.board.user %}">{{ hot.board.user.get_full_name }}</a>
                             </div>
                         </div>              
                         <div class="trendingFooter">
-                            <span><a href="{% url 'b:view_item' hot.board.user hot.board.slug hot.id %}"><i class="far fa-comments"></i></a>
+                            <span><a href="{% url 'b:view_item' hot.board.user hot.board.slug hot.id hot.slug %}"><i class="far fa-comments"></i></a>
                                 {% get_comment_count for hot as comment_count %}
                                 {% if comment_count %}
                                     {{ comment_count }}

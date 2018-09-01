@@ -314,13 +314,13 @@
 
                         {% else %}
                         
-                            <a href="{% url 'b:view_item' board.user board.slug itemconx.id %}">
+                            <a href="{% url 'b:view_item' board.user board.slug itemconx.id itemconx.slug %}">
                                 {% thumbnail itemconx.image "300x300" as im %}
                                     <img src="{{ im.url }}">
                                 {% endthumbnail %}
                             </a>
 
-                            <a href="{% url 'b:view_item' board.user board.slug itemconx.id %}" class="boardItemName">{{ itemconx.item.item_name }}</a>
+                            <a href="{% url 'b:view_item' board.user board.slug itemconx.id itemconx.slug %}" class="boardItemName">{{ itemconx.item.item_name }}</a>
 
                             {% if itemconx.item_status == 'GOT' %}
                                 <div class="got">
@@ -350,7 +350,7 @@
 
                             <div class="boardItemStats">
 
-                                <span><a href="{% url 'b:view_item' board.user board.slug itemconx.id %}"><i class="fal fa-comment"></i>
+                                <span><a href="{% url 'b:view_item' board.user board.slug itemconx.id itemconx.slug %}"><i class="fal fa-comment"></i>
                                 	{% get_comment_count for itemconx as comment_count %}
                                 	{{ comment_count }}                    	
                                 </a></span>
@@ -400,24 +400,24 @@
                                             <div class="tip">
                                                 <div class="ssk-group">
                                                     <a href="" class="ssk ssk-icon ssk-facebook"
-                                                        data-url="{% url 'b:view_item' board.user board.slug itemconx.id %}"
-                                                        data-text="Checkout this item I found on Wantbrd: {{ itemconx.item.item_name }} - https://www.wantbrd.com{% url 'b:view_item' board.user board.slug itemconx.id %}"
+                                                        data-url="{% url 'b:view_item' board.user board.slug itemconx.id itemconx.slug %}"
+                                                        data-text="Checkout this item I found on Wantbrd: {{ itemconx.item.item_name }} - https://www.wantbrd.com{% url 'b:view_item' board.user board.slug itemconx.id itemconx.slug %}"
                                                     ></a>
                                                     <a href="" class="ssk ssk-icon ssk-twitter"
-                                                        data-url="{% url 'b:view_item' board.user board.slug itemconx.id %}"
-                                                        data-text="Checkout this item I found on Wantbrd: {{ itemconx.item.item_name }} - https://www.wantbrd.com{% url 'b:view_item' board.user board.slug itemconx.id %}"
+                                                        data-url="{% url 'b:view_item' board.user board.slug itemconx.id itemconx.slug %}"
+                                                        data-text="Checkout this item I found on Wantbrd: {{ itemconx.item.item_name }} - https://www.wantbrd.com{% url 'b:view_item' board.user board.slug itemconx.id itemconx.slug %}"
                                                     ></a>
                                                     <a href="" class="ssk ssk-icon ssk-google-plus"
-                                                        data-url="{% url 'b:view_item' board.user board.slug itemconx.id %}"
-                                                        data-text="Checkout this item I found on Wantbrd: {{ itemconx.item.item_name }} - https://www.wantbrd.com{% url 'b:view_item' board.user board.slug itemconx.id %}"
+                                                        data-url="{% url 'b:view_item' board.user board.slug itemconx.id itemconx.slug %}"
+                                                        data-text="Checkout this item I found on Wantbrd: {{ itemconx.item.item_name }} - https://www.wantbrd.com{% url 'b:view_item' board.user board.slug itemconx.id itemconx.slug %}"
                                                     ></a>
                                                     <a href="" class="ssk ssk-icon ssk-pinterest"   
-                                                        data-url="{% url 'b:view_item' board.user board.slug itemconx.id %}"
-                                                        data-text="Checkout this item I found on Wantbrd: {{ itemconx.item.item_name }} - https://www.wantbrd.com{% url 'b:view_item' board.user board.slug itemconx.id %}"
+                                                        data-url="{% url 'b:view_item' board.user board.slug itemconx.id itemconx.slug %}"
+                                                        data-text="Checkout this item I found on Wantbrd: {{ itemconx.item.item_name }} - https://www.wantbrd.com{% url 'b:view_item' board.user board.slug itemconx.id itemconx.slug %}"
                                                     ></a>
                                                     <a href="" class="ssk ssk-icon ssk-tumblr"
-                                                        data-url="{% url 'b:view_item' board.user board.slug itemconx.id %}"
-                                                        data-text="Checkout this item I found on Wantbrd: {{ itemconx.item.item_name }} - https://www.wantbrd.com{% url 'b:view_item' board.user board.slug itemconx.id %}"
+                                                        data-url="{% url 'b:view_item' board.user board.slug itemconx.id itemconx.slug %}"
+                                                        data-text="Checkout this item I found on Wantbrd: {{ itemconx.item.item_name }} - https://www.wantbrd.com{% url 'b:view_item' board.user board.slug itemconx.id itemconx.slug %}"
                                                     ></a>
                                                 </div>
                                             </div>
