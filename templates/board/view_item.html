@@ -71,30 +71,35 @@
 			    			</div>
 			    		</div>
 			    	</div>
-			    	<form class="inline" method="POST">
-			    	    {% csrf_token %}
-			    	    <input type="hidden" name="itemconx_id" value="{{ itemconx.id }}">
-			    	    <button class="naked" name="savelater" rel="tooltip" title="Add to your saved items"><i class="fal fa-bookmark"></i> Save</button>
-			    	</form>			        
-			        <a href="#ex{{itemconx.id}}" class="metalink" rel="modal:open tooltip" title="Add to your board"><i class="fal fa-plus"></i> Add to Board</a>
-			        <div id="ex{{itemconx.id}}" class="modal">
-			            <form method="POST" id="addtoboard-{{itemconx.id}}" name="addtoboard{{itemconx.id}}">
-			                {% csrf_token %}        
-			                <h5>Add to your board</h5>
-			                <p>Select which of your boards you would like to copy this item to:</p>
-			                <select name="board_id" class="selectBoard">
-			                    {% for board in user_boards %}
-			                        <option value="{{board.id}}">{{board.board_name}}</option>
-			                    {% endfor %}
-			                        <option value="newBoard">Create a new board</option>
-			                </select>
-			                <div class="addNewBoard" style="display: none;">
-			                    <input type="text" name="addNewBoard" placeholder="Name your new board">
-			                </div>
-			                <input type="hidden" name="itemconx_id" value="{{ itemconx.id }}">
-			                <p><button class="btn orange" name="addtoboard">Add to board</button></p>
-			            </form>
-			        </div>
+
+			    	{% if user.is_authenticated %}
+
+				    	<form class="inline" method="POST">
+				    	    {% csrf_token %}
+				    	    <input type="hidden" name="itemconx_id" value="{{ itemconx.id }}">
+				    	    <button class="naked" name="savelater" rel="tooltip" title="Add to your saved items"><i class="fal fa-bookmark"></i> Save</button>
+				    	</form>			        
+				        <a href="#ex{{itemconx.id}}" class="metalink" rel="modal:open tooltip" title="Add to your board"><i class="fal fa-plus"></i> Add to Board</a>
+				        <div id="ex{{itemconx.id}}" class="modal">
+				            <form method="POST" id="addtoboard-{{itemconx.id}}" name="addtoboard{{itemconx.id}}">
+				                {% csrf_token %}        
+				                <h5>Add to your board</h5>
+				                <p>Select which of your boards you would like to copy this item to:</p>
+				                <select name="board_id" class="selectBoard">
+				                    {% for board in user_boards %}
+				                        <option value="{{board.id}}">{{board.board_name}}</option>
+				                    {% endfor %}
+				                        <option value="newBoard">Create a new board</option>
+				                </select>
+				                <div class="addNewBoard" style="display: none;">
+				                    <input type="text" name="addNewBoard" placeholder="Name your new board">
+				                </div>
+				                <input type="hidden" name="itemconx_id" value="{{ itemconx.id }}">
+				                <p><button class="btn orange" name="addtoboard">Add to board</button></p>
+				            </form>
+				        </div>
+				    {% endif %}
+				    
 			    </div>
 			</div>
 

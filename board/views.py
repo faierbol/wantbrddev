@@ -476,7 +476,11 @@ def view_item(request, username, board_name, itemconx_id):
 	userip = request.META['REMOTE_ADDR']
 	item_view, created = ItemView.objects.get_or_create(item_conx=itemconx, ip=userip)
 
-	user_boards = Board.objects.filter(user=request.user)
+	try:
+		user_boards = Board.objects.filter(user=request.user)
+	except:
+		user_boards = False
+
 	linkback = False
 	if itemconx.image_owner:
 		linkback = User.objects.get(pk=itemconx.image_owner)
