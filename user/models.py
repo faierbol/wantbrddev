@@ -120,9 +120,9 @@ class Profile(models.Model):
 
 
     
-    def get_suggested_boards(self, qty, request):    
+    def get_suggested_boards(self, qty):    
         user_tags = []
-        our_user = User.objects.get(pk=request.user.id)
+        our_user = User.objects.get(pk=self.user.id)
         user_boards = Board.objects.filter(user=our_user)          
         suggested_boards = []    
         c = 0    
@@ -134,31 +134,33 @@ class Profile(models.Model):
             if c < q:
                 # find similar board
                 similar_boards = board.tags.similar_objects()
-                for board in similar_boards:                
-                    if c < q:
-                        if (board.slug != 'Your Saved Items' and board not in suggested_boards and
-                            board.user != request.user and board.user_blocked(request.user) == False and
-                            board.get_item_count() > 0):
-                            board.totalitems = board.get_item_count()
-                            board.views = BoardView.objects.filter(board=board).count()
-                            board.items = []
+                for board in similar_boards:
+                    if isinstance(board, Board):
+                        if c < q:
+                            if (board.slug != 'Your Saved Items' and board not in suggested_boards and
+                                board.user != our_user and board.user_blocked(our_user) == False and
+                                board.get_item_count() > 0):
+                                board.totalitems = board.get_item_count()
+                                board.views = BoardView.objects.filter(board=board).count()
+                                board.items = []
 
-                            # get all items for this board
-                            boarditems = ItemConnection.objects.filter(board=board)
-                            board.itemcount = boarditems.count()
-                            x=0
-                            for item in boarditems:
-                                if x < 2:
-                                    board.items.append(item)
-                                    x+=1
-                                else:
-                                    break
+                                # get all items for this board
+                                boarditems = ItemConnection.objects.filter(board=board)
+                                board.itemcount = boarditems.count()
+                                x=0
+                                for item in boarditems:
+                                    if x < 2:
+                                        board.items.append(item)
+                                        x+=1
+                                    else:
+                                        break
 
-
-                            suggested_boards.append(board)
-                            c+=1
+                                suggested_boards.append(board)
+                                c+=1
+                        else:
+                            break
                     else:
-                        break
+                        pass    
             else:
                 break
 

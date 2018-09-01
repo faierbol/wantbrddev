@@ -47,9 +47,9 @@ def home(request):
 	template = 'index.html'
 	hot_items = []
 
-	trending_items = get_trending_items(request,3)
-	trending_users = get_trending_users(request,3)
-	trending_boards = get_trending_boards(request,3)
+	trending_items = get_trending_items(request,7)
+	trending_users = get_trending_users(request,7)
+	trending_boards = get_trending_boards(request,7)
 	recommended_boards = get_recommended_boards(request)
 
 	mixed = list(trending_boards) + list(trending_items) + list(trending_users) + list(recommended_boards)
@@ -466,13 +466,13 @@ def view_board(request, username, board_name):
 def view_item(request, username, board_name, itemconx_id):
 	template = 'board/view_item.html'
 	itemconx = ItemConnection.objects.get(pk=itemconx_id)
+	itemconx.thetags = itemconx.tags.all()
 
 	# is the user blocked from this board?
 	if is_blocked(itemconx.board, request.user):
 		return redirect('home')	
 
 	# start the fun
-
 	userip = request.META['REMOTE_ADDR']
 	item_view, created = ItemView.objects.get_or_create(item_conx=itemconx, ip=userip)
 
@@ -760,7 +760,7 @@ def add_item(request, board_id):
 			original_url = request.POST.get("original_url")
 			board_assign = Board.objects.get(id=current_board)
 			itook = request.POST.get("itook")
-			board_assign = Board.objects.get(id=current_board)
+			board_assign = Board.objects.get(id=current_board)			
 
 			if itook == "itook":
 				itook = True
@@ -789,7 +789,7 @@ def add_item(request, board_id):
 				new_item.item_name = item_name
 				new_item.save()
 				
-				# save the model form
+				# save the model form				
 				new_item_conx = form.save(commit=False)
 				if item_status == 'GOT':
 					new_item_conx.rating = rating
@@ -806,7 +806,9 @@ def add_item(request, board_id):
 					new_item_conx.image.save(file_name, files.File(fp))
 				new_item_conx.board = board_assign
 				new_item_conx.original_purchase_url = original_url
-				new_item_conx.save()	
+				new_item_conx.save()
+				form.save_m2m()	
+
 
 				return redirect('b:edit_board', board_id=board_id)
 				
@@ -820,11 +822,10 @@ def add_item(request, board_id):
 
 
 ### add existing item
-def add_existing_item(request, board_id, item_id):
+def add_existing_item(request, board_id, itemconx_id):
 	template = 'board/add_item.html'
-
-	itemconx = ItemConnection.objects.get(id=item_id)
-	copied_item = Item.objects.get(pk=itemconx.item.id)
+	itemconx = ItemConnection.objects.get(id=itemconx_id)
+	item_to_copy = Item.objects.get(pk=itemconx.item.id)
 	board = Board.objects.get(id=board_id)
 	ogimg = itemconx.image.url
 	page_title = itemconx.item.item_name
@@ -885,42 +886,40 @@ def add_existing_item(request, board_id, item_id):
 				# save the new form instance to a var
 				new_itemconx = form.save(commit=False)				
 				# if the name has changed from the one copied...
-				if item_name != copied_item.item_name:
+				if item_name != item_to_copy.item_name:
 					# we must create a new one.
 					new_item = Item()
 					# give the new item the new name
 					new_item.item_name = item_name
 					new_item.save()
 					# assign the new item to the cloned itemconnection
-					clone.item = new_item
+					new_itemconx.item = new_item
+				else:
+					new_itemconx.item = clone.item
 
 				
-				# save all the other item details				
-				clone.board = board_assign
-				clone.itook = itook
-				clone.review = review
-				clone.item_desc = item_desc
-				clone.purchase_url = purchase_url
-				clone.active = item_active
-				clone.item_status = item_status
+				# save all the other item details
 				if item_status == 'GOT':
-					clone.rating = rating
+					new_itemconx.rating = rating
 				else:
-					clone.rating = 1
+					new_itemconx.rating = 1
+				new_itemconx.board = board_assign
 
 				# replace  the image if it was changed (can only be own)
 				if imgsrc == 'own':
 					b64pic = request.POST.get("b64pic")					
-					clone.image = decode_base64_file(b64pic)
+					new_itemconx.image = decode_base64_file(b64pic)
 					clone.img_own = True	
 					if itook == True:
-						clone.image_owner = request.user.id
+						new_itemconx.image_owner = request.user.id
 					else:
-						clone.image_owner = False				
-					clone.save()
+						new_itemconx.image_owner = False									
+				else:
+					new_itemconx.image = clone.image
 
-				# wrap it all up
-				clone.save()					
+				new_itemconx.save()
+				form.save_m2m()
+
 				return redirect('b:edit_board', board_id=board_id)
 
 			else:
@@ -1002,20 +1001,34 @@ def search(request):
 	user_count = 0
 
 	#items 
-	items = Item.objects.filter(item_name__icontains=search_term)
-	for item in items:
+	all_items = []
+	item_search_names = []
+	item_obj = Item.objects.filter(item_name__icontains=search_term)
+	for item in item_obj:
 		item_conxs = ItemConnection.objects.filter(item=item, active=True).exclude(board__slug='your-saved-items')
 		for item in item_conxs:
-			if is_blocked(item.board, request.user):
-				pass
-			else:
-				item.likes = ItemLike.objects.filter(item_conx=item).count()
-				try:
-					item.is_liked = ItemLike.objects.filter(item_conx=item, user=request.user).exists()
-				except:
-					item.is_liked = False
-				item.views = ItemView.objects.filter(item_conx=item).count()
-				item_results.append(item)			
+			item_search_names.append(item)
+
+	item_search_tags = ItemConnection.objects.filter(tags__name__in=[search_term])
+	item_search_tags = list(item_search_tags)
+	items_list = item_search_tags + item_search_names
+	for item in items_list:
+		if item.item.item_name not in all_items:
+			all_items.append(item)
+		else:
+			pass
+
+	for item in all_items:
+		if is_blocked(item.board, request.user):
+			pass
+		else:
+			item.likes = ItemLike.objects.filter(item_conx=item).count()
+			try:
+				item.is_liked = ItemLike.objects.filter(item_conx=item, user=request.user).exists()
+			except:
+				item.is_liked = False
+			item.views = ItemView.objects.filter(item_conx=item).count()
+			item_results.append(item)			
 
 	# boards
 	all_boards = False
@@ -1097,20 +1110,34 @@ def search_item(request):
 	search_term = search_term.lower()
 
 	#items 
-	items = Item.objects.filter(item_name__icontains=search_term)
-	for item in items:
+	all_items = []
+	item_search_names = []
+	item_obj = Item.objects.filter(item_name__icontains=search_term)
+	for item in item_obj:
 		item_conxs = ItemConnection.objects.filter(item=item, active=True).exclude(board__slug='your-saved-items')
 		for item in item_conxs:
-			if is_blocked(item.board, request.user):
-				pass
-			else:
-				item.likes = ItemLike.objects.filter(item_conx=item).count()
-				try:
-					item.is_liked = ItemLike.objects.filter(item_conx=item, user=request.user).exists()
-				except:
-					item.is_liked = False
-				item.views = ItemView.objects.filter(item_conx=item).count()
-				item_results.append(item)
+			item_search_names.append(item)
+
+	item_search_tags = ItemConnection.objects.filter(tags__name__in=[search_term])
+	item_search_tags = list(item_search_tags)
+	items_list = item_search_tags + item_search_names
+	for item in items_list:
+		if item.item.item_name not in all_items:
+			all_items.append(item)
+		else:
+			pass
+
+	for item in all_items:
+		if is_blocked(item.board, request.user):
+			pass
+		else:
+			item.likes = ItemLike.objects.filter(item_conx=item).count()
+			try:
+				item.is_liked = ItemLike.objects.filter(item_conx=item, user=request.user).exists()
+			except:
+				item.is_liked = False
+			item.views = ItemView.objects.filter(item_conx=item).count()
+			item_results.append(item)
 
 	# boards
 	all_boards = False

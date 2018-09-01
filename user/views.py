@@ -123,7 +123,7 @@ def my_home(request):
 	followers = profile.get_followers()
 	no_connections = profile.get_connections().count()
 	no_followers = profile.get_followers().count()
-	suggested_boards = profile.get_suggested_boards(2, request)
+	suggested_boards = profile.get_suggested_boards(2)
 
 	# recent activity
 	now = datetime.datetime.now()

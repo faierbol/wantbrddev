@@ -379,7 +379,7 @@
                                 {% if editable %}
                                     <div class="itemTools">
                                         <a class="metalink" rel="tooltip" title="Edit item" href="{% url 'b:edit_item' board.id itemconx.id %}"><i class="fas fa-pencil-alt"></i></a>
-                                        <a href="#delete{{itemconx.id}}" rel="modal:open tooltip" title="Delete item" class="metalink"><i class="fal fa-trash-alt"></i></a>
+                                        <a href="#delete{{itemconx.id}}" rel="modal:open" class="metalink"><i class="fal fa-trash-alt"></i></a>
                                     </div>
 
                                     <div id="delete{{itemconx.id}}" class="modal">

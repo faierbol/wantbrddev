@@ -54,6 +54,9 @@
                         {{ form.item_desc }}
                         <span class="charsLeft"><span id="chars">{{ desc_remain }}</span> characters remaining</span>
 
+                        <label>Tags:</label>
+                        {{ form.tags }}
+
                         <label>Board:</label>
                         <select id="currentBoard" name="currentBoard">
                             {% for b in user_boards %}                                

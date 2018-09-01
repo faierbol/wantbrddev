@@ -138,11 +138,14 @@
     	        		<input type="text" name="item_name" value="{{ page_title }}">
 
     	        		<label>Link to buy/view this item:</label>
-    	        		<input type="text" name="purchase_url" value="{{ url }}"><br>
+    	        		<input type="text" name="purchase_url" value="{{ url }}">
 
     	        		<label>About this item:</label>
     	        		<textarea name="item_desc" id="item_desc"></textarea>
                         <span class="charsLeft"><span id="desc_chars">1000</span> characters remaining</span>
+
+                        <label>Tags:</label>
+                        {{ form.tags }}
 
                         <label>Board:</label>
                         <select id="currentBoard" name="currentBoard">
@@ -186,7 +189,7 @@
                         <input type="hidden" name="domain" value="{{ domain }}" id="domain">
                         <input type="hidden" name="copied_item" value="{{ itemconx.item }}">
                         <input type="hidden" name="original_url" value={{ url }}>
-    	        		<button class="grey large submit" name="additem" id="additem" value="1">Add item</button>
+    	        		<button class="grey large submit" name="additem" id="additem" value="1">Add item</button>                        
 
     	        	</div>
             	</form>

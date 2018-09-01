@@ -130,6 +130,15 @@
 				    </div>
 			    {% endif %}
 
+
+			    {% if itemconx.thetags %}
+			    	<div class="itemTags">
+					    {% for tag in itemconx.thetags %}
+					    	<span><a href="{% url 'search_item' %}?kw={{ tag }}">#{{ tag }}</a></span>
+					    {% endfor %}
+					</div>
+				{% endif %}
+
 			    <a href="{{ itemconx.purchase_url }}" class="btn orange large" target="_blank" rel="nofollow">More Info</a>
 
 			    {% if itemconx.item_status == 'GOT' %}

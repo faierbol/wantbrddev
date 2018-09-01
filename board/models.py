@@ -95,6 +95,7 @@ class ItemConnection(models.Model):
 	review = models.CharField(max_length=1000, blank=True, default='')
 	rating = models.IntegerField(null=False, blank=False, default=1)
 	image_owner = models.IntegerField(null=True, blank=True)
+	tags = TaggableManager(blank=True)
 	WANT = 'WNT'
 	GOT = 'GOT'
 	ITEM_STATUS_CHOICES = (

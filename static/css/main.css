@@ -2462,6 +2462,9 @@ BOARD
     .recentActivity i {
         margin-right:0px;
     }
+    .suggestedBoards .trendingUserUserWrap {
+        position: relative;
+    }
     .suggestedBoards .featBox {
         margin-top:20px;
     }
@@ -2470,6 +2473,15 @@ BOARD
     }
     .suggestedBoards .trendingItems > a {
         height: 75px;
+    }
+    .suggestedBoards .trendingUserPic {
+        left:0;
+    }
+    .suggestedBoards .trendingBoard .trendingUserNames {
+        padding-left:60px;
+    }
+    .suggestedBoards .trendingBoardMeta {
+        padding:20px;
     }
 
 .feedRight {
@@ -2826,6 +2838,14 @@ ITEM DETAILS
         }
         .popDesc p {
             line-height: 1.6rem
+        }
+        .itemTags a {
+            font-size: .8rem;
+            text-decoration: none;
+            margin-left:4px;
+        }
+        .itemTags a:first-child {
+            margin-left:0;
         }
         .itemReview {
             margin-top:20px;

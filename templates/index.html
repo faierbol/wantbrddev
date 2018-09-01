@@ -252,7 +252,7 @@
                             </div>
                         </div>              
                         <div class="trendingFooter">
-                            <span><i class="far fa-comments"></i>
+                            <span><a href="{% url 'b:view_item' hot.board.user hot.board.slug hot.id %}"><i class="far fa-comments"></i></a>
                                 {% get_comment_count for hot as comment_count %}
                                 {% if comment_count %}
                                     {{ comment_count }}

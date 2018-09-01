@@ -2,6 +2,7 @@ from django import forms
 from django.forms import Textarea
 from .models import Board, Item, ItemConnection
 from django.core.exceptions import ValidationError
+from taggit.forms import *
 
 
 class BoardForm(forms.ModelForm):
@@ -22,8 +23,8 @@ class BoardForm(forms.ModelForm):
 
 class ItemForm(forms.ModelForm):
 	class Meta:
-		model = ItemConnection
-		fields = ['purchase_url', 'item_desc', 'item_status', 'rating', 'review', 'active']
+		model = ItemConnection		
+		exclude = {'board', 'image', 'img_own', 'itook', 'item', 'slug', 'created', 'allow_comments', 'original_purchase_url', 'image_owner'}
 		widgets = {
 	        'item_desc': Textarea(),
 	        'rating':forms.HiddenInput(),
