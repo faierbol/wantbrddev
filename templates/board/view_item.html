@@ -3,9 +3,9 @@
 {% load comments static %}
 {% load thumbnail %}
 
-{% block title %}
-	{{ itemconx.item.item_name }} | {{ itemconx.board.board_name }} | {{ itemconx.board.user.get_full_name }} | Wantbrd
-{% endblock %}
+{% block title %}{{ itemconx.item.item_name }} | {{ itemconx.board.board_name }} | {{ itemconx.board.user.get_full_name }} | Wantbrd{% endblock %}
+
+{% block meta_description %}View, discuss and share {{ itemconx.item.item_name }} and other items on Wantbrd.  Create your own wish list and share with friends and family. Take the guessing out of giving!{% endblock %}
 
 {% block extra-css %}
 	<link type="text/css" href="{% static 'css/macy.css' %}" rel="stylesheet" />
@@ -60,7 +60,7 @@
 			    {% endthumbnail %}
 			    <div class="popMeta">
 			    	<div class="share-link">
-			    		<a class="toggle" href="javascript:void(0);"><i class="fal fa-share"></i> Share</a>
+			    		<a class="toggle" href="javascript:void(0);" {% if not user.is_authenticated %} style="border-right:none;" {% endif %}><i class="fal fa-share"></i> Share</a>
 			    		<div class="tip">
 			    			<div class="ssk-group">
 			    			    <a href="" class="ssk ssk-icon ssk-facebook"></a>
@@ -99,7 +99,7 @@
 				            </form>
 				        </div>
 				    {% endif %}
-				    
+
 			    </div>
 			</div>
 
@@ -168,12 +168,16 @@
 
 			    <div class="itemComments">
 				    <h2>Join the discussion</h2>
+				    {% if user.is_authenticated %}
 		            <div class="popComments">
 		    			{% render_comment_list for itemconx %}
 		    			{% if user.is_authenticated %}
 		    			{% render_comment_form for itemconx %}
 		    			{% endif %}
 		            </div>
+		            {% else %}
+		            <p>You must be <a href="#loginModal" rel="modal:open">logged in</a> to view and post comments</p>
+		            {% endif %}
 		        </div>
 
 			</div>
