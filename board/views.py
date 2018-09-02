@@ -9,7 +9,7 @@ from django.contrib.auth.models import User
 from .models import Board, Item, BoardLike, ItemLike, BoardView, ItemView, ItemConnection, BoardPrivacy, Collection
 from user.models import Notification
 from user.views import Connection
-from .forms import BoardForm, ItemForm, EditBoardForm, ChangeBackgroundForm, UpdateTags
+from .forms import BoardForm, ItemForm, EditBoardForm, ChangeBackgroundForm, UpdateTags, BoardPrivacyForm
 from bs4 import BeautifulSoup
 import os, copy
 from urllib.parse import urlparse
@@ -25,6 +25,7 @@ import metadata_parser
 from amazon.api import AmazonAPI
 import bottlenose.api
 from django.template.defaultfilters import slugify
+from dal import autocomplete
 
 
 ##### HOME PAGE
@@ -141,6 +142,7 @@ def edit_board(request, board_id):
 	items = []
 	item_conxs = ItemConnection.objects.filter(board=board_id)
 	allusers = User.objects.all()
+	privacy_form = BoardPrivacyForm()
 	for item in item_conxs:
 		item.likes = ItemLike.objects.filter(item_conx=item).count()
 		try:
@@ -294,6 +296,7 @@ def edit_board(request, board_id):
 			'form':form,
 			'editable':editable,
 			'bgform':bgform,
+			'privacy_form':privacy_form,
 			'tagform':tagform,
 			'items':items,
 			'allusers':allusers,
@@ -1444,3 +1447,12 @@ def save_item(request):
 			json.dumps({"nothing to see": "this isn't happening"}),
 			content_type="application/json"
 		)
+
+class UserAutocomplete(autocomplete.Select2QuerySetView):
+    def get_queryset(self):
+        if not self.request.user.is_authenticated():
+            return User.objects.none()
+        qs = User.objects.all()
+        if self.q:
+            qs = qs.filter(name__istartswith=self.q)
+        return qs

@@ -1,9 +1,9 @@
 from django import forms
 from django.forms import Textarea
-from .models import Board, Item, ItemConnection
+from .models import Board, Item, ItemConnection, BoardPrivacy
+from user.models import User
 from django.core.exceptions import ValidationError
-from taggit.forms import *
-
+from dal import autocomplete
 
 class BoardForm(forms.ModelForm):
 	class Meta:
@@ -45,6 +45,18 @@ class ChangeBackgroundForm(forms.ModelForm):
 		model = Board		
 		fields = ['hero', 'user']
 		widgets = {'user':forms.HiddenInput()}
+
+
+class BoardPrivacyForm(forms.ModelForm):
+	user = forms.ModelChoiceField(
+	    queryset=User.objects.all(),
+	    widget=autocomplete.ModelSelect2(url='b:user_autocomplete')
+	)
+	class Meta:
+	    model = BoardPrivacy
+	    fields = ('__all__')
+	    widgets = {'user':forms.HiddenInput()}
+
 
 
 class UpdateTags(forms.ModelForm):

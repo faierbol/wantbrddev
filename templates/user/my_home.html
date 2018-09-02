@@ -77,14 +77,14 @@
                 	{% for item in itemconxs|dictsortreversed:"created" %}
                     
     	                <div class="discoveryItem clearfix match">
-    	                    <a href="{% url 'b:view_item' item.board.user item.board.slug item.id %}" class="discoveryImage">
+    	                    <a href="{% url 'b:view_item' item.board.user item.board.slug item.id item.slug %}" class="discoveryImage">
     	                    	{% thumbnail item.image "300x300" as im %}
     	                    	    <img src="{{ im.url }}">
     	                    	{% endthumbnail %}
     	                    </a>
     	                    <div class="discoveryMeta">
     	                        <div class="trendingItemName">
-    	                            <a href="{% url 'b:view_item' item.board.user item.board.slug item.id %}" class="trendName">{{ item.item.item_name }}</a>
+    	                            <a href="{% url 'b:view_item' item.board.user item.board.slug item.id item.slug %}" class="trendName">{{ item.item.item_name }}</a>
     	                            <div class="trendingItemMeta">
     	                                Found in <a href="{% url 'b:view_board' item.board.user item.board.slug %}">{{ item.board.board_name }}</a> by 
     	                                <a href="{% url 'u:profile' item.board.user %}">
@@ -107,7 +107,7 @@
                                         </form>
                                     </span>
     	                            <span>
-                                        <a href="{% url 'b:view_item' item.board.user item.board.slug item.id %}">
+                                        <a href="{% url 'b:view_item' item.board.user item.board.slug item.id item.slug %}">
                                             <i class="far fa-comments"></i>
         	                            	{% get_comment_count for item as comment_count %}
         									{% if comment_count %}
@@ -160,24 +160,24 @@
                                         <div class="tip">
                                             <div class="ssk-group">
                                                 <a href="" class="ssk ssk-icon ssk-facebook"
-                                                    data-url="{% url 'b:view_item' item.board.user item.board.slug item.id %}"
-                                                    data-text="Checkout this item I found on Wantbrd: {{ item.item.item_name }} - https://www.wantbrd.com{% url 'b:view_item' item.board.user item.board.slug item.id %}"
+                                                    data-url="{% url 'b:view_item' item.board.user item.board.slug item.id item.slug %}"
+                                                    data-text="Checkout this item I found on Wantbrd: {{ item.item.item_name }} - https://www.wantbrd.com{% url 'b:view_item' item.board.user item.board.slug item.id item.slug %}"
                                                 ></a>
                                                 <a href="" class="ssk ssk-icon ssk-twitter"
-                                                    data-url="{% url 'b:view_item' item.board.user item.board.slug item.id %}"
-                                                    data-text="Checkout this item I found on Wantbrd: {{ item.item.item_name }} - https://www.wantbrd.com{% url 'b:view_item' item.board.user item.board.slug item.id %}"
+                                                    data-url="{% url 'b:view_item' item.board.user item.board.slug item.id item.slug %}"
+                                                    data-text="Checkout this item I found on Wantbrd: {{ item.item.item_name }} - https://www.wantbrd.com{% url 'b:view_item' item.board.user item.board.slug item.id item.slug %}"
                                                 ></a>
                                                 <a href="" class="ssk ssk-icon ssk-google-plus"
-                                                    data-url="{% url 'b:view_item' item.board.user item.board.slug item.id %}"
-                                                    data-text="Checkout this item I found on Wantbrd: {{ item.item.item_name }} - https://www.wantbrd.com{% url 'b:view_item' item.board.user item.board.slug item.id %}"
+                                                    data-url="{% url 'b:view_item' item.board.user item.board.slug item.id item.slug %}"
+                                                    data-text="Checkout this item I found on Wantbrd: {{ item.item.item_name }} - https://www.wantbrd.com{% url 'b:view_item' item.board.user item.board.slug item.id item.slug %}"
                                                 ></a>
                                                 <a href="" class="ssk ssk-icon ssk-pinterest"   
-                                                    data-url="{% url 'b:view_item' item.board.user item.board.slug item.id %}"
-                                                    data-text="Checkout this item I found on Wantbrd: {{ item.item.item_name }} - https://www.wantbrd.com{% url 'b:view_item' item.board.user item.board.slug item.id %}"
+                                                    data-url="{% url 'b:view_item' item.board.user item.board.slug item.id item.slug %}"
+                                                    data-text="Checkout this item I found on Wantbrd: {{ item.item.item_name }} - https://www.wantbrd.com{% url 'b:view_item' item.board.user item.board.slug item.id item.slug %}"
                                                 ></a>
                                                 <a href="" class="ssk ssk-icon ssk-tumblr"
-                                                    data-url="{% url 'b:view_item' item.board.user item.board.slug item.id %}"
-                                                    data-text="Checkout this item I found on Wantbrd: {{ item.item.item_name }} - https://www.wantbrd.com{% url 'b:view_item' item.board.user item.board.slug item.id %}"
+                                                    data-url="{% url 'b:view_item' item.board.user item.board.slug item.id item.slug %}"
+                                                    data-text="Checkout this item I found on Wantbrd: {{ item.item.item_name }} - https://www.wantbrd.com{% url 'b:view_item' item.board.user item.board.slug item.id item.slug %}"
                                                 ></a>
                                             </div>
                                         </div>
@@ -198,7 +198,7 @@
                                     {% endif %}
 
                                     {% if comment_list %}
-                                        <a href="{% url 'b:view_item' item.board.user item.board.slug item.id %}" class="viewComments">View comments</a>
+                                        <a href="{% url 'b:view_item' item.board.user item.board.slug item.id item.slug %}" class="viewComments">View comments</a>
                                     {% endif %}
 
     	                        </div>

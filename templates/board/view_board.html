@@ -547,8 +547,10 @@
             </div>
 
             <div class="optionsPanel boardPrivacy">
+                
                 <h4>Board Privacy</h4>
                 <p>Restrict the following users from viewing this board.</p>
+
                 <form method="POST" enctype="multipart/form-data">
                     {% csrf_token %}
                     <div id="selectusers" style="width: 100%;">
@@ -564,8 +566,8 @@
                     </div>
                     <input type="hidden" name="board" value="{{ board.id }}">
                     <p><button class="btn grey" name="updateprivacy" value="updateprivacy">Update</button></p>
-
                 </form>
+
             </div>
         </div>
     </div>

@@ -1,6 +1,7 @@
 from django.conf.urls import url
 from django.urls import path, reverse_lazy
 from . import views
+from .views import UserAutocomplete
 
 app_name = 'b'
 urlpatterns = [	
@@ -17,4 +18,5 @@ urlpatterns = [
 	path('follow/', views.follow_user, name='follow_user'),
 	path('unfollow/', views.unfollow_user, name='unfollow_user'),	
 	path('my_boards/edit/<board_id>/add_item/<itemconx_id>', views.add_existing_item, name='add_existing_item'),
+	url(r'^user_autocomplete/$', UserAutocomplete.as_view(), name='user_autocomplete',),
 ]
