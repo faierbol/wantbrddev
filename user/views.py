@@ -181,10 +181,9 @@ def my_home(request):
 		for item in matching_items:
 			itemconx_obj.append(item)
 
+	page = request.GET.get('page',1)
+	paginator = Paginator(itemconx_obj,2)
 
-
-	paginator = Paginator(itemconx_obj,10)
-	page = request.GET.get('page',10)
 	try:
 		feed = paginator.page(page)
 	except PageNotAnInteger:
@@ -216,6 +215,7 @@ def my_home(request):
 			return HttpResponseRedirect(request.path_info)
 
 	context_dict = {
+		'paginator':paginator,
 		'profile': profile,
 		'no_connections': no_connections,
 		'no_followers': no_followers,
@@ -451,7 +451,6 @@ def profile(request, username):
 		followers = profile.get_followers()
 		no_connections = profile.get_connections().count()
 		no_followers = profile.get_followers().count()
-
 
 		is_followed = False
 		for auser in followers:

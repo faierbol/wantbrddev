@@ -1,0 +1,407 @@
+{% extends 'base.html' %}
+{% load comments static %}
+{% load staticfiles %}
+{% load thumbnail %}
+
+{% block title %}
+	Your home | @{{ user.username }}
+{% endblock %}
+
+{% block extra-css %}
+    <link type="text/css" href="{% static 'css/macy.css' %}" rel="stylesheet" />
+    <link rel="stylesheet" type="text/css" href="{% static 'fluent_comments/css/ajaxcomments.css' %}" />    
+{% endblock %}
+
+{% block body %}
+
+    {% if profile.background %}
+    <div class="discoveryWrap" style="background-image:url('{{ profile.background.url  }}"></div>
+    {% else %}
+    <div class="discoveryWrap" style="background-image:url('{% static 'img/profile-hero.jpg' %}"></div>
+    {% endif %}
+
+    <div id="discoveryCont" class="container clearfix">
+        
+        <div class="feedLeft">
+
+            <div class="profileImage">
+                <a class="profileImage" href="{% url 'u:home' %}">
+                    {% if profile.picture %}
+                    <div class="circle" style="background-image:url('{{ profile.picture.url }}');"></div>
+                    {% else %}
+                    <div class="circle" style="background-image:url('{% static 'img/default-hero.png' %}');"></div>
+                    {% endif %}
+                </a>                
+            </div>
+
+            <div class="discoveryUserInfo">
+                <div class="discoveryUsername">
+                {% if user.username|length > 30 %}                    
+                    @{{ user.username|slice:":30" }}<u class="tooLong" rel="tooltip" title="{{ user.username }}">...</u>
+                {% else %}
+                    @{{ user.username }}
+                {% endif %}
+                </div>
+                <div class="discoveryName">
+                    {% if user.get_full_name|length > 50 %}
+                        {{ user.get_full_name|slice:":50" }}<u class="tooLong" rel="tooltip" title="{{user.get_full_name}}">...</u>
+                    {% else %}
+                        {{ user.get_full_name }}
+                    {% endif %}
+                </div>
+                <div class="discoveryStats">
+                    <p><strong>{{ no_followers }}</strong> FOLLOWERS</p>
+                    <p><strong>{{ no_connections }}</strong> FOLLOWING</p>
+                    <p><strong>{{ boards.count }}</strong> {% if boards.count > 1 %}BOARDS{% else %}BOARD{% endif %}</p>
+                    <p><strong>{{ no_items }}</strong> ITEMS</p>
+                </div>
+            </div>
+
+            <div class="recentActivity">
+                <h6>Recent Activity</h6>
+                <a href="{% url 'my_notifications' %}"><i class="far fa-heart"></i> <strong>{{ recent_likes }}</strong> Likes</a>
+                <a href="{% url 'my_notifications' %}"><i class="fas fa-user-plus"></i> <strong>{{ recent_followers }}</strong> Followers</a>
+                <!-- <a href="{% url 'my_notifications' %}"><i class="far fa-comments"></i> <strong>X</strong> Comments</a> -->
+            </div>
+
+        </div>
+
+        <div class="discoveryFeed">
+            
+            <h3>
+            Recent Posts
+            </h3>
+
+            <div class="infinite-container">
+                {% for number in numbers %}
+                  <div class="infinite-item">{{ number }}</div>
+                {% endfor %}
+              </div>
+
+              {% if numbers.has_next %}
+                <a class="infinite-more-link" href="?page={{ numbers.next_page_number }}">More</a>
+              {% endif %}
+
+            <div class="discoveryFeedContent clearfix">
+
+                {% if itemconxs %}
+
+                	{% for item in itemconxs|dictsortreversed:"created" %}
+                    
+    	                <div class="discoveryItem clearfix match">
+    	                    <a href="{% url 'b:view_item' item.board.user item.board.slug item.id item.slug %}" class="discoveryImage">
+    	                    	{% thumbnail item.image "300x300" as im %}
+    	                    	    <img src="{{ im.url }}">
+    	                    	{% endthumbnail %}
+    	                    </a>
+    	                    <div class="discoveryMeta">
+    	                        <div class="trendingItemName">
+    	                            <a href="{% url 'b:view_item' item.board.user item.board.slug item.id item.slug %}" class="trendName">{{ item.item.item_name }}</a>
+    	                            <div class="trendingItemMeta">
+    	                                Found in <a href="{% url 'b:view_board' item.board.user item.board.slug %}">{{ item.board.board_name }}</a> by 
+    	                                <a href="{% url 'u:profile' item.board.user %}">
+    	                                	{% if item.board.user.get_full_name %}
+    	                                		{{ item.board.user.get_full_name }}	                                
+    	                                	{% else %}
+    	                                		@{{ item.board.user }}
+    	                                	{% endif %}
+    	                                </a>
+    	                            </div>
+    	                        </div>              
+    	                        <div class="trendingFooter">
+                                    <span>
+                                        <form class="inline saveitem" method="POST" data-id="{{ item.id }}">
+                                            {% csrf_token %}
+                                            <input type="hidden" class="save_item_id" name="itemconx_id" value="{{ item.id }}">
+                                            <button class="naked saveitembutton" data-id="{{ item.id }}" name="savelater" rel="tooltip" title="Add to your saved items">
+                                                <i class="fal fa-bookmark"></i>
+                                            </button>
+                                        </form>
+                                    </span>
+    	                            <span>
+                                        <a href="{% url 'b:view_item' item.board.user item.board.slug item.id item.slug %}">
+                                            <i class="far fa-comments"></i>
+        	                            	{% get_comment_count for item as comment_count %}
+        									{% if comment_count %}
+        										{{ comment_count }}
+        									{% else %}
+        										0
+        									{% endif %}
+                                        </a>
+    	                            </span>
+
+                                    <form class="inline unlikeitem" method="POST" data-id="{{item.id }}" style="display:{% if item.is_liked %} inline-block {% else %} none {% endif %}">
+                                        {% csrf_token %}
+                                        <input type="hidden" class="unlike_item_id" name="item_id" value="{{ item.id }}">
+                                        <button class="naked unlikeitembutton" name="unlikeitem" data-id="{{item.id }}">
+                                            <i class="fas fa-heart likeon"></i>
+                                            <span>{{ item.likes }}</span>
+                                        </button>
+                                    </form>
+
+                                    <form class="inline likeitem" method="POST"  data-id="{{item.id }}" style="display:{% if item.is_liked %} none {% else %} inline-block {% endif %}">
+                                        {% csrf_token %}
+                                        <input type="hidden" class="like_item_id" name="item_id" value="{{ item.id }}">
+                                        <button class="naked likeitembutton" name="likeitem" data-id="{{item.id }}">
+                                            <i class="fal fa-heart"></i>
+                                            <span>{{ item.likes }}</span>
+                                        </button>
+                                    </form>
+
+<!--                                     {% if item.is_liked %}
+                                        <span>
+                                            <form class="inline" method="POST">
+                                                {% csrf_token %}
+                                                <input type="hidden" name="itemconx_id" value="{{ item.id }}">
+                                                <button class="naked" name="unlikeitem"><i class="fas fa-heart likeon"></i> {{ item.likes }}</button>
+                                            </form>
+                                        </span>
+                                    {% else %}
+                                        <span>
+                                            <form class="inline" method="POST">
+                                                {% csrf_token %}
+                                                <input type="hidden" name="itemconx_id" value="{{ item.id }}">
+                                                <button class="naked" name="likeitem"><i class="far fa-heart"></i> {{ item.likes }}</button>                                
+                                            </form>
+                                        </span>                                    
+                                    {% endif %} -->
+
+    	                            <span><i class="fas fa-eye"></i> {{ item.views }}</span>
+                                    <div class="share-link">
+                                        <a class="toggle metalink" rel="tooltip" title="Share" href="javascript:void(0);"><i class="fal fa-share"></i></a>
+                                        <div class="tip">
+                                            <div class="ssk-group">
+                                                <a href="" class="ssk ssk-icon ssk-facebook"
+                                                    data-url="{% url 'b:view_item' item.board.user item.board.slug item.id item.slug %}"
+                                                    data-text="Checkout this item I found on Wantbrd: {{ item.item.item_name }} - https://www.wantbrd.com{% url 'b:view_item' item.board.user item.board.slug item.id item.slug %}"
+                                                ></a>
+                                                <a href="" class="ssk ssk-icon ssk-twitter"
+                                                    data-url="{% url 'b:view_item' item.board.user item.board.slug item.id item.slug %}"
+                                                    data-text="Checkout this item I found on Wantbrd: {{ item.item.item_name }} - https://www.wantbrd.com{% url 'b:view_item' item.board.user item.board.slug item.id item.slug %}"
+                                                ></a>
+                                                <a href="" class="ssk ssk-icon ssk-google-plus"
+                                                    data-url="{% url 'b:view_item' item.board.user item.board.slug item.id item.slug %}"
+                                                    data-text="Checkout this item I found on Wantbrd: {{ item.item.item_name }} - https://www.wantbrd.com{% url 'b:view_item' item.board.user item.board.slug item.id item.slug %}"
+                                                ></a>
+                                                <a href="" class="ssk ssk-icon ssk-pinterest"   
+                                                    data-url="{% url 'b:view_item' item.board.user item.board.slug item.id item.slug %}"
+                                                    data-text="Checkout this item I found on Wantbrd: {{ item.item.item_name }} - https://www.wantbrd.com{% url 'b:view_item' item.board.user item.board.slug item.id item.slug %}"
+                                                ></a>
+                                                <a href="" class="ssk ssk-icon ssk-tumblr"
+                                                    data-url="{% url 'b:view_item' item.board.user item.board.slug item.id item.slug %}"
+                                                    data-text="Checkout this item I found on Wantbrd: {{ item.item.item_name }} - https://www.wantbrd.com{% url 'b:view_item' item.board.user item.board.slug item.id item.slug %}"
+                                                ></a>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    {% if comment_list %}
+                                    <div class="myHomeComments">
+
+                                        {% get_comment_list for item as comment_list %}
+                                        {% for comment in comment_list|slice:":2" %}
+                                            <STRONG>{{user}}</STRONG>
+                                            <div class="aComment">
+                                                {{ comment.comment|escape|slice:":90" }}{% if comment.comment|length > 90 %}<p>...</p>{% endif %}
+                                            </div>  
+                                        {% endfor %}
+
+                                    </div>
+                                    {% endif %}
+
+                                    {% if comment_list %}
+                                        <a href="{% url 'b:view_item' item.board.user item.board.slug item.id item.slug %}" class="viewComments">View comments</a>
+                                    {% endif %}
+
+    	                        </div>
+    	                    </div>
+                            <div class="clearfix"></div>
+    	                </div>
+
+                    {% endfor %}
+
+                    {% if itemconxs.has_next %}
+                        <a class="infinite-more-link" href='?page={{ itemconxs.next_page_number }}'>More</a>
+                    {% endif %}
+
+                    <div class="loading" style="display: none;">
+                        Loading...
+                    </div>
+
+                {% else %}
+
+                    <div class="nofollow">You are not following anyone yet.</div>
+
+                {% endif %}   
+
+                {% if itemconxs.has_other_pages %}
+                  <ul class="pagination">
+                    {% if itemconxs.has_previous %}
+                      <li><a href="?page={{ itemconxs.previous_page_number }}">&laquo;</a></li>
+                    {% else %}
+                      <li class="disabled"><span>&laquo;</span></li>
+                    {% endif %}
+                    {% for i in itemconxs.paginator.page_range %}
+                      {% if itemconxs.number == i %}
+                        <li class="active"><span>{{ i }} <span class="sr-only">(current)</span></span></li>
+                      {% else %}
+                        <li><a href="?page={{ i }}">{{ i }}</a></li>
+                      {% endif %}
+                    {% endfor %}
+                    {% if itemconxs.has_next %}
+                      <li><a href="?page={{ itemconxs.next_page_number }}">&raquo;</a></li>
+                    {% else %}
+                      <li class="disabled"><span>&raquo;</span></li>
+                    {% endif %}
+                  </ul>
+                {% endif %}             
+
+            </div>
+
+        </div>
+
+        <div class="feedRight">
+
+<!--             <h5>Suggested to follow:</h5>
+            
+            <div class="followList">
+                <div class="followCard">
+                    <a class="followProfile" href="#">
+                        <div class="circle" style="background-image:url('img/profile-pic.jpg');"></div>
+                    </a>
+                    <div class="followInfo">
+                        <a href="#" class="follow">+Follow</a>
+                        <span><a href="#">@iamholdsworth</a></span>
+                        <strong><a href="#">Luke Holdsworth</a></strong>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="followCard">
+                    <a class="followProfile" href="#">
+                        <div class="circle" style="background-image:url('img/profile-pic.jpg');"></div>
+                    </a>
+                    <div class="followInfo">
+                        <a href="#" class="follow">+Follow</a>
+                        <span><a href="#">@iamholdsworth</a></span>
+                        <strong><a href="#">Luke Holdsworth</a></strong>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="followCard">
+                    <a class="followProfile" href="#">
+                        <div class="circle" style="background-image:url('img/profile-pic.jpg');"></div>
+                    </a>
+                    <div class="followInfo">
+                        <a href="#" class="follow">+Follow</a>
+                        <span><a href="#">@iamholdsworth</a></span>
+                        <strong><a href="#">Luke Holdsworth</a></strong>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+            </div> -->
+
+            {% if suggested_boards %}
+
+                <h5>Suggested boards:</h5>
+                <div class="suggestedBoards">
+
+                    {% for board in suggested_boards %}
+
+                        <div class="featBox trendingBoard">
+                            {% if board.hero %}
+                            <a class="trendingBoardHero" style="background-image:url('{{ board.hero.url }}');" href="{% url 'b:view_board' board.user.username board.slug %}">
+                            {% else %}    
+                            <a class="trendingBoardHero" style="background-image:url('{% static 'img/default-hero.png' %}');" href="{% url 'b:view_board' board.user.username board.slug %}">
+                            {% endif %}                            
+                                <div class="trendingBoardMeta">
+                                    <strong>{{ board.board_name }}</strong>
+                                </div>
+                            </a>
+
+                            <div class="trendingItems clearfix">
+                                {% for item in board.items %}
+                                    {% thumbnail item.image "300x300" as im %}
+                                        <a style="background-image:url('{{ im.url }}');" href="{% url 'u:profile' user.username  %}"></a>
+                                    {% endthumbnail %}
+                                {% endfor %}
+
+                                {% if board.itemcount > 2 %}
+                                    <a class="plusMore" href="{% url 'u:profile' user.username  %}">
+                                        <div class="plusMoreNumber">+{{ board.itemcount|add:"-2" }}</div>
+                                    </a>
+                                {% endif %}
+                            </div>
+
+                            <a class="trendingUserUser" href="{% url 'u:profile' board.user %}">
+                                <div class="trendingUserUserWrap clearfix">
+                                    <div class="trendingUserPic">
+                                        {% if board.user.profile.picture %}
+                                        <div class="circle" style="background-image:url('{{ board.user.profile.picture.url }}');"></div>
+                                        {% else %}
+                                        <div class="circle" style="background-image:url('{% static 'img/default-hero.png' %}');"></div>
+                                        {% endif %}
+                                    </div>
+                                    <div class="trendingUserNames">
+                                        <strong>@{{ board.user.username }}</strong>
+                                        <span>{{ board.user.get_full_name }}</span>
+                                    </div>
+                                </div>
+                            </a>
+                            <div class="trendingFooter">
+                                <span>{{ board.totalitems }} {% if board.totalitems > 1 or board.totalitems == 0 %} Items {% else %} Item {% endif %}</span>
+                                <span>{{ board.views }} {% if board.views > 1 or board.views == 0 %} Views {% else %} View {% endif %}</span>
+                            </div>
+                        </div>
+                        
+                    {% endfor %}
+
+                </div>
+            
+            {% endif %}
+
+        </div>
+
+    </div>	
+
+{% endblock %}
+
+{% block extra-js %}
+
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/waypoints/4.0.1/jquery.waypoints.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/waypoints/4.0.1/shortcuts/infinite.min.js"></script>
+    <script type="text/javascript" src="{% static 'fluent_comments/js/ajaxcomments.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/ajaxactions.js' %}"></script>
+    <script>
+    var infinite = new Waypoint.Infinite({
+        element: $('.infinite-container')[0],
+            onBeforePageLoad: function () {
+            $('.loading').show();
+        },
+        onAfterPageLoad: function ($items) {
+            $('.loading').hide();
+        }
+      });
+    </script>
+
+    <!--- message alert -->
+        {% if messages %}
+            {% for message in messages %}    
+                <script type="text/javascript">
+                $(function(){
+                  new PNotify({
+                    title: false,
+                    type: "success",
+                    text: '{{ message }}',
+                    shadow: false,
+                    delay: 5000,
+                    buttons: {
+                        sticker: false,
+                    }
+                  });
+                });
+                </script>
+            {% endfor %}
+        {% endif %}
+
+
+{% endblock %}

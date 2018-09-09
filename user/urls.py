@@ -10,3 +10,6 @@ urlpatterns = [
 	path('<username>/following/', views.profile_following, name='profile_following'),
 	path('<username>/followers/', views.profile_followers, name='profile_followers'),
 ]
+
+handler404 = 'board.views.error_404'
+handler500 = 'board.views.error_500'
