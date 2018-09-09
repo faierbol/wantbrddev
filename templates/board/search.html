@@ -17,8 +17,20 @@
 
 	<div class="searchTerm">
 	    <div class="container">            
-	        You searched for: {% if search_term %}"{{ search_term }}"{% endif %}
-	        {{ pri }}
+	        <p>You searched for: {% if search_term %}"{{ search_term }}"{% endif %}</p>
+
+	        <form method="POST" id="followtag" style="display:{% if tag_followed %} none {% else %} inline-block {% endif %}">
+	            {% csrf_token %}
+	            <input type="hidden" class="search_term" value="{{ search_term|cut:" " }}">
+	            <button name="follow" id="followtagbtn">Follow the tag #{{ tag_term}}</button>
+	        </form>
+
+	        <form method="POST" id="unfollowtag" style="display:{% if tag_followed %} inline-block {% else %} none {% endif %}">
+	            {% csrf_token %}
+	            <input type="hidden" class="search_term" value="{{ search_term|cut:" " }}">
+	            <button name="unfollow" id="unfollowtagbtn">Unfollow the tag #{{ tag_term }}</button>
+	        </form>	       
+
 	    </div>
 	</div>
 
@@ -53,7 +65,7 @@
 	            	{% else %}
 	            		{{ user_count }} <span>users</span>
 	            	{% endif %}
-	            </a>
+	            </a>	            
 	        </div>
 
 
@@ -204,7 +216,7 @@
 		            		<div class="featBox trendingItem">
 		            		    <div class="trendingItemItem">
 		            		        {% thumbnail item.image "300x300" as im %}
-		            		            <a href="{% url 'b:view_item' item.board.user item.board.slug item.id %}"">
+		            		            <a href="{% url 'b:view_item' item.board.user item.board.slug item.id item.slug %}""> 
 		            		            	<img src="{{ im.url }}">
 		            		            </a>
 		            		        {% endthumbnail %}
@@ -212,11 +224,11 @@
 		            		    <div class="trendingItemName">
 
 		            		    	{% if item.item.item_name|length > 40 %}
-		            		    		<a href="{% url 'b:view_item' item.board.user item.board.slug item.id %}">{{ item.item.item_name|slice:":40" }}
+		            		    		<a href="{% url 'b:view_item' item.board.user item.board.slug item.id item.slug %}">{{ item.item.item_name|slice:":40" }}
 		            		    			<u class="tooLong" rel="tooltip" title="{{ item.item.item_name }}">...</u>
 		            		    		</a>
 		            		    	{% else %}
-		            		    		<a href="{% url 'b:view_item' item.board.user item.board.slug item.id %}">{{ item.item.item_name }}</a>
+		            		    		<a href="{% url 'b:view_item' item.board.user item.board.slug item.id  item.slug %}">{{ item.item.item_name }}</a>
 		            		    	{% endif %}
 
 		            		        <div class="trendingItemMeta">
@@ -305,7 +317,11 @@
 {% endblock %}
 
 {% block extra-js %}
+
+<script type="text/javascript" src="{% static 'js/tagfollowajax.js' %}"></script>
+
 <script src="{% static 'js/macy.js' %}" type="text/javascript"></script>
+
 <script>
     var masonry = new Macy({
         container: '#searchItems',
@@ -323,5 +339,5 @@
         }
     });
 </script>
-<script type="text/javascript" src="{% static 'js/ajaxactions.js' %}"></script>
+
 {% endblock %}

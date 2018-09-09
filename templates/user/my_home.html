@@ -208,6 +208,10 @@
 
                     {% endfor %}
 
+                    {% if itemconxs.has_next %}
+                        <a class="infinite-more-link" href='?page={{ itemconxs.next_page_number }}'>More</a>
+                    {% endif %}
+
                 {% else %}
 
                     <div class="nofollow">You are not following anyone yet.</div>
@@ -325,9 +329,15 @@
 
 {% block extra-js %}
 
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/waypoints/4.0.1/jquery.waypoints.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/waypoints/4.0.1/shortcuts/infinite.min.js"></script>
     <script type="text/javascript" src="{% static 'fluent_comments/js/ajaxcomments.js' %}"></script>
-
     <script type="text/javascript" src="{% static 'js/ajaxactions.js' %}"></script>
+    <script>
+      var infinite = new Waypoint.Infinite({
+        element: $('.discoveryFeedContent')[0]
+      });
+    </script>
 
     <!--- message alert -->
         {% if messages %}

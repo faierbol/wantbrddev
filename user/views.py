@@ -1,14 +1,15 @@
-import datetime, base64
+import datetime, base64, json
 from django.contrib import messages
 from django.core.mail import send_mail
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib.auth import login, update_session_auth_hash
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.models import User
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
 from .forms import SignUpForm, UserForm, ProfileForm, ProfileImageForm, ChangeBackgroundForm, UpdateSocial, SettingsForm, PrivacyForm
-from .models import Profile, Connection, BlockedUsers, AuthorisedUsers, Notification
+from .models import Profile, Connection, BlockedUsers, AuthorisedUsers, Notification, TagFollows
 from board.models import Board, Item, ItemConnection, BoardView, ItemLike, ItemView, BoardPrivacy
 from django.core.exceptions import PermissionDenied
 from django.forms.models import inlineformset_factory
@@ -99,9 +100,11 @@ def my_home(request):
 	template = 'user/my_home.html'
 
 	user = request.user
+	# get all this users boards
 	boards = Board.objects.filter(user=user.id).exclude(slug='your-saved-items')
 	no_items = 0
 	
+	# raverse the boards 
 	for board in boards:
 		board.items = []		
 		# get the tags for each board
@@ -133,6 +136,10 @@ def my_home(request):
 	recent_boardlikes = Notification.objects.filter(user=user, notification_type='likeboard', created__range=[ago, now]).count()
 	recent_followers = Notification.objects.filter(user=user, notification_type='newfollow', created__range=[ago, now]).count()
 	recent_likes = recent_itemlikes + recent_boardlikes
+
+	### **************** ###
+	######  THE FEED  ######
+	### **************** ###
 
 	# get all users that we're following
 	following = request.user.profile.get_connections()
@@ -167,6 +174,23 @@ def my_home(request):
 			item.is_saved = ItemConnection.objects.filter(pk=item.id, board=user_saved_board.id).exists()
 			itemconx_obj.append(item)
 
+	# get all items with tags i follow
+	user_tags = TagFollows.objects.filter(user=request.user)
+	for tag in user_tags:
+		matching_items = ItemConnection.objects.filter(tags__name__in=[tag])
+		for item in matching_items:
+			itemconx_obj.append(item)
+
+
+
+	paginator = Paginator(itemconx_obj,10)
+	page = request.GET.get('page',10)
+	try:
+		feed = paginator.page(page)
+	except PageNotAnInteger:
+		feed = paginator.page(1)
+	except EmptyPage:
+		feed = paginator.page(paginator.num_pages)
 
 	if request.method == 'POST':
 
@@ -199,7 +223,7 @@ def my_home(request):
 		'connections': connections,
 		'followers': followers,
 		'boards': boards,
-		'itemconxs':itemconx_obj,
+		'itemconxs':feed,
 		'suggested_boards':suggested_boards,
 		'recent_likes':recent_likes,
 		'recent_followers':recent_followers,
@@ -675,6 +699,86 @@ def my_notifications(request):
 	}
 
 	return render(request, template, context_dict)
+
+
+def tags_followed(request):
+
+	template = 'user/tags_followed.html'
+
+	tags = TagFollows.objects.filter(user=request.user)
+
+	context_dict = {
+		'tags':tags,
+	}
+
+	return render(request, template, context_dict)
+
+
+def follow_tag(request):
+	if request.method == 'POST':		
+		response_data = {}
+		tag = request.POST.get("tag")
+		user = request.user
+		try:
+			TagFollows.objects.get(user=user, tag=tag)
+			response_data['result'] = 'Your are already following this tag'
+		except:
+			newfollow = TagFollows(user=user, tag=tag)
+			newfollow.save()
+			response_data['result'] = 'Tag followed'
+
+		return HttpResponse(
+			json.dumps(response_data),
+			content_type="application/json"
+		)
+	else:
+		return HttpResponse(
+			json.dumps({"nothing to see": "this isn't happening"}),
+			content_type="application/json"
+		)
+
+def unfollow_tag(request):
+	if request.method == 'POST':		
+		response_data = {}
+		tag = request.POST.get("tag")
+		user = request.user
+		try:
+			instance = TagFollows.objects.get(user=user, tag=tag)
+			instance.delete()
+			response_data['result'] = 'Tag unfollowed'
+		except:
+			response_data['result'] = 'You are not following this tag'
+
+		return HttpResponse(
+			json.dumps(response_data),
+			content_type="application/json"
+		)
+	else:
+		return HttpResponse(
+			json.dumps({"nothing to see": "this isn't happening"}),
+			content_type="application/json"
+		)
+
+def unfollowtag(request):
+	if request.method == 'POST':		
+		response_data = {}
+		tagid = request.POST.get("tagid")
+		try:
+			instance = TagFollows.objects.get(pk=tagid)
+			instance.delete()
+			response_data['result'] = 'Tag unfollowed'
+		except:
+			response_data['result'] = 'You are not following this tag'
+
+		return HttpResponse(
+			json.dumps(response_data),
+			content_type="application/json"
+		)
+	else:
+		return HttpResponse(
+			json.dumps({"nothing to see": "this isn't happening"}),
+			content_type="application/json"
+		)
 
 
 def terms(request):

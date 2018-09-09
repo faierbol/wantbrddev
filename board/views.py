@@ -7,7 +7,7 @@ from django.db.models import Q
 from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.auth.models import User
 from .models import Board, Item, BoardLike, ItemLike, BoardView, ItemView, ItemConnection, BoardPrivacy, Collection
-from user.models import Notification
+from user.models import Notification, TagFollows
 from user.views import Connection
 from .forms import BoardForm, ItemForm, EditBoardForm, ChangeBackgroundForm, UpdateTags, BoardPrivacyForm
 from bs4 import BeautifulSoup
@@ -441,17 +441,6 @@ def view_board(request, username, board_name):
 			itemconx = ItemConnection.copy_to_board(boardid, new_board_name, itemconxid, request)
 			messages.info(request, '"{0}" was added to the board, "{1}".'.format(itemconx.item.item_name, board.board_name))
 			return HttpResponseRedirect(request.path_info)
-
-		# # if user followed
-		# if 'follow' in request.POST:
-		# 	board.user.profile.make_connection(request)
-		# 	return HttpResponseRedirect(request.path_info)
-
-		# # if user unfollowed
-		# if 'unfollow' in request.POST:
-		# 	board.user.profile.break_connection(request)
-		# 	return HttpResponseRedirect(request.path_info)
-
 
 	context_dict = {
 		'is_followed': is_followed,
@@ -1097,12 +1086,23 @@ def search(request):
 	item_count = len(item_results)
 	user_count = len(user_results)
 
+	# is user following this term?	
+	tag_term = search_term.replace(' ', '').replace("'"," ").replace('"', "")
+	try:
+		TagFollows.objects.get(user=request.user, tag=tag_term)
+		tagfollowed = True
+	except:
+		tagfollowed = False
+
+
 	context_dict = {
 		'search_term':search_term,
+		'tag_term':tag_term,
+		'tag_followed':tagfollowed,
 		'all_results':all_results,
 		'user_count':user_count,
 		'item_count':item_count,
-		'board_count':board_count,
+		'board_count':board_count,		
 	}
 
 	return render(request, template, context_dict)
@@ -1170,8 +1170,19 @@ def search_item(request):
 
 	all_results = board_count + user_count + len(item_results)
 
+	# is user following this term?	
+	tag_term = search_term.replace(' ', '').replace("'"," ").replace('"', "")
+	try:
+		TagFollows.objects.get(user=request.user, tag=tag_term)
+		tagfollowed = True
+	except:
+		tagfollowed = False
+
+
 	context_dict = {
 		'search_term':search_term,
+		'tag_term':tag_term,
+		'tag_followed':tagfollowed,
 		'item_results':item_results,
 		'user_count':user_count,
 		'board_count':board_count,
@@ -1227,8 +1238,19 @@ def search_board(request):
 
 	all_results = item_count + user_count + len(board_results)
 
+	# is user following this term?	
+	tag_term = search_term.replace(' ', '').replace("'"," ").replace('"', "")
+	try:
+		TagFollows.objects.get(user=request.user, tag=tag_term)
+		tagfollowed = True
+	except:
+		tagfollowed = False
+
+
 	context_dict = {
 		'search_term':search_term,
+		'tag_term':tag_term,
+		'tag_followed':tagfollowed,
 		'item_count':item_count,
 		'user_count':user_count,
 		'board_results':board_results,
@@ -1311,8 +1333,19 @@ def search_user(request):
 
 	all_results = item_count + board_count + len(user_results)
 
+	# is user following this term?	
+	tag_term = search_term.replace(' ', '').replace("'"," ").replace('"', "")
+	try:
+		TagFollows.objects.get(user=request.user, tag=tag_term)
+		tagfollowed = True
+	except:
+		tagfollowed = False
+
+
 	context_dict = {
 		'search_term':search_term,
+		'tag_term':tag_term,
+		'tag_followed':tagfollowed,
 		'item_count':item_count,
 		'user_results':user_results,
 		'board_count':board_count,

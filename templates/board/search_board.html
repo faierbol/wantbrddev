@@ -16,7 +16,20 @@
 
 	<div class="searchTerm">
 	    <div class="container">            
-	        You searched for: {% if search_term %}"{{ search_term }}"{% endif %}
+	        <p>You searched for: {% if search_term %}"{{ search_term }}"{% endif %}</p>
+
+	        <form method="POST" id="followtag" style="display:{% if tag_followed %} none {% else %} inline-block {% endif %}">
+	            {% csrf_token %}
+	            <input type="hidden" class="search_term" value="{{ search_term|cut:" " }}">
+	            <button name="follow" id="followtagbtn">Follow the tag #{{ tag_term}}</button>
+	        </form>
+
+	        <form method="POST" id="unfollowtag" style="display:{% if tag_followed %} inline-block {% else %} none {% endif %}">
+	            {% csrf_token %}
+	            <input type="hidden" class="search_term" value="{{ search_term|cut:" " }}">
+	            <button name="unfollow" id="unfollowtagbtn">Unfollow the tag #{{ tag_term }}</button>
+	        </form>	  
+	        
 	    </div>
 	</div>
 
@@ -146,6 +159,7 @@
 {% endblock %}
 
 {% block extra-js %}
+<script type="text/javascript" src="{% static 'js/tagfollowajax.js' %}"></script>
 <script src="{% static 'js/macy.js' %}" type="text/javascript"></script>
 <script>
     var masonry = new Macy({

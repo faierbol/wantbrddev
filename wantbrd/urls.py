@@ -31,6 +31,10 @@ urlpatterns = [
     path('my/profile/', user_views.update_profile, name='update_profile'),
     path('my/settings/', user_views.privacy_settings, name='privacy_settings'),
     path('my/notifications', user_views.my_notifications, name='my_notifications'),
+    path('follow_tag/', user_views.follow_tag, name='follow_tag'),
+    path('unfollow_tag/', user_views.unfollow_tag, name='unfollow_tag'),
+    path('tags_followed/', user_views.tags_followed, name='tags_followed'),
+    path('unfollowtag/', user_views.unfollowtag, name='unfollowtag'),
     # SIGN UP / SIGN IN
     path('signup/', user_views.signup, name='signup'),   
     url(r'^login/$',  auth_views.LoginView.as_view(template_name='user/login.html'), name='login'),

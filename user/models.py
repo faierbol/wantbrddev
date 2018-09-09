@@ -279,3 +279,7 @@ class Notification(models.Model):
                 user_trigger = user_trigger,
                 seen = False,       
             )
+
+class TagFollows(models.Model):
+    user = models.ForeignKey(User,on_delete=models.CASCADE)
+    tag = models.CharField(default='', max_length=500, blank=False, null=False)

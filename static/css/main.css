@@ -1502,6 +1502,45 @@ NOTIFICATIONS
 
 
 /* ---------------- 
+TAG FOLLOWS
+-----------------*/
+.unfollowtag {
+    width: 48%;
+    float: left;
+}
+    .unfollowtag:nth-child(even) {
+        width: 48%;
+        float: right;
+    }
+    .unfollowtag button {
+        border:none;
+        text-transform: uppercase;
+        padding:0;
+        width: 100%;
+        padding:15px;
+        border-radius:5px;
+        text-align:right;
+        margin-bottom:10px;
+        background:#f9f9f9;
+    }
+    .unfollowtag:hover button {
+        background:#8680B2;
+        color:#fff;
+    }
+    .unfollowtag button i {
+        color:#aaa;
+    }
+    .unfollowtag:hover button i {
+        color:#fff;
+        font-weight: bold;
+    }
+    .unfollowtag span {
+        float:left;
+    }
+
+
+
+/* ---------------- 
 BOARD
 -----------------*/
 .boardWrap {}
@@ -2599,6 +2638,22 @@ BOARD
     font-size:2rem;
     font-weight: 300;
 }
+    .searchTerm button {
+        padding:10px 20px;
+        border-radius:100px;
+        font-size:0.812rem;
+        text-decoration:none;
+        text-transform: uppercase;
+        line-height: 1;
+        display: inline-block;
+        border:1px solid #fff;
+        color:#fff;
+        background:none;
+    }
+    .searchTerm button:hover {
+        background:#fff;
+        color:#8488B9;
+    }
     .searchResults .tabNav {
         margin:30px 0;
     }    
