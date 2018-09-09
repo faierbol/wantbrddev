@@ -209,8 +209,15 @@
                 </div>
 
                 {% if itemconxs.has_next %}
-                    <a class="infinite-more-link" href='?page={{ itemconxs.next_page_number }}'>More</a>
+                    <a class="infinite-more-link" href='?page={{ itemconxs.next_page_number }}'>&nbsp;</a>
                 {% endif %}
+
+                <div class="loading" style="display: block;">
+                    <div class="dot dot1"></div>
+                    <div class="dot dot2"></div>
+                    <div class="dot dot3"></div>
+                    <div class="dot dot4"></div>
+                </div>
 
             {% else %}
 
@@ -333,7 +340,13 @@
     <script type="text/javascript" src="{% static 'js/ajaxactions.js' %}"></script>
     <script>
       var infinite = new Waypoint.Infinite({
-        element: $('.infinite-container')[0]
+        element: $('.infinite-container')[0],
+            onBeforePageLoad: function () {
+            $('.loading').show();
+        },
+        onAfterPageLoad: function ($items) {
+            $('.loading').hide();
+        }
       });
     </script>
 
