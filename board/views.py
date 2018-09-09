@@ -28,6 +28,15 @@ from django.template.defaultfilters import slugify
 from dal import autocomplete
 
 
+def error_404(request, exception):
+    data = {"name": "ThePythonDjango.com"}
+    return render(request,'error_404.html', data)
+
+def error_500(request, exception):
+    data = {"name": "ThePythonDjango.com"}
+    return render(request,'error_500.html', data)
+
+
 ##### HOME PAGE
 def home(request):
 
