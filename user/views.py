@@ -182,7 +182,7 @@ def my_home(request):
 			itemconx_obj.append(item)
 
 	page = request.GET.get('page',1)
-	paginator = Paginator(itemconx_obj,2)
+	paginator = Paginator(itemconx_obj,8)
 
 	try:
 		feed = paginator.page(page)
