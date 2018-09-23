@@ -38,7 +38,7 @@
 
 							<a href="{% url 'u:profile' n.user_trigger %}">{{ n.user_trigger }}</a>
 							liked your item 
-							<a href="{% url 'b:view_item' n.user.username n.item.board.slug n.item.id %}">{{ n.item.item.item_name }}</a>
+							<a href="{% url 'b:view_item' n.user.username n.item.board.slug n.item.id n.item.slug %}">{{ n.item.item.item_name }}</a>
 
 						{% elif n.notification_type == 'likeboard' %}
 
@@ -88,7 +88,7 @@
 
 							<a href="{% url 'u:profile' n.user_trigger %}">{{ n.user_trigger }}</a>
 							liked your item 
-							<a href="{% url 'b:view_item' n.user.username n.item.board.slug n.item.id %}">{{ n.item.item.item_name }}</a>
+							<a href="{% url 'b:view_item' n.user.username n.item.board.slug n.item.id n.item.slug %}">{{ n.item.item.item_name }}</a>
 
 						{% elif n.notification_type == 'likeboard' %}
 

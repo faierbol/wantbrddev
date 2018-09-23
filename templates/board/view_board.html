@@ -282,18 +282,18 @@
                     <div class="featBox boardPic">                
 
                         {% if editable %}
-                            <a href="{% url 'b:edit_item' board.id itemconx.id %}">
+                            <a href="#">
                                 {% thumbnail itemconx.image "300x300" as im %}
                                     <img src="{{ im.url }}">
                                 {% endthumbnail %}
                             </a>
 
                             {% if itemconx.item.item_name|length > 75 %}
-                                <a href="{% url 'b:edit_item' board.id itemconx.id %}" class="boardItemName">
+                                <a href="#" class="boardItemName">
                                     {{ itemconx.item.item_name|slice:":75" }}<u class="tooLong" rel="tooltip" title="{{itemconx.item.item_name}}">...</u>                                    
                                 </a>
                             {% else %}                                
-                                <a href="{% url 'b:edit_item' board.id itemconx.id %}" class="boardItemName">{{ itemconx.item.item_name }}</a>                                
+                                <a href="#" class="boardItemName">{{ itemconx.item.item_name }}</a>                                
                             {% endif %}
 
                             {% if itemconx.item_status == 'GOT' %}
@@ -378,7 +378,7 @@
 
                                 {% if editable %}
                                     <div class="itemTools">
-                                        <a class="metalink" rel="tooltip" title="Edit item" href="{% url 'b:edit_item' board.id itemconx.id %}"><i class="fas fa-pencil-alt"></i></a>
+                                        <a class="metalink" rel="tooltip" title="Edit item" href="{% url 'b:edit_item' board.slug itemconx.id itemconx.slug %}"><i class="fas fa-pencil-alt"></i></a>
                                         <a href="#delete{{itemconx.id}}" rel="modal:open" class="metalink"><i class="fal fa-trash-alt"></i></a>
                                     </div>
 

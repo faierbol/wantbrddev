@@ -57,9 +57,9 @@ def home(request):
 	template = 'index.html'
 	hot_items = []
 
-	trending_items = get_trending_items(request,7)
-	trending_users = get_trending_users(request,7)
-	trending_boards = get_trending_boards(request,7)
+	trending_items = get_trending_items(request,365)
+	trending_users = get_trending_users(request,365)
+	trending_boards = get_trending_boards(request,365)
 	recommended_boards = get_recommended_boards(request)
 
 	mixed = list(trending_boards) + list(trending_items) + list(trending_users) + list(recommended_boards)
@@ -316,11 +316,11 @@ def edit_board(request, board_id):
 
 
 ##### Edit item
-def edit_item(request, board_id, itemconx_id):
+def edit_item(request, board_slug, itemconx_id, item_slug):
 	template = 'board/edit_item.html'
-	board = get_object_or_404(Board, id=board_id)
-	user_boards = Board.objects.filter(user=request.user)
 	itemconx = get_object_or_404(ItemConnection, pk=itemconx_id)	
+	board = get_object_or_404(Board, id=itemconx.board.id)
+	user_boards = Board.objects.filter(user=request.user)
 	item = get_object_or_404(Item, pk=itemconx.item.id)
 	form = ItemForm(instance=itemconx)
 	rev_remain =  1000 - len(itemconx.review)
@@ -360,7 +360,7 @@ def edit_item(request, board_id, itemconx_id):
 				itemconx.board = board_assign
 				form.save()		
 
-				return redirect('b:edit_board', board_id=board_id)
+				return redirect('b:edit_board', board_id=board.id)
 
 			else:
 				return redirect('home')
