@@ -50,10 +50,10 @@
                     {% endif %}
                 </div>
                 <div class="discoveryStats">
-                    <p><strong>{{ no_followers }}</strong> FOLLOWERS</p>
-                    <p><strong>{{ no_connections }}</strong> FOLLOWING</p>
-                    <p><strong>{{ boards.count }}</strong> {% if boards.count > 1 %}BOARDS{% else %}BOARD{% endif %}</p>
-                    <p><strong>{{ no_items }}</strong> ITEMS</p>
+                    <a href="{% url 'u:profile_followers' user.username %}"><strong>{{ no_followers }}</strong> FOLLOWERS</a>
+                    <a href="{% url 'u:profile_following' user.username %}"><strong>{{ no_connections }}</strong> FOLLOWING</a>
+                    <a href="{% url 'u:home' %}"><strong>{{ boards.count }}</strong> {% if boards.count > 1 %}BOARDS{% else %}BOARD{% endif %}</a>
+                    <a href="{% url 'u:home' %}"><strong>{{ no_items }}</strong> ITEMS</a>
                 </div>
             </div>
 
