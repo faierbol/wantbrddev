@@ -282,18 +282,18 @@
                     <div class="featBox boardPic">                
 
                         {% if editable %}
-                            <a href="#">
+                            <a href="{% url 'b:edit_item' board.slug itemconx.id itemconx.slug %}">
                                 {% thumbnail itemconx.image "300x300" as im %}
                                     <img src="{{ im.url }}">
                                 {% endthumbnail %}
                             </a>
 
                             {% if itemconx.item.item_name|length > 75 %}
-                                <a href="#" class="boardItemName">
+                                <a href="{% url 'b:edit_item' board.slug itemconx.id itemconx.slug %}" class="boardItemName">
                                     {{ itemconx.item.item_name|slice:":75" }}<u class="tooLong" rel="tooltip" title="{{itemconx.item.item_name}}">...</u>                                    
                                 </a>
                             {% else %}                                
-                                <a href="#" class="boardItemName">{{ itemconx.item.item_name }}</a>                                
+                                <a href="{% url 'b:edit_item' board.slug itemconx.id itemconx.slug %}" class="boardItemName">{{ itemconx.item.item_name }}</a>                                
                             {% endif %}
 
                             {% if itemconx.item_status == 'GOT' %}
