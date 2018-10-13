@@ -77,7 +77,7 @@
 
             <a href="#0" class="mobSearch md-trigger" data-modal="modal-12"><i class="fal fa-search"></i></a>
 
-            <a href="#" class="influencerLink">Influencer?</a>
+            <a href="{% url 'influencers' %}" class="influencerLink">Influencer?</a>
             {% if request.user.is_authenticated %}
                 <a href="{% url 'my_home' %}" class="btn orange myhome"><span>My Home</span><i class="fal fa-home"></i></a>
                 <a href="#0" class="headerPpic js-cd-panel-trigger" data-panel="menu">

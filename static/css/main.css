@@ -2502,6 +2502,7 @@ BOARD
     }
     .discoveryStats a {
         display: block;
+        text-decoration: none;
     }
     .discoveryBio {
         margin-top:20px;
@@ -3415,9 +3416,8 @@ div.spinner i:nth-child(8) {
         background-position: center;
     }
     .staticHeader.influencer {
-        background-image:url('../img/banner-influencer.jpg');
-        background-size: cover;
-        background-position: center;
+        height: auto;
+        padding-top:100px;
     }
 #innerContent {
     padding:40px 0;
@@ -3430,6 +3430,143 @@ div.spinner i:nth-child(8) {
         margin-bottom:20px;
     }
 
+
+/* ---------------- 
+INFLUENCERS
+-----------------*/
+.whatIsWantbrd {}
+    .whatIsWantbrdText {
+        float: left;
+        width: 50%;
+        background:#D464E4;
+        color:#fff;
+        font-size: 1.4rem;
+    }
+    .whatIsWantbrdText h1 {
+        font-size: 3.3rem;
+        font-weight: 700;
+        margin-bottom:20px;
+    }
+    .whatIsWantbrdImage {
+        float: right;
+        width: 50%;
+        background-size: cover;
+        background:url(../img/fashion.jpg) center no-repeat;
+    }
+    .whatTextWrap {
+        width: 630px;
+        float: right;
+        padding:150px 100px 150px 0;
+    }
+    .whatTextWrap a {
+        margin-top:20px;
+        display: inline-block;
+        border:3px solid #fff;
+        padding:30px 60px;
+        text-align: center;
+        font-size: 1.4rem;
+        text-decoration: none;
+        color:#fff;
+        border-radius: 100px;
+    }
+    .whatTextWrap a:hover {
+        background:#fff;
+        color:#111;
+    }
+    .whatTextWrap a i {
+        font-size: 2rem;
+        margin-left: 10px;
+    }
+
+
+.whyWantbrd {}
+    .whyWantbrdImage {
+        width: 50%;
+        float: left;
+        background:url(../img/tech-back.jpg) center no-repeat;
+        background-size: cover;
+    }
+    .whyWantbrdText {
+        float: right;
+        width: 50%;
+        background:#7BF4D2;
+        color:#121212;
+        font-size: 1.4rem;
+    }
+    .whyWantbrdText h2 {
+        font-size: 3.3rem;
+        font-weight: 700;
+        margin-bottom:20px;
+    }
+    .whyTextWrap {
+        width: 630px;
+        float: left;
+        padding:150px 0 150px 100px;
+    }
+    .whyWantbrd ul {
+        list-style: none;
+        margin:0 0 0 30px;
+        padding:0;
+    }
+    .whyWantbrd li {
+        margin-bottom:25px;
+    }
+    .whyWantbrd i {
+        font-size: 2rem;
+    }
+    .whyWantbrd a {
+        margin-top:20px;
+        display: inline-block;
+        border:3px solid #111;
+        padding:30px 60px;
+        text-align: center;
+        font-size: 1.4rem;
+        text-decoration: none;
+        color:#111;
+        border-radius: 100px;
+    }
+    .whyWantbrd a:hover {
+        background:#111;
+        color:#fff;
+    }
+    .whyWantbrd a i {
+        font-size: 2rem;
+        margin-left: 10px;
+    }
+
+.proceed {
+    padding:100px 0;
+    text-align: center;
+    font-size: 2rem;
+    color:#fff;
+    clear: both;
+    line-height: 1.8;
+    background: rgb(15,217,214); /* Old browsers */
+    background: -moz-linear-gradient(-45deg, rgba(15,217,214,1) 0%, rgba(135,170,222,1) 100%); /* FF3.6-15 */
+    background: -webkit-linear-gradient(-45deg, rgba(15,217,214,1) 0%,rgba(135,170,222,1) 100%); /* Chrome10-25,Safari5.1-6 */
+    background: linear-gradient(135deg, rgba(15,217,214,1) 0%,rgba(135,170,222,1) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#0fd9d6', endColorstr='#87aade',GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
+}
+    .proceed .container {
+        max-width: 1000px;
+        margin:auto;
+        padding:0 20px;
+    }
+    .proceed a {
+        margin-top:30px;
+        display: inline-block;
+        border:3px solid #fff;
+        padding:40px 60px;
+        text-align: center;
+        font-size: 1.4rem;
+        text-decoration: none;
+        color:#fff;
+        border-radius: 100px;
+    }
+    .proceed a:hover {
+        background:#fff;
+        color:#111;
+    }
 
 
 /* ---------------- 

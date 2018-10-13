@@ -91,7 +91,7 @@
                         {% endthumbnail %}
                     </div>
                     <div class="trendingItemName">
-                        <a href="{% url 'b:view_item' item.board.user item.board.slug item.id %}">{{ item.item.item_name }}</a>
+                        <a href="{% url 'b:view_item' item.board.user item.board.slug item.id item.slug %}">{{ item.item.item_name }}</a>
                         <div class="trendingItemMeta">
                             Found on <a href="{% url 'b:view_board' item.board.user.username item.board.slug %}">{{ item.board.board_name }}</a>
                             by <a href="{% url 'u:profile' item.board.user.username  %}">{{ item.board.user.get_full_name }}</a>

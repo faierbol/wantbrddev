@@ -21,13 +21,13 @@
             <div class="container clearfix">
                 
                 <div class="profileImageDetails clearfix match">
-                    <a class="profileImage" href="{% url 'update_profile' %}">
+                    <div class="profileImage">
                         {% if profile.picture %}
                         <div class="circle" style="background-image:url('{{ profile.picture.url }}');"></div>
                         {% else %}
                         <div class="circle" style="background-image:url('{% static 'img/default-hero.png' %}');"></div>
                         {% endif %}
-                    </a>
+                    </div>
                     <div class="profileDetails">
                         {% if profile.user.username|length > 40 %}
                         <span>@{{ profile.user.username|slice:":40" }}<u class="tooLong" rel="tooltip" title="{{ profile.user.username }}">...</u></span>
