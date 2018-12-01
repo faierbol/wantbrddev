@@ -20,11 +20,11 @@
 <div class="homeBannerPush"></div>
 <section class="homeBanner desktop clearfix">
     <div class="homeSlider">
-        <div><img src="{% static 'img/banner-6.jpg' %}" alt=""></div>
-        <div><img src="{% static 'img/banner-3.jpg' %}" alt=""></div>
-        <div><img src="{% static 'img/banner-4.jpg' %}" alt=""></div>
-        <div><img src="{% static 'img/banner-1.jpg' %}" alt=""></div>
-        <div><img src="{% static 'img/banner-5.jpg' %}" alt=""></div>
+        <div><img src="{% static 'img/banner-6.jpg' %}" alt="Create and share gift lists"></div>
+        <div><img src="{% static 'img/banner-3.jpg' %}" alt="Create and share your personal wishllist"></div>
+        <div><img src="{% static 'img/banner-4.jpg' %}" alt="The new way for influencers to monetise"></div>
+        <div><img src="{% static 'img/banner-1.jpg' %}" alt="Content creator? Monetise your content with Wantbrd"></div>
+        <div><img src="{% static 'img/banner-5.jpg' %}" alt="Discover new products and experiences"></div>
     </div>
     <div class="slickLeft"><i class="fas fa-chevron-right"></i></div>
     <div class="slickRight"><i class="fas fa-chevron-left"></i></div>
@@ -32,11 +32,11 @@
 
 <section class="homeBanner mobile clearfix">
     <div class="homeSliderMobile">
-        <div><img src="{% static 'img/banner-6b.jpg' %}" alt=""></div>
-        <div><img src="{% static 'img/banner-3b.jpg' %}" alt=""></div>
-        <div><img src="{% static 'img/banner-4b.jpg' %}" alt=""></div>
-        <div><img src="{% static 'img/banner-1b.jpg' %}" alt=""></div>
-        <div><img src="{% static 'img/banner-5b.jpg' %}" alt=""></div>
+        <div><img src="{% static 'img/banner-6b.jpg' %}" alt="Create and share gift lists"></div>
+        <div><img src="{% static 'img/banner-3b.jpg' %}" alt="Create and share your personal wishllist"></div>
+        <div><img src="{% static 'img/banner-4b.jpg' %}" alt="The new way for influencers to monetise"></div>
+        <div><img src="{% static 'img/banner-1b.jpg' %}" alt="Content creator? Monetise your content with Wantbrd"></div>
+        <div><img src="{% static 'img/banner-5b.jpg' %}" alt="Discover new products and experiences"></div>
     </div>
 </section>
 
@@ -241,7 +241,7 @@
                         </div>
                         <div class="trendingItemItem">
                             {% thumbnail hot.image "300x300" as im %}
-                                <a href="{% url 'b:view_item' hot.board.user hot.board.slug hot.id hot.slug %}"><img src="{{ im.url }}"></a>
+                                <a href="{% url 'b:view_item' hot.board.user hot.board.slug hot.id hot.slug %}"><img src="{{ im.url }}" alt="{{ hot.item.item_name }}"></a>
                             {% endthumbnail %}
                         </div>
                         <div class="trendingItemName">
@@ -330,7 +330,44 @@
 
         </div>
 
-    </div>  
+
+        <div class="homeIntro">
+            <h1>Wantbrd, taking the guessing out of giving</h1>
+            <h2>Buy, Request, Discover</h2>
+
+            <section>
+                <div class="iCol">
+                    <p>Did you know that in the USA alone we waste over $9 BILLION worth of unwanted gifts every year?! That’s a lot of stuff! Stuff bought with good intentions. Stuff filling up our homes. Stuff ending up in landfill. Stuff that wasn’t really wanted in the first place.</p>
+                    <p>&nbsp;</p>
+                    <p>But how do we replace this unwanted stuff with things we actually want and need? Asking for specific gifts is awkward; even if you do ask, what price point is acceptable? Will they remember the correct size, color etc? As the gift giver, buying with no real clues is stressfull. What would they like, what do they already have, what size or spec...</p>
+                </div>
+                <div class="iCol">
+                    <p><strong>Enter Wantbrd.</strong></p>
+                    <p>&nbsp;</p>
+                    <p>Wantbrd allows everyone a space to pin items they really want to a personal Board, with links to where the items can be purchased, along with any details  or specifics you’d like to add.</p>
+                    <p>&nbsp;</p>
+                    <p>How cool would it be if you could look up any friend before their Birthday and see all the things they’re pining over, to surprise them with on their big day?</p>
+                    <p>&nbsp;</p>
+                    <p>Wanbrd is the end of fake ‘oh wow’ faces when opening gifts. Its the end of anxious gift shopping. Its minimising waste.</p>            
+                </div> 
+                <div class="iCol">
+                    <p>Wantbrd allows you to follow friends and influencers, adding things you like to your own Board, commenting on them, or suggesting them to other friends as something they might like for their own Board. Wantbrd is the ultimate in shopping inspo and trend spotting, all in one place.</p>
+                    <p>&nbsp;</p>
+                    <p>We’re new, we’re growing, and we’re very glad you’re here. Any feedback or features you’d like to see, let us know!</p>
+                    {% if request.user.is_authenticated %}
+                    <a href="{% url 'u:home' %}">
+                    {% else %}
+                    <a href="#loginModal" rel="modal:open">
+                    {% endif %}
+                    Get started! <i class="fal fa-thumbs-up"></i></a>
+                </div>
+                <div class="clearfix"></div>
+            </section>
+
+        </div>  
+
+    </div>
+
 </section>
 
 {% endblock %}

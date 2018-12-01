@@ -14,6 +14,20 @@
 
 <section class="staticHeader influencer"></section>
 
+<section class="proceed">
+	<div class="container">
+		
+		<p>Wantbrd is a creator-centric community that gives you more time to <strong>focus on what you do best</strong>, creating.</p>
+
+		{% if request.user.is_authenticated %}
+		<a href="{% url 'u:home' %}">
+		{% else %}
+		<a href="#loginModal" rel="modal:open">
+		{% endif %}
+		Claim your profile</a>
+
+	</div>
+</section>
 
 <section class="whatIsWantbrd">
 	
@@ -35,6 +49,8 @@
 	</div>
 
 	<div class="whatIsWantbrdImage match"></div>
+
+	<div class="clearfix"></div>
 
 </section>
 
@@ -64,24 +80,9 @@
 
 	<div class="whyWantbrdImage match"></div>
 
+	<div class="clearfix"></div>
+
 </section>
-
-
-<section class="proceed">
-	<div class="container">
-		
-		<p>Wantbrd is a creator-centric community that gives you more time to <strong>focus on what you do best</strong>, creating.</p>
-
-		{% if request.user.is_authenticated %}
-		<a href="{% url 'u:home' %}">
-		{% else %}
-		<a href="#loginModal" rel="modal:open">
-		{% endif %}
-		Claim your profile</a>
-
-	</div>
-</section>
-
 
 
 {% endblock %}

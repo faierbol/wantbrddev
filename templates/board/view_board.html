@@ -7,6 +7,10 @@
 	{{ board.board_name }} by {{ board.user.username }} | Wantbrd
 {% endblock %}
 
+{% block meta_description %}
+Check out {{ board.board_name }} by {{ board.user.username }}. Create your own wish list and share with friends and family. Take the guessing out of giving!
+{% endblock %}
+
 {% block extra-css %}
 	<link type="text/css" href="{% static 'css/macy.css' %}" rel="stylesheet" />
     <link href="{% static 'css/font/font-fileuploader.css' %}" media="all" rel="stylesheet">
@@ -284,7 +288,7 @@
                         {% if editable %}
                             <a href="{% url 'b:edit_item' board.slug itemconx.id itemconx.slug %}">
                                 {% thumbnail itemconx.image "300x300" as im %}
-                                    <img src="{{ im.url }}">
+                                    <img src="{{ im.url }}" alt="{{ itemconx.item.item_name }}">
                                 {% endthumbnail %}
                             </a>
 
@@ -316,7 +320,7 @@
                         
                             <a href="{% url 'b:view_item' board.user board.slug itemconx.id itemconx.slug %}">
                                 {% thumbnail itemconx.image "300x300" as im %}
-                                    <img src="{{ im.url }}">
+                                    <img src="{{ im.url }}" alt="{{ itemconx.item.item_name }}">
                                 {% endthumbnail %}
                             </a>
 

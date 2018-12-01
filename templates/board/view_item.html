@@ -52,7 +52,7 @@
 			<div class="popImage">
 			    {% thumbnail itemconx.image "600x600" as im %}
 			    	<div style="position: relative;">
-			        	<img src="{{ im.url }}">
+			        	<img src="{{ im.url }}" alt="{{ itemconx.item.item_name }}">
 			        	{% if linkback %}
 			        		<div class="linkback"><a href="{% url 'u:profile' linkback %}">Image credit @{{ linkback }}</a></div>
 			        	{% endif %}

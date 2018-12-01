@@ -885,6 +885,58 @@ HOME
             margin-top:5px;
         }
 
+.homeIntro {
+    padding:40px 0 80px 0;
+    font-size: 1.2rem;
+}
+    .homeIntro h1 {
+        font-weight: 500;
+        text-transform: capitalize;
+        text-align: center;        
+        font-size: 2.2rem;
+    }
+    .homeIntro h2 {
+        font-weight: 700;
+        font-style: 1rem;
+        text-align: center;
+        color:#8680B2;
+        margin-bottom:20px;
+    }
+    .homeIntro h2:after {
+        height: 2px;
+        background:#ccc;
+        width: 100px;
+        content:" ";
+        display: block;
+        margin:20px auto 40px;
+    }
+    .iCol {
+        float: left;
+        width: 30%;
+        margin-right: 5%;
+    }
+    .iCol:nth-child(3n) {
+        margin-right:0;
+    }
+    .iCol a {
+        margin-top:20px;
+        display: inline-block;
+        border:3px solid #222;
+        padding:30px 60px;
+        text-align: center;
+        font-size: 1.4rem;
+        text-decoration: none;
+        color:#222;
+        border-radius: 100px;
+    }
+    .iCol a:hover {
+        background:#222;
+        color:#fff;
+    }
+    .iCol a i {
+        font-size: 2rem;
+        margin-left: 10px;
+    }
 
 
 /* ---------------- 
@@ -3833,6 +3885,17 @@ footer {
    MEDIA QUERIES
    ========================================================================== */
 
+@media screen and (max-width: 1360px) {
+    .whyTextWrap {
+        width:100%;
+        padding:150px 30px 150px 60px;
+    }
+    .whatTextWrap {
+        width: 100%;
+        padding:150px 60px 150px 30px;
+    }
+}
+
 @media screen and (max-width: 1280px) {
    .profileFollows .followCard {
        width: 32%;
@@ -3976,6 +4039,11 @@ footer {
     .profileBoardItem:nth-child(2n+1) {
         clear: both;
     }
+    .iCol {
+        width: 100%;
+        float: none;
+        margin:0 0 20px 0;
+    }
 }
 
 @media screen and (max-width: 960px) {
@@ -4025,6 +4093,15 @@ footer {
         text-align: left;
         max-width: 100%;
         padding-right:70px;
+    }
+    .whatIsWantbrdText, .whatIsWantbrdImage, .whyWantbrdImage, .whyWantbrdText {
+        width: 100%;
+        float: none;
+        min-height: 300px;
+    }
+    .whyTextWrap, .whatTextWrap {
+        padding:80px 30px;
+        float: none;
     }
 }   
 
@@ -4406,6 +4483,13 @@ footer {
     }
     .boardItemStats span, .itemTools form, .itemTools a {
         padding:0px 0 0 8px;
+    }
+    .proceed {
+        font-size: 1.5rem;
+        line-height: 1.5;
+    }
+    .proceed a {
+        padding:30px 40px;
     }
 }
 
