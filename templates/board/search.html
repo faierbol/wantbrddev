@@ -100,15 +100,15 @@
 
 			            	    	{% for itemconx in item.itemconxs %}
 			            	    		{% thumbnail itemconx.image "300x300" as im %}
-			            	    		    <a style="background-image:url('{{ im.url }}');" href="#"></a>
+			            	    		    <a style="background-image:url('{{ im.url }}');" href="{% url 'b:view_item' item.user item.slug itemconx.id itemconx.slug %}"></a>
 			            	    		{% endthumbnail %}		            	        
 			            	        {% endfor %}		            	        
 
-		            	        	{% if item.board.totalitems > 5 %}
+<!-- 		            	        	{% if item.board.totalitems > 3 %}
 		            	        		<a class="plusMore" href="#">
-		            	            		<div class="plusMoreNumber">+{{ item.totalitems|add:"-5" }}</div>
+		            	            		<div class="plusMoreNumber">+{{ item.totalitems|add:"-3" }}</div>
 		            	            	</a>
-		            	            {% endif %}
+		            	            {% endif %} -->
 			            	        
 			            	    </div>
 			            	    <a class="trendingUserUser" href="#">
@@ -178,9 +178,9 @@
     	            		    <a class="trendingUserHero" href="{% url 'u:profile' item.username  %}" style="background-image:url('{% static 'img/profile-hero.jpg' %}')"></a>
 
     	            		    <div class="trendingItems clearfix">	            		    	
-    	            		    	{% for item in item.items %}
-    		            		        {% thumbnail item.image "300x300" as im %}
-    		            		            <a style="background-image:url('{{ im.url }}');" href="{% url 'u:profile' item.board.user.username  %}"></a>
+    	            		    	{% for itemc in item.items %}
+    		            		        {% thumbnail itemc.image "300x300" as im %}
+    		            		            <a style="background-image:url('{{ im.url }}');" href="{% url 'b:view_item' item.username itemc.board.slug itemc.id itemc.slug %}"></a>
     		            		        {% endthumbnail %}
     	            		        {% endfor %}
 

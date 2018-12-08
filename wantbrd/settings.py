@@ -74,6 +74,7 @@ CRISPY_TEMPLATE_PACK = 'bootstrap3'
 ### COMMENTS STUFF END
 
 MIDDLEWARE = [
+    'django.middleware.gzip.GZipMiddleware',
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -82,6 +83,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',    
+    'htmlmin.middleware.HtmlMinifyMiddleware',
+    'htmlmin.middleware.MarkRequestMiddleware'
 ]
 
 ROOT_URLCONF = 'wantbrd.urls'
@@ -171,7 +174,7 @@ STATICFILES_DIRS = [STATIC_DIR, ]
 # url definition for static files
 
 # ----------- ENABLE BELOW FOR LOCAL -----------
-# STATIC_URL = '/static/'
+#STATIC_URL = '/static/'
 # ----------- ENABLE ABOVE FOR LOCAL -----------
 
 STATIC_ROOT = os.path.normpath(os.path.join(BASE_DIR, 'staticfiles'))

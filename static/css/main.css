@@ -329,11 +329,14 @@ header#main {
         .headerRight i {
             color:#8680B2;
         }
-        .influencerLink {
+        .influencerLink, .blogLink {
             color:#121212;
             text-decoration: none;
-            padding:16px 20px 0 0;
+            padding:16px 0 0 0;
             vertical-align: middle;
+        }
+        .blogLink {
+            padding-right:10px;
         }
         .addItemSmall {
             float: right;
@@ -1165,7 +1168,7 @@ PROFILE
             background-size:cover;
             background-position: center;
         }
-        .profileBoardShare a {
+        .profileBoardShare .share-link {
             float: right;
             padding:20px 20px 0 0;
             text-decoration: none;

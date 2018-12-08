@@ -2,7 +2,7 @@
 {% load staticfiles %}
 
 {% block title %}
-	Your notifications | Wantbrd
+	Tags you are following | Wantbrd
 {% endblock %}
 
 {% block extra-css %}
@@ -16,6 +16,7 @@
 
 		<div class="panel">
 
+			{% if tags %}
 			<h2>The tags you are following are:</h2>
 
 			<div class="theNotifications clearfix">
@@ -34,6 +35,17 @@
 				{% endfor %}
 
 			</div>
+
+			{% else %}
+			<h2>You are not following any tags!</h2>
+
+			<div class="theNotifications clearfix">
+				
+				<p>Following tags is really easy, you can follow as many as you like and you'll be able see items with these tags in your feed.  Just use the search above to search for the tag and click the 'follow tag' button to add it here.</p>
+
+			</div>
+
+			{% endif %}
 
 		</div>
 

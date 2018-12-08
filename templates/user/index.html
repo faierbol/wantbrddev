@@ -65,13 +65,17 @@
                                 <button class="btn orange" name="unfollow"><i class="fas fa-times"></i> Unfollow</button>
                             </form>
 
-                            <form method="POST" class="followuser"
-                                data-id="{{ profile.user.id }}"
-                                style="display: {% if is_followed %} none {% else %} inline-block {% endif %};">
-                                {% csrf_token %}
-                                <input type="hidden" class="follow_user_id" value="{{ profile.user.id }}">
-                                <button class="btn orange" name="follow"><i class="fas fa-user-plus"></i></i> Follow</button>
-                            </form>
+                            {% if request.user.is_authenticated %}
+                                <form method="POST" class="followuser"
+                                    data-id="{{ profile.user.id }}"
+                                    style="display: {% if is_followed %} none {% else %} inline-block {% endif %};">
+                                    {% csrf_token %}
+                                    <input type="hidden" class="follow_user_id" value="{{ profile.user.id }}">
+                                    <button class="btn orange" name="follow"><i class="fas fa-user-plus"></i> Follow</button>
+                                </form>
+                            {% else %}
+                                <a class="btn orange" href="#loginModal" rel="modal:open"><i class="fas fa-user-plus"></i> Follow</a>
+                            {% endif %}
 
                             <div class="clear"></div>
                         {% endif %}
@@ -166,7 +170,35 @@
                         </div>
                         {% if not editable %}
                         <div class="profileBoardShare">
-                            <a href="https://twitter.com/home?status=Check out this board I found on Wantbrd: {{ board.board_name }} - https://www.wantbrd.com/{% url 'b:view_board' board.user.username board.slug %}{% if board.hero %} {{board.hero.url}}{% else %} {% static 'img/default-hero.png' %}{% endif %}" target="_blank" rel="nooperner nofollow">Share <i class="fas fa-share-alt"></i></a>
+
+                            <div class="share-link">
+                                <a class="toggle metalink" href="javascript:void(0);"><i class="fal fa-share"></i> Share</a>
+                                <div class="tip">
+                                    <div class="ssk-group">
+                                        <a href="" class="ssk ssk-icon ssk-facebook"
+                                            data-url="{{ request.build_absolute_uri }}"
+                                            data-text="Checkout {{ board.board_name }} by {{ board.user.username }}!"
+                                        ></a>
+                                        <a href="" class="ssk ssk-icon ssk-twitter"
+                                            data-url="{{ request.build_absolute_uri }}"
+                                            data-text="Checkout {{ board.board_name }} by {{ board.user.username }}!"
+                                        ></a>
+                                        <a href="" class="ssk ssk-icon ssk-google-plus"
+                                            data-url="{{ request.build_absolute_uri }}"
+                                            data-text="Checkout {{ board.board_name }} by {{ board.user.username }}!"
+                                        ></a>
+                                        <a href="" class="ssk ssk-icon ssk-pinterest"   
+                                            data-url="{{ request.build_absolute_uri }}"
+                                            data-text="Checkout {{ board.board_name }} by {{ board.user.username }}!"
+                                        ></a>
+                                        <a href="" class="ssk ssk-icon ssk-tumblr"
+                                            data-url="{{ request.build_absolute_uri }}"
+                                            data-text="Checkout {{ board.board_name }} by {{ board.user.username }}!"
+                                        ></a>
+                                    </div>
+                                </div>
+                            </div>
+
                         </div>
                         {% endif %}
                         <div class="clearfix"></div>

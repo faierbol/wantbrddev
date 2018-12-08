@@ -1052,7 +1052,7 @@ def search(request):
 	for board in board_results:
 		board.totalitems = board.get_item_count()
 		board.views = BoardView.objects.filter(board=board).count()
-		board.itemconxs = ItemConnection.objects.filter(board=board, active=True)[:5]
+		board.itemconxs = ItemConnection.objects.filter(board=board, active=True)[:3]
 	
 
 	# users
@@ -1080,7 +1080,7 @@ def search(request):
 			itemviews = 0			
 			for item in boarditems:
 				itemviews += ItemView.objects.filter(item_conx=item).count()
-				if x < 2:
+				if x < 3:
 					user.items.append(item)
 				x+=1				
 			user.viewscount = boardviews + itemviews
@@ -1240,7 +1240,7 @@ def search_board(request):
 	for board in board_results:
 		board.totalitems = board.get_item_count()
 		board.views = BoardView.objects.filter(board=board).count()
-		board.itemconxs = ItemConnection.objects.filter(board=board, active=True)[:5]
+		board.itemconxs = ItemConnection.objects.filter(board=board, active=True)[:3]
 
 	# users
 	user_count = User.objects.filter(username__icontains=search_term).count()
@@ -1335,7 +1335,7 @@ def search_user(request):
 			itemviews = 0			
 			for item in boarditems:
 				itemviews += ItemView.objects.filter(item_conx=item).count()
-				if x < 2:
+				if x < 3:
 					user.items.append(item)
 				x+=1				
 			user.viewscount = boardviews + itemviews

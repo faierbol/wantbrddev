@@ -92,15 +92,15 @@
 
 		            	    	{% for itemconx in board.itemconxs %}
 		            	    		{% thumbnail itemconx.image "300x300" as im %}
-		            	    		    <a style="background-image:url('{{ im.url }}');" href="{% url 'b:view_board' board.user.username board.slug %}"></a>
+		            	    		    <a style="background-image:url('{{ im.url }}');" href="{% url 'b:view_item' board.user board.slug itemconx.id itemconx.slug %}"></a>
 		            	    		{% endthumbnail %}		            	        
 		            	        {% endfor %}		            	        
 
-	            	        	{% if board.totalitems > 5 %}
+<!-- 	            	        	{% if board.totalitems > 5 %}
 	            	        		<a class="plusMore" href="{% url 'b:view_board' board.user.username board.slug %}">
 	            	            		<div class="plusMoreNumber">+{{ board.totalitems|add:"-5" }}</div>
 	            	            	</a>
-	            	            {% endif %}
+	            	            {% endif %} -->
 		            	        
 		            	    </div>
 		            	    <a class="trendingUserUser" href="{% url 'u:profile' board.user.username %}">

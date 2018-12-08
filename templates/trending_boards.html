@@ -6,6 +6,9 @@
 	Trending Boards | Wantbrd - Taking the guessing out of giving!
 {% endblock %}
 
+{% block meta_description %}
+    Create wishlists and share with your friends, family and followers. Discover new products, places &amp; experiences, find out what your friends and family really want.  Wantbrd, taking the guessing out of giving!
+{% endblock %}
 
 {% block extra-css %}
 	<link type="text/css" href="{% static 'css/slick.css' %}" rel="stylesheet" />
@@ -96,7 +99,7 @@
                     <div class="trendingItems clearfix">
                         {% for itemconx in board.itemconxs %}
                             {% thumbnail itemconx.image "300x300" as im %}
-                                <a style="background-image:url('{{ im.url }}');" href="{% url 'b:view_board' board.user.username board.slug %}"></a>
+                                <a style="background-image:url('{{ im.url }}');" href="{% url 'b:view_item' board.user board.slug itemconx.id itemconx.slug %}"></a>
                             {% endthumbnail %}                              
                         {% endfor %}                                
 

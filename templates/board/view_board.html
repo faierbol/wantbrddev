@@ -82,20 +82,24 @@ Check out {{ board.board_name }} by {{ board.user.username }}. Create your own w
                                     <button class="btn grey">Unfollow</button>
                                 </form>
 
-                                <form method="POST" class="followuser"
-                                    data-id="{{ board.user.id }}"
-                                    style="display: {% if is_followed %} none {% else %} inline-block {% endif %};">
-                                    {% csrf_token %}
-                                    <input type="hidden" class="follow_user_id" value="{{ board.user.id }}">
-                                    <button class="btn orange">Follow</button>
-                                </form>
+                                {% if request.user.is_authenticated %}
+                                    <form method="POST" class="followuser"
+                                        data-id="{{ board.user.id }}"
+                                        style="display: {% if is_followed %} none {% else %} inline-block {% endif %};">
+                                        {% csrf_token %}
+                                        <input type="hidden" class="follow_user_id" value="{{ board.user.id }}">
+                                        <button class="btn orange">Follow</buttwon>
+                                    </form>
+                                {% else %}
+                                    <a class="btn orange" href="#loginModal" rel="modal:open">Follow</a>
+                                {% endif %}
 
                             {% endif %}
                         </div>                
                         <div class="boardStats">
                             <p>Created on {{ board.created|date:'d F o' }}</p>                            
                             <div class="share-link">
-                                <a class="toggle metalink" rel="tooltip" title="Share" href="javascript:void(0);"><i class="fal fa-share"></i> Share</a>
+                                <a class="toggle metalink" href="javascript:void(0);"><i class="fal fa-share"></i> Share</a>
                                 <div class="tip">
                                     <div class="ssk-group">
                                         <a href="" class="ssk ssk-icon ssk-facebook"
