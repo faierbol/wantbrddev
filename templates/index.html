@@ -303,8 +303,8 @@
                             <p>{{ hot.description|truncatechars:75 }}</p>
                         </div>
                         <div class="recommendedMeta">
-                            <span>{{ hot.totalitems }} {% if hot.totalitems > 1 or hot_items.totalitems == 0 %} Items {% else %} Item {% endif %}</span>
-                            <span>{{ hot.views }} {% if hot.views > 1 or hot.views == 0 %} Views {% else %} View {% endif %}</span>
+                            <span>{{ hot.totalitems }} <i class="fal fa-list-alt"></i></span>
+                            <span>{{ hot.views }} <i class="fas fa-eye"></i></span>
                         </div>
                         <a href="{% url 'b:view_board' hot.user.username hot.slug %}" class="btn grey">View Board</a>
                         <div class="clear"></div>

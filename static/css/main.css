@@ -509,8 +509,7 @@ header#main.shrink {
         padding:10px 10px 0 0;
         font-size:.8rem;        
     }
-    header#main.shrink .influencerLink {
-        padding:10px 20px 0 0;
+    header#main.shrink .influencerLink, header#main.shrink .blogLink {
         font-size:.8rem;
     }
     header#main.shrink .headerRight {
@@ -4173,6 +4172,30 @@ footer {
         max-width: 400px;
         margin: auto;
     }
+/*    a.influencerLink {
+        display: none;
+    }*/
+    .headersearch {
+        display: none;
+    }
+    a.mobSearch {
+        display: inline-block;
+        border:1px solid #F97D1F;
+        background:#F97D1F;
+        border-radius:50%;
+        line-height: 33px;
+        padding:0 10px;
+    }
+    a.mobSearch i {
+        color:#fff;
+    }
+    a.mobSearch:hover {
+        background:#fff;
+        border:1px solid #2a2a2a;
+    }
+    a.mobSearch:hover i {
+        color:#333;
+    }
 }
 
 @media screen and (max-width: 740px) {
@@ -4297,30 +4320,6 @@ footer {
 }
 
 @media screen and (max-width: 730px) {
-    a.influencerLink {
-        display: none;
-    }
-    .headersearch {
-        display: none;
-    }
-    a.mobSearch {
-        display: inline-block;
-        border:1px solid #F97D1F;
-        background:#F97D1F;
-        border-radius:50%;
-        line-height: 33px;
-        padding:0 10px;
-    }
-    a.mobSearch i {
-        color:#fff;
-    }
-    a.mobSearch:hover {
-        background:#fff;
-        border:1px solid #2a2a2a;
-    }
-    a.mobSearch:hover i {
-        color:#333;
-    }
     .profileBoards {
         padding-top:40px;
     }
@@ -4543,6 +4542,9 @@ footer {
     }
     .homeBannerPush {
         padding-top: 100px;
+    }
+    .influencerLink, .blogLink {
+        display: none;
     }
 }
 

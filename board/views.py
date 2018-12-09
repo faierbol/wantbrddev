@@ -979,7 +979,7 @@ def collection(request, collection_slug):
 		board.totalitems = board.get_item_count()
 		board.views = BoardView.objects.filter(board=board).count()
 		board.likes = BoardLike.objects.filter(board=board).count()
-		board.itemconxs = ItemConnection.objects.filter(board=board, active=True)[:5]
+		board.itemconxs = ItemConnection.objects.filter(board=board, active=True)[:3]
 
 	mixed = list(item_results) + list(board_results)
 	random.shuffle(mixed)	

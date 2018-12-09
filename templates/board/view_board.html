@@ -4,7 +4,7 @@
 {% load thumbnail %}
 
 {% block title %}
-	{{ board.board_name }} by {{ board.user.username }} | Wantbrd
+    {{ board.board_name }} by {{ board.user.username }} | Wantbrd
 {% endblock %}
 
 {% block meta_description %}
@@ -12,7 +12,7 @@ Check out {{ board.board_name }} by {{ board.user.username }}. Create your own w
 {% endblock %}
 
 {% block extra-css %}
-	<link type="text/css" href="{% static 'css/macy.css' %}" rel="stylesheet" />
+    <link type="text/css" href="{% static 'css/macy.css' %}" rel="stylesheet" />
     <link href="{% static 'css/font/font-fileuploader.css' %}" media="all" rel="stylesheet">
     <link href="{% static 'css/jquery.fileuploader.min.css' %}" media="all" rel="stylesheet">
     {% if board.isblocked %}
@@ -169,9 +169,11 @@ Check out {{ board.board_name }} by {{ board.user.username }}. Create your own w
 
                 {% if board.board_name|length > 50 %}
                     <h1>
-                        {{ board.board_name|slice:":50" }}<u class="tooLong" rel="tooltip" title="{{ board.board_name }}">...</u>                        
-                        {% if editable %}
-                            <i class="fas fa-pencil-alt editBoardDesc"></i>
+                        {{ board.board_name|slice:":50" }}<u class="tooLong" rel="tooltip" title="{{ board.board_name }}">...</u>                                                
+                        {% if board.slug != 'your-saved-items' %}
+                            {% if editable %}
+                                <i class="fas fa-pencil-alt editBoardDesc"></i>
+                            {% endif %}
                         {% endif %}
                     </h1>
                 {% else %}
@@ -179,15 +181,17 @@ Check out {{ board.board_name }} by {{ board.user.username }}. Create your own w
                         <span id="theBoardTitle">{{ board.board_name }}</span>                        
                         
                         {% if editable %}
-                            <div id="editBoardName" style="display: none;">
-                                <form method="POST">
-                                    {% csrf_token %}
-                                    <input type="text" id="boardName" name="boardName" value="{{ board.board_name }}">
-                                    <button class="altbtn" name="updateboardname" value="1"><i class="fas fa-check"></i></button>
-                                    <a href="#" id="hideEditName" style="display: none;"><i class="fas fa-times"></i></a>
-                                </form>                
-                            </div>                    
-                            <a href="#" id="editBoardTitle" rel="tooltip" title="Edit the board name"><i class="fas fa-pencil-alt"></i></a>
+                            {% if board.slug != 'your-saved-items' %}
+                                <div id="editBoardName" style="display: none;">
+                                    <form method="POST">
+                                        {% csrf_token %}
+                                        <input type="text" id="boardName" name="boardName" value="{{ board.board_name }}">
+                                        <button class="altbtn" name="updateboardname" value="1"><i class="fas fa-check"></i></button>
+                                        <a href="#" id="hideEditName" style="display: none;"><i class="fas fa-times"></i></a>
+                                    </form>                
+                                </div>                    
+                                <a href="#" id="editBoardTitle" rel="tooltip" title="Edit the board name"><i class="fas fa-pencil-alt"></i></a>
+                            {% endif %}
                         {% endif %}
 
                     </h1>
@@ -201,9 +205,9 @@ Check out {{ board.board_name }} by {{ board.user.username }}. Create your own w
                     {% if not board.slug == 'your-saved-items' %}
                         <div class="tags" {% if not editable %} style="padding-left:0" {% endif %}>    
                             <div id="theTags">
-                            	{% for tag in board.thetags %}
-                            		<span><a href="{% url 'search_board' %}?kw={{ tag }}">#{{ tag }}</a></span>
-                            	{% endfor %}
+                                {% for tag in board.thetags %}
+                                    <span><a href="{% url 'search_board' %}?kw={{ tag }}">#{{ tag }}</a></span>
+                                {% endfor %}
                             </div>
                         </div>
                         {% if editable %}
@@ -359,8 +363,8 @@ Check out {{ board.board_name }} by {{ board.user.username }}. Create your own w
                             <div class="boardItemStats">
 
                                 <span><a href="{% url 'b:view_item' board.user board.slug itemconx.id itemconx.slug %}"><i class="fal fa-comment"></i>
-                                	{% get_comment_count for itemconx as comment_count %}
-                                	{{ comment_count }}                    	
+                                    {% get_comment_count for itemconx as comment_count %}
+                                    {{ comment_count }}                     
                                 </a></span>
                                 <span><i class="fal fa-eye"></i> {{ itemconx.views }}</span>
 
@@ -466,7 +470,7 @@ Check out {{ board.board_name }} by {{ board.user.username }}. Create your own w
                         {% else %}
 
                             <div class="itemTools">
-                                <a class="metalink" rel="tooltip" title="Edit item" href="{% url 'b:edit_item' board.id itemconx.id %}"><i class="fas fa-pencil-alt"></i></a>
+                                <a class="metalink" rel="tooltip" title="Edit item" href="{% url 'b:edit_item' board.slug itemconx.id itemconx.slug %}"><i class="fas fa-pencil-alt"></i></a>
                                 <a href="#delete{{itemconx.id}}" rel="modal:open tooltip" title="Delete item" class="metalink"><i class="fal fa-trash-alt"></i></a>
                             </div>
 
