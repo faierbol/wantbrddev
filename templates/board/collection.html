@@ -107,7 +107,7 @@
 	            		<div class="featBox trendingItem">
 	            		    <div class="trendingItemItem">
 	            		        {% thumbnail item.image "300x300" as im %}
-	            		            <a href="{% url 'b:view_item' item.board.user item.board.slug item.id %}"">
+	            		            <a href="{% url 'b:view_item' item.board.user item.board.slug item.id item.slug %}">
 	            		            	<img src="{{ im.url }}">
 	            		            </a>
 	            		        {% endthumbnail %}
@@ -115,11 +115,11 @@
 	            		    <div class="trendingItemName">
 
 	            		    	{% if item.item.item_name|length > 40 %}
-	            		    		<a href="{% url 'b:view_item' item.board.user item.board.slug item.id %}">{{ item.item.item_name|slice:":40" }}
+	            		    		<a href="{% url 'b:view_item' item.board.user item.board.slug item.id item.slug %}">{{ item.item.item_name|slice:":40" }}
 	            		    			<u class="tooLong" rel="tooltip" title="{{ item.item.item_name }}">...</u>
 	            		    		</a>
 	            		    	{% else %}
-	            		    		<a href="{% url 'b:view_item' item.board.user item.board.slug item.id %}">{{ item.item.item_name }}</a>
+	            		    		<a href="{% url 'b:view_item' item.board.user item.board.slug item.id item.slug %}">{{ item.item.item_name }}</a>
 	            		    	{% endif %}
 
 	            		        <div class="trendingItemMeta">
