@@ -779,6 +779,9 @@ def add_item(request, board_id):
 
 			if imgsrc == 'web':				
 				url = request.POST.get("scrapedimg")
+				if url.startswith('//'):
+					url = 'https:' + url					
+
 				resp = requests.get(url)
 				if resp.status_code != 200:
 					resp = requests.get('https://api.proxycrawl.com/?token=' + api + '&format=html&url=' + url, timeout=30)					

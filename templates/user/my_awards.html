@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+
+{% block title %}
+	Your awards | Wantbrd
+{% endblock %}
+
+{% block extra-css %}
+	<link type="text/css" href="{% static 'css/date-picker.min.css' %}" rel="stylesheet" />
+{% endblock %}
+
+{% block body %}
+<section class="myNotifications">
+
+	<div class="container clearfix">
+
+		<div class="panel">
+
+			<div style="text-align: center; display: block;">
+				{% if profileComplete < 100 %}
+				<strong>Complete your profile</strong> and get your Profile badge!
+				{% else %}
+				<strong>Woohoo!</strong> You've completed your profile.
+				{% endif %}
+			</div>
+
+			<ul class="profileThings">
+				<li {% if hasAvatar %} class="done" {% endif %}><i class="fal fa-check-circle"></i> Add your photo</li>
+				<li {% if hasBackground %} class="done" {% endif %}><i class="fal fa-check-circle"></i> Set your profile background</li>
+				<li {% if hasBio %} class="done" {% endif %}><i class="fal fa-check-circle"></i> Write your bio</li>
+				<li {% if hasSocial %} class="done" {% endif %}><i class="fal fa-check-circle"></i> Add your social media connections</li>
+			</ul>
+
+			<div class="profileCompletion">
+				<div class="barSection match {% if profileComplete >= 25 %}done{% endif %}"></div>
+				<div class="barSection match {% if profileComplete >= 50 %}done{% endif %}"></div>
+				<div class="barSection match {% if profileComplete >= 75 %}done{% endif %}"></div>
+				<div class="barSection match {% if profileComplete == 100 %}done{% endif %}"></div>
+			</div>
+
+			<h3 style="text-align: center; margin-bottom:30px;">More awards coming soon...</h3>
+
+		</div>
+
+	</div>
+
+</section>
+      
+
+{% endblock %}
+
+{% block extra-js %}
+
+{% endblock %}

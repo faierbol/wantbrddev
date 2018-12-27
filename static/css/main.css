@@ -1626,6 +1626,109 @@ TAG FOLLOWS
     }
 
 
+/* ---------------- 
+AWARDS
+-----------------*/
+.theAwards:after {
+    content:"";
+    clear: both;
+    display: table;
+}
+    .anAward {
+        width: 47.5%;
+        float: left;
+        clear: both;
+        margin-bottom:30px;
+    }
+    .anAward:nth-child(even){
+        float: right;
+        clear: none;
+    }
+    .anAward:after {
+        content:"";
+        clear: both;
+        display: table;
+    }
+    .awardIcon {
+        text-align:center;
+    }
+    .theBadge {
+        width: 100px;
+        height: 100px;
+        background:#f4f4f4;
+        margin:0 auto 10px;
+        display: block;
+        text-align: center;
+        border-radius: 100px;
+        display: table;
+    }
+    .theBadge > span {
+        display: table-cell;
+        height: 100%;
+        vertical-align: middle;
+    }
+    .theBadge i {
+        font-size: 3rem;
+        color:#ccc;
+    }
+    .theBadge.on {
+        background: rgb(134,128,178);
+    }
+    .theBadge.on i {
+        color:#fff;
+    }
+    .awardText {
+        text-align:center;
+    }
+    ul.profileThings {
+        list-style: none;
+        text-align: center;
+        margin:20px 0;
+        padding:0;
+    }
+    ul.profileThings:after {
+        content:"";
+        clear: both;
+        display: table;
+    }
+    ul.profileThings li {
+        float: left;
+        width: 25%;
+        color:#999;
+    }
+    ul.profileThings i {
+        display: block;
+        color:#ccc;
+        font-size: 2rem
+    }
+    ul.profileThings li.done {
+        font-weight: bold;
+        color:#222;
+    }
+    ul.profileThings li.done i {
+        color:rgb(134,128,178);        
+    }
+    .profileCompletion {
+        margin:10px 0 60px 0;
+    }
+    .profileCompletion:after {
+        content:"";
+        display: table;
+        clear: both;
+    }
+    .barSection {
+        font-size: .8rem;
+        background:#eee;
+        float: left;
+        width: 25%;        
+        display: block;
+        padding:10px;
+        color:#fff;
+        text-align: center;
+    }
+    .barSection.done {
+        background: #f77c40;
+    }
 
 /* ---------------- 
 BOARD

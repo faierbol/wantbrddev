@@ -31,6 +31,7 @@ urlpatterns = [
     path('my/profile/', user_views.update_profile, name='update_profile'),
     path('my/settings/', user_views.privacy_settings, name='privacy_settings'),
     path('my/notifications', user_views.my_notifications, name='my_notifications'),
+    path('my/awards', user_views.my_awards, name='my_awards'),
     path('follow_tag/', user_views.follow_tag, name='follow_tag'),
     path('unfollow_tag/', user_views.unfollow_tag, name='unfollow_tag'),
     path('tags_followed/', user_views.tags_followed, name='tags_followed'),

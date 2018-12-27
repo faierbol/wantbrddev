@@ -700,6 +700,54 @@ def my_notifications(request):
 	return render(request, template, context_dict)
 
 
+def my_awards(request):
+
+	template = 'user/my_awards.html'	
+
+	user = request.user
+	profile = request.user.profile
+
+	profilecomplete = 0
+
+	if profile.picture:
+		hasAvatar = True
+		profilecomplete += 25
+	else:
+		hasAvatar = False
+
+	if profile.background:
+		hasBackground = True
+		profilecomplete += 25
+	else:
+		hasBackground = False
+
+	if profile.bio:
+		hasBio = True
+		profilecomplete += 25
+	else:
+		hasBio = False
+
+	if (profile.social_instagram or profile.social_twitter or profile.social_youtube or
+	profile.social_facebook or profile.social_twitch or profile.social_pinterest or
+	profile.social_vimeo or profile.social_weibo or profile.social_vk):
+		hasSocial = True
+		profilecomplete += 25
+	else:
+		hasSocial = False
+
+
+	context_dict = {
+		'user':user,
+		'hasAvatar': hasAvatar,
+		'hasBackground': hasBackground,
+		'hasBio': hasBio,
+		'hasSocial': hasSocial,
+		'profileComplete': profilecomplete
+	}
+
+	return render(request, template, context_dict)
+
+
 def tags_followed(request):
 
 	template = 'user/tags_followed.html'
