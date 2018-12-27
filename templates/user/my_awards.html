@@ -20,7 +20,13 @@
 				{% if profileComplete < 100 %}
 				<strong>Complete your profile</strong> and get your Profile badge!
 				{% else %}
-				<strong>Woohoo!</strong> You've completed your profile.
+				<div class="profileComplete">
+					<div class="anAward">										
+						<div class="theBadge on"><span><i class="fal fa-award"></i></span></div>
+					</div>
+					<div class="clearfix"></div>
+					<strong>Woohoo!</strong> You've completed your profile.
+				</div>
 				{% endif %}
 			</div>
 
@@ -31,14 +37,121 @@
 				<li {% if hasSocial %} class="done" {% endif %}><i class="fal fa-check-circle"></i> Add your social media connections</li>
 			</ul>
 
-			<div class="profileCompletion">
-				<div class="barSection match {% if profileComplete >= 25 %}done{% endif %}"></div>
-				<div class="barSection match {% if profileComplete >= 50 %}done{% endif %}"></div>
-				<div class="barSection match {% if profileComplete >= 75 %}done{% endif %}"></div>
-				<div class="barSection match {% if profileComplete == 100 %}done{% endif %}"></div>
-			</div>
+			<progress max="100" value="{{ profileComplete }}"></progress>			
 
-			<h3 style="text-align: center; margin-bottom:30px;">More awards coming soon...</h3>
+			<div class="theAwards">				
+
+				<h3>Other Awards</h3>
+
+				<button class="accordion">Followers</button>
+
+				<div class="acpanel"><div class="acInner">
+
+					<div class="anAward">										
+						<div class="theBadge {% if followers >= 10%}on{% endif %}"><span><i class="fal fa-award"></i></span></div>
+						<div class="awardText">
+							<strong>Social</strong>
+							<h4>Get 10 followers</h4>
+						</div>
+					</div>
+
+					<div class="anAward">										
+						<div class="theBadge {% if followers >= 100 %}on{% endif %}"><span><i class="fal fa-award"></i></span></div>
+						<div class="awardText">
+							<strong>Cool Kid</strong>
+							<h4>Get 100 followers</h4>
+						</div>
+					</div>
+
+					<div class="anAward">										
+						<div class="theBadge {% if followers >= 300 %}on{% endif %}"><span><i class="fal fa-award"></i></span></div>
+						<div class="awardText">
+							<strong>Popular</strong>
+							<h4>Get 300 followers</h4>
+						</div>
+					</div>
+
+					<div class="anAward">										
+						<div class="theBadge {% if followers >= 1000 %}on{% endif %}"><span><i class="fal fa-award"></i></span></div>
+						<div class="awardText">
+							<strong>Micro Influencer</strong>
+							<h4>Get 1,000 followers</h4>
+						</div>
+					</div>
+
+					<div class="anAward">										
+						<div class="theBadge {% if followers >= 10000 %}on{% endif %}"><span><i class="fal fa-award"></i></span></div>
+						<div class="awardText">
+							<strong>Influencer</strong>
+							<h4>Get 10,000 followers</h4>
+						</div>
+					</div>
+
+					<div class="anAward">										
+						<div class="theBadge {% if followers >= 100000 %}on{% endif %}"><span><i class="fal fa-award"></i></span></div>
+						<div class="awardText">
+							<strong>Pro</strong>
+							<h4>Get 100,000 followers</h4>
+						</div>
+					</div>
+
+				</div></div>
+
+				<button class="accordion">Following</button>
+
+				<div class="acpanel"><div class="acInner">
+
+					<div class="anAward">										
+						<div class="theBadge {% if following >= 10%}on{% endif %}"><span><i class="fal fa-award"></i></span></div>
+						<div class="awardText">
+							<strong>Social</strong>
+							<h4>Follow 10 users</h4>
+						</div>
+					</div>
+
+					<div class="anAward">										
+						<div class="theBadge {% if following >= 100 %}on{% endif %}"><span><i class="fal fa-award"></i></span></div>
+						<div class="awardText">
+							<strong>Cool Kid</strong>
+							<h4>Follow 100 users</h4>
+						</div>
+					</div>
+
+					<div class="anAward">										
+						<div class="theBadge {% if following >= 300 %}on{% endif %}"><span><i class="fal fa-award"></i></span></div>
+						<div class="awardText">
+							<strong>Popular</strong>
+							<h4>Follow 300 users</h4>
+						</div>
+					</div>
+
+					<div class="anAward">										
+						<div class="theBadge {% if following >= 1000 %}on{% endif %}"><span><i class="fal fa-award"></i></span></div>
+						<div class="awardText">
+							<strong>Micro Influencer</strong>
+							<h4>Follow 1000 users</h4>
+						</div>
+					</div>
+
+					<div class="anAward">										
+						<div class="theBadge {% if following >= 10000 %}on{% endif %}"><span><i class="fal fa-award"></i></span></div>
+						<div class="awardText">
+							<strong>Influencer</strong>
+							<h4>Follow 10,000 users</h4>
+						</div>
+					</div>
+
+					<div class="anAward">										
+						<div class="theBadge {% if following >= 100000 %}on{% endif %}"><span><i class="fal fa-award"></i></span></div>
+						<div class="awardText">
+							<strong>Pro</strong>
+							<h4>Follow 100,000 users</h4>
+						</div>
+					</div>
+
+				</div></div>
+
+			</div>
 
 		</div>
 
@@ -50,5 +163,84 @@
 {% endblock %}
 
 {% block extra-js %}
+
+<script>
+  // W3C's JS Code
+  var acc = document.getElementsByClassName("accordion");
+  var i;
+	
+  // Open the first accordion
+  var firstAccordion = acc[0];
+  var firstPanel = firstAccordion.nextElementSibling;
+  firstAccordion.classList.add("active");
+  firstPanel.style.maxHeight = firstPanel.scrollHeight + "px";
+
+  // Add onclick listener to every accordion element
+  for (i = 0; i < acc.length; i++) {
+    acc[i].onclick = function() {
+      // For toggling purposes detect if the clicked section is already "active"
+      var isActive = this.classList.contains("active");
+
+      // Close all accordions
+      var allAccordions = document.getElementsByClassName("accordion");
+      for (j = 0; j < allAccordions.length; j++) {
+        // Remove active class from section header
+        allAccordions[j].classList.remove("active");
+
+        // Remove the max-height class from the panel to close it
+        var panel = allAccordions[j].nextElementSibling;
+        var maxHeightValue = getStyle(panel, "maxHeight");
+      
+      if (maxHeightValue !== "0px") {
+          panel.style.maxHeight = null;
+        }
+      }
+
+      // Toggle the clicked section using a ternary operator
+      isActive ? this.classList.remove("active") : this.classList.add("active");
+
+      // Toggle the panel element
+      var panel = this.nextElementSibling;
+      var maxHeightValue = getStyle(panel, "maxHeight");
+      
+      if (maxHeightValue !== "0px") {
+        panel.style.maxHeight = null;
+      } else {
+        panel.style.maxHeight = panel.scrollHeight + "px";
+      }
+    };
+  }
+  
+  // Cross-browser way to get the computed height of a certain element. Credit to @CMS on StackOverflow (http://stackoverflow.com/a/2531934/7926565)
+  function getStyle(el, styleProp) {
+  var value, defaultView = (el.ownerDocument || document).defaultView;
+  // W3C standard way:
+  if (defaultView && defaultView.getComputedStyle) {
+    // sanitize property name to css notation
+    // (hypen separated words eg. font-Size)
+    styleProp = styleProp.replace(/([A-Z])/g, "-$1").toLowerCase();
+    return defaultView.getComputedStyle(el, null).getPropertyValue(styleProp);
+  } else if (el.currentStyle) { // IE
+    // sanitize property name to camelCase
+    styleProp = styleProp.replace(/\-(\w)/g, function(str, letter) {
+      return letter.toUpperCase();
+    });
+    value = el.currentStyle[styleProp];
+    // convert other units to pixels on IE
+    if (/^\d+(em|pt|%|ex)?$/i.test(value)) { 
+      return (function(value) {
+        var oldLeft = el.style.left, oldRsLeft = el.runtimeStyle.left;
+        el.runtimeStyle.left = el.currentStyle.left;
+        el.style.left = value || 0;
+        value = el.style.pixelLeft + "px";
+        el.style.left = oldLeft;
+        el.runtimeStyle.left = oldRsLeft;
+        return value;
+      })(value);
+    }
+    return value;
+  }
+}
+</script>
 
 {% endblock %}

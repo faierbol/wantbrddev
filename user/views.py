@@ -707,6 +707,7 @@ def my_awards(request):
 	user = request.user
 	profile = request.user.profile
 
+	# profile completion
 	profilecomplete = 0
 
 	if profile.picture:
@@ -735,6 +736,14 @@ def my_awards(request):
 	else:
 		hasSocial = False
 
+	# individual awards
+
+	# followers
+	followers = profile.get_followers().count()
+
+	# following
+	following = connections = profile.get_connections().count()
+
 
 	context_dict = {
 		'user':user,
@@ -742,7 +751,9 @@ def my_awards(request):
 		'hasBackground': hasBackground,
 		'hasBio': hasBio,
 		'hasSocial': hasSocial,
-		'profileComplete': profilecomplete
+		'profileComplete': profilecomplete,
+		'followers':followers,
+		'following':following,
 	}
 
 	return render(request, template, context_dict)

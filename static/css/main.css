@@ -1629,12 +1629,22 @@ TAG FOLLOWS
 /* ---------------- 
 AWARDS
 -----------------*/
-.theAwards:after {
-    content:"";
-    clear: both;
-    display: table;
+.theAwards {
+    margin-top:30px;
 }
-    .anAward {
+    .theAwards h3 {
+        text-align: center;
+        display: block;
+        margin-bottom:20px;
+        font-size: 1.2rem;
+        font-weight: 600;
+    }
+    .theAwards:after {
+        content:"";
+        clear: both;
+        display: table;
+    }
+        .anAward {
         width: 47.5%;
         float: left;
         clear: both;
@@ -1708,27 +1718,47 @@ AWARDS
     ul.profileThings li.done i {
         color:rgb(134,128,178);        
     }
-    .profileCompletion {
-        margin:10px 0 60px 0;
+    .profileComplete .anAward {
+        width: 100%;
+        margin-bottom:0
     }
-    .profileCompletion:after {
-        content:"";
-        display: table;
-        clear: both;
+    .profileComplete .theBadge.on {
+        background:#FFD579;
     }
-    .barSection {
-        font-size: .8rem;
-        background:#eee;
-        float: left;
-        width: 25%;        
-        display: block;
-        padding:10px;
-        color:#fff;
-        text-align: center;
+    progress[value] {
+        /* Reset the default appearance */
+        -webkit-appearance: none;
+        appearance: none;
+        width: 100%;
+        height: 20px;
     }
-    .barSection.done {
-        background: #f77c40;
+    progress[value]::-webkit-progress-bar {
+      background-color: #eee;
+      border-radius: 2px;
+      /*box-shadow: 0 2px 5px rgba(0, 0, 0, 0.25) inset;*/
     }
+    progress[value]::-webkit-progress-value {
+      background-image:
+           -webkit-linear-gradient(-45deg, 
+                                   transparent 33%, rgba(0, 0, 0, .1) 33%, 
+                                   rgba(0,0, 0, .1) 66%, transparent 66%),
+           -webkit-linear-gradient(top, 
+                                   rgba(255, 255, 255, .25), 
+                                   rgba(0, 0, 0, .25)),
+           -webkit-linear-gradient(left, #09c, #f44);
+
+        border-radius: 2px; 
+        background-size: 35px 20px, 100% 100%, 100% 100%;
+    }
+    @-webkit-keyframes animate-stripes {
+       100% { background-position: -100px 0px; }
+    }
+
+    @keyframes animate-stripes {
+       100% { background-position: -100px 0px; }
+    }
+    -webkit-animation: animate-stripes 5s linear infinite;
+            animation: animate-stripes 5s linear infinite;
 
 /* ---------------- 
 BOARD
@@ -3620,6 +3650,44 @@ div.spinner i:nth-child(8) {
         margin-bottom:20px;
     }
 
+button.accordion {
+    background-color: #f1f1f1;
+    color: #444;
+    cursor: pointer;
+    padding: 18px;
+    width: 100%;
+    border: none;
+    text-align: left;
+    outline: none;
+    font-size: 15px;
+    transition: 0.4s;
+    border-radius: 5px;
+    margin-bottom:10px;
+}
+button.accordion.active, button.accordion:hover {
+    background: rgb(125,185,232);
+    color:#fff;
+}
+button.accordion:after {
+    content: '\002B';
+    color: #777;
+    font-weight: bold;
+    float: right;
+    margin-left: 5px;
+}
+button.accordion.active:after, button.accordion:hover:after {
+    content: "\2212";
+    color:#fff;
+}
+div.acpanel {
+    background-color: white;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.2s ease-out;
+}
+.acInner {
+    margin:30px 0;
+}
 
 /* ---------------- 
 INFLUENCERS
@@ -4996,6 +5064,9 @@ footer {
         right: 10px;
         top:-35px;
         position: absolute;
+    }
+    .anAward {
+        width: 100%;
     }
 }
 
