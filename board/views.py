@@ -137,7 +137,7 @@ def add_board(request):
 
 
 ##### Edit a board
-def edit_board(request, board_id):
+def edit_board(request, board_id, itemadded=''):
 	template = 'board/view_board.html'
 	editable = True
 	deniedusers = False
@@ -298,7 +298,12 @@ def edit_board(request, board_id):
 					return redirect('b:my_boards')
 		else:
 			# create a form using the current board instance
-			form = EditBoardForm(instance=board)
+			form = EditBoardForm(instance=board)	
+
+		try:
+			item_to_tweet = ItemConnection.objects.get(pk=itemadded)
+		except:
+			item_to_tweet = ''
 
 		context_dict = {
 			'board':board,
@@ -310,6 +315,7 @@ def edit_board(request, board_id):
 			'items':items,
 			'allusers':allusers,
 			'deniedusers':deniedusers,
+			'item_to_tweet':item_to_tweet,
 		}
 
 		return render(request, template, context_dict)
@@ -815,10 +821,9 @@ def add_item(request, board_id):
 				new_item_conx.board = board_assign
 				new_item_conx.original_purchase_url = original_url
 				new_item_conx.save()
-				form.save_m2m()	
+				form.save_m2m()					
 
-
-				return redirect('b:edit_board', board_id=board_id)
+				return redirect('b:edit_board_added', board_id=board_id, itemadded=new_item_conx.id)
 				
 
 	context_dict = {
@@ -928,7 +933,7 @@ def add_existing_item(request, board_id, itemconx_id):
 				new_itemconx.save()
 				form.save_m2m()
 
-				return redirect('b:edit_board', board_id=board_id)
+				return redirect('b:edit_board_added', board_id=board_id, itemadded=new_itemconx.id)
 
 			else:
 				context_dict = {

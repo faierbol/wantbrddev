@@ -7,6 +7,15 @@
 
 {% block meta_description %}View, discuss and share {{ itemconx.item.item_name }} and other items on Wantbrd.  Create your own wish list and share with friends and family. Take the guessing out of giving!{% endblock %}
 
+{% block extrameta %}
+	<meta name="twitter:site" content="@wantbrd" />
+	<!-- <meta name="twitter:creator" content="@nickbilton" /> -->
+	<meta property="og:url" content="https://www.wantbrd.com/b/{{item_to_tweet.board.user.username}}/{{item_to_tweet.board.slug}}/{{item_to_tweet.id}}/{{item_to_tweet.slug}}" />
+	<meta property="og:title" content="{{ itemconx.item.item_name }} @ wantbrd.com" />
+	<meta property="og:description" content="{{ itemconx.item_desc }}" />
+	<meta property="og:image" content="{{itemconx.image.url}}" />
+{% endblock %}
+
 {% block extra-css %}
 	<link type="text/css" href="{% static 'css/macy.css' %}" rel="stylesheet" />
 	<link rel="stylesheet" type="text/css" href="{% static 'fluent_comments/css/ajaxcomments.css' %}" />	
@@ -145,6 +154,7 @@
 				{% endif %}
 
 			    <a href="{{ itemconx.purchase_url }}" class="btn orange large" target="_blank" rel="nofollow">View details</a>
+			    
 
 			    {% if itemconx.item_status == 'GOT' %}
 			    	<div class="itemReview">

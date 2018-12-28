@@ -7,6 +7,7 @@ app_name = 'b'
 urlpatterns = [	
 	path('my_boards/edit/<board_id>', views.edit_board, name='edit_board'),
 	path('my_boards/edit/<board_id>/add_item', views.add_item, name='add_item'),
+	path('my_boards/edit/<board_id>/r/<itemadded>', views.edit_board, name='edit_board_added'),	
 	path('my_boards/edit/<board_id>/add_item/<itemconx_id>', views.add_existing_item, name='add_existing_item'),
 	path('my_boards/edit/<board_slug>/<itemconx_id>/<item_slug>', views.edit_item, name='edit_item'),	
 	path('like_board/', views.like_board, name='like_board'),

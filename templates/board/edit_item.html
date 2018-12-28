@@ -95,7 +95,9 @@
                         {{ form.active }}
             			<label class="switch" for="itemactive"></label>
                         {{ form.rating }}
-                        <button class="grey large" name="updateitem" id="updateitem" value="1">Update item</button>                    
+                        <div class="clearfix"></div>
+                        <button class="grey large" name="updateitem" id="updateitem" value="1">Update item</button>
+                        <a class="btn grey large" href="{% url 'b:edit_board' itemconx.board.id %}">Go back</a>
 
     	        	</div>
             	</form>

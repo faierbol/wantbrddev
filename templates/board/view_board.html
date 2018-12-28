@@ -585,6 +585,32 @@ Check out {{ board.board_name }} by {{ board.user.username }}. Create your own w
     </div>
 </div>
 
+
+
+{% if item_to_tweet %}
+<div id="tweetModal" class="modal">
+
+    <h4>Share your new item</h4>
+    <h3>{{ item_to_tweet.item.item_name }}</h3>
+
+    {% thumbnail item_to_tweet.image "600x600" as im %}
+        <div style="position: relative;">
+            <img src="{{ im.url }}" alt="{{ itemconx.item.item_name }}">
+            {% if linkback %}
+                <div class="linkback"><a href="{% url 'u:profile' linkback %}">Image credit @{{ linkback }}</a></div>
+            {% endif %}
+        </div>
+    {% endthumbnail %}    
+
+    <a class="btn grey large" href="https://twitter.com/intent/tweet?url=https%3A%2F%2Fwww.wantbrd.com/b/{{item_to_tweet.board.user.username}}/{{item_to_tweet.board.slug}}/{{item_to_tweet.id}}/{{item_to_tweet.slug}}&via=want_brd&text=Check%20out%20this%20item%20I%20just%20added%20to%20my%20Wantbrd%3A%20&hashtags=wantbrd%2C{{ item_to_tweet.item.item_name }}" target="_blank">
+    <i class="fab fa-twitter"></i> Share via Twitter
+    </a>
+    
+
+</div>
+{% endif %}
+
+
 {% endblock %}
 
 {% block extra-js %}
@@ -728,5 +754,9 @@ Check out {{ board.board_name }} by {{ board.user.username }}. Create your own w
     </script>
     {% endfor %}
 {% endif %}
+
+<script type="text/javascript">
+    $('#tweetModal').modal();
+</script>
 
 {% endblock %}
