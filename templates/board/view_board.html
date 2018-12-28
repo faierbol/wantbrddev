@@ -593,7 +593,7 @@ Check out {{ board.board_name }} by {{ board.user.username }}. Create your own w
     <h4>Share your new item</h4>
     <h3>{{ item_to_tweet.item.item_name }}</h3>
 
-    {% thumbnail item_to_tweet.image "600x600" as im %}
+    {% thumbnail item_to_tweet.image "300x300" as im %}
         <div style="position: relative;">
             <img src="{{ im.url }}" alt="{{ itemconx.item.item_name }}">
             {% if linkback %}
