@@ -1065,7 +1065,7 @@ def search(request):
 
 	# users
 	user_results = False
-	user_results = User.objects.filter(username__icontains=search_term)
+	user_results = User.objects.filter(Q(username__icontains=search_term) | Q(first_name__icontains=search_term) | Q(last_name__icontains=search_term))
 	for user in user_results:
 		# set things up
 		user.itemcount = 0
@@ -1183,7 +1183,7 @@ def search_item(request):
 
 
 	# users
-	user_count = User.objects.filter(username__icontains=search_term).count()
+	user_count = user_results = User.objects.filter(Q(username__icontains=search_term) | Q(first_name__icontains=search_term) | Q(last_name__icontains=search_term)).count()
 
 	all_results = board_count + user_count + len(item_results)
 
@@ -1251,7 +1251,7 @@ def search_board(request):
 		board.itemconxs = ItemConnection.objects.filter(board=board, active=True)[:3]
 
 	# users
-	user_count = User.objects.filter(username__icontains=search_term).count()
+	user_count = user_results = User.objects.filter(Q(username__icontains=search_term) | Q(first_name__icontains=search_term) | Q(last_name__icontains=search_term)).count()
 
 	all_results = item_count + user_count + len(board_results)
 
@@ -1320,7 +1320,7 @@ def search_user(request):
 
 	# users
 	user_results = False
-	user_results = User.objects.filter(username__icontains=search_term)
+	user_results = User.objects.filter(Q(username__icontains=search_term) | Q(first_name__icontains=search_term) | Q(last_name__icontains=search_term))
 	for user in user_results:
 		# set things up
 		user.itemcount = 0
