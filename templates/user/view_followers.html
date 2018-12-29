@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 {% load staticfiles %}
 {% load thumbnail %}
+{% load random_numbers %}
 
 {% block title %}
 	View members following @{{ profile.user.username }} | Wantbrd 
@@ -25,7 +26,7 @@
                         {% if profile.picture %}
                         <div class="circle" style="background-image:url('{{ profile.picture.url }}');"></div>
                         {% else %}
-                        <div class="circle" style="background-image:url('{% static 'img/default-hero.png' %}');"></div>
+                        <div class="circle" style="background-image:url('{% static '' %}/img/default-hero-{% random_int 1 4%}.jpg');"></div>
                         {% endif %}
                     </a>
                     <div class="profileDetails">
@@ -131,7 +132,7 @@
                         {% if auser.creator.profile.picture %}
                             <div class="circle" style="background-image:url('{{ auser.creator.profile.picture.url }}');"></div>
                         {% else %}
-                            <div class="circle" style="background-image:url('{% static 'img/default-hero.png' %}');"></div>
+                            <div class="circle" style="background-image:url('{% static '' %}/img/default-hero-{% random_int 1 4%}.jpg');"></div>
                         {% endif %}
                     </a>
                     <div class="followInfo">

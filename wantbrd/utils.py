@@ -53,6 +53,7 @@ def get_trending_boards(request, period):
 		board.totalitems = board.get_item_count()
 		board.views = BoardView.objects.filter(board=board).count()
 		board.itemconxs = ItemConnection.objects.filter(board=board, active=True)[:5]
+		board.nohero = 'img/default-hero-1.jpg'
 		trending_boards.append(board)
 
 	return trending_boards

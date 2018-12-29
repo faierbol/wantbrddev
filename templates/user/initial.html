@@ -2,6 +2,7 @@
 {% load comments static %}
 {% load staticfiles %}
 {% load thumbnail %}
+{% load random_numbers %}
 
 {% block title %}
 	Get started with Wantbrd!
@@ -70,7 +71,7 @@
                     {% if user.profile.picture %}
                     <div class="circle" style="background-image:url('{{ user.profile.picture.url }}');"></div>
                     {% else %}
-                    <div class="circle" style="background-image:url('{% static 'img/default-hero.png' %}');"></div>
+                    <div class="circle" style="background-image:url('{% static '' %}/img/default-hero-{% random_int 1 4%}.jpg');"></div>
                     {% endif %}                    
                 </a>
 

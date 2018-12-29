@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 {% load staticfiles %}
 {% load thumbnail %}
+{% load random_numbers %}
 
 {% block title %}
 	Trending Boards | Wantbrd - Taking the guessing out of giving!
@@ -89,7 +90,7 @@
                     {% if board.hero %}
                     <a class="trendingBoardHero" style="background-image:url('{{ board.hero.url }}');" href="{% url 'b:view_board' board.user.username board.slug %}">
                     {% else %}    
-                    <a class="trendingBoardHero" style="background-image:url('{% static 'img/default-hero.png' %}');" href="{% url 'b:view_board' board.user.username board.slug %}">
+                    <a class="trendingBoardHero" style="background-image:url('{% static '' %}/img/default-hero-{% random_int 1 4%}.jpg');" href="{% url 'b:view_board' board.user.username board.slug %}">
                     {% endif %}
 
                         <div class="trendingBoardMeta">
@@ -115,7 +116,7 @@
                                 {% if board.user.profile.picture %}
                                     <div class="circle" style="background-image:url('{{ board.user.profile.picture.url }}');"></div>
                                 {% else %}
-                                    <div class="circle" style="background-image:url('{% static 'img/default-hero.png' %}');"></div>
+                                    <div class="circle" style="background-image:url('{% static '' %}/img/default-hero-{% random_int 1 4%}.jpg');"></div>
                                 {% endif %}
                             </div>
                             <div class="trendingUserNames">

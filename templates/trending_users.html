@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 {% load staticfiles %}
 {% load thumbnail %}
+{% load random_numbers %}
 
 {% block title %}
 	Trending Users | Wantbrd - Taking the guessing out of giving!
@@ -94,7 +95,7 @@
                                 {% if user.profile.picture %}
                                 <div class="circle" style="background-image:url('{{ user.profile.picture.url }}');"></div>
                                 {% else %}
-                                <div class="circle" style="background-image:url('{% static 'img/default-hero.png' %}');"></div>
+                                <div class="circle" style="background-image:url('{% static '' %}/img/default-hero-{% random_int 1 4%}.jpg');"></div>
                                 {% endif %}
                             </div>
                             <div class="trendingUserNames">

@@ -174,7 +174,7 @@ STATICFILES_DIRS = [STATIC_DIR, ]
 # url definition for static files
 
 # ----------- ENABLE BELOW FOR LOCAL -----------
-# STATIC_URL = '/static/'
+#STATIC_URL = '/static/'
 # ----------- ENABLE ABOVE FOR LOCAL -----------
 
 STATIC_ROOT = os.path.normpath(os.path.join(BASE_DIR, 'staticfiles'))
