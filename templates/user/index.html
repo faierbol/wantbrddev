@@ -26,7 +26,7 @@
                         {% if profile.picture %}
                         <div class="circle" style="background-image:url('{{ profile.picture.url }}');"></div>
                         {% else %}
-                        <div class="circle" style="background-image:url('{% static '' %}/img/default-hero-{% random_int 1 4%}.jpg');"></div>
+                        <div class="circle" style="background-image:url('{% static '' %}img/default-hero-{% random_int 1 4%}.jpg');"></div>
                         {% endif %}
                     </div>
                     <div class="profileDetails">
@@ -212,7 +212,7 @@
                         {% if board.hero %}
                         <div class="profileBoardHero" style="background-image:url('{{ board.hero.url }}')">
                         {% else %}
-                        <div class="profileBoardHero" style="background-image:url('{% static '' %}/img/default-hero-{% random_int 1 4%}.jpg')">
+                        <div class="profileBoardHero" style="background-image:url('{% static '' %}img/default-hero-{% random_int 1 4%}.jpg')">
                         {% endif %}
 
                         </div>
