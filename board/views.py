@@ -58,9 +58,19 @@ def home(request):
 	template = 'index.html'
 	hot_items = []
 
+	trending_items = get_trending_items(request,365)
+	trending_users = get_trending_users(request,365)
+	trending_boards = get_trending_boards(request,365)
+	recommended_boards = get_recommended_boards(request)
 
+	mixed = list(trending_boards) + list(trending_items) + list(trending_users) + list(recommended_boards)
+	random.shuffle(mixed)	
+	for item in mixed:
+		if item not in hot_items:
+			hot_items.append(item)
 
 	context_dict = {
+		'hot_items':hot_items,
 	}
 
 	return render(request, template, context_dict)
