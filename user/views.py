@@ -104,7 +104,7 @@ def my_home(request):
 	boards = Board.objects.filter(user=user.id).exclude(slug='your-saved-items')
 	no_items = 0
 	
-	# raverse the boards 
+	# traverse the boards 
 	for board in boards:
 		board.items = []		
 		# get the tags for each board
@@ -174,7 +174,7 @@ def my_home(request):
 			item.is_saved = ItemConnection.objects.filter(pk=item.id, board=user_saved_board.id).exists()
 			itemconx_obj.append(item)
 
-	# get all items with tags i follow
+	# get all items with tags I follow
 	user_tags = TagFollows.objects.filter(user=request.user)
 	for tag in user_tags:
 		matching_items = ItemConnection.objects.filter(tags__name__in=[tag])
@@ -182,7 +182,7 @@ def my_home(request):
 			itemconx_obj.append(item)
 
 	page = request.GET.get('page',1)
-	paginator = Paginator(itemconx_obj,8)
+	paginator = Paginator(itemconx_obj,4)
 
 	try:
 		feed = paginator.page(page)

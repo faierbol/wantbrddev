@@ -3,6 +3,7 @@ from django.contrib import messages
 from django.template import RequestContext
 from django.shortcuts import render, redirect, get_object_or_404
 from django.core.files.storage import FileSystemStorage
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.db.models import Q
 from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.auth.models import User
@@ -68,8 +69,18 @@ def home(request):
 		if item not in hot_items:
 			hot_items.append(item)
 
+	page = request.GET.get('page',1)
+	paginator = Paginator(hot_items,10)
+
+	try:
+		feed = paginator.page(page)
+	except PageNotAnInteger:
+		feed = paginator.page(1)
+	except EmptyPage:
+		feed = paginator.page(paginator.num_pages)
+
 	context_dict = {
-		'hot_items':hot_items,
+		'hot_items':feed,
 	}
 
 	return render(request, template, context_dict)

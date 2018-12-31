@@ -605,13 +605,13 @@ HOME
         text-transform: capitalize;
         color: #121212
     }
-    #homeBoardItems {
+    #homeBoardItems, .grid {
         margin-top:25px;
     }
-    #homeBoardItems .trendingUserUser .trendingUserPic {
+    #homeBoardItems .trendingUserUser .trendingUserPic, .grid .trendingUserUser .trendingUserPic {
         top:50px;
     }
-    #homeBoardItems .trendingBoard .trendingUserPic {
+    #homeBoardItems .trendingBoard .trendingUserPic, .grid .trendingBoard .trendingUserPic {
         top:65px;
     }
     .featBox {
@@ -651,7 +651,7 @@ HOME
         background:rgba(255,255,255,1);
         color:#000;
     }
-    #homeBoardItems img {        
+    #homeBoardItems img, .grid img {        
         width:100%;
     }
 
@@ -3283,6 +3283,15 @@ COLLECTIONS
 /* ---------------- 
 MISC
 -----------------*/
+.grid__item {
+    width: 31%;
+    margin-right: 3.5%;
+    margin-bottom:3.5%;
+}
+.grid__item:nth-child(3n){
+    margin-right: 0;
+}
+
 u.tooLong {
     text-decoration: none;
     font-size: 1.2rem;
@@ -4351,6 +4360,15 @@ footer {
     .profileFollows .followCard:nth-child(2n+1){
         clear: both;
     }
+    .grid__item {
+        width: 48.25%;
+    }
+    .grid__item:nth-child(3n){
+        margin-right: 3.5%;
+    }
+    .grid__item:nth-child(2n){
+        margin-right: 0;
+    }
 }
 
 @media screen and (max-width: 900px) {
@@ -4765,6 +4783,12 @@ footer {
     }
     .influencerLink, .blogLink {
         display: none;
+    }
+    .grid__item {
+        width: 100%;
+    }
+    .grid__item:nth-child(3n){
+        margin-right: 0;
     }
 }
 

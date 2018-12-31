@@ -59,9 +59,9 @@
         </div>
 
         
-        <div class="grid">
+        <div id="homeBoardItems">  
 
-            <div class="grid__item featBox whatIsWantbrdBox">
+            <div class="featBox whatIsWantbrdBox">
                 <div class="whatIsInner">
                     <strong>What is Wantbrd?</strong>
 
@@ -81,7 +81,7 @@
                 <!-- ### TRENDING BOARDS ### -->
                 {% if hot.board_name and not hot.recommended %}
 
-                    <div class="grid__item featBox trendingBoard">
+                    <div class="featBox trendingBoard">
                         <div class="trendingTop clearfix">
                             <strong>Trending Board</strong>
                             <div class="share-link trendingUserShare">
@@ -114,9 +114,9 @@
                         </div>
 
                         {% if hot.hero %}
-                        <a class="trendingBoardHero" style="background-image:url('{{ hot.hero.url }}');" href="{% url 'b:view_board' hot.user.username hot.slug %}">
+                        <a class="trendingBoardHero lazy" data-src="{{ hot.hero.url }}" href="{% url 'b:view_board' hot.user.username hot.slug %}">
                         {% else %}    
-                        <a class="trendingBoardHero" style="background-image:url('{% static '' %}img/default-hero-{% random_int 1 4%}.jpg');" href="{% url 'b:view_board' hot.user.username hot.slug %}">
+                        <a class="trendingBoardHero lazy" data-src="{% static '' %}img/default-hero-{% random_int 1 4%}.jpg" href="{% url 'b:view_board' hot.user.username hot.slug %}">
                         {% endif %}
 
                             <div class="trendingBoardMeta">
@@ -126,7 +126,7 @@
                         <div class="trendingItems clearfix">
                             {% for itemconx in hot.itemconxs %}
                                 {% thumbnail itemconx.image "300x300" as im %}
-                                    <a style="background-image:url('{{ im.url }}');" href="{% url 'b:view_item' hot.user hot.slug itemconx.id itemconx.slug %}"></a>
+                                    <a class="lazy" data-src="{{ im.url }}" href="{% url 'b:view_item' hot.user hot.slug itemconx.id itemconx.slug %}"></a>
                                 {% endthumbnail %}                              
                             {% endfor %}                                
 
@@ -140,9 +140,9 @@
                             <div class="trendingUserUserWrap clearfix">
                                 <div class="trendingUserPic">
                                     {% if hot.user.profile.picture %}
-                                        <div class="circle" style="background-image:url('{{ hot.user.profile.picture.url }}');"></div>
+                                        <div class="circle lazy" data-src="{{ hot.user.profile.picture.url }}"></div>
                                     {% else %}
-                                        <div class="circle" style="background-image:url('{% static '' %}img/default-hero-{% random_int 1 4%}.jpg');"></div>
+                                        <div class="circle" data-src="{% static '' %}img/default-hero-{% random_int 1 4%}.jpg"></div>
                                     {% endif %}
                                 </div>
                                 <div class="trendingUserNames">
@@ -159,7 +159,7 @@
 
                 <!-- ### TRENDING USERS ### -->
                 {% elif hot.username %}
-                    <div class="grid__item featBox trendingUser">
+                    <div class="featBox trendingUser">
                         <div class="trendingTop clearfix">
                             <strong>Trending User</strong>
                             <div class="share-link trendingUserShare">
@@ -194,9 +194,9 @@
                             <div class="trendingUserUserWrap clearfix">
                                 <div class="trendingUserPic">
                                     {% if hot.profile.picture %}
-                                    <div class="circle" style="background-image:url('{{ hot.profile.picture.url }}');"></div>
+                                    <div class="circle lazy" data-src="{{ hot.profile.picture.url }}"></div>
                                     {% else %}
-                                    <div class="circle" style="background-image:url('{% static '' %}img/default-hero-{% random_int 1 4%}.jpg');"></div>
+                                    <div class="circle lazy" data-src="{% static '' %}img/default-hero-{% random_int 1 4%}.jpg"></div>
                                     {% endif %}
                                 </div>
                                 <div class="trendingUserNames">
@@ -206,12 +206,12 @@
                             </div>
                         </a>
                         
-                        <a class="trendingUserHero" href="{% url 'u:profile' hot.username  %}" style="background-image:url('{% static 'img/profile-hero.jpg' %}')"></a>
+                        <a class="lazy trendingUserHero" href="{% url 'u:profile' hot.username  %}" data-src="{% static 'img/profile-hero.jpg' %"></a>
 
                         <div class="trendingItems clearfix">
                             {% for item in hot.items %}
                                 {% thumbnail item.image "300x300" as im %}
-                                    <a style="background-image:url('{{ im.url }}');" href="{% url 'b:view_item' hot.username item.board.slug item.id item.slug %}"></a>
+                                    <a class="lazy" data-src="{{ im.url }}" href="{% url 'b:view_item' hot.username item.board.slug item.id item.slug %}"></a>
                                 {% endthumbnail %}
                             {% endfor %}
 
@@ -228,7 +228,7 @@
                     </div>
 
                 {% elif hot.item %}
-                    <div class="grid__item featBox trendingItem">
+                    <div class="featBox trendingItem">
                         <div class="trendingTop clearfix">
                             <strong>Trending Item</strong>
                             <div class="share-link trendingUserShare">
@@ -261,7 +261,7 @@
                         </div>
                         <div class="trendingItemItem">
                             {% thumbnail hot.image "300x300" as im %}
-                                <a href="{% url 'b:view_item' hot.board.user hot.board.slug hot.id hot.slug %}"><img src="{{ im.url }}" alt="{{ hot.item.item_name }}"></a>
+                                <a href="{% url 'b:view_item' hot.board.user hot.board.slug hot.id hot.slug %}"><img data-src="{{ im.url }}" alt="{{ hot.item.item_name }}" class="lazy"></a>
                             {% endthumbnail %}
                         </div>
                         <div class="trendingItemName">
@@ -305,15 +305,15 @@
 
                 {% elif hot.recommended %}
 
-                    <div class="grid__item featBox recommendedBoard">
+                    <div class="featBox recommendedBoard">
                         <div class="featOrangeHead">
                             <strong>Wantbrd Recommended</strong>
                             <a href="{% url 'b:view_board' hot.user.username hot.slug %}">{{ hot.board_name }}</a>
                         </div>                        
                         {% if hot.hero %}
-                            <div class="recommendedImage" style="background-image:url('{{ hot.hero.url }}');"></div>
+                            <div class="recommendedImage lazy" data-src="{{ hot.hero.url }}"></div>
                         {% else %}
-                            <div class="recommendedImage" style="background-image:url('{% static '' %}img/default-hero-{% random_int 1 4%}.jpg');"></div>
+                            <div class="recommendedImage" data-src="{% static '' %}img/default-hero-{% random_int 1 4%}.jpg"></div>
                         {% endif %}
                         <div class="recommendedText">
                             <p>{{ hot.description|truncatechars:75 }}</p>
@@ -333,7 +333,7 @@
 
             <!-- feat group -->
 
-<!--             <div class="grid__item featBox recommendedBoard group">
+<!--             <div class="featBox recommendedBoard group">
                 <div class="featOrangeHead">
                     <strong>Featured Group</strong>
                     <a href="#">#Resorts</a>
@@ -349,19 +349,6 @@
             </div> -->
 
         </div>
-
-        {% if hot_items.has_other_pages %}
-            {% if hot_items.has_next %}
-              <a href="?page={{ hot_items.next_page_number }}" class="next">&raquo;</a>
-            {% endif %}
-        {% endif %}
-
-<!--         <div class="loading" style="display: block;">
-            <div class="dot dot1"></div>
-            <div class="dot dot2"></div>
-            <div class="dot dot3"></div>
-            <div class="dot dot4"></div>
-        </div> -->
 
 
         <div class="homeIntro">
@@ -406,62 +393,83 @@
 {% endblock %}
 
 {% block extra-js %}
+<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery.lazy/1.7.9/jquery.lazy.min.js"></script>
 <script src="{% static 'js/slick.min.js' %}" type="text/javascript"></script>
+<script src="{% static 'js/macy.js' %}" type="text/javascript"></script>
 <script type="text/javascript" src="{% static 'js/ajaxactions.js' %}"></script>
-<script src="https://unpkg.com/infinite-scroll@3/dist/infinite-scroll.pkgd.min.js"></script>
-<script src="https://unpkg.com/packery@2/dist/packery.pkgd.js"></script>
 
-<script type="text/javascript">
+<script>
 
-    $('.homeSlider').slick({
-        centerMode: true,
-        arrows:false,
-        centerPadding: '200px',
-        slidesToShow: 1,
-        autoplay: false,
-        dots: true,            
-        responsive: [
-            {
-              breakpoint: 1200,
-              settings: {
-                centerPadding: '0px',
-              }
-            },
-        ],
-    });
-    $('.slickRight').click(function(){
-        $('.homeSlider').slick('slickPrev');
-    })
-    $('.slickLeft').click(function(){
-        $('.homeSlider').slick('slickNext');
-    })
-    $('.homeSliderMobile').slick({
-        centerMode: true,
-        arrows:false,
-        centerPadding: '200px',
-        slidesToShow: 1,
-        autoplay: false,
-        dots: true,            
-        responsive: [
-            {
-              breakpoint: 1200,
-              settings: {
-                centerPadding: '0px',
-              }
-            },
-        ],
+    $(function() {
+        $('.lazy').lazy({
+          effect: "fadeIn",
+          effectTime: 2000,
+          threshold: 0
+        });
     });
 
-    var pckry = new Packery( '.grid', {   
-        itemSelector: '.grid__item', 
+    var macy_instance = new Macy({
+        container: '#homeBoardItems',
+        trueOrder: true,
+        waitForImages: false,
+        useOwnImageLoader: false,
+        debug: true,
+        mobileFirst: true,
+        columns: 1,
+        margin: 24,
+        breakAt: {
+            860: 3,
+            520: 2,
+            320: 1
+        }
     });
 
-    var infScroll = new InfiniteScroll( '.grid', {
-        append: '.grid__item',
-        path: '.next',
-        history: true,
-        outlayer: pckry,
-    });
+    macy_instance.runOnImageLoad(function () { 
+        console.log('every image');
+        macy_instance.recalculate(true);
+    }, true); 
 
+    $(document).ready(function(){
+        $('.homeSlider').slick({
+            centerMode: true,
+            arrows:false,
+            centerPadding: '200px',
+            slidesToShow: 1,
+            autoplay: false,
+            dots: true,            
+            responsive: [
+                {
+                  breakpoint: 1200,
+                  settings: {
+                    centerPadding: '0px',
+                  }
+                },
+            ],
+        });
+        $('.slickRight').click(function(){
+            $('.homeSlider').slick('slickPrev');
+        })
+
+        $('.slickLeft').click(function(){
+            $('.homeSlider').slick('slickNext');
+        })
+
+        $('.homeSliderMobile').slick({
+            centerMode: true,
+            arrows:false,
+            centerPadding: '200px',
+            slidesToShow: 1,
+            autoplay: false,
+            dots: true,            
+            responsive: [
+                {
+                  breakpoint: 1200,
+                  settings: {
+                    centerPadding: '0px',
+                  }
+                },
+            ],
+        });
+    });
 </script>
 {% endblock %}
