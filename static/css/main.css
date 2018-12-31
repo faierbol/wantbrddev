@@ -3283,13 +3283,15 @@ COLLECTIONS
 /* ---------------- 
 MISC
 -----------------*/
-.grid__item {
-    width: 31%;
-    margin-right: 3.5%;
-    margin-bottom:3.5%;
+
+.grid__item,
+.grid-sizer {
+  width: 29%; /* fallback if calc isn't supported */
+  width: calc( ( 100% - 10px * 2 ) / 3 );
 }
-.grid__item:nth-child(3n){
-    margin-right: 0;
+
+.gutter-sizer {
+  width: 10px;
 }
 
 u.tooLong {
@@ -4360,14 +4362,10 @@ footer {
     .profileFollows .followCard:nth-child(2n+1){
         clear: both;
     }
-    .grid__item {
-        width: 48.25%;
-    }
-    .grid__item:nth-child(3n){
-        margin-right: 3.5%;
-    }
-    .grid__item:nth-child(2n){
-        margin-right: 0;
+    .grid__item,
+    .grid-sizer {
+      width: 45%; /* fallback if calc isn't supported */
+      width: calc( ( 100% - 10px * 1 ) / 2 );
     }
 }
 
