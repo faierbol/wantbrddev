@@ -59,12 +59,9 @@
         </div>
 
         
-        <div class="grid">
+        <div id="homeBoardItems">
 
-            <div class="grid-sizer"></div>
-            <div class="gutter-sizer"></div>
-
-            <div class="grid__item featBox whatIsWantbrdBox">
+            <div class="featBox whatIsWantbrdBox">
                 <div class="whatIsInner">
                     <strong>What is Wantbrd?</strong>
 
@@ -84,7 +81,7 @@
                 <!-- ### TRENDING BOARDS ### -->
                 {% if hot.board_name and not hot.recommended %}
 
-                    <div class="grid__item featBox trendingBoard">
+                    <div class="featBox trendingBoard">
                         <div class="trendingTop clearfix">
                             <strong>Trending Board</strong>
                             <div class="share-link trendingUserShare">
@@ -162,7 +159,7 @@
 
                 <!-- ### TRENDING USERS ### -->
                 {% elif hot.username %}
-                    <div class="grid__item featBox trendingUser">
+                    <div class="featBox trendingUser">
                         <div class="trendingTop clearfix">
                             <strong>Trending User</strong>
                             <div class="share-link trendingUserShare">
@@ -231,7 +228,7 @@
                     </div>
 
                 {% elif hot.item %}
-                    <div class="grid__item featBox trendingItem">
+                    <div class="featBox trendingItem">
                         <div class="trendingTop clearfix">
                             <strong>Trending Item</strong>
                             <div class="share-link trendingUserShare">
@@ -308,7 +305,7 @@
 
                 {% elif hot.recommended %}
 
-                    <div class="grid__item featBox recommendedBoard">
+                    <div class="featBox recommendedBoard">
                         <div class="featOrangeHead">
                             <strong>Wantbrd Recommended</strong>
                             <a href="{% url 'b:view_board' hot.user.username hot.slug %}">{{ hot.board_name }}</a>
@@ -336,7 +333,7 @@
 
             <!-- feat group -->
 
-<!--             <div class="grid__item featBox recommendedBoard group">
+<!--             <div class="featBox recommendedBoard group">
                 <div class="featOrangeHead">
                     <strong>Featured Group</strong>
                     <a href="#">#Resorts</a>
@@ -411,11 +408,24 @@
 {% block extra-js %}
 <script src="{% static 'js/slick.min.js' %}" type="text/javascript"></script>
 <script type="text/javascript" src="{% static 'js/ajaxactions.js' %}"></script>
-<script src="https://unpkg.com/infinite-scroll@3/dist/infinite-scroll.pkgd.min.js"></script>
-<script src="https://unpkg.com/packery@2/dist/packery.pkgd.js"></script>
+<script src="{% static 'js/macy.js' %}" type="text/javascript"></script>
 
 <script type="text/javascript">
-
+    var masonry = new Macy({
+        container: '#homeBoardItems',
+        trueOrder: false,
+        waitForImages: false,
+        useOwnImageLoader: false,
+        debug: true,
+        mobileFirst: true,
+        columns: 1,
+        margin: 24,
+        breakAt: {
+            860: 3,
+            520: 2,
+            320: 1
+        }
+    });
     $('.homeSlider').slick({
         centerMode: true,
         arrows:false,
@@ -453,18 +463,6 @@
               }
             },
         ],
-    });
-
-    var pckry = new Packery( '.grid', {   
-        itemSelector: '.grid__item', 
-        gutter: '.gutter-sizer',
-    });
-
-    var infScroll = new InfiniteScroll( '.grid', {
-        append: '.grid__item',
-        path: '.next',
-        history: true,
-        outlayer: pckry,
     });
 
 </script>

@@ -69,18 +69,8 @@ def home(request):
 		if item not in hot_items:
 			hot_items.append(item)
 
-	page = request.GET.get('page',1)
-	paginator = Paginator(hot_items,10)
-
-	try:
-		feed = paginator.page(page)
-	except PageNotAnInteger:
-		feed = paginator.page(1)
-	except EmptyPage:
-		feed = paginator.page(paginator.num_pages)
-
 	context_dict = {
-		'hot_items':feed,
+		'hot_items':hot_items,
 	}
 
 	return render(request, template, context_dict)
