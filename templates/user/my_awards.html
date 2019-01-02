@@ -25,7 +25,7 @@
 						<div class="theBadge on"><span><i class="fal fa-award"></i></span></div>
 					</div>
 					<div class="clearfix"></div>
-					<strong>Woohoo!</strong> You've completed your profile.
+					<strong>Great!</strong> You've completed your profile.
 				</div>
 				{% endif %}
 			</div>
@@ -43,7 +43,127 @@
 
 				<h3>Other Awards</h3>
 
-				<button class="accordion">Followers</button>
+				<!-- No. boards -->
+				<button class="accordion">Boards ({{ board_count }})</button>
+
+				<div class="acpanel"><div class="acInner">
+
+					<div class="anAward">										
+						<div class="theBadge {% if board_count >= 1%}on{% endif %}"><span><i class="fal fa-award"></i></span></div>
+						<div class="awardText">
+							<strong>Starter</strong>
+							<h4>Create 1 board</h4>
+						</div>
+					</div>
+
+					<div class="anAward">										
+						<div class="theBadge {% if board_count >= 5%}on{% endif %}"><span><i class="fal fa-award"></i></span></div>
+						<div class="awardText">
+							<strong>Novice</strong>
+							<h4>Create 5 boards</h4>
+						</div>
+					</div>
+
+					<div class="anAward">										
+						<div class="theBadge {% if board_count >= 10%}on{% endif %}"><span><i class="fal fa-award"></i></span></div>
+						<div class="awardText">
+							<strong>Collector</strong>
+							<h4>Create 10 boards</h4>
+						</div>
+					</div>
+
+					<div class="anAward">										
+						<div class="theBadge {% if board_count >= 20%}on{% endif %}"><span><i class="fal fa-award"></i></span></div>
+						<div class="awardText">
+							<strong>Cultivator</strong>
+							<h4>Create 20 boards</h4>
+						</div>
+					</div>
+
+					<div class="anAward">										
+						<div class="theBadge {% if board_count >= 50%}on{% endif %}"><span><i class="fal fa-award"></i></span></div>
+						<div class="awardText">
+							<strong>Collator</strong>
+							<h4>Create 50 boards</h4>
+						</div>
+					</div>
+
+					<div class="anAward">										
+						<div class="theBadge {% if board_count >= 100%}on{% endif %}"><span><i class="fal fa-award"></i></span></div>
+						<div class="awardText">
+							<strong>Pro</strong>
+							<h4>Create 100 boards</h4>
+						</div>
+					</div>
+
+				</div></div>
+
+				<!-- No. Items -->
+
+				<button class="accordion">Items ({{ item_count }})</button>
+
+				<div class="acpanel"><div class="acInner">
+
+					<div class="anAward">										
+						<div class="theBadge {% if item_count >= 1%}on{% endif %}"><span><i class="fal fa-award"></i></span></div>
+						<div class="awardText">
+							<strong>Newcomer</strong>
+							<h4>Post 1 item</h4>
+						</div>
+					</div>
+
+					<div class="anAward">										
+						<div class="theBadge {% if item_count >= 5%}on{% endif %}"><span><i class="fal fa-award"></i></span></div>
+						<div class="awardText">
+							<strong>Window Shopper</strong>
+							<h4>Post 5 items</h4>
+						</div>
+					</div>
+
+					<div class="anAward">										
+						<div class="theBadge {% if item_count >= 10%}on{% endif %}"><span><i class="fal fa-award"></i></span></div>
+						<div class="awardText">
+							<strong>Curator</strong>
+							<h4>Post 10 items</h4>
+						</div>
+					</div>
+
+					<div class="anAward">										
+						<div class="theBadge {% if item_count >= 20%}on{% endif %}"><span><i class="fal fa-award"></i></span></div>
+						<div class="awardText">
+							<strong>Keen-eyed</strong>
+							<h4>Post 20 items</h4>
+						</div>
+					</div>
+
+					<div class="anAward">										
+						<div class="theBadge {% if item_count >= 50%}on{% endif %}"><span><i class="fal fa-award"></i></span></div>
+						<div class="awardText">
+							<strong>Shopaholic</strong>
+							<h4>Post 50 items</h4>
+						</div>
+					</div>
+
+					<div class="anAward">										
+						<div class="theBadge {% if item_count >= 250%}on{% endif %}"><span><i class="fal fa-award"></i></span></div>
+						<div class="awardText">
+							<strong>Aficionado</strong>
+							<h4>Post 250 items</h4>
+						</div>
+					</div>
+
+					<div class="anAward">										
+						<div class="theBadge {% if item_count >= 1000%}on{% endif %}"><span><i class="fal fa-award"></i></span></div>
+						<div class="awardText">
+							<strong>Connoisseur</strong>
+							<h4>Post 1000 items</h4>
+						</div>
+					</div>
+
+				</div></div>
+
+				<!-- No. Followers -->
+				<button class="accordion">Followers ({{ followers }})</button>
 
 				<div class="acpanel"><div class="acInner">
 
@@ -97,14 +217,15 @@
 
 				</div></div>
 
-				<button class="accordion">Following</button>
+				<!-- No. following -->
+				<button class="accordion">Following ({{ following }})</button>
 
 				<div class="acpanel"><div class="acInner">
 
 					<div class="anAward">										
 						<div class="theBadge {% if following >= 10%}on{% endif %}"><span><i class="fal fa-award"></i></span></div>
 						<div class="awardText">
-							<strong>Social</strong>
+							<strong>Friendly</strong>
 							<h4>Follow 10 users</h4>
 						</div>
 					</div>
@@ -112,7 +233,7 @@
 					<div class="anAward">										
 						<div class="theBadge {% if following >= 100 %}on{% endif %}"><span><i class="fal fa-award"></i></span></div>
 						<div class="awardText">
-							<strong>Cool Kid</strong>
+							<strong>Sociable</strong>
 							<h4>Follow 100 users</h4>
 						</div>
 					</div>
@@ -120,7 +241,7 @@
 					<div class="anAward">										
 						<div class="theBadge {% if following >= 300 %}on{% endif %}"><span><i class="fal fa-award"></i></span></div>
 						<div class="awardText">
-							<strong>Popular</strong>
+							<strong>Chummy</strong>
 							<h4>Follow 300 users</h4>
 						</div>
 					</div>
@@ -128,7 +249,7 @@
 					<div class="anAward">										
 						<div class="theBadge {% if following >= 1000 %}on{% endif %}"><span><i class="fal fa-award"></i></span></div>
 						<div class="awardText">
-							<strong>Micro Influencer</strong>
+							<strong>Supportive</strong>
 							<h4>Follow 1000 users</h4>
 						</div>
 					</div>
@@ -136,7 +257,7 @@
 					<div class="anAward">										
 						<div class="theBadge {% if following >= 10000 %}on{% endif %}"><span><i class="fal fa-award"></i></span></div>
 						<div class="awardText">
-							<strong>Influencer</strong>
+							<strong>Outgoing</strong>
 							<h4>Follow 10,000 users</h4>
 						</div>
 					</div>
@@ -144,8 +265,176 @@
 					<div class="anAward">										
 						<div class="theBadge {% if following >= 100000 %}on{% endif %}"><span><i class="fal fa-award"></i></span></div>
 						<div class="awardText">
-							<strong>Pro</strong>
+							<strong>Community Builder</strong>
 							<h4>Follow 100,000 users</h4>
+						</div>
+					</div>
+
+				</div></div>
+
+				<!-- No. likes -->
+
+				<button class="accordion">Likes Given ({{ likes_given }})</button>
+
+				<div class="acpanel"><div class="acInner">
+
+					<div class="anAward">										
+						<div class="theBadge {% if likes_given >= 10%}on{% endif %}"><span><i class="fal fa-award"></i></span></div>
+						<div class="awardText">
+							<strong>Complementary</strong>
+							<h4>10 likes given</h4>
+						</div>
+					</div>
+
+					<div class="anAward">										
+						<div class="theBadge {% if likes_given >= 100 %}on{% endif %}"><span><i class="fal fa-award"></i></span></div>
+						<div class="awardText">
+							<strong>Appreciative</strong>
+							<h4>100 likes given</h4>
+						</div>
+					</div>
+
+					<div class="anAward">										
+						<div class="theBadge {% if likes_given >= 300 %}on{% endif %}"><span><i class="fal fa-award"></i></span></div>
+						<div class="awardText">
+							<strong>Supportive</strong>
+							<h4>300 likes given</h4>
+						</div>
+					</div>
+
+					<div class="anAward">										
+						<div class="theBadge {% if likes_given >= 1000 %}on{% endif %}"><span><i class="fal fa-award"></i></span></div>
+						<div class="awardText">
+							<strong>Uplifting</strong>
+							<h4>1000 likes given</h4>
+						</div>
+					</div>
+
+					<div class="anAward">										
+						<div class="theBadge {% if likes_given >= 10000 %}on{% endif %}"><span><i class="fal fa-award"></i></span></div>
+						<div class="awardText">
+							<strong>Positive Energy</strong>
+							<h4>10,000 likes given</h4>
+						</div>
+					</div>
+
+					<div class="anAward">										
+						<div class="theBadge {% if likes_given >= 100000 %}on{% endif %}"><span><i class="fal fa-award"></i></span></div>
+						<div class="awardText">
+							<strong>Cheerleader</strong>
+							<h4>100,000 likes given</h4>
+						</div>
+					</div>
+
+				</div></div>
+
+				<!-- No. likes -->
+
+				<button class="accordion">Likes Received ({{ likes_rec }})</button>
+
+				<div class="acpanel"><div class="acInner">
+
+					<div class="anAward">										
+						<div class="theBadge {% if likes_rec >= 10%}on{% endif %}"><span><i class="fal fa-award"></i></span></div>
+						<div class="awardText">
+							<strong>Valued</strong>
+							<h4>10 likes received</h4>
+						</div>
+					</div>
+
+					<div class="anAward">										
+						<div class="theBadge {% if likes_rec >= 100 %}on{% endif %}"><span><i class="fal fa-award"></i></span></div>
+						<div class="awardText">
+							<strong>Honored</strong>
+							<h4>100 likes received</h4>
+						</div>
+					</div>
+
+					<div class="anAward">										
+						<div class="theBadge {% if likes_rec >= 300 %}on{% endif %}"><span><i class="fal fa-award"></i></span></div>
+						<div class="awardText">
+							<strong>Admired</strong>
+							<h4>300 likes received</h4>
+						</div>
+					</div>
+
+					<div class="anAward">										
+						<div class="theBadge {% if likes_rec >= 1000 %}on{% endif %}"><span><i class="fal fa-award"></i></span></div>
+						<div class="awardText">
+							<strong>Respected</strong>
+							<h4>1000 likes received</h4>
+						</div>
+					</div>
+
+					<div class="anAward">										
+						<div class="theBadge {% if likes_rec >= 10000 %}on{% endif %}"><span><i class="fal fa-award"></i></span></div>
+						<div class="awardText">
+							<strong>Esteemed</strong>
+							<h4>10,000 likes received</h4>
+						</div>
+					</div>
+
+					<div class="anAward">										
+						<div class="theBadge {% if likes_rec >= 100000 %}on{% endif %}"><span><i class="fal fa-award"></i></span></div>
+						<div class="awardText">
+							<strong>Cherished</strong>
+							<h4>100,000 likes received</h4>
+						</div>
+					</div>
+
+				</div></div>
+
+				<!-- No. Reviews -->
+
+				<button class="accordion">Reviews ({{ reviews_count }})</button>
+
+				<div class="acpanel"><div class="acInner">
+
+					<div class="anAward">										
+						<div class="theBadge {% if reviews_count >= 1%}on{% endif %}"><span><i class="fal fa-award"></i></span></div>
+						<div class="awardText">
+							<strong>Critic</strong>
+							<h4>Post 1 review</h4>
+						</div>
+					</div>
+
+					<div class="anAward">										
+						<div class="theBadge {% if reviews_count >= 5%}on{% endif %}"><span><i class="fal fa-award"></i></span></div>
+						<div class="awardText">
+							<strong>Opiniated</strong>
+							<h4>Post 5 reviews</h4>
+						</div>
+					</div>
+
+					<div class="anAward">										
+						<div class="theBadge {% if reviews_count >= 10%}on{% endif %}"><span><i class="fal fa-award"></i></span></div>
+						<div class="awardText">
+							<strong>Tasteful</strong>
+							<h4>Post 10 reviews</h4>
+						</div>
+					</div>
+
+					<div class="anAward">										
+						<div class="theBadge {% if reviews_count >= 20%}on{% endif %}"><span><i class="fal fa-award"></i></span></div>
+						<div class="awardText">
+							<strong>Clued Up</strong>
+							<h4>Post 20 reviews</h4>
+						</div>
+					</div>
+
+					<div class="anAward">										
+						<div class="theBadge {% if reviews_count >= 50%}on{% endif %}"><span><i class="fal fa-award"></i></span></div>
+						<div class="awardText">
+							<strong>Discerning</strong>
+							<h4>Post 50 reviews</h4>
+						</div>
+					</div>
+
+					<div class="anAward">										
+						<div class="theBadge {% if reviews_count >= 100%}on{% endif %}"><span><i class="fal fa-award"></i></span></div>
+						<div class="awardText">
+							<strong>Expert</strong>
+							<h4>Post 100 reviews</h4>
 						</div>
 					</div>
 

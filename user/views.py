@@ -744,6 +744,27 @@ def my_awards(request):
 	# following
 	following = connections = profile.get_connections().count()
 
+	#boards, items & reviews 
+	boards = Board.objects.filter(user=request.user).exclude(slug='your-saved-items')
+	board_count = 0
+	item_count = 0
+	reviews_count = 0
+	for board in boards:
+		items = ItemConnection.objects.filter(board=board)
+		itemcount = items.count()
+		if itemcount > 0:
+			board_count += 1
+		item_count += itemcount
+		for item in items:
+			if item.review:
+				reviews_count += 1
+
+	#likes
+	likes_given = ItemLike.objects.filter(user = request.user).count()
+	likes_rec = ItemLike.objects.filter(item_conx__board__user = request.user).count()
+
+
+
 
 	context_dict = {
 		'user':user,
@@ -754,6 +775,11 @@ def my_awards(request):
 		'profileComplete': profilecomplete,
 		'followers':followers,
 		'following':following,
+		'board_count': board_count,
+		'item_count':item_count,
+		'reviews_count':reviews_count,
+		'likes_given':likes_given,
+		'likes_rec':likes_rec,
 	}
 
 	return render(request, template, context_dict)

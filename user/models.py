@@ -51,6 +51,8 @@ class Profile(models.Model):
     social_weibo = models.CharField(default='', max_length=500, blank=True)
     social_vk = models.CharField(default='', max_length=500, blank=True)
     login_count = models.IntegerField(default=0)
+    saved_count = models.IntegerField(default=0)
+    isaved_count = models.IntegerField(default=0)
 
 
     def __str__(self):
