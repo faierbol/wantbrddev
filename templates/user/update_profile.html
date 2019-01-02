@@ -28,7 +28,7 @@
 					    {% if request.user.profile.picture %}
 					    <div class="circle" style="background-image:url('{{ request.user.profile.picture.url }}');"></div>
 					    {% else %}
-					    <div class="circle" style="background-image:url('{% static '' %}img/default-hero-{% random_int 1 4%}.jpg');"></div>
+					    <div class="circle" style="background-image:url('{% static '' %}img/default-hero-{% random_int 1 4%}.webp');"></div>
 					    {% endif %}
 					</a>
 					<form method="POST" enctype="multipart/form-data">

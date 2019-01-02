@@ -116,7 +116,7 @@
                         {% if hot.hero %}
                         <a class="trendingBoardHero lazy" data-src="{{ hot.hero.url }}" href="{% url 'b:view_board' hot.user.username hot.slug %}">
                         {% else %}    
-                        <a class="trendingBoardHero lazy" data-src="{% static '' %}img/default-hero-{% random_int 1 4%}.jpg" href="{% url 'b:view_board' hot.user.username hot.slug %}">
+                        <a class="trendingBoardHero lazy" data-src="{% static '' %}img/default-hero-{% random_int 1 4%}.webp" href="{% url 'b:view_board' hot.user.username hot.slug %}">
                         {% endif %}
 
                             <div class="trendingBoardMeta">
@@ -142,7 +142,7 @@
                                     {% if hot.user.profile.picture %}
                                         <div class="circle lazy" data-src="{{ hot.user.profile.picture.url }}"></div>
                                     {% else %}
-                                        <div class="circle" data-src="{% static '' %}img/default-hero-{% random_int 1 4%}.jpg"></div>
+                                        <div class="circle" data-src="{% static '' %}img/default-hero-{% random_int 1 4%}.webp"></div>
                                     {% endif %}
                                 </div>
                                 <div class="trendingUserNames">
@@ -196,7 +196,7 @@
                                     {% if hot.profile.picture %}
                                     <div class="circle lazy" data-src="{{ hot.profile.picture.url }}"></div>
                                     {% else %}
-                                    <div class="circle lazy" data-src="{% static '' %}img/default-hero-{% random_int 1 4%}.jpg"></div>
+                                    <div class="circle lazy" data-src="{% static '' %}img/default-hero-{% random_int 1 4%}.webp"></div>
                                     {% endif %}
                                 </div>
                                 <div class="trendingUserNames">
@@ -313,7 +313,7 @@
                         {% if hot.hero %}
                             <div class="recommendedImage lazy" data-src="{{ hot.hero.url }}"></div>
                         {% else %}
-                            <div class="recommendedImage" data-src="{% static '' %}img/default-hero-{% random_int 1 4%}.jpg"></div>
+                            <div class="recommendedImage" data-src="{% static '' %}img/default-hero-{% random_int 1 4%}.webp"></div>
                         {% endif %}
                         <div class="recommendedText">
                             <p>{{ hot.description|truncatechars:75 }}</p>
