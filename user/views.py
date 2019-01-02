@@ -238,6 +238,8 @@ def signup(request):
 		form = SignUpForm(request.POST)
 		if form.is_valid():
 			user = form.save();
+			user.username = user.username.lower();
+			user.save();
 			login(request, user)
 			return redirect('u:home')
 	else:
@@ -426,6 +428,7 @@ def profile(request, username):
 	template = 'user/index.html'	
 
 	try:
+		username = username.lower()
 		user = get_object_or_404(User, username=username)
 		boards = Board.objects.filter(user=user.id).exclude()
 		the_boards = []
