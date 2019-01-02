@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 {% load staticfiles %}
 {% load random_numbers %}
+{% load compress %}
 
 <html class="no-js" lang="">
 
@@ -13,17 +14,23 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no, maximum-scale=1">
 	<link rel="manifest" href="site.webmanifest">
 	<link rel="apple-touch-icon" href="icon.png">
+    
     {% block extrameta %}{% endblock %}
-	<link href="{% static 'css/normalize.css' %}" rel="stylesheet">	
+
     <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.2.0/css/all.css"
     integrity="sha384-TXfwrfuHVznxCssTxWoPZjhcss/hp38gEOH8UPZG/JcXonvBQ6SlsIF49wUzsGno" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.css" />
     <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet" />
+
+    {% compress css %}
+	<link href="{% static 'css/normalize.css' %}" rel="stylesheet">	
     <link rel="stylesheet" href="{% static 'css/social-share-kit.css' %}" rel="stylesheet">
     <link href="{% static 'css/pnotify.custom.min.css' %}" rel="stylesheet"> 
     <link href="{% static 'css/slidein.css' %}" rel="stylesheet"> 
-	{% block extra-css %}{% endblock %}
-	<link href="{% static 'css/main.css' %}" rel="stylesheet">
+    <link href="{% static 'css/main.css' %}" rel="stylesheet">
+    {% endcompress %}
+	
+    {% block extra-css %}{% endblock %}
 
     <script>
         // GA
@@ -225,11 +232,12 @@
 <div class="md-overlay"></div>
 
 <!-- Constant JS -->
-<!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js" type="text/javascript"></script> -->
-<script src="{% static 'js/vendor/modernizr-3.5.0.min.js' %}" type="text/javascript"></script>
 <script src="https://code.jquery.com/jquery-3.2.1.min.js" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.js"></script>
+
+
+<script src="{% static 'js/vendor/modernizr-3.5.0.min.js' %}" type="text/javascript"></script>
 <script src="{% static 'js/jquery.matchHeight-min.js' %}" type="text/javascript"></script>
 <script src="{% static 'js/social-share-kit.min.js' %}" type="text/javascript"></script>
 <script src="{% static 'js/classie.js' %}" type="text/javascript"></script>

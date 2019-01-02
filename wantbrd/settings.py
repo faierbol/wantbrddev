@@ -62,6 +62,7 @@ INSTALLED_APPS = [
     'storages',
     'threadedcomments',
     'corsheaders',
+    'compressor',
 ]
 
 ### COMMENTS STUFF
@@ -174,7 +175,7 @@ STATICFILES_DIRS = [STATIC_DIR, ]
 # url definition for static files
 
 # ----------- ENABLE BELOW FOR LOCAL -----------
-# STATIC_URL = '/static/'
+#STATIC_URL = '/static/'
 # ----------- ENABLE ABOVE FOR LOCAL -----------
 
 STATIC_ROOT = os.path.normpath(os.path.join(BASE_DIR, 'staticfiles'))
@@ -199,6 +200,12 @@ STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 STATIC_URL = "https://%s/%s/" % (AWS_S3_CUSTOM_DOMAIN, AWS_LOCATION)
 SECURE_SSL_REDIRECT = True
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+COMPRESS_URL = STATIC_URL
+STATICFILES_FINDERS = (
+    'django.contrib.staticfiles.finders.FileSystemFinder',
+    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+    'compressor.finders.CompressorFinder'
+)
 # ----------- DISABLE ABOVE FOR LOCAL-----------
 
 DEFAULT_FILE_STORAGE = 'wantbrd.storage_backends.MediaStorage'  # <-- here is where we reference it
