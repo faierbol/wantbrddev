@@ -1538,6 +1538,9 @@ UPDATE ACCOUNT
         #agreeterms {
             margin:10px 0;
         }
+        .signupError {
+            margin-top:30px;
+        }
 
 
 /* ---------------- 

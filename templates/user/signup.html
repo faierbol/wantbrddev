@@ -15,6 +15,24 @@
 			<h2>Create an account</h2>
 			<p>Enter your details below to sign up and start creating your boards!</p>
 
+			{% if form.errors %}
+				<div class="signupError">
+			    {% for field in form %}
+			        {% for error in field.errors %}
+			            <div class="alert alert-danger">
+			                <strong>{{ error|escape }}</strong>
+			            </div>
+			        {% endfor %}
+			    {% endfor %}
+			    {% for error in form.non_field_errors %}
+			        <div class="alert alert-danger">
+			            <strong>{{ error|escape }}</strong>
+			        </div>
+			    {% endfor %}
+				</div>
+			{% endif %}
+
+
 			<form method="post" novalidate id="signupform">
 				{% csrf_token %}
 				<label>Username*</label>
