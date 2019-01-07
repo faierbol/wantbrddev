@@ -41,10 +41,36 @@ def error_500(request, exception):
 ##### HOME PAGE
 def home(request):
 
+	if request.method == "POST":
+
+		# like item
+		if 'likeitem' in request.POST:
+			itemconx_id = request.POST.get("itemconx_id")
+			like_item(itemconx_id, request.user)
+			return HttpResponseRedirect(request.path_info)
+
+		# unlike item
+		if 'unlikeitem' in request.POST:
+			itemconx_id = request.POST.get("itemconx_id")
+			unlike_item(itemconx_id, request.user)
+			return HttpResponseRedirect(request.path_info)
+
 	template = 'index.html'
+	hot_items = []
+
+	trending_items = get_trending_items(request,30)
+	trending_users = get_trending_users(request,30)
+	trending_boards = get_trending_boards(request,30)
+	recommended_boards = get_recommended_boards(request)
+
+	mixed = list(trending_boards) + list(trending_items) + list(trending_users) + list(recommended_boards)
+	random.shuffle(mixed)	
+	for item in mixed:
+		if item not in hot_items:
+			hot_items.append(item)
 
 	context_dict = {
-		
+		'hot_items':hot_items,
 	}
 
 	return render(request, template, context_dict)
