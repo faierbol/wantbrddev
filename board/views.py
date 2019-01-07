@@ -63,7 +63,7 @@ def home(request):
 	trending_boards = get_trending_boards(request,7)
 	# recommended_boards = get_recommended_boards(request)
 
-	mixed = list(trending_boards) + list(trending_items) + list(trending_users) + list(recommended_boards)
+	mixed = list(trending_boards) + list(trending_items) + list(trending_users)
 	random.shuffle(mixed)	
 	for item in mixed:
 		if item not in hot_items:
