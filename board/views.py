@@ -58,9 +58,9 @@ def home(request):
 	template = 'index.html'
 	hot_items = []
 
-	trending_items = get_trending_items(request,7)
-	trending_users = get_trending_users(request,7)
-	trending_boards = get_trending_boards(request,7)
+	trending_items = get_trending_items(request,30)
+	trending_users = get_trending_users(request,30)
+	trending_boards = get_trending_boards(request,30)
 	# recommended_boards = get_recommended_boards(request)
 
 	mixed = list(trending_boards) + list(trending_items) + list(trending_users)
