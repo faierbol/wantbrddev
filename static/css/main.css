@@ -539,6 +539,9 @@ header#main.shrink {
 /* ---------------- 
 HOME
 -----------------*/
+.homeSlider { display: none; }
+.homeSlider.slick-initialized { display: block; }
+
 .homeBanner.mobile {
     display: none;
 }
