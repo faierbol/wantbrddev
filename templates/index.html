@@ -61,26 +61,11 @@
         
         <div id="homeBoardItems">
 
-            <div class="featBox whatIsWantbrdBox">
-                <div class="whatIsInner">
-                    <strong>What is Wantbrd?</strong>
-
-                    Wantbrd is a place for you to share the things you want and recommend with your friends, family and followers.
-
-                    {% if request.user.is_authenticated %}
-                    <a class="btn" href="{% url 'u:home' %}">Create your wantbrd now</a>
-                    {% else %}
-                    <a class="btn" href="#loginModal" rel="modal:open">Create your wantbrd now</a>
-                    {% endif %}
-
-                    <div class="loadingcont">
-                      <div class="item"></div>
-                      <div class="item"></div>
-                      <div class="item"></div>
-                      <div class="item"></div>
-                    </div>
-                
-                </div>    
+            <div class="loadingcont">
+              <div class="item"></div>
+              <div class="item"></div>
+              <div class="item"></div>
+              <div class="item"></div>
             </div>
 
         </div>
@@ -137,6 +122,17 @@
     $(window).on("load", function() {
         console.log('page loaded');
 
+        let board = $('#homeBoardItems')
+        board.append(
+            '<div class="featBox whatIsWantbrdBox">' +
+                '<div class="whatIsInner">' +
+                    '<strong>What is Wantbrd?</strong>' +
+                    'Wantbrd is a place for you to share the things you want and recommend with your friends, family and followers.' +
+                    '<a class="btn" href="#loginModal" rel="modal:open">Create your wantbrd now</a>'+
+                '</div>' +
+            '</div>'
+        );
+
         $.ajax({
             url : "/b/get_home_items/", // the endpoint
             dataType: 'json',
@@ -145,8 +141,7 @@
             // handle a successful response
             success : function(data) {
                 console.log(data);
-                $('.loadingcont').hide();
-                let board = $('#homeBoardItems')
+                $('.loadingcont').remove();                
                 
                 data.map(function(item){
 
