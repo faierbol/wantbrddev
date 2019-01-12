@@ -76,292 +76,7 @@
                 </div>    
             </div>
 
-            {% for hot in hot_items %}          
-
-                <!-- ### TRENDING BOARDS ### -->
-                {% if hot.board_name and not hot.recommended %}
-
-                    <div class="featBox trendingBoard">
-                        <div class="trendingTop clearfix">
-                            <strong>Trending Board</strong>
-                            <div class="share-link trendingUserShare">
-                                <a class="toggle" href="javascript:void(0);"><i class="fas fa-share-alt"></i> Share</a>
-                                <div class="tip">
-                                    <div class="ssk-group">
-                                        <a href="" class="ssk ssk-icon ssk-facebook"
-                                            data-url="{% url 'b:view_board' hot.user.username hot.slug %}"
-                                            data-text="Checkout {{ hot.board_name }} by {{ hot.user.username }}: https://www.wantbrd.com{% url 'b:view_board' hot.user.username hot.slug %}"
-                                        ></a>
-                                        <a href="" class="ssk ssk-icon ssk-twitter"
-                                            data-url="{% url 'b:view_board' hot.user.username hot.slug %}"
-                                            data-text="Checkout {{ hot.board_name }} by {{ hot.user.username }}: https://www.wantbrd.com{% url 'b:view_board' hot.user.username hot.slug %}"
-                                        ></a>
-                                        <a href="" class="ssk ssk-icon ssk-google-plus"
-                                            data-url="{% url 'b:view_board' hot.user.username hot.slug %}"
-                                            data-text="Checkout {{ hot.board_name }} by {{ hot.user.username }}: https://www.wantbrd.com{% url 'b:view_board' hot.user.username hot.slug %}"
-                                        ></a>
-                                        <a href="" class="ssk ssk-icon ssk-pinterest"   
-                                            data-url="{% url 'b:view_board' hot.user.username hot.slug %}"
-                                            data-text="Checkout {{ hot.board_name }} by {{ hot.user.username }}: https://www.wantbrd.com{% url 'b:view_board' hot.user.username hot.slug %}"
-                                        ></a>
-                                        <a href="" class="ssk ssk-icon ssk-tumblr"
-                                            data-url="{% url 'b:view_board' hot.user.username hot.slug %}"
-                                            data-text="Checkout {{ hot.board_name }} by {{ hot.user.username }}: https://www.wantbrd.com{% url 'b:view_board' hot.user.username hot.slug %}"
-                                        ></a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        {% if hot.hero %}
-                        <a class="trendingBoardHero" style="background-image:url('{{ hot.hero.url }}');" href="{% url 'b:view_board' hot.user.username hot.slug %}">
-                        {% else %}    
-                        <a class="trendingBoardHero" style="background-image:url('{% static '' %}img/default-hero-{% random_int 1 4%}.webp');" href="{% url 'b:view_board' hot.user.username hot.slug %}">
-                        {% endif %}
-
-                            <div class="trendingBoardMeta">
-                                <strong>{{ hot.board_name }}</strong>
-                            </div>
-                        </a>
-                        <div class="trendingItems clearfix">
-                            {% for itemconx in hot.itemconxs %}
-                                {% thumbnail itemconx.image "300x300" as im %}
-                                    <a style="background-image:url('{{ im.url }}');" href="{% url 'b:view_item' hot.user hot.slug itemconx.id itemconx.slug %}"></a>
-                                {% endthumbnail %}                              
-                            {% endfor %}                                
-
-                            {% if hot.totalitems > 5 %}
-                                <a class="plusMore" href="{% url 'b:view_board' hot.user.username hot.slug %}">
-                                    <div class="plusMoreNumber">+{{ hot.totalitems|add:"-5" }}</div>
-                                </a>
-                            {% endif %}
-                        </div>
-                        <a class="trendingUserUser" href="{% url 'u:profile' hot.user.username %}">
-                            <div class="trendingUserUserWrap clearfix">
-                                <div class="trendingUserPic">
-                                    {% if hot.user.profile.picture %}
-                                        <div class="circle" style="background-image:url('{{ hot.user.profile.picture.url }}');"></div>
-                                    {% else %}
-                                        <div class="circle" style="background-image:url('{% static '' %}img/default-hero-{% random_int 1 4%}.webp');"></div>
-                                    {% endif %}
-                                </div>
-                                <div class="trendingUserNames">
-                                    <strong>@{{ hot.user.username }}</strong>
-                                    <span>{{ hot.user.get_full_name }}</span>
-                                </div>
-                            </div>
-                        </a>
-                        <div class="trendingFooter">
-                            <span>{{ hot.totalitems }} {% if hot.totalitems > 1 or hot_items.totalitems == 0 %} Items {% else %} Item {% endif %}</span>
-                            <span>{{ hot.views }} {% if hot.views > 1 or hot.views == 0 %} Views {% else %} View {% endif %}</span>
-                        </div>
-                    </div>
-
-                <!-- ### TRENDING USERS ### -->
-                {% elif hot.username %}
-                    <div class="featBox trendingUser">
-                        <div class="trendingTop clearfix">
-                            <strong>Trending User</strong>
-                            <div class="share-link trendingUserShare">
-                                <a class="toggle" href="javascript:void(0);"><i class="fas fa-share-alt"></i> Share</a>
-                                <div class="tip">
-                                    <div class="ssk-group">
-                                        <a href="" class="ssk ssk-icon ssk-facebook"
-                                            data-url="{% url 'u:profile' hot.username %}"
-                                            data-text="Checkout {{ hot.username }} on Wantbrd: https://www.wantbrd.com{% url 'u:profile' hot.username %}"
-                                        ></a>
-                                        <a href="" class="ssk ssk-icon ssk-twitter"
-                                        data-url="{% url 'u:profile' hot.username %}"
-                                        data-text="Checkout {{ hot.username }} on Wantbrd: https://www.wantbrd.com{% url 'u:profile' hot.username %}"
-                                        ></a>
-                                        <a href="" class="ssk ssk-icon ssk-google-plus"
-                                        data-url="{% url 'u:profile' hot.username %}"
-                                        data-text="Checkout {{ hot.username }} on Wantbrd: https://www.wantbrd.com{% url 'u:profile' hot.username %}"
-                                        ></a>
-                                        <a href="" class="ssk ssk-icon ssk-pinterest"   
-                                        data-url="{% url 'u:profile' hot.username %}"
-                                        data-text="Checkout {{ hot.username }} on Wantbrd: https://www.wantbrd.com{% url 'u:profile' hot.username %}"
-                                        ></a>
-                                        <a href="" class="ssk ssk-icon ssk-tumblr"
-                                        data-url="{% url 'u:profile' hot.username %}"
-                                        data-text="Checkout {{ hot.username }} on Wantbrd: https://www.wantbrd.com{% url 'u:profile' hot.username %}"
-                                        ></a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <a class="trendingUserUser" href="{% url 'u:profile' hot.username  %}">
-                            <div class="trendingUserUserWrap clearfix">
-                                <div class="trendingUserPic">
-                                    {% if hot.profile.picture %}
-                                    <div class="circle" style="background-image:url('{{ hot.profile.picture.url }}');"></div>
-                                    {% else %}
-                                    <div class="circle" style="background-image:url('{% static '' %}img/default-hero-{% random_int 1 4%}.webp');"></div>
-                                    {% endif %}
-                                </div>
-                                <div class="trendingUserNames">
-                                    <strong>@{{ hot.username }}</strong>
-                                    <span>{{ hot.get_full_name }}</span>
-                                </div>
-                            </div>
-                        </a>
-                        
-                        <a class="trendingUserHero" href="{% url 'u:profile' hot.username  %}" style="background-image:url('{% static 'img/profile-hero.jpg' %}')"></a>
-
-                        <div class="trendingItems clearfix">
-                            {% for item in hot.items %}
-                                {% thumbnail item.image "300x300" as im %}
-                                    <a style="background-image:url('{{ im.url }}');" href="{% url 'b:view_item' hot.username item.board.slug item.id item.slug %}"></a>
-                                {% endthumbnail %}
-                            {% endfor %}
-
-                            {% if hot.itemcount > 2 %}
-                                <a class="plusMore" href="{% url 'u:profile' hot.username  %}">
-                                    <div class="plusMoreNumber">+{{ hot.itemcount|add:"-2" }}</div>
-                                </a>
-                            {% endif %}
-                        </div>
-                        <div class="trendingFooter">
-                            <span>{{ hot.totalboards }} {% if hot.totalboards > 1 or hot.totalboards == 0 %} Boards {% else %} Board {% endif %}</span>
-                            <span>{{ hot.totalitems }} {% if hot.totalitems > 1 or hot.totalitems == 0 %} Items {% else %} Item {% endif %}</span>
-                        </div>
-                    </div>
-
-                {% elif hot.item %}
-                    <div class="featBox trendingItem">
-                        <div class="trendingTop clearfix">
-                            <strong>Trending Item</strong>
-                            <div class="share-link trendingUserShare">
-                                <a class="toggle" href="javascript:void(0);"><i class="fas fa-share-alt"></i> Share</a>
-                                <div class="tip">
-                                    <div class="ssk-group">
-                                        <a href="" class="ssk ssk-icon ssk-facebook"
-                                            data-udrl="{% url 'b:view_item' hot.board.user hot.board.slug hot.id hot.slug %}"
-                                            data-text="Checkout this item I found on Wantbrd: {{ hot.item.item_name }} - https://www.wantbrd.com{% url 'b:view_item' hot.board.user hot.board.slug hot.id hot.slug %}"
-                                        ></a>
-                                        <a href="" class="ssk ssk-icon ssk-twitter"
-                                        data-udrl="{% url 'b:view_item' hot.board.user hot.board.slug hot.id hot.slug %}"
-                                        data-text="Checkout this item I found on Wantbrd: {{ hot.item.item_name }} - https://www.wantbrd.com{% url 'b:view_item' hot.board.user hot.board.slug hot.id hot.slug %}"
-                                        ></a>
-                                        <a href="" class="ssk ssk-icon ssk-google-plus"
-                                        data-udrl="{% url 'b:view_item' hot.board.user hot.board.slug hot.id hot.slug %}"
-                                        data-text="Checkout this item I found on Wantbrd: {{ hot.item.item_name }} - https://www.wantbrd.com{% url 'b:view_item' hot.board.user hot.board.slug hot.id hot.slug %}"
-                                        ></a>
-                                        <a href="" class="ssk ssk-icon ssk-pinterest"
-                                        data-udrl="{% url 'b:view_item' hot.board.user hot.board.slug hot.id hot.slug %}"
-                                        data-text="Checkout this item I found on Wantbrd: {{ hot.item.item_name }} - https://www.wantbrd.com{% url 'b:view_item' hot.board.user hot.board.slug hot.id hot.slug %}"
-                                        ></a>
-                                        <a href="" class="ssk ssk-icon ssk-tumblr"
-                                            data-udrl="{% url 'b:view_item' hot.board.user hot.board.slug hot.id hot.slug %}"
-                                            data-text="Checkout this item I found on Wantbrd: {{ hot.item.item_name }} - https://www.wantbrd.com{% url 'b:view_item' hot.board.user hot.board.slug hot.id hot.slug %}"
-                                        ></a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="trendingItemItem">
-                            {% thumbnail hot.image "300x300" as im %}
-                                <a href="{% url 'b:view_item' hot.board.user hot.board.slug hot.id hot.slug %}"><img src="{{ im.url }}" alt="{{ hot.item.item_name }}"></a>
-                            {% endthumbnail %}
-                        </div>
-                        <div class="trendingItemName">
-                            <a href="{% url 'b:view_item' hot.board.user hot.board.slug hot.id hot.slug %}">{{ hot.item.item_name }}</a>
-                            <div class="trendingItemMeta">
-                                Found on <a href="{% url 'b:view_board' hot.board.user hot.board.slug %}">{{ hot.board.board_name }}</a>
-                                by <a href="{% url 'u:profile' hot.board.user %}">{{ hot.board.user.get_full_name }}</a>
-                            </div>
-                        </div>              
-                        <div class="trendingFooter">
-                            <span><a href="{% url 'b:view_item' hot.board.user hot.board.slug hot.id hot.slug %}"><i class="far fa-comments"></i></a>
-                                {% get_comment_count for hot as comment_count %}
-                                {% if comment_count %}
-                                    {{ comment_count }}
-                                {% else %}
-                                    0
-                                {% endif %}
-                            </span>
-                            
-                            <form class="inline unlikeitem" method="POST" data-id="{{hot.id }}" style="display:{% if hot.is_liked %} inline-block {% else %} none {% endif %}">
-                                {% csrf_token %}
-                                <input type="hidden" class="unlike_item_id" name="item_id" value="{{ hot.id }}">
-                                <button class="naked unlikeitembutton" data-id="{{hot.id }}" name="unlikeitem">
-                                    <i class="fas fa-heart likeon"></i>
-                                    <span>{{ hot.likes }}</span>
-                                </button>
-                            </form>
-
-                            <form class="inline likeitem" method="POST"  data-id="{{hot.id }}" style="display:{% if hot.is_liked %} none {% else %} inline-block {% endif %}">
-                                {% csrf_token %}
-                                <input type="hidden" class="like_item_id" name="item_id" value="{{ hot.id }}">
-                                <button class="naked likeitembutton" data-id="{{hot.id }}" name="likeitem">
-                                    <i class="fal fa-heart"></i>
-                                    <span>{{ hot.likes }}</span>
-                                </button>
-                            </form>
-
-                            <span><i class="fas fa-eye"></i> {{ hot.views }}</span>
-                        </div>
-                    </div>
-
-                {% elif hot.recommended %}
-
-                    <div class="featBox recommendedBoard">
-                        <div class="featOrangeHead">
-                            <strong>Wantbrd Recommended</strong>
-                            <a href="{% url 'b:view_board' hot.user.username hot.slug %}">{{ hot.board_name }}</a>
-                        </div>                        
-                        {% if hot.hero %}
-                            <div class="recommendedImage" style="background-image:url('{{ hot.hero.url }}');"></div>
-                        {% else %}
-                            <div class="recommendedImage" style="background-image:url('{% static '' %}img/default-hero-{% random_int 1 4%}.webp');"></div>
-                        {% endif %}
-                        <div class="recommendedText">
-                            <p>{{ hot.description|truncatechars:75 }}</p>
-                        </div>
-                        <div class="recommendedMeta">
-                            <span>{{ hot.totalitems }} <i class="fal fa-list-alt"></i></span>
-                            <span>{{ hot.views }} <i class="fas fa-eye"></i></span>
-                        </div>
-                        <a href="{% url 'b:view_board' hot.user.username hot.slug %}" class="btn grey">View Board</a>
-                        <div class="clear"></div>
-                    </div>            
-
-                {% endif %}
-
-            {% endfor %}
-
-
-            <!-- feat group -->
-
-<!--             <div class="featBox recommendedBoard group">
-                <div class="featOrangeHead">
-                    <strong>Featured Group</strong>
-                    <a href="#">#Resorts</a>
-                </div>
-                <div class="featGroupMeta">
-                    <span>14 Boards</span> <span>365 Items</span>
-                </div>
-                <div class="featGroupText">
-                    <p>Luxury holidays, Island retreats, Private Islands, Resorts ...</p>
-                </div>
-                <a href="#" class="btn large grey">View Board</a>
-                <div class="clear"></div>
-            </div> -->
-
         </div>
-
-        {% if hot_items.has_other_pages %}
-            {% if hot_items.has_next %}
-              <a href="?page={{ hot_items.next_page_number }}" class="next">&raquo;</a>
-            {% endif %}
-        {% endif %}
-
-<!--         <div class="loading" style="display: block;">
-            <div class="dot dot1"></div>
-            <div class="dot dot2"></div>
-            <div class="dot dot3"></div>
-            <div class="dot dot4"></div>
-        </div> -->
 
 
         <div class="homeIntro">
@@ -411,21 +126,250 @@
 <script src="{% static 'js/macy.js' %}" type="text/javascript"></script>
 
 <script type="text/javascript">
-    var masonry = new Macy({
-        container: '#homeBoardItems',
-        trueOrder: false,
-        waitForImages: false,
-        useOwnImageLoader: false,
-        debug: true,
-        mobileFirst: true,
-        columns: 1,
-        margin: 24,
-        breakAt: {
-            860: 3,
-            520: 2,
-            320: 1
-        }
-    });
+
+    $(window).on("load", function() {
+        console.log('page loaded');
+
+        $.ajax({
+            url : "/b/get_home_items/", // the endpoint
+            dataType: 'json',
+            data : {}, // data sent with the post request
+
+            // handle a successful response
+            success : function(data) {
+                console.log(data);
+                let board = $('#homeBoardItems')
+                
+                data.map(function(item){
+
+                    if (item.type == 'trending_item') {
+
+                        board.append(
+                            '<div class="featBox trendingItem">'+
+                                '<div class="trendingTop clearfix">'+
+                                    '<strong>Trending Item</strong>'+
+                                    '<div class="share-link trendingUserShare">'+
+                                        '<a class="toggle" href="javascript:void(0);"><i class="fas fa-share-alt"></i>' + item.type + '</a>'+
+                                        '<div class="tip">'+
+                                            '<div class="ssk-group">'+
+                                                '<a href="" class="ssk ssk-icon ssk-facebook"'+
+                                                    'data-url="' + item.item_url  + '"'+
+                                                    'data-text="Checkout this item I found on Wantbrd: ' + item.item_name + ' - https://www.wantbrd.com' + item.item_url + '"'+
+                                                '></a>' +
+                                                '<a href="" class="ssk ssk-icon ssk-twitter"'+
+                                                    'data-url="' + item.item_url + '"'+
+                                                    'data-text="Checkout this item I found on Wantbrd: ' + item.item_name + ' - https://www.wantbrd.com' + item.item_url + '"'+
+                                                '></a>'+
+                                                '<a href="" class="ssk ssk-icon ssk-google-plus"'+
+                                                    'data-url="' + item.item_url + '"'+
+                                                    'data-text="Checkout this item I found on Wantbrd: ' + item.item_name + ' - https://www.wantbrd.com' + item.item_url + '"'+
+                                                    '></a>'+
+                                                '<a href="" class="ssk ssk-icon ssk-pinterest"'+
+                                                    'data-url="' + item.item_url + '"'+
+                                                    'data-text="Checkout this item I found on Wantbrd: ' + item.item_name + ' - https://www.wantbrd.com' + item.item_url + '"'+
+                                                '></a>'+
+                                                '<a href="" class="ssk ssk-icon ssk-tumblr"'+
+                                                    'data-url="' + item.item_url + '"'+
+                                                    'data-text="Checkout this item I found on Wantbrd: ' + item.item_name + ' - https://www.wantbrd.com' + item.item_url + '"'+
+                                                '></a>'+
+                                            '</div>'+
+                                        '</div>'+
+                                    '</div>'+
+                                '</div>'+
+                                '<div class="trendingItemItem">' +
+                                    '<a href="' + item.item_url + '"><img src="' + item.item_image + '" alt="' + item.item_name + '"></a>'+
+                                '</div>' +
+                                '<div class="trendingItemName">'+
+                                    '<a href="' + item.item_url + '">' + item.item_name + '</a>'+
+                                    '<div class="trendingItemMeta">' +
+                                        'Found on <a href="' + item.board_url + '">' + item.board_name + '</a>'+
+                                        'by <a href="' + item.user_url + '">' + item.user + '</a>'+
+                                    '</div>'+
+                                '</div>'+
+                                '<div class="trendingFooter">'+
+                                    '<span><a href="' + item.item_url + '"><i class="far fa-comments"></i></a> 0'+                                    
+                                    '</span>' +                                
+                                    '<span><i class="fas fa-eye"></i>' + item.item_views + '</span>'+
+                                '</div>'+
+                            '</div>'
+                        )
+
+                    } else if(item.type == 'trending_board')  {
+
+                        totalItemsSuffix = item.total_items == 1 ? "item" : "items";
+                        totalItems = "<span>" + item.total_items + " " + totalItemsSuffix + "</span>";
+
+                        viewsSuffix = item.views == 1 ? "view" : "views";
+                        views = "<span>" + item.views + " " + viewsSuffix + "</span>";      
+
+                        userpic = "<div class='circle' style='background-image:url(" + item.user_pic + ");'></div>";
+
+                        boardpic = "<a class='trendingBoardHero' style='background-image:url(" + item.hero + ");' href='" + 
+                        item.board_url + "'><div class='trendingBoardMeta'><strong>" + item.board_name + "</div></strong></a>";
+                        
+                        var itemHtml = '';
+                        var x = 1;
+                        for (var key in item.items) {
+                            itemHtml += '<a data-id="this" style="background-image:url(' + item.items[key].image + ');" href="' + item.items[key].link + '"></a>'                            
+                        }
+
+                        board.append(
+
+                            '<div class="featBox trendingBoard">' +
+                                '<div class="trendingTop clearfix">' +
+                                    '<strong>Trending Board</strong>' +
+                                    '<div class="share-link trendingUserShare">' +
+                                        '<a class="toggle" href="javascript:void(0);"><i class="fas fa-share-alt"></i> Share</a>' +
+                                        '<div class="tip">' +
+                                            '<div class="ssk-group">' +
+                                                '<a href="" class="ssk ssk-icon ssk-facebook"' +
+                                                    'data-url="https://www.wantbrd.com' + item.board_url + '"' +
+                                                    'data-text="Checkout ' + item.board_name + ' by ' + item.username + ': https://www.wantbrd.com' + item.board_url + '"' +
+                                                '></a>' +
+                                                '<a href="" class="ssk ssk-icon ssk-twitter"' +
+                                                'data-url="https://www.wantbrd.com' + item.board_url + '"' +
+                                                'data-text="Checkout ' + item.board_name + ' by ' + item.username + ': https://www.wantbrd.com' + item.board_url + '"' +
+                                                '></a>' +
+                                                '<a href="" class="ssk ssk-icon ssk-google-plus"' +
+                                                'data-url="https://www.wantbrd.com' + item.board_url + '"' +
+                                                'data-text="Checkout ' + item.board_name + ' by ' + item.username + ': https://www.wantbrd.com' + item.board_url + '"' +
+                                                '></a>' +
+                                                '<a href="" class="ssk ssk-icon ssk-pinterest"' +
+                                                'data-url="https://www.wantbrd.com' + item.board_url + '"' +
+                                                'data-text="Checkout ' + item.board_name + ' by ' + item.username + ': https://www.wantbrd.com' + item.board_url + '"' +
+                                                '></a>' +
+                                                '<a href="" class="ssk ssk-icon ssk-tumblr"' +
+                                                'data-url="https://www.wantbrd.com' + item.board_url + '"' +
+                                                'data-text="Checkout ' + item.board_name + ' by ' + item.username + ': https://www.wantbrd.com' + item.board_url + '"' +
+                                                '></a>' +
+                                            '</div>' +
+                                        '</div>' +
+                                    '</div>' +
+                                '</div>' +
+
+                                boardpic +
+
+                                "<div class='trendingItems clearfix'>" +
+                                    itemHtml +
+                                "</div>" +
+
+                                '<a class="trendingUserUser" href="' + item.user_url + '">' +
+                                    '<div class="trendingUserUserWrap clearfix">' +
+                                        '<div class="trendingUserPic">' +
+                                            userpic +
+                                        '</div>' +
+                                        '<div class="trendingUserNames">' +
+                                            '<strong>@' + item.username + '</strong>' +
+                                            '<span>' + item.full_name + '</span>' +
+                                        '</div>' +
+                                    '</div>' +
+                                '</a>' +
+                                '<div class="trendingFooter">' +
+                                views +
+                                totalItems +
+                                '</div>' +
+                            '</div>' 
+
+                        );
+
+                    } else if(item.type == 'trending_user') {
+
+                        totalItemsSuffix = item.total_items == 1 ? "item" : "items";
+                        total_items = "<span>" + item.total_items + " " + totalItemsSuffix + "</span>";
+
+                        boardsSuffix = item.total_boards == 1 ? "board" : "boards";
+                        total_boards = "<span>" + item.total_boards + " " + boardsSuffix + "</span>";
+
+                        var itemHtml = '';
+                        var x = 1;
+                        for (var key in item.items) {
+                            itemHtml += '<a style="background-image:url(' + item.items[key].image + ');" href="' + item.items[key].link + '"></a>'                            
+                        }
+
+                        board.append(
+
+                            '<div class="featBox trendingUser">' +
+                                '<div class="trendingTop clearfix">' +
+                                    '<strong>Trending User</strong>' +
+                                    '<div class="share-link trendingUserShare">' +
+                                        '<a class="toggle" href="javascript:void(0);"><i class="fas fa-share-alt"></i> Share</a>' +
+                                        '<div class="tip">' +
+                                            '<div class="ssk-group">' +
+                                                '<a href="" class="ssk ssk-icon ssk-facebook"' +
+                                                    'data-url="' + item.user_url + '"' +
+                                                    'data-text="Checkout ' + item.username + ' on Wantbrd: ' + item.user_url + '"' +
+                                                '></a>' +
+                                                '<a href="" class="ssk ssk-icon ssk-twitter"' +
+                                                    'data-url="' + item.user_url + '"' +
+                                                    'data-text="Checkout ' + item.username + ' on Wantbrd: ' + item.user_url + '"' +
+                                                '></a>' +
+                                                '<a href="" class="ssk ssk-icon ssk-google-plus"' +
+                                                    'data-url="' + item.user_url + '"' +
+                                                    'data-text="Checkout ' + item.username + ' on Wantbrd: ' + item.user_url + '"' +
+                                                '></a>' +
+                                                '<a href="" class="ssk ssk-icon ssk-pinterest"' +
+                                                    'data-url="' + item.user_url + '"' +
+                                                    'data-text="Checkout ' + item.username + ' on Wantbrd: ' + item.user_url + '"' +
+                                                '></a>' +
+                                                '<a href="" class="ssk ssk-icon ssk-tumblr"' +
+                                                    'data-url="' + item.user_url + '"' +
+                                                    'data-text="Checkout ' + item.username + ' on Wantbrd: ' + item.user_url + '"' +
+                                                '></a>' +
+                                            '</div>' +
+                                        '</div>' +
+                                    '</div>' +
+                                '</div>' +
+                                '<a class="trendingUserUser" href="' + item.user_url + '">' +
+                                    '<div class="trendingUserUserWrap clearfix">' +
+                                        '<div class="trendingUserPic">' +                                            
+                                            '<div class="circle" style="background-image:url(' + item.user_pic + ');"></div>' +
+                                        '</div>' +
+                                        '<div class="trendingUserNames">' +
+                                            '<strong>@' + item.username + '</strong>' +
+                                            '<span>' + item.name + '</span>' +
+                                        '</div>' +
+                                    '</div>' +
+                                '</a>' +
+                                
+                                '<a class="trendingUserHero" href="' + item.user_url + '" style="background-image:url(' + item.hero + ')"></a>' +
+
+                                '<div class="trendingItems clearfix">' +
+                                    itemHtml +
+                                '</div>' +
+
+                                '<div class="trendingFooter">' +
+                                    total_items +
+                                    total_boards +
+                                '</div>' +
+
+                            '</div>'
+
+                        )
+
+                    } 
+                })             
+
+                // then do masonry
+                var masonry = new Macy({
+                    container: '#homeBoardItems',
+                    trueOrder: false,
+                    waitForImages: false,
+                    useOwnImageLoader: false,
+                    debug: true,
+                    mobileFirst: true,
+                    columns: 1,
+                    margin: 24,
+                    breakAt: {
+                        860: 3,
+                        520: 2,
+                        320: 1
+                    }
+                });   
+            }
+        });
+
+    })
+
     $('.homeSlider').slick({
         centerMode: true,
         arrows:false,

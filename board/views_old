@@ -38,25 +38,6 @@ def error_500(request, exception):
     return render(request,'error_500.html', data)
 
 
-##### GET HOME ITEMS
-def get_home_items(request):
-	
-	hot_items = []
-
-	trending_items = ajax_trending_items(request,60)
-	trending_boards = ajax_trending_boards(request,60)
-	trending_users = ajax_trending_users(request,60)	
-	# recommended_boards = get_recommended_boards(request)
-
-	mixed = trending_boards + trending_items + trending_users
-	random.shuffle(mixed)
-
-	return HttpResponse(
-		json.dumps(mixed),
-		content_type="application/json"
-	)
-
-
 ##### HOME PAGE
 def home(request):
 
@@ -75,10 +56,21 @@ def home(request):
 			return HttpResponseRedirect(request.path_info)
 
 	template = 'index.html'
-	trending_items = ajax_trending_items(request,365)
+	hot_items = []
+
+	trending_items = get_trending_items(request,365)
+	trending_users = get_trending_users(request,365)
+	trending_boards = get_trending_boards(request,365)
+	recommended_boards = get_recommended_boards(request)
+
+	mixed = list(trending_boards) + list(trending_items) + list(trending_users) + list(recommended_boards)
+	random.shuffle(mixed)	
+	for item in mixed:
+		if item not in hot_items:
+			hot_items.append(item)
 
 	context_dict = {
-		'trending_items':trending_items
+		'hot_items':hot_items,
 	}
 
 	return render(request, template, context_dict)
