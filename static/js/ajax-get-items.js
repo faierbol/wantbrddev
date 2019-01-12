@@ -9,7 +9,14 @@ $(window).on("load", function() {
                 'Wantbrd is a place for you to share the things you want and recommend with your friends, family and followers.' +
                 '<a class="btn" href="#loginModal" rel="modal:open">Create your wantbrd now</a>'+
             '</div>' +
-        '</div>'
+        '</div>' +
+        
+        '<div class="loadingcont">' +
+          '<div class="item"></div>' +
+          '<div class="item"></div>' +
+          '<div class="item"></div>' +
+          '<div class="item"></div>' +
+        '</div>' +
     );
 
     $.ajax({
