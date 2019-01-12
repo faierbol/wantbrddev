@@ -29,34 +29,7 @@ $(window).on("load", function() {
                     board.append(
                         '<div class="featBox trendingItem">'+
                             '<div class="trendingTop clearfix">'+
-                                '<strong></strong>'+
-                                '<div class="share-link trendingUserShare">'+
-                                    '<a class="toggle" href="javascript:void(0);"><i class="fas fa-share-alt"></i> Share</a>' +
-                                    '<div class="tip">'+
-                                        '<div class="ssk-group">'+
-                                            '<a href="" class="ssk ssk-icon ssk-facebook"'+
-                                                'data-url="' + item.item_url  + '"'+
-                                                'data-text="Checkout this item I found on Wantbrd: ' + item.item_name + ' - https://www.wantbrd.com' + item.item_url + '"'+
-                                            '></a>' +
-                                            '<a href="" class="ssk ssk-icon ssk-twitter"'+
-                                                'data-url="' + item.item_url + '"'+
-                                                'data-text="Checkout this item I found on Wantbrd: ' + item.item_name + ' - https://www.wantbrd.com' + item.item_url + '"'+
-                                            '></a>'+
-                                            '<a href="" class="ssk ssk-icon ssk-google-plus"'+
-                                                'data-url="' + item.item_url + '"'+
-                                                'data-text="Checkout this item I found on Wantbrd: ' + item.item_name + ' - https://www.wantbrd.com' + item.item_url + '"'+
-                                                '></a>'+
-                                            '<a href="" class="ssk ssk-icon ssk-pinterest"'+
-                                                'data-url="' + item.item_url + '"'+
-                                                'data-text="Checkout this item I found on Wantbrd: ' + item.item_name + ' - https://www.wantbrd.com' + item.item_url + '"'+
-                                            '></a>'+
-                                            '<a href="" class="ssk ssk-icon ssk-tumblr"'+
-                                                'data-url="' + item.item_url + '"'+
-                                                'data-text="Checkout this item I found on Wantbrd: ' + item.item_name + ' - https://www.wantbrd.com' + item.item_url + '"'+
-                                            '></a>'+
-                                        '</div>'+
-                                    '</div>'+
-                                '</div>'+
+                                '<strong>TRENDING ITEM</strong>'+
                             '</div>'+
                             '<div class="trendingItemItem">' +
                                 '<a href="' + item.item_url + '"><img src="' + item.item_image + '" alt="' + item.item_name + '"></a>'+
@@ -100,33 +73,6 @@ $(window).on("load", function() {
                         '<div class="featBox trendingBoard">' +
                             '<div class="trendingTop clearfix">' +
                                 '<strong>Trending Board</strong>' +
-                                '<div class="share-link trendingUserShare">' +
-                                    '<a class="toggle" href="javascript:void(0);"><i class="fas fa-share-alt"></i> Share</a>' +
-                                    '<div class="tip">' +
-                                        '<div class="ssk-group">' +
-                                            '<a href="" class="ssk ssk-icon ssk-facebook"' +
-                                                'data-url="https://www.wantbrd.com' + item.board_url + '"' +
-                                                'data-text="Checkout ' + item.board_name + ' by ' + item.username + ': https://www.wantbrd.com' + item.board_url + '"' +
-                                            '></a>' +
-                                            '<a href="" class="ssk ssk-icon ssk-twitter"' +
-                                            'data-url="https://www.wantbrd.com' + item.board_url + '"' +
-                                            'data-text="Checkout ' + item.board_name + ' by ' + item.username + ': https://www.wantbrd.com' + item.board_url + '"' +
-                                            '></a>' +
-                                            '<a href="" class="ssk ssk-icon ssk-google-plus"' +
-                                            'data-url="https://www.wantbrd.com' + item.board_url + '"' +
-                                            'data-text="Checkout ' + item.board_name + ' by ' + item.username + ': https://www.wantbrd.com' + item.board_url + '"' +
-                                            '></a>' +
-                                            '<a href="" class="ssk ssk-icon ssk-pinterest"' +
-                                            'data-url="https://www.wantbrd.com' + item.board_url + '"' +
-                                            'data-text="Checkout ' + item.board_name + ' by ' + item.username + ': https://www.wantbrd.com' + item.board_url + '"' +
-                                            '></a>' +
-                                            '<a href="" class="ssk ssk-icon ssk-tumblr"' +
-                                            'data-url="https://www.wantbrd.com' + item.board_url + '"' +
-                                            'data-text="Checkout ' + item.board_name + ' by ' + item.username + ': https://www.wantbrd.com' + item.board_url + '"' +
-                                            '></a>' +
-                                        '</div>' +
-                                    '</div>' +
-                                '</div>' +
                             '</div>' +
 
                             boardpic +
@@ -173,33 +119,6 @@ $(window).on("load", function() {
                         '<div class="featBox trendingUser">' +
                             '<div class="trendingTop clearfix">' +
                                 '<strong>Trending User</strong>' +
-                                '<div class="share-link trendingUserShare">' +
-                                    '<a class="toggle" href="javascript:void(0);"><i class="fas fa-share-alt"></i> Share</a>' +
-                                    '<div class="tip">' +
-                                        '<div class="ssk-group">' +
-                                            '<a href="" class="ssk ssk-icon ssk-facebook"' +
-                                                'data-url="' + item.user_url + '"' +
-                                                'data-text="Checkout ' + item.username + ' on Wantbrd: ' + item.user_url + '"' +
-                                            '></a>' +
-                                            '<a href="" class="ssk ssk-icon ssk-twitter"' +
-                                                'data-url="' + item.user_url + '"' +
-                                                'data-text="Checkout ' + item.username + ' on Wantbrd: ' + item.user_url + '"' +
-                                            '></a>' +
-                                            '<a href="" class="ssk ssk-icon ssk-google-plus"' +
-                                                'data-url="' + item.user_url + '"' +
-                                                'data-text="Checkout ' + item.username + ' on Wantbrd: ' + item.user_url + '"' +
-                                            '></a>' +
-                                            '<a href="" class="ssk ssk-icon ssk-pinterest"' +
-                                                'data-url="' + item.user_url + '"' +
-                                                'data-text="Checkout ' + item.username + ' on Wantbrd: ' + item.user_url + '"' +
-                                            '></a>' +
-                                            '<a href="" class="ssk ssk-icon ssk-tumblr"' +
-                                                'data-url="' + item.user_url + '"' +
-                                                'data-text="Checkout ' + item.username + ' on Wantbrd: ' + item.user_url + '"' +
-                                            '></a>' +
-                                        '</div>' +
-                                    '</div>' +
-                                '</div>' +
                             '</div>' +
                             '<a class="trendingUserUser" href="' + item.user_url + '">' +
                                 '<div class="trendingUserUserWrap clearfix">' +
