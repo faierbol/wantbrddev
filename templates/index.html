@@ -72,6 +72,13 @@
                     {% else %}
                     <a class="btn" href="#loginModal" rel="modal:open">Create your wantbrd now</a>
                     {% endif %}
+
+                    <div class="loadingcont">
+                      <div class="item"></div>
+                      <div class="item"></div>
+                      <div class="item"></div>
+                      <div class="item"></div>
+                    </div>
                 
                 </div>    
             </div>
@@ -138,6 +145,7 @@
             // handle a successful response
             success : function(data) {
                 console.log(data);
+                $('.loadingcont').hide();
                 let board = $('#homeBoardItems')
                 
                 data.map(function(item){
