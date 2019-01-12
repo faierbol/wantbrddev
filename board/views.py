@@ -75,11 +75,8 @@ def home(request):
 			return HttpResponseRedirect(request.path_info)
 
 	template = 'index.html'
-	trending_items = ajax_trending_items(request,365)
 
-	context_dict = {
-		'trending_items':trending_items
-	}
+	context_dict = {}
 
 	return render(request, template, context_dict)
 
