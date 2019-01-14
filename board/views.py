@@ -85,7 +85,7 @@ def home(request):
 def trending_items(request):
 	template = 'trending_items.html'
 
-	items = get_trending_items(request,365)
+	items = ajax_trending_items(request,365)
 
 	context_dict = {
 		'items':items
@@ -98,7 +98,7 @@ def trending_items(request):
 def trending_boards(request):
 	template = 'trending_boards.html'
 
-	trending_boards = get_trending_boards(request,365)
+	trending_boards = ajax_trending_boards(request,365)
 
 	context_dict = {
 		'trending_boards':trending_boards,
@@ -111,7 +111,7 @@ def trending_boards(request):
 def trending_users(request):
 	template = 'trending_users.html'
 
-	trending_users = get_trending_users(request,365)
+	trending_users = ajax_trending_users(request,365)
 
 	context_dict = {
 		'trending_users':trending_users
