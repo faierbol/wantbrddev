@@ -62,7 +62,25 @@ INSTALLED_APPS = [
     'storages',
     'threadedcomments',
     'corsheaders',
+    'pwa',
 ]
+
+# pwa
+PWA_APP_NAME = 'Wantbrd'
+PWA_APP_DESCRIPTION = "Wantbrd - Taking the guessing out of giving"
+PWA_APP_THEME_COLOR = '#F97D1F'
+PWA_APP_BACKGROUND_COLOR = '#ffffff'
+PWA_APP_DISPLAY = 'standalone'
+PWA_APP_ORIENTATION = 'any'
+PWA_APP_START_URL = '/'
+# PWA_APP_ICONS = [
+#     {
+#         'src': '/static/images/my_app_icon.png',
+#         'sizes': '160x160'
+#     }
+# ]
+# PWA_APP_DIR = 'ltr'
+PWA_APP_LANG = 'en-US'
 
 ### COMMENTS STUFF
 

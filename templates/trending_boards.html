@@ -22,11 +22,10 @@
 <div class="homeBannerPush"></div>
 <section class="homeBanner desktop clearfix">
     <div class="homeSlider">
-        <div><img src="{% static 'img/banner-6.jpg' %}" alt="Create and share gift lists"></div>
-        <div><img src="{% static 'img/banner-3.jpg' %}" alt="Create and share your personal wishllist"></div>
-        <div><img src="{% static 'img/banner-4.jpg' %}" alt="The new way for influencers to monetise"></div>
-        <div><img src="{% static 'img/banner-1.jpg' %}" alt="Content creator? Monetise your content with Wantbrd"></div>
-        <div><img src="{% static 'img/banner-5.jpg' %}" alt="Discover new products and experiences"></div>
+        <div><a href="/collection/can-you-click-it"><img src="{% static 'img/banner-3.webp' %}" alt="Create and share your personal wishllist"></a></div>
+        <div><a href="/collection/girls-trip"><img src="{% static 'img/banner-4.webp' %}" alt="The new way for influencers to monetise"></a></div>
+        <div><a href="/collection/full-color-sound"><img src="{% static 'img/banner-1.webp' %}" alt="Content creator? Monetise your content with Wantbrd"></a></div>
+        <div><a href="/collection/jump-to-it"><img src="{% static 'img/banner-5.webp' %}" alt="Discover new products and experiences"></a></div>
     </div>
     <div class="slickLeft"><i class="fas fa-chevron-right"></i></div>
     <div class="slickRight"><i class="fas fa-chevron-left"></i></div>
@@ -34,11 +33,10 @@
 
 <section class="homeBanner mobile clearfix">
     <div class="homeSliderMobile">
-        <div><img src="{% static 'img/banner-6b.jpg' %}" alt="Create and share gift lists"></div>
-        <div><img src="{% static 'img/banner-3b.jpg' %}" alt="Create and share your personal wishllist"></div>
-        <div><img src="{% static 'img/banner-4b.jpg' %}" alt="The new way for influencers to monetise"></div>
-        <div><img src="{% static 'img/banner-1b.jpg' %}" alt="Content creator? Monetise your content with Wantbrd"></div>
-        <div><img src="{% static 'img/banner-5b.jpg' %}" alt="Discover new products and experiences"></div>
+        <div><a href="/collection/can-you-click-it"><img src="{% static 'img/banner-3.webp' %}" alt="Create and share your personal wishllist"></a></div>
+        <div><a href="/collection/girls-trip"><img src="{% static 'img/banner-4.webp' %}" alt="The new way for influencers to monetise"></a></div>
+        <div><a href="/collection/full-color-sound"><img src="{% static 'img/banner-1.webp' %}" alt="Content creator? Monetise your content with Wantbrd"></a></div>
+        <div><a href="/collection/jump-to-it"><img src="{% static 'img/banner-5.webp' %}" alt="Discover new products and experiences"></a></div>
     </div>
 </section>
 
@@ -53,85 +51,12 @@
         </div>
 
         <div id="homeBoardItems">            
-
-            {% for board in trending_boards %}
-                <div class="featBox trendingBoard">
-                    <div class="trendingTop clearfix">
-                        <strong>Trending Board</strong>
-                        <div class="share-link trendingUserShare">
-                            <a class="toggle" href="javascript:void(0);"><i class="fas fa-share-alt"></i> Share</a>
-                            <div class="tip">
-                                <div class="ssk-group">
-                                    <a href="" class="ssk ssk-icon ssk-facebook"
-                                        data-url="{% url 'b:view_board' board.user.username board.slug %}"
-                                        data-text="Checkout {{ board.board_name }} by {{ board.user.username }}: https://www.wantbrd.com/{% url 'b:view_board' board.user.username board.slug %}"
-                                    ></a>
-                                    <a href="" class="ssk ssk-icon ssk-twitter"
-                                        data-url="{% url 'b:view_board' board.user.username board.slug %}"
-                                        data-text="Checkout {{ board.board_name }} by {{ board.user.username }}: https://www.wantbrd.com/{% url 'b:view_board' board.user.username board.slug %}"
-                                    ></a>
-                                    <a href="" class="ssk ssk-icon ssk-google-plus"
-                                        data-url="{% url 'b:view_board' board.user.username board.slug %}"
-                                        data-text="Checkout {{ board.board_name }} by {{ board.user.username }}: https://www.wantbrd.com/{% url 'b:view_board' board.user.username board.slug %}"
-                                    ></a>
-                                    <a href="" class="ssk ssk-icon ssk-pinterest"   
-                                        data-url="{% url 'b:view_board' board.user.username board.slug %}"
-                                        data-text="Checkout {{ board.board_name }} by {{ board.user.username }}: https://www.wantbrd.com/{% url 'b:view_board' board.user.username board.slug %}"
-                                    ></a>
-                                    <a href="" class="ssk ssk-icon ssk-tumblr"
-                                        data-url="{% url 'b:view_board' board.user.username board.slug %}"
-                                        data-text="Checkout {{ board.board_name }} by {{ board.user.username }}: https://www.wantbrd.com/{% url 'b:view_board' board.user.username board.slug %}"
-                                    ></a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    {% if board.hero %}
-                    <a class="trendingBoardHero" style="background-image:url('{{ board.hero.url }}');" href="{% url 'b:view_board' board.user.username board.slug %}">
-                    {% else %}    
-                    <a class="trendingBoardHero" style="background-image:url('{% static '' %}img/default-hero-{% random_int 1 4%}.webp');" href="{% url 'b:view_board' board.user.username board.slug %}">
-                    {% endif %}
-
-                        <div class="trendingBoardMeta">
-                            <strong>{{ board.board_name }}</strong>
-                        </div>
-                    </a>
-                    <div class="trendingItems clearfix">
-                        {% for itemconx in board.itemconxs %}
-                            {% thumbnail itemconx.image "300x300" as im %}
-                                <a style="background-image:url('{{ im.url }}');" href="{% url 'b:view_item' board.user board.slug itemconx.id itemconx.slug %}"></a>
-                            {% endthumbnail %}                              
-                        {% endfor %}                                
-
-                        {% if board.totalitems > 5 %}
-                            <a class="plusMore" href="{% url 'b:view_board' board.user.username board.slug %}">
-                                <div class="plusMoreNumber">+{{ board.totalitems|add:"-5" }}</div>
-                            </a>
-                        {% endif %}
-                    </div>
-                    <a class="trendingUserUser" href="{% url 'u:profile' board.user.username %}">
-                        <div class="trendingUserUserWrap clearfix">
-                            <div class="trendingUserPic">
-                                {% if board.user.profile.picture %}
-                                    <div class="circle" style="background-image:url('{{ board.user.profile.picture.url }}');"></div>
-                                {% else %}
-                                    <div class="circle" style="background-image:url('{% static '' %}img/default-hero-{% random_int 1 4%}.webp');"></div>
-                                {% endif %}
-                            </div>
-                            <div class="trendingUserNames">
-                                <strong>@{{ board.user.username }}</strong>
-                                <span>{{ board.user.get_full_name }}</span>
-                            </div>
-                        </div>
-                    </a>
-                    <div class="trendingFooter">
-                        <span>{{ board.totalitems }} {% if board.totalitems > 1 or board.totalitems == 0 %} Items {% else %} Item {% endif %}</span>
-                        <span>{{ board.views }} {% if board.views > 1 or board.views == 0 %} Views {% else %} View {% endif %}</span>
-                    </div>
-                </div>
-            {% endfor %}
-
+            <div class="loadingcont">
+              <div class="item"></div>
+              <div class="item"></div>
+              <div class="item"></div>
+              <div class="item"></div>
+            </div>
         </div>
 
     </div>  
@@ -143,21 +68,6 @@
 <script src="{% static 'js/slick.min.js' %}" type="text/javascript"></script>
 <script src="{% static 'js/macy.js' %}" type="text/javascript"></script>
 <script>
-    var masonry = new Macy({
-        container: '#homeBoardItems',
-        trueOrder: false,
-        waitForImages: false,
-        useOwnImageLoader: false,
-        debug: true,
-        mobileFirst: true,
-        columns: 1,
-        margin: 24,
-        breakAt: {
-            860: 3,
-            520: 2,
-            320: 1
-        }
-    });
     $(document).ready(function(){
         $('.homeSlider').slick({
             centerMode: true,
@@ -200,5 +110,95 @@
             ],
         });
     });
+
+    $(window).on("load", function() {
+        console.log('page loaded');
+
+        let board = $('#homeBoardItems')
+
+        $.ajax({
+            url : "/b/get_trending_boards/", // the endpoint
+            dataType: 'json',
+            data : {}, // data sent with the post request
+
+            // handle a successful response
+            success : function(data) {
+                console.log(data);
+                $('.loadingcont').remove();                              
+                
+                data.map(function(item){
+
+                    totalItemsSuffix = item.total_items == 1 ? "item" : "items";
+                    totalItems = "<span>" + item.total_items + " " + totalItemsSuffix + "</span>";
+
+                    viewsSuffix = item.views == 1 ? "view" : "views";
+                    views = "<span>" + item.views + " " + viewsSuffix + "</span>";      
+
+                    userpic = "<div class='circle' style='background-image:url(" + item.user_pic + ");'></div>";
+
+                    boardpic = "<a class='trendingBoardHero' style='background-image:url(" + item.hero + ");' href='" + 
+                    item.board_url + "'><div class='trendingBoardMeta'><strong>" + item.board_name + "</div></strong></a>";
+                    
+                    var itemHtml = '';
+                    var x = 1;
+                    for (var key in item.items) {
+                        itemHtml += '<a data-id="this" style="background-image:url(' + item.items[key].image + ');" href="' + item.items[key].link + '"></a>'                            
+                    }
+
+                    board.append(
+
+                        '<div class="featBox trendingBoard">' +
+                            '<div class="trendingTop clearfix">' +
+                                '<strong>Trending Board</strong>' +
+                            '</div>' +
+
+                            boardpic +
+
+                            "<div class='trendingItems clearfix'>" +
+                                itemHtml +
+                            "</div>" +
+
+                            '<a class="trendingUserUser" href="' + item.user_url + '">' +
+                                '<div class="trendingUserUserWrap clearfix">' +
+                                    '<div class="trendingUserPic">' +
+                                        userpic +
+                                    '</div>' +
+                                    '<div class="trendingUserNames">' +
+                                        '<strong>@' + item.username + '</strong>' +
+                                        '<span>' + item.full_name + '</span>' +
+                                    '</div>' +
+                                '</div>' +
+                            '</a>' +
+                            '<div class="trendingFooter">' +
+                            views +
+                            totalItems +
+                            '</div>' +
+                        '</div>' 
+
+                    );
+
+                })             
+
+                // then do masonry
+                var masonry = new Macy({
+                    container: '#homeBoardItems',
+                    trueOrder: false,
+                    waitForImages: false,
+                    useOwnImageLoader: false,
+                    debug: true,
+                    mobileFirst: true,
+                    columns: 1,
+                    margin: 24,
+                    breakAt: {
+                        860: 3,
+                        520: 2,
+                        320: 1
+                    }
+                });   
+            }
+        });
+
+    })
+
 </script>
 {% endblock %}

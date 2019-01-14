@@ -41,8 +41,6 @@ def error_500(request, exception):
 ##### GET HOME ITEMS
 def get_home_items(request):
 	
-	hot_items = []
-
 	trending_items = ajax_trending_items(request,60)
 	trending_boards = ajax_trending_boards(request,60)
 	trending_users = ajax_trending_users(request,60)	
@@ -56,6 +54,35 @@ def get_home_items(request):
 		content_type="application/json"
 	)
 
+##### GET TRENDING ITEMS
+def get_trending_items(request):
+	
+	trending_items = ajax_trending_items(request,60)
+
+	return HttpResponse(
+		json.dumps(trending_items),
+		content_type="application/json"
+	)
+
+##### GET TRENDING USERS
+def get_trending_users(request):
+	
+	trending_users = ajax_trending_users(request,60)	
+
+	return HttpResponse(
+		json.dumps(trending_users),
+		content_type="application/json"
+	)
+
+##### GET TRENDING BOARDDS
+def get_trending_boards(request):
+	
+	trending_boards = ajax_trending_boards(request,60)
+
+	return HttpResponse(
+		json.dumps(trending_boards),
+		content_type="application/json"
+	)
 
 ##### HOME PAGE
 def home(request):
@@ -85,11 +112,7 @@ def home(request):
 def trending_items(request):
 	template = 'trending_items.html'
 
-	items = ajax_trending_items(request,365)
-
-	context_dict = {
-		'items':items
-	}
+	context_dict = {}
 
 	return render(request, template, context_dict)
 
@@ -98,11 +121,7 @@ def trending_items(request):
 def trending_boards(request):
 	template = 'trending_boards.html'
 
-	trending_boards = ajax_trending_boards(request,365)
-
-	context_dict = {
-		'trending_boards':trending_boards,
-	}
+	context_dict = {}
 
 	return render(request, template, context_dict)
 
@@ -113,9 +132,7 @@ def trending_users(request):
 
 	trending_users = ajax_trending_users(request,365)
 
-	context_dict = {
-		'trending_users':trending_users
-	}
+	context_dict = {}
 
 	return render(request, template, context_dict)
 

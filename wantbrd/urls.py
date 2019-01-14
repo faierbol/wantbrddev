@@ -2,12 +2,11 @@ from django.conf.urls import url, include
 from django.conf import settings
 from django.contrib import admin
 from django.conf.urls.static import static
-from django.urls import path
 from django.contrib.auth import views as auth_views
 from django.views.i18n import JavaScriptCatalog
 from board import views as board_views
 from user import views as user_views
-from django.urls import path, reverse_lazy
+from django.urls import path, reverse_lazy, include
 
 urlpatterns = [
     path('u/', include('user.urls')),
@@ -71,6 +70,7 @@ urlpatterns = [
         name='password_change'),
     url(r'^settings/password/done/$', auth_views.PasswordChangeDoneView.as_view(template_name='user/password_change_done.html'),
         name='password_change_done'),
+    path('', include('pwa.urls')),
 ]
 
 handler404 = 'board.views.error_404'
