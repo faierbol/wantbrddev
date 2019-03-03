@@ -33,53 +33,54 @@ def ajax_trending_items(request, period):
 
 		# now we have a unique list of itemconx's, loop through them
 		for item in itemconxs:
-			ti_dict = {}
-			#item_name
-			item_name = item.item.item_name
-			# item likes
-			item_likes = ItemLike.objects.filter(item_conx=item).count()
-			# item is liked
-			try:
-				item_is_liked = ItemLike.objects.filter(item_conx=item, user=request.user).exists()
-			except:
-				item_is_liked = False
-			# item views
-			item_views = ItemView.objects.filter(item_conx=item).count()						
-			# item image
-			item_image = item.image.url
-			# item id
-			item_id = item.id
-			# item slug
-			item_slug = item.slug
-			# item user
-			user = item.board.user.get_full_name()
-			# item username
-			username = item.board.user.username
-			# board name
-			board_name = item.board.board_name
-			# board slug
-			board_slug = item.board.slug
-			# user url
-			user_url = reverse('u:profile', kwargs={'username':username})
-			# item url
-			item_url = reverse('b:view_item', kwargs={'username':username, 'board_name':board_name, 'item_id':item_id, 'item_slug':item_slug})			
-			# boad_url
-			board_url = reverse('b:view_board', kwargs={'username':username,'board_name':board_slug})
+			if not item.board.private:
+				ti_dict = {}
+				#item_name
+				item_name = item.item.item_name
+				# item likes
+				item_likes = ItemLike.objects.filter(item_conx=item).count()
+				# item is liked
+				try:
+					item_is_liked = ItemLike.objects.filter(item_conx=item, user=request.user).exists()
+				except:
+					item_is_liked = False
+				# item views
+				item_views = ItemView.objects.filter(item_conx=item).count()						
+				# item image
+				item_image = item.image.url
+				# item id
+				item_id = item.id
+				# item slug
+				item_slug = item.slug
+				# item user
+				user = item.board.user.get_full_name()
+				# item username
+				username = item.board.user.username
+				# board name
+				board_name = item.board.board_name
+				# board slug
+				board_slug = item.board.slug
+				# user url
+				user_url = reverse('u:profile', kwargs={'username':username})
+				# item url
+				item_url = reverse('b:view_item', kwargs={'username':username, 'board_name':board_name, 'item_id':item_id, 'item_slug':item_slug})			
+				# boad_url
+				board_url = reverse('b:view_board', kwargs={'username':username,'board_name':board_slug})
 
-			ti_dict = {
-				'type':'trending_item',
-				'item_name':item_name,
-				'item_likes':item_likes,
-				'item_is_liked':item_is_liked,
-				'item_views':item_views,
-				'item_image':item_image,
-				'item_url':item_url,
-				'user':user,
-				'user_url':user_url,
-				'board_name':board_name,
-				'board_url':board_url,
-			}
-			trending_items.append(ti_dict)
+				ti_dict = {
+					'type':'trending_item',
+					'item_name':item_name,
+					'item_likes':item_likes,
+					'item_is_liked':item_is_liked,
+					'item_views':item_views,
+					'item_image':item_image,
+					'item_url':item_url,
+					'user':user,
+					'user_url':user_url,
+					'board_name':board_name,
+					'board_url':board_url,
+				}
+				trending_items.append(ti_dict)
 			
 	return trending_items
 
@@ -101,55 +102,56 @@ def ajax_trending_boards(request, period):
 	tb_dict = {}
 
 	for board in all_boards:
+		if not board.private:
 
-		board.itemconxs = ItemConnection.objects.filter(board=board, active=True)[:5]
-		board.nohero = 'img/default-hero-1.jpg'
+			board.itemconxs = ItemConnection.objects.filter(board=board, active=True)[:5]
+			board.nohero = 'img/default-hero-1.jpg'
 
-		username = board.user.username
-		full_name = board.user.get_full_name()
-		try:
-			user_pic = board.user.profile.picture.url
-		except:
-			user_pic = static('img/default-hero-1.webp')
-		try:
-			hero = board.hero.url
-		except:
-			hero = static('img/default-hero-3.webp')
+			username = board.user.username
+			full_name = board.user.get_full_name()
+			try:
+				user_pic = board.user.profile.picture.url
+			except:
+				user_pic = static('img/default-hero-1.webp')
+			try:
+				hero = board.hero.url
+			except:
+				hero = static('img/default-hero-3.webp')
 
-		board_name = board.board_name
-		board_slug = board.slug
-		total_items = board.totalitems = board.get_item_count()
-		views = board.views = BoardView.objects.filter(board=board).count()		
-		user_url = reverse('u:profile', kwargs={'username':username})
-		board_url = reverse('b:view_board', kwargs={'username':username,'board_name':board_slug})
+			board_name = board.board_name
+			board_slug = board.slug
+			total_items = board.totalitems = board.get_item_count()
+			views = board.views = BoardView.objects.filter(board=board).count()		
+			user_url = reverse('u:profile', kwargs={'username':username})
+			board_url = reverse('b:view_board', kwargs={'username':username,'board_name':board_slug})
 
-		getItems = ItemConnection.objects.filter(board=board, active=True)[:3]
-		allitems = []
-		for item in getItems:
-			item_id = item.id
-			item_slug = item.slug
-			item_link = item_url = reverse('b:view_item', kwargs={'username':username, 'board_name':board_name, 'item_id':item_id, 'item_slug':item_slug})			
-			item_dict = {
-				'image':item.image.url,
-				'link':item_link
+			getItems = ItemConnection.objects.filter(board=board, active=True)[:3]
+			allitems = []
+			for item in getItems:
+				item_id = item.id
+				item_slug = item.slug
+				item_link = item_url = reverse('b:view_item', kwargs={'username':username, 'board_name':board_name, 'item_id':item_id, 'item_slug':item_slug})			
+				item_dict = {
+					'image':item.image.url,
+					'link':item_link
+				}
+				allitems.append(item_dict)		
+
+			tb_dict = {
+				'type':'trending_board',
+				'items':allitems,
+				'username':username,
+				'full_name':full_name,
+				'user_pic':user_pic,
+				'board_name':board_name,
+				'total_items':total_items,
+				'views':views,
+				'user_url':user_url,
+				'board_url':board_url,
+				'hero':hero,
 			}
-			allitems.append(item_dict)		
 
-		tb_dict = {
-			'type':'trending_board',
-			'items':allitems,
-			'username':username,
-			'full_name':full_name,
-			'user_pic':user_pic,
-			'board_name':board_name,
-			'total_items':total_items,
-			'views':views,
-			'user_url':user_url,
-			'board_url':board_url,
-			'hero':hero,
-		}
-
-		trending_boards.append(tb_dict)
+			trending_boards.append(tb_dict)
 
 	return trending_boards
 

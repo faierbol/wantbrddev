@@ -233,6 +233,19 @@ def edit_board(request, board_id, itemadded=''):
 				messages.info(request, 'your video settings were updated.')
 				return HttpResponseRedirect(request.path_info)
 
+
+			# manage board visibility
+			if request.POST.get("updatevisibility"):
+				board_status = request.POST.get("show_board")
+				if board_status:
+					Board.objects.filter(pk=board.id).update(private=False)
+					messages.info(request, 'Your board is now visible to users.')
+				else:
+					Board.objects.filter(pk=board.id).update(private=True)		
+					messages.info(request, 'Your board is now hidden from users.')		
+				return HttpResponseRedirect(request.path_info)
+
+
 			# manage privacy
 			if request.POST.get("updateprivacy"):
 				# get form data

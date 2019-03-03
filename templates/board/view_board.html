@@ -562,7 +562,22 @@ Check out {{ board.board_name }} by {{ board.user.username }}. Create your own w
             <div class="optionsPanel boardPrivacy">
                 
                 <h4>Board Privacy</h4>
-                <p>Restrict the following users from viewing this board.</p>
+
+                <p>Make board visible to users?</p>
+
+                <form method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    {% if not board.private %}
+                        <input type="checkbox" name="show_board" hidden="hidden" id="show_board" value="yes" checked="checked">
+                        <label class="switch" for="show_board"></label>
+                    {% else %}
+                        <input type="checkbox" name="show_board" hidden="hidden" id="show_board" value="yes">
+                        <label class="switch" for="show_board"></label>
+                    {% endif %}
+                    <p><button class="btn grey" name="updatevisibility" value="updatevisibility">Update</button></p>
+                </form>
+
+<!--                 <p>Restrict the following users from viewing this board.</p>
 
                 <form method="POST" enctype="multipart/form-data">
                     {% csrf_token %}
@@ -579,7 +594,7 @@ Check out {{ board.board_name }} by {{ board.user.username }}. Create your own w
                     </div>
                     <input type="hidden" name="board" value="{{ board.id }}">
                     <p><button class="btn grey" name="updateprivacy" value="updateprivacy">Update</button></p>
-                </form>
+                </form> -->
 
             </div>
         </div>
