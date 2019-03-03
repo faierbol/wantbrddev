@@ -1054,11 +1054,11 @@ def search(request):
 	item_search_names = []
 	item_obj = Item.objects.filter(item_name__icontains=search_term)
 	for item in item_obj:
-		item_conxs = ItemConnection.objects.filter(item=item, active=True).exclude(board__slug='your-saved-items')
+		item_conxs = ItemConnection.objects.filter(item=item, active=True).exclude(board__slug='your-saved-items').exclude(board__private=True)
 		for item in item_conxs:
 			item_search_names.append(item)
 
-	item_search_tags = ItemConnection.objects.filter(tags__name__in=[search_term])
+	item_search_tags = ItemConnection.objects.filter(tags__name__in=[search_term]).exclude(board__private=True)
 	item_search_tags = list(item_search_tags)
 	items_list = item_search_tags + item_search_names
 	for item in items_list:
@@ -1087,12 +1087,13 @@ def search(request):
 	all_boards = board_search_tags | board_search_names
 	all_boards = all_boards.distinct()	
 	for board in all_boards:
-		try:
-			if board.get_item_count() > 0 and not board.user_blocked(request.user):
-				board_results.append(board)
-		except:
-			if board.get_item_count() > 0:
-				board_results.append(board)
+		if not board.private:
+			try:
+				if board.get_item_count() > 0 and not board.user_blocked(request.user):
+					board_results.append(board)
+			except:
+				if board.get_item_count() > 0:
+					board_results.append(board)
 	for board in board_results:
 		board.totalitems = board.get_item_count()
 		board.views = BoardView.objects.filter(board=board).count()
@@ -1174,11 +1175,11 @@ def search_item(request):
 	item_search_names = []
 	item_obj = Item.objects.filter(item_name__icontains=search_term)
 	for item in item_obj:
-		item_conxs = ItemConnection.objects.filter(item=item, active=True).exclude(board__slug='your-saved-items')
+		item_conxs = ItemConnection.objects.filter(item=item, active=True).exclude(board__slug='your-saved-items').exclude(board__private=True)
 		for item in item_conxs:
 			item_search_names.append(item)
 
-	item_search_tags = ItemConnection.objects.filter(tags__name__in=[search_term])
+	item_search_tags = ItemConnection.objects.filter(tags__name__in=[search_term]).exclude(board__private=True)
 	item_search_tags = list(item_search_tags)
 	items_list = item_search_tags + item_search_names
 	for item in items_list:
