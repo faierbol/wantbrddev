@@ -434,20 +434,21 @@ def profile(request, username):
 		the_boards = []
 		# get the tags for each board
 		for board in boards:
-			board.items = []
-			board.thetags = board.tags.all()
-			item_conxs = ItemConnection.objects.filter(board=board, active=True)
-			board.count = item_conxs.count()
-			if board.count > 0:
-				board.views = BoardView.objects.filter(board=board).count()
-				board.items = ItemConnection.objects.filter(board=board, active=True)[:3]
-				blocked_obj = BoardPrivacy.objects.filter(board=board) 
-				board.blocked = []
-				for obj in blocked_obj:
-					board.blocked.append(obj.user)
-				if board.items:
-					if request.user not in board.blocked:
-						the_boards.append(board)
+			if not board.private:
+				board.items = []
+				board.thetags = board.tags.all()
+				item_conxs = ItemConnection.objects.filter(board=board, active=True)
+				board.count = item_conxs.count()
+				if board.count > 0:
+					board.views = BoardView.objects.filter(board=board).count()
+					board.items = ItemConnection.objects.filter(board=board, active=True)[:3]
+					blocked_obj = BoardPrivacy.objects.filter(board=board) 
+					board.blocked = []
+					for obj in blocked_obj:
+						board.blocked.append(obj.user)
+					if board.items:
+						if request.user not in board.blocked:
+							the_boards.append(board)
 
 		profile = user.profile
 		connections = profile.get_connections()
