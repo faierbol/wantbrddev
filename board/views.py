@@ -41,9 +41,9 @@ def error_500(request, exception):
 ##### GET HOME ITEMS
 def get_home_items(request):
 	
-	trending_items = ajax_trending_items(request,60)
-	trending_boards = ajax_trending_boards(request,60)
-	trending_users = ajax_trending_users(request,60)	
+	trending_items = ajax_trending_items(request,120)
+	trending_boards = ajax_trending_boards(request,120)
+	trending_users = ajax_trending_users(request,120)	
 	# recommended_boards = get_recommended_boards(request)
 
 	mixed = trending_boards + trending_items + trending_users
@@ -596,7 +596,10 @@ def view_item(request, username, board_name, item_id, item_slug):
 def add_item(request, board_id):
 	template = 'board/add_item.html'
 
-	board = get_object_or_404(Board, pk=board_id)
+	try:
+		board = get_object_or_404(Board, pk=board_id)
+	except:
+		board = None
 	user_boards = Board.objects.filter(user=request.user)
 	form = ItemForm()
 	url = ''
@@ -843,7 +846,7 @@ def add_item(request, board_id):
 				new_item_conx = form.save(commit=False)
 				if item_status == 'GOT':
 					new_item_conx.rating = rating
-				new_item_conx.board = board
+				new_item_conx.board = board_assign
 				new_item_conx.item = new_item
 				if itook == True:
 					new_item_conx.image_owner = request.user.id
@@ -853,13 +856,12 @@ def add_item(request, board_id):
 					new_item_conx.img_own = True
 					new_item_conx.save()
 				else:
-					new_item_conx.image.save(file_name, files.File(fp))
-				new_item_conx.board = board_assign
+					new_item_conx.image.save(file_name, files.File(fp))				
 				new_item_conx.original_purchase_url = original_url
 				new_item_conx.save()
 				form.save_m2m()					
 
-				return redirect('b:edit_board_added', board_id=board_id, itemadded=new_item_conx.id)
+				return redirect('b:edit_board_added', board_id=new_item_conx.board.id, itemadded=new_item_conx.id)					
 				
 
 	context_dict = {

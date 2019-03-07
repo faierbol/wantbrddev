@@ -296,7 +296,7 @@ header#main {
             color:#121212;
         }
         .headersearch {
-            margin:6px 20px 0 20px;
+            margin:14px 20px 0 20px;
             position: relative;
         }
             .headersearch i {
@@ -487,6 +487,14 @@ header#main {
             transform: scale(1);
             opacity: 1;
         }
+    .addItemNone {
+        font-size: 2.3rem;
+        display: inline-block;
+        vertical-align: middle;
+    }
+    .addItemNone i {
+        color:#F14E2C;
+    }
 
 header#main.shrink {
     padding:8px 0;
@@ -4459,7 +4467,7 @@ footer {
     }
 }
 
-@media screen and (max-width: 760px) {
+@media screen and (max-width: 790px) {
     #addeditleft, #addeditright {
         width: 100%;
         float: none;
@@ -4791,7 +4799,7 @@ footer {
     }
 }
 
-@media screen and (max-width: 560px) {
+@media screen and (max-width: 570px) {
     .modal {
         padding:20px 20px;
     }
@@ -4993,6 +5001,24 @@ footer {
 }
 
 @media screen and (max-width: 460px) {
+    a.myhome i {
+        line-height: 33px;
+        display: block;
+        color:#fff;
+        font-size: 1rem;
+    }
+    a.myhome:hover i {
+        color:#333;
+    }
+    a.myhome {
+        display: inline-block;
+        border:none;
+        border-radius:50%;
+        padding:0 10px;
+    }
+    a.myhome span {
+        display: none;
+    }
     .smallLinks .popRegister {
         display: block;
         float: none;
@@ -5068,24 +5094,6 @@ footer {
 @media screen and (max-width: 420px) {
     .boardMeta p {
         display: none;
-    }
-    a.myhome {
-        display: inline-block;
-        border:none;
-        border-radius:50%;
-        padding:0 10px;
-    }
-    a.myhome span {
-        display: none;
-    }
-    a.myhome i {
-        line-height: 33px;
-        display: block;
-        color:#fff;
-        font-size: 1rem;
-    }
-    a.myhome:hover i {
-        color:#333;
     }
     a.loginregister {
         padding:0 10px;
@@ -5182,6 +5190,9 @@ footer {
     }
     .tabNav a span {
         font-size: 1.2rem;
+    }
+    a.myhome {
+        display: none;
     }
 }
 

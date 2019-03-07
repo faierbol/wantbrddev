@@ -91,6 +91,7 @@
                 {% if unread_followers or unread_likes %}
                     <i class="fas fa-exclamation"></i>
                 {% endif %}
+                <a class="addItemNone" href="{% url 'b:add_item' 0 %}"><i class="fas fa-plus-circle"></i></a>
 
             {% else %}
                 <a href="#loginModal" class="btn orange loginregister" rel="modal:open">
@@ -175,7 +176,8 @@
             </div>
             <div class="cd-panel__content">
                 <ul>
-                    <li><a href="{% url 'u:home' %}"><i class="fal fa-user"></i> <span>Profile</span></a></li>
+                    <li><a href="{% url 'my_home' %}"><i class="fal fa-home"></i> <span>My Home</span></a></li>
+                    <li><a href="{% url 'u:home' %}"><i class="fal fa-user"></i> <span>Profile / My Boards</span></a></li>
                     <li><a href="{% url 'b:edit_board' request.user.profile.get_saved_board %}"><i class="fal fa-bookmark"></i> Saved Items</a></li>
                     {% if unread_followers or unread_likes %}
                     <li><a href="{% url 'my_notifications' %}" rel="tooltip" title="

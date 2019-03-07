@@ -18,20 +18,16 @@
 {% block body %}
 
 {% if board.background %}
-<div class="discoveryWrap" style="background-image:url('{% static '' %}img/default-hero-{% random_int 1 4%}.jpg')"></div>
+<div class="discoveryWrap" style="background-image:url('{% static '' %}img/default-hero-{% random_int 1 4%}.webp')"></div>
 {% else %}
-<div class="discoveryWrap" style="background-image:url('{% static '' %}img/default-hero-{% random_int 1 4%}.jpg')"></div>
+<div class="discoveryWrap" style="background-image:url('{% static '' %}img/default-hero-{% random_int 1 4%}.webp')"></div>
 {% endif %}
 
 <div id="discoveryCont" class="addNewItem container clearfix">
     
     <div class="addItem">
         
-        {% if board.id %}
         <h3>Add an item to <em>'{{ board.board_name }}'</em></h3>
-        {% else %}
-        <h3>Add an item</h3>
-        {% endif %}
 
         {% if form.errors %}
             <h4>Please fix the following errors</h4>
@@ -45,11 +41,7 @@
 
             <div class="searchWnt">
                 <strong class="formtitle">Search wantbrd for an item:</strong>
-                {% if board.id %}
                 <form method="GET" action="{% url 'b:add_item' board.id %}" id="finditem">
-                {% else %}
-                <form method="GET" action="{% url 'b:add_item' 0 %}" id="finditem">
-                {% endif %}
                     <input
                         type="search"
                         placeholder="Search for an item by name"
