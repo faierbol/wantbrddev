@@ -261,14 +261,43 @@ def ajax_communities(request):
 
 
 ### GET RECOMMENDED BOARDS
-def get_recommended_boards(request):
+def ajax_recommended_boards(request):
 
-	rec_boards = Board.objects.filter(recommended=True)
+	rec_boards = []
+	rec_dict = {}
+	
+	all_boards = Board.objects.filter(recommended=True)
+	
+	for board in all_boards:
 
-	for board in rec_boards:
-		board.totalitems = board.get_item_count()
-		board.views = BoardView.objects.filter(board=board).count()
-		board.itemconxs = ItemConnection.objects.filter(board=board, active=True)[:5]
+		username = board.user.username
+		full_name = board.user.get_full_name()
+
+		try:
+			hero = board.hero.url
+		except:
+			hero = static('img/default-hero-3.jpg')
+
+		board_name = board.board_name
+		board_slug = board.slug
+		total_items = board.totalitems = board.get_item_count()
+		views = board.views = BoardView.objects.filter(board=board).count()		
+		user_url = reverse('u:profile', kwargs={'username':username})
+		board_url = reverse('b:view_board', kwargs={'username':username,'board_name':board_slug})
+
+		rec_dict = {
+			'type':'rec_board',
+			'username':username,
+			'full_name':full_name,
+			'board_name':board_name,
+			'total_items':total_items,
+			'views':views,
+			'user_url':user_url,
+			'board_url':board_url,
+			'hero':hero,
+		}
+
+		rec_boards.append(rec_dict)
 
 	return rec_boards
 

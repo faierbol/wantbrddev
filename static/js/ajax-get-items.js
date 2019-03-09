@@ -168,6 +168,29 @@ $(window).on("load", function() {
                         `
                     )
 
+                } else if(item.type == 'rec_board') {
+
+                    board.append(
+                        `
+                        <div class="featBox recommendedBoard">
+                            <div class="featOrangeHead">
+                                <strong>Wantbrd Recommended</strong>
+                                <a href="${item.board_url}">${item.board_name}</a>
+                            </div>                        
+                            <div class="recommendedImage" style="background-image:url('${item.hero}');"></div>
+                            <div class="recommendedText">
+                                <p>${item.description}</p>
+                            </div>
+                            <div class="recommendedMeta">
+                                <span>${item.total_items} <i class="fal fa-list-alt"></i></span>
+                                <span>${item.views} <i class="fas fa-eye"></i></span>
+                            </div>
+                            <a href="${item.board_url}" class="btn grey">View Board</a>
+                            <div class="clear"></div>
+                        </div>            
+                        `
+                    )
+
                 } 
             })             
 

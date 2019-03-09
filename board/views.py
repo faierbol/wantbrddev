@@ -45,9 +45,9 @@ def get_home_items(request):
 	trending_boards = ajax_trending_boards(request,240)
 	trending_users = ajax_trending_users(request,240)
 	communities = ajax_communities(request)
-	# recommended_boards = get_recommended_boards(request)
+	recommended_boards = ajax_recommended_boards(request)
 
-	mixed = trending_boards + trending_users + list(communities)
+	mixed = trending_boards + trending_users + communities + recommended_boards
 	random.shuffle(mixed)
 
 	return HttpResponse(
