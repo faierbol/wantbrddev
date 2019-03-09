@@ -179,7 +179,7 @@ $(window).on("load", function() {
                             </div>                        
                             <div class="recommendedImage" style="background-image:url('${item.hero}');"></div>
                             <div class="recommendedText">
-                                <p>${item.description}</p>
+                                <p></p>
                             </div>
                             <div class="recommendedMeta">
                                 <span>${item.total_items} <i class="fal fa-list-alt"></i></span>
