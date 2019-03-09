@@ -112,11 +112,11 @@ def ajax_trending_boards(request, period):
 			try:
 				user_pic = board.user.profile.picture.url
 			except:
-				user_pic = static('img/default-hero-1.webp')
+				user_pic = static('img/default-hero-1.jpg')
 			try:
 				hero = board.hero.url
 			except:
-				hero = static('img/default-hero-3.webp')
+				hero = static('img/default-hero-3.jpg')
 
 			board_name = board.board_name
 			board_slug = board.slug
@@ -179,11 +179,11 @@ def ajax_trending_users(request, period):
 		try:
 			user_pic = user.profile.picture.url
 		except:
-			user_pic = static('img/default-hero-1.webp')
+			user_pic = static('img/default-hero-1.jpg')
 		try:
 			hero = user.profile.url
 		except:
-			hero = static('img/default-hero-3.webp')
+			hero = static('img/default-hero-3.jpg')
 		user_boards = Board.objects.filter(user=user).exclude(slug='your-saved-items')
 		total_boards = user_boards.count()
 		user_items = []

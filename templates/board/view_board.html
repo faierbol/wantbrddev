@@ -39,7 +39,7 @@ Check out {{ board.board_name }} by {{ board.user.username }}. Create your own w
         {% if board.hero %}
         <div class="boardBg" style="background-image:url('{{ board.hero.url }}')"></div>
         {% else %}    
-        <div class="boardBg" style="background-image:url('{% static '' %}img/default-hero-{% random_int 1 4%}.webp')"></div>
+        <div class="boardBg" style="background-image:url('{% static '' %}img/default-hero-{% random_int 1 4%}.jpg')"></div>
         {% endif %}
 
         <div class="container">
@@ -51,7 +51,7 @@ Check out {{ board.board_name }} by {{ board.user.username }}. Create your own w
                         {% if board.user.profile.picture %}
                             <div class="circle" style="background-image:url('{{ board.user.profile.picture.url }}');"></div>
                         {% else %}
-                            <div class="circle" style="background-image:url('{% static '' %}img/default-hero-{% random_int 1 4%}.webp');"></div>
+                            <div class="circle" style="background-image:url('{% static '' %}img/default-hero-{% random_int 1 4%}.jpg');"></div>
                         {% endif %}
                     </div>
                     <a class="trendingUserNames" href="{% url 'u:profile' board.user.username %}">
@@ -164,7 +164,7 @@ Check out {{ board.board_name }} by {{ board.user.username }}. Create your own w
                 {% if board.hero %}
                 <div class="mobileBoardBg" style="background-image:url('{{ board.hero.url }}')"></div>
                 {% else %}    
-                <div class="mobileBoardBg" style="background-image:url('{% static '' %}img/default-hero-{% random_int 1 4%}.webp')"></div>
+                <div class="mobileBoardBg" style="background-image:url('{% static '' %}img/default-hero-{% random_int 1 4%}.jpg')"></div>
                 {% endif %}
 
 

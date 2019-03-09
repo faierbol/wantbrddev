@@ -232,7 +232,7 @@ LOGOUT_REDIRECT_URL = 'home'
 # EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 EMAIL_HOST = 'smtp.mailgun.org'
-EMAIL_PORT = 587
+EMAIL_PORT = 5871
 EMAIL_HOST_USER = 'mailsend@mg.wantbrd.com'
 EMAIL_HOST_PASSWORD = config('MAILGUN_SMTP_PASSWORD')
 EMAIL_USE_TLS = True

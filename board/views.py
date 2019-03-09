@@ -41,12 +41,12 @@ def error_500(request, exception):
 ##### GET HOME ITEMS
 def get_home_items(request):
 	
-	trending_items = ajax_trending_items(request,120)
-	trending_boards = ajax_trending_boards(request,120)
-	trending_users = ajax_trending_users(request,120)	
+	# trending_items = ajax_trending_items(request,120)
+	trending_boards = ajax_trending_boards(request,240)
+	trending_users = ajax_trending_users(request,240)	
 	# recommended_boards = get_recommended_boards(request)
 
-	mixed = trending_boards + trending_items + trending_users
+	mixed = trending_boards + trending_users
 	random.shuffle(mixed)
 
 	return HttpResponse(
