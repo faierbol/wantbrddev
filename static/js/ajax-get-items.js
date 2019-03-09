@@ -147,6 +147,27 @@ $(window).on("load", function() {
 
                     )
 
+                } else if(item.type == 'community') {
+
+                    board.append(
+                        `
+                        <div class="featBox communityCta">
+                            <div class="comTop">
+                                Featured Community
+                            </div>
+                            <div class="communityCtaImage" style="background-image:url('${item.image}')">
+                            </div>
+                            <div class="communityCtaCont">
+                                <h2>#${item.name}</h2>
+                                <div class="communityCtaProducts">
+                                    ${item.products}
+                                </div>
+                                <a href="/community/${item.slug}">Explore now</a>
+                            </div>
+                        </div>
+                        `
+                    )
+
                 } 
             })             
 

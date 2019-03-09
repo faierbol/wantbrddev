@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Board, Item, BoardLike, ItemLike, BoardView, ItemView, ItemConnection, BoardPrivacy, Collection
+from .models import Board, Item, BoardLike, ItemLike, BoardView, ItemView, ItemConnection, BoardPrivacy, Collection, Community
 
 class BoardAdmin(admin.ModelAdmin):
 	prepopulated_fields = {
@@ -24,6 +24,11 @@ class CollectionAdmin(admin.ModelAdmin):
 	readonly_fields=('id',)
 	list_display = ('id', 'name')
 admin.site.register(Collection, CollectionAdmin)
+
+class CommunityAdmin(admin.ModelAdmin):
+	readonly_fields=('id',)
+	list_display = ('id', 'name')
+admin.site.register(Community, CommunityAdmin)
 
 admin.site.register(BoardLike)
 

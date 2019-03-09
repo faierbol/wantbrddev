@@ -1,14 +1,14 @@
 import requests, urllib, datetime, base64
 from django.shortcuts import get_object_or_404
 from django.contrib.auth.models import User
-from board.models import ItemLike, BoardLike, ItemConnection, ItemView, BoardView, Board, BoardPrivacy, Community
+from board.models import ItemLike, BoardLike, ItemConnection, ItemView, BoardView, Board, BoardPrivacy
 from user.models import Notification
 from django.urls import reverse
 from django.contrib.staticfiles.templatetags.staticfiles import static
 
 
 
-### GET TRENDING ITEMS
+### GET TRENDING ITEMS (NEW)
 def ajax_trending_items(request, period):
 	# current datetime and datetime 3 days ago
 	now = datetime.datetime.now()
@@ -85,7 +85,7 @@ def ajax_trending_items(request, period):
 	return trending_items
 
 
-### GET TRENDING BOARDS
+### GET TRENDING BOARDS (NEW)
 def ajax_trending_boards(request, period):
 
 	now = datetime.datetime.now()
@@ -156,7 +156,7 @@ def ajax_trending_boards(request, period):
 	return trending_boards
 
 
-### GET TRENDING USERS
+### GET TRENDING USERS (NEW)
 def ajax_trending_users(request, period):
 
 	now = datetime.datetime.now()
@@ -232,32 +232,86 @@ def ajax_trending_users(request, period):
 	return trending_users
 
 
-### GET COMMUNITIES
-def ajax_communities(request):
+### GET TRENDING ITEMS
+def get_trending_items(request, period):
+	# current datetime and datetime 3 days ago
+	now = datetime.datetime.now()
+	ago = now - datetime.timedelta(days=period)
 
-	communities = []
-	com_dict = {}
-	all_communities = Community.objects.filter(front_page=True)
-	for community in all_communities:
-		name = community.name
-		description = community.description
-		products = community.products_included
-		image = community.image.url
-		slug = community.slug
+	try:
+		item_likes = ItemLike.objects.filter(created__range=[ago, now])	
+	except:
+		pass
 	
-		com_dict = {
-			'type': 'community',
-			'name': name,
-			'slug': slug,
-			'description': description,
-			'products': products,
-			'image': image,
-		}
-	
-		communities.append(com_dict);
+	itemconxs = []
+	trending_items = []
 
-	return communities
+	if item_likes:
+		for item in item_likes:
+			if item.item_conx not in itemconxs:
+				itemconxs.append(item.item_conx)
+		
+		for item in itemconxs:
+			item.likes = ItemLike.objects.filter(item_conx=item).count()
+			try:
+				item.is_liked = ItemLike.objects.filter(item_conx=item, user=request.user).exists()
+			except:
+				item.is_liked = False
+			item.views = ItemView.objects.filter(item_conx=item).count()
+			trending_items.append(item)
 
+	return trending_items
+
+
+### GET TRENDING BOARDS
+def get_trending_boards(request, period):
+	now = datetime.datetime.now()
+	ago = now - datetime.timedelta(days=period)
+
+	board_likes = BoardLike.objects.filter(created__range=[ago, now])
+
+	all_boards = []
+	for board_like in board_likes:
+		if board_like.board not in all_boards:
+			all_boards.append(board_like.board)
+
+	trending_boards = []
+	for board in all_boards:
+		board.totalitems = board.get_item_count()
+		board.views = BoardView.objects.filter(board=board).count()
+		board.itemconxs = ItemConnection.objects.filter(board=board, active=True)[:5]
+		board.nohero = 'img/default-hero-1.jpg'
+		trending_boards.append(board)
+
+	return trending_boards
+
+
+### GET TRENDING USERS
+def get_trending_users(request, period):
+	now = datetime.datetime.now()
+	ago = now - datetime.timedelta(days=period)
+
+	item_likes = ItemLike.objects.filter(created__range=[ago, now])	
+
+	users = []
+	for item in item_likes:
+		if item.item_conx.board.user not in users:
+			users.append(item.item_conx.board.user)
+
+	trending_users = []
+	for user in users:
+		user_boards = Board.objects.filter(user=user).exclude(slug='your-saved-items')
+		user.totalboards = user_boards.count()
+		user_items = []
+		for board in user_boards:
+			itemconxs = ItemConnection.objects.filter(board=board, active=True)
+			for item in itemconxs:
+				user_items.append(item)									
+		user.items = user_items[:5]
+		user.totalitems = len(user_items)
+		trending_users.append(user)
+
+	return trending_users
 
 
 ### GET RECOMMENDED BOARDS

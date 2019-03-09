@@ -21,6 +21,7 @@ urlpatterns = [
     path('trending/users', board_views.trending_users, name='trending_users'),
     path('trending/boards', board_views.trending_boards, name='trending_boards'),
     path('collection/<collection_slug>', board_views.collection, name='collection'),
+    path('community/<community_slug>', board_views.community, name='community'),
     path('search/', board_views.search, name='search'),
     path('search/item/', board_views.search_item, name='search_item'),
     path('search/user/', board_views.search_user, name='search_user'),

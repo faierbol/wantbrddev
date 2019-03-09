@@ -224,6 +224,23 @@ class Collection(models.Model):
 		super(Collection, self).save(*args, **kwargs)
 
 
+# Communities
+class Community(models.Model):
+	name = models.CharField(null=False, max_length=100, blank=False)
+	tag = models.CharField(max_length=100, blank=True)
+	products_included = models.TextField(default='', blank=True)
+	description = models.TextField(default='', blank=True)
+	front_page = models.BooleanField(default=False)
+	image = ImageField(upload_to = 'uploads/community/', default = 'defaults/no-item.png')
+	slug = models.SlugField(default='', max_length=255)
+
+	def __str__(self):
+		return self.name
+
+	def save(self, *args, **kwargs):
+		self.slug = slugify(self.name)
+		super(Community, self).save(*args, **kwargs)
+
 # Track item views
 class ItemView(models.Model):
 	item_conx = models.ForeignKey(ItemConnection, on_delete=models.CASCADE)

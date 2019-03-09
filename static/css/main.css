@@ -666,6 +666,68 @@ HOME
     #homeBoardItems img {        
         width:100%;
     }
+    .featBox.communityCta {
+        /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#f97d1f+0,edca1e+100 */
+        background: rgb(249,125,31); /* Old browsers */
+        background: -moz-linear-gradient(-45deg, rgba(249,125,31,1) 0%, rgba(237,202,30,1) 100%); /* FF3.6-15 */
+        background: -webkit-linear-gradient(-45deg, rgba(249,125,31,1) 0%,rgba(237,202,30,1) 100%); /* Chrome10-25,Safari5.1-6 */
+        background: linear-gradient(135deg, rgba(249,125,31,1) 0%,rgba(237,202,30,1) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+        filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f97d1f', endColorstr='#edca1e',GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
+        color:#fff;
+        border:none; 
+    }
+    .communityCtaImage {
+        height: 200px;
+        background-size: cover;
+        background-position: center;
+        position: relative;
+    }
+    .comLabel {
+        position: absolute;
+        left:0;
+        top:20px;
+        background:#fff;
+        color:#111;
+        padding:5px;
+        font-size: 1rem;
+    }
+    .comTop {
+        background:#fff;
+        color:#111;
+        padding:20px;
+        font-weight: bold;
+        font-size: .75rem;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        border:1px solid #dbdbdb;
+        border-bottom:0;
+    }
+    .communityCtaCont {
+        padding:30px;
+    }
+    .communityCta h2 {
+        font-size: 2rem;
+        font-weight: 700;
+        text-transform: uppercase;
+    }
+    .communityCtaProducts {
+        font-size: 1.3rem;
+    }
+    .communityCtaCont a {
+        margin-top:20px;
+        display: inline-block;
+        border:3px solid #fff;
+        padding:20px 30px;
+        text-align: center;
+        font-size: 1.4rem;
+        text-decoration: none;
+        color:#fff;
+        border-radius: 100px;
+    }
+    .communityCtaCont a:hover {
+        background:#fff;
+        color:#111;
+    }
 
     /** trending user **/
 
@@ -1755,8 +1817,8 @@ AWARDS
     progress[value]::-webkit-progress-value {
       background-image:
            -webkit-linear-gradient(-45deg, 
-                                   transparent 33%, rgba(0, 0, 0, .1) 33%, 
-                                   rgba(0,0, 0, .1) 66%, transparent 66%),
+           transparent 33%, rgba(0, 0, 0, .1) 33%, 
+           rgba(0,0, 0, .1) 66%, transparent 66%),
            -webkit-linear-gradient(left, #09c, #7DB7E6);
 
         border-radius: 2px; 

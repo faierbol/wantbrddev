@@ -7,7 +7,7 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.db.models import Q
 from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.auth.models import User
-from .models import Board, Item, BoardLike, ItemLike, BoardView, ItemView, ItemConnection, BoardPrivacy, Collection
+from .models import Board, Item, BoardLike, ItemLike, BoardView, ItemView, ItemConnection, BoardPrivacy, Collection, Community
 from user.models import Notification, TagFollows
 from user.views import Connection
 from .forms import BoardForm, ItemForm, EditBoardForm, ChangeBackgroundForm, UpdateTags, BoardPrivacyForm
@@ -43,10 +43,11 @@ def get_home_items(request):
 	
 	# trending_items = ajax_trending_items(request,120)
 	trending_boards = ajax_trending_boards(request,240)
-	trending_users = ajax_trending_users(request,240)	
+	trending_users = ajax_trending_users(request,240)
+	communities = ajax_communities(request)
 	# recommended_boards = get_recommended_boards(request)
 
-	mixed = trending_boards + trending_users
+	mixed = trending_boards + trending_users + list(communities)
 	random.shuffle(mixed)
 
 	return HttpResponse(
@@ -57,7 +58,7 @@ def get_home_items(request):
 ##### GET TRENDING ITEMS
 def get_trending_items(request):
 	
-	trending_items = ajax_trending_items(request,60)
+	trending_items = ajax_trending_items(request,240)
 
 	return HttpResponse(
 		json.dumps(trending_items),
@@ -67,7 +68,7 @@ def get_trending_items(request):
 ##### GET TRENDING USERS
 def get_trending_users(request):
 	
-	trending_users = ajax_trending_users(request,60)	
+	trending_users = ajax_trending_users(request,240)	
 
 	return HttpResponse(
 		json.dumps(trending_users),
@@ -77,7 +78,7 @@ def get_trending_users(request):
 ##### GET TRENDING BOARDDS
 def get_trending_boards(request):
 	
-	trending_boards = ajax_trending_boards(request,60)
+	trending_boards = ajax_trending_boards(request,240)
 
 	return HttpResponse(
 		json.dumps(trending_boards),
@@ -1033,6 +1034,29 @@ def collection(request, collection_slug):
 	context_dict = {
 		'collection':collection,
 		'mixed':mixed,
+	}
+
+	return render(request, template, context_dict)
+
+
+##### COMMUNITIES
+def community(request, community_slug):
+	template = 'board/community.html'
+	community = Community.objects.get(slug=community_slug)
+	term = community.tag
+	
+	# get items by tag
+	items = ItemConnection.objects.filter(tags__name__in=[term]).exclude(board__private=True)
+	# get boards by tag
+	boards = Board.objects.filter(tags__name__in=[term]).exclude(private=True)
+
+	# collate and mix all results
+	results = list(items) + list(boards)
+	random.shuffle(results)
+
+	context_dict = {
+		'results':results,
+		'community': community,
 	}
 
 	return render(request, template, context_dict)
