@@ -85,6 +85,7 @@
                                     <div class="trendingItemName">
                                         <a href="{% url 'b:view_item' item.board.user item.board.slug item.id item.slug %}" class="trendName">{{ item.item.item_name }}</a>
                                         <div class="trendingItemMeta">
+                                            <p>Posted {{ item.created|timesince }} ago</p>
                                             Found in <a href="{% url 'b:view_board' item.board.user item.board.slug %}">{{ item.board.board_name }}</a> by 
                                             <a href="{% url 'u:profile' item.board.user %}">
                                                 {% if item.board.user.get_full_name %}
