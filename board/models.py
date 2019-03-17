@@ -93,6 +93,7 @@ class ItemConnection(models.Model):
 	original_purchase_url = models.URLField(max_length=2000, blank=True)
 	item_desc = models.CharField(max_length=1000, blank=True)
 	review = models.CharField(max_length=1000, blank=True, default='')
+	front_page_review = models.BooleanField(default=False)
 	rating = models.IntegerField(null=False, blank=False, default=1)
 	image_owner = models.IntegerField(null=True, blank=True)
 	tags = TaggableManager(blank=True)

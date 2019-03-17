@@ -34,37 +34,24 @@ def ajax_trending_items(request, period):
 		# now we have a unique list of itemconx's, loop through them
 		for item in itemconxs:
 			if not item.board.private:
+				
 				ti_dict = {}
-				#item_name
 				item_name = item.item.item_name
-				# item likes
 				item_likes = ItemLike.objects.filter(item_conx=item).count()
-				# item is liked
 				try:
 					item_is_liked = ItemLike.objects.filter(item_conx=item, user=request.user).exists()
 				except:
 					item_is_liked = False
-				# item views
 				item_views = ItemView.objects.filter(item_conx=item).count()						
-				# item image
 				item_image = item.image.url
-				# item id
 				item_id = item.id
-				# item slug
 				item_slug = item.slug
-				# item user
 				user = item.board.user.get_full_name()
-				# item username
 				username = item.board.user.username
-				# board name
 				board_name = item.board.board_name
-				# board slug
 				board_slug = item.board.slug
-				# user url
 				user_url = reverse('u:profile', kwargs={'username':username})
-				# item url
 				item_url = reverse('b:view_item', kwargs={'username':username, 'board_name':board_name, 'item_id':item_id, 'item_slug':item_slug})			
-				# boad_url
 				board_url = reverse('b:view_board', kwargs={'username':username,'board_name':board_slug})
 
 				ti_dict = {
@@ -300,6 +287,46 @@ def ajax_recommended_boards(request):
 		rec_boards.append(rec_dict)
 
 	return rec_boards
+
+
+### GET HIGHLIGHTED REVIEWS
+def ajax_highlighted_reviews(request):
+
+	reviews = []
+	review_dict = {}
+	
+	items_with_reviews = ItemConnection.objects.filter(front_page_review=True)
+	
+	for item in items_with_reviews:
+
+		ti_dict = {}
+		item_name = item.item.item_name
+		item_image = item.image.url
+		item_id = item.id
+		item_slug = item.slug
+		user = item.board.user.get_full_name()
+		username = item.board.user.username
+		board_name = item.board.board_name
+		board_slug = item.board.slug
+		user_url = reverse('u:profile', kwargs={'username':username})
+		item_url = reverse('b:view_item', kwargs={'username':username, 'board_name':board_name, 'item_id':item_id, 'item_slug':item_slug})			
+		board_url = reverse('b:view_board', kwargs={'username':username,'board_name':board_slug})
+		item_review = item.review
+
+		review_dict = {
+			'type':'review',
+			'item_name':item_name,
+			'item_image':item_image,
+			'item_url':item_url,
+			'item_review':item_review,
+			'user':user,
+			'user_url':user_url,
+			'board_name':board_name,
+			'board_url':board_url,
+		}
+		reviews.append(review_dict)
+
+	return reviews
 
 
 # Like item & notify

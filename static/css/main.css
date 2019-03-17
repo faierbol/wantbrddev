@@ -676,11 +676,24 @@ HOME
         color:#fff;
         border:none; 
     }
-    .communityCtaImage {
+    .communityCtaImage, .boxReviewImage {
         height: 200px;
         background-size: cover;
         background-position: center;
         position: relative;
+        border:1px solid #ebebeb;
+        border-top:0;
+        border-bottom:0;
+    }
+    .boxReviewImage {
+        display: block;
+    }
+    .boxReviewImage h3 {
+        padding:10px;
+        background:#F97D1F;
+        color:#fff;
+        position: absolute;
+        bottom:10px;
     }
     .comLabel {
         position: absolute;
@@ -699,7 +712,7 @@ HOME
         font-size: .75rem;
         text-transform: uppercase;
         letter-spacing: 1px;
-        border:1px solid #dbdbdb;
+        border:1px solid #ebebeb;
         border-bottom:0;
     }
     .communityCtaCont {
@@ -713,7 +726,7 @@ HOME
     .communityCtaProducts {
         font-size: 1.3rem;
     }
-    .communityCtaCont a {
+    .communityCtaCont a, .reviewCont a {
         margin-top:20px;
         display: inline-block;
         border:3px solid #fff;
@@ -727,6 +740,43 @@ HOME
     .communityCtaCont a:hover {
         background:#fff;
         color:#111;
+    }
+    .boxReview {
+        color:#222;
+    }
+    .reviewCont {
+        padding: 30px;
+        font-size: 1.7rem;
+        line-height: 2rem;
+        font-weight: 600;
+        color:#333;        
+    }
+    .reviewContInner {
+        background:url('../img/qmark.png') left top no-repeat;
+        padding-left: 80px;
+    }
+    .reviewCont h4 {
+        font-weight: 800;
+    }
+    .reviewCont a.btn {
+        font-size: .9rem;
+    }
+    .reviewBoxTitle {
+        padding: 0 30px;
+    }
+    .reviewBoxTitle h3 {
+        font-size: 2rem;
+    }
+    .reviewContInner a {
+        display: block;
+        margin:10px 0 0 0;
+        border:none;
+        color:#333;
+        font-size: 1rem;
+        padding:0;
+        text-align: left;
+        font-style: italic;
+        font-weight: 400;
     }
 
     /** trending user **/

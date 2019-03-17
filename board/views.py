@@ -46,8 +46,9 @@ def get_home_items(request):
 	trending_users = ajax_trending_users(request,240)
 	communities = ajax_communities(request)
 	recommended_boards = ajax_recommended_boards(request)
+	highlighted_reviews = ajax_highlighted_reviews(request)
 
-	mixed = trending_boards + trending_users + communities + recommended_boards
+	mixed = trending_boards + trending_users + communities + recommended_boards + highlighted_reviews
 	random.shuffle(mixed)
 
 	return HttpResponse(
@@ -361,7 +362,8 @@ def edit_board(request, board_id, itemadded=''):
 ##### Edit item
 def edit_item(request, board_slug, itemconx_id, item_slug):
 	template = 'board/edit_item.html'
-	itemconx = get_object_or_404(ItemConnection, pk=itemconx_id)	
+	itemconx = get_object_or_404(ItemConnection, pk=itemconx_id)
+	fpreview = itemconx.front_page_review	
 	board = get_object_or_404(Board, id=itemconx.board.id)
 	user_boards = Board.objects.filter(user=request.user)
 	item = get_object_or_404(Item, pk=itemconx.item.id)
@@ -399,6 +401,7 @@ def edit_item(request, board_slug, itemconx_id, item_slug):
 						# we can update the original item
 						item.item_name = item_name
 						item.save()
+				itemconx.front_page_review = fpreview
 				itemconx.rating = rating
 				itemconx.board = board_assign
 				form.save()		

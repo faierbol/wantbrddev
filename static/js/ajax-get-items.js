@@ -191,6 +191,31 @@ $(window).on("load", function() {
                         `
                     )
 
+                } else if(item.type == 'review') {
+
+                    let fullreview = item.item_review;
+                    let review = fullreview.substring(0,70);
+
+                    board.append(
+                        `
+                        <div class="featBox boxReview">
+                            <div class="comTop">
+                                Member Review
+                            </div>
+                            <a class="boxReviewImage" href="${item.item_url}" style="background-image:url('${item.item_image}')">
+                                <h3>${item.item_name}</h3>
+                            </a>
+                            <div class="reviewCont">
+                                <div class="reviewContInner">
+                                    ${review}...
+                                    <a href="${item.user_url}">~ ${item.user}</a>
+                                </div>
+                                <a class="btn grey" href="${item.item_url}">View item</a>                                
+                            </div>                                                
+                        </div> 
+                        `
+                    )
+
                 } 
             })             
 
