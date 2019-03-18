@@ -70,10 +70,8 @@
 
             {% if user.is_superuser %}
 
-                {{ obs }}
-
                 {% for x in obs %}
-                    <p>{{ x }}</p>
+                    <p>{{ x.created }}</p>
                 {% endfor %}
             {% endif %}
             
