@@ -181,6 +181,8 @@ def my_home(request):
 		for item in matching_items:
 			itemconx_obj.append(item)
 
+	itemconx_obj.sort(key=lambda x: x.created, reverse=True)
+
 	page = request.GET.get('page',1)
 	paginator = Paginator(itemconx_obj,4)
 
@@ -189,7 +191,7 @@ def my_home(request):
 	except PageNotAnInteger:
 		feed = paginator.page(1)
 	except EmptyPage:
-		feed = paginator.page(paginator.num_pages)
+		feed = Paginator.page(paginator.num_pages)
 
 	if request.method == 'POST':
 
