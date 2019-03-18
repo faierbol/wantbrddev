@@ -4403,7 +4403,7 @@ footer {
         margin-top:30px;
     }
     .discoveryItem {
-        width: 32%;
+        /*width: 32%;*/
         float: left;
         margin-right: 2%;
         margin-bottom:30px;
