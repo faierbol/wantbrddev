@@ -67,20 +67,13 @@
         </div>
 
         <div class="discoveryFeed">
-
-            {% if user.is_superuser %}
-
-                {% for x in obs %}
-                    <p>{{ x.created }}</p>
-                {% endfor %}
-            {% endif %}
             
             <h3>Recent Posts</h3>
 
             {% if itemconxs %}
 
                 <div class="infinite-container discoveryFeedContent clearfix">
-                    {% for item in itemconxs|dictsortreversed:"created" %}
+                    {% for item in itemconxs %}
                         <div class="infinite-item">
                             <div class="discoveryItem clearfix match">
                                 <a href="{% url 'b:view_item' item.board.user item.board.slug item.id item.slug %}" class="discoveryImage">
