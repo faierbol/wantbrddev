@@ -147,7 +147,7 @@ def my_home(request):
 	# get boards of people we're following and build array
 	board_obj = []
 	for user in following:		
-		boards = Board.objects.filter(user=user.following).exclude(slug='your-saved-items')
+		boards = Board.objects.filter(user=user.following).exclude(slug='your-saved-items').exclude(private=True)
 		for board in boards:
 			board_obj.append(board)
 
@@ -227,6 +227,7 @@ def my_home(request):
 		'suggested_boards':suggested_boards,
 		'recent_likes':recent_likes,
 		'recent_followers':recent_followers,
+		'obs':itemconx_obj,
 	}
 
 	return render(request, template, context_dict)

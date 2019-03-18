@@ -67,6 +67,12 @@
         </div>
 
         <div class="discoveryFeed">
+
+            {% if user.is_superuser %}
+                {% for ob in obs|dictsortreversed:"created" %}
+                    <p>{{ ob.created }}</p>
+                {% endfor %}
+            {% endif %}
             
             <h3>Recent Posts</h3>
 
