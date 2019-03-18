@@ -69,7 +69,7 @@
         <div class="discoveryFeed">
 
             {% if user.is_superuser %}
-                {% for x in itemconx|dictsortreversed:"created" %}
+                {% for x in itemconxs|dictsortreversed:"created" %}
                     <p>{{ x.created }}</p>
                 {% endfor %}
             {% endif %}
