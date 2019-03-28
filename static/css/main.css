@@ -126,6 +126,12 @@ GLOBAL
     margin:auto;
     padding:0 20px;
     position: relative;
+    height: 100%;
+}
+.container:after {
+    clear: both;
+    display: table;
+    content:"";
 }
 p {
     margin:0;
@@ -3904,138 +3910,155 @@ body {
 /* ---------------- 
 INFLUENCERS
 -----------------*/
-.whatIsWantbrd {}
-    .whatIsWantbrdText {
-        float: left;
-        width: 50%;
-        background:#D464E4;
-        color:#fff;
-        font-size: 1.4rem;
-    }
-    .whatIsWantbrdText h1 {
-        font-size: 3.3rem;
-        font-weight: 700;
+.creators {
+    font-size: 1.25rem;
+    line-height: 2.4rem;
+    background:#f9f9f9;
+}
+    .creators h2, .creators h3 {
+        font-size: 3rem;
+        line-height: 3.6rem;
         margin-bottom:20px;
     }
-    .whatIsWantbrdImage {
-        float: right;
-        width: 50%;
-        background-size: cover;
-        background:url(../img/fashion.jpg) center no-repeat;
+
+a.cbtn {
+    display: inline-block;
+    border-radius: 100px;
+    background:#E5F1FB;
+    color:#111;
+    text-decoration: none;
+    padding:35px 55px;
+    margin-top:20px;
+}
+
+.creatorBanner {
+    height: 650px;
+    background:url('../img/creator-banner.jpg') center no-repeat;
+    background-size: cover;
+    color:#fff;
+}
+    .creatorText {
+        display: table;
+        width: 100%;
+        height: 100%;
     }
-    .whatTextWrap {
-        width: 630px;
-        float: right;
-        padding:150px 100px 150px 0;
-    }
-    .whatTextWrap a {
-        margin-top:20px;
-        display: inline-block;
-        border:3px solid #fff;
-        padding:30px 60px;
+    .creatorCell {
+        display: table-cell;
+        vertical-align: middle;
+        height: 100%;
         text-align: center;
-        font-size: 1.4rem;
-        text-decoration: none;
-        color:#fff;
+    }
+    .creatorInner {
+        max-width: 1000px;
+        font-size: 3.5rem;
+        line-height: 4.5rem;
+        margin:auto;
+    }
+    .creatorInner a {
+        display: inline-block;
         border-radius: 100px;
-    }
-    .whatTextWrap a:hover {
-        background:#fff;
-        color:#111;
-    }
-    .whatTextWrap a i {
-        font-size: 2rem;
-        margin-left: 10px;
+        border:4px solid #fff;
+        padding:35px 35px;
+        color:#fff;
+        text-decoration: none;
+        font-size: 1.5rem;
+        line-height: 2rem;
+        margin-top:20px;
     }
 
-
-.whyWantbrd {}
-    .whyWantbrdImage {
-        width: 50%;
+.whatIsWantbrd {
+    padding:100px 0;
+    background: #fff
+}
+    .whatIsWantbrdImage {
         float: left;
-        background:url(../img/tech-back.jpg) center no-repeat;
-        background-size: cover;
+        width: 47.5%;
     }
-    .whyWantbrdText {
+    .whatIsWantbrdImage img {
+        max-width: 100%;
+        height: auto;
+    }
+    .whatIsWantbrdText {
         float: right;
-        width: 50%;
-        background:#7BF4D2;
-        color:#121212;
-        font-size: 1.4rem;
+        width: 47.5%;
     }
-    .whyWantbrdText h2 {
-        font-size: 3.3rem;
-        font-weight: 700;
-        margin-bottom:20px;
-    }
-    .whyTextWrap {
-        width: 630px;
+
+.whyUseWantbrd {
+    padding:100px 0;
+    background:#7DB7E3;
+    color:#fff;
+}
+    .whyUseWantbrdText {
         float: left;
-        padding:150px 0 150px 100px;
+        width: 50%;
     }
-    .whyWantbrd ul {
+    .whyUseWantbrdImage {
+        position: absolute;
+        right: 0;
+        top: -150px;
+    }
+    .whyUseWantbrd ul {
+        margin:0 0 0 35px;
+    }
+    .whyUseWantbrd ul li {
+        margin-bottom:10px;
+    }
+    .whyUseWantbrd ul i {
+        font-size: 1.5rem;
+        vertical-align: middle;
+    }
+
+.creatorFeedback {
+    margin-top: -80px;
+    background:#f9f9f9;
+    padding:120px 0 100px;
+    -webkit-clip-path: polygon(0 10%, 100% 0, 100% 100%, 0 100%);
+    clip-path: polygon(0 10%, 100% 0, 100% 100%, 0 100%);
+}
+    ul.creators {
         list-style: none;
-        margin:0 0 0 30px;
+        margin: 40px 0;
         padding:0;
     }
-    .whyWantbrd li {
-        margin-bottom:25px;
+    ul.creators:after {
+        clear: both;
+        content:"";
+        display: table;
     }
-    .whyWantbrd i {
-        font-size: 2rem;
-    }
-    .whyWantbrd a {
-        margin-top:20px;
-        display: inline-block;
-        border:3px solid #111;
-        padding:30px 60px;
+    ul.creators li {
+        float: left;
+        width: 31%;
+        margin-right: 3.5%;
         text-align: center;
+    }
+    ul.creators li:last-child {
+        margin-right:0;
+    }
+    ul.creators li strong {
+        display: block;
         font-size: 1.4rem;
-        text-decoration: none;
-        color:#111;
-        border-radius: 100px;
+        line-height:2rem;
     }
-    .whyWantbrd a:hover {
-        background:#111;
-        color:#fff;
+    ul.creators li span {
+        font-size: 1rem;
+        color:#F87A33;
+        display: block;
+        font-weight: bold;
+        line-height: 1;
     }
-    .whyWantbrd a i {
-        font-size: 2rem;
-        margin-left: 10px;
-    }
-
-.proceed {
-    padding:100px 0;
-    text-align: center;
-    font-size: 2rem;
-    color:#fff;
-    clear: both;
-    line-height: 1.8;
-    background: rgb(15,217,214); /* Old browsers */
-    background: -moz-linear-gradient(-45deg, rgba(15,217,214,1) 0%, rgba(135,170,222,1) 100%); /* FF3.6-15 */
-    background: -webkit-linear-gradient(-45deg, rgba(15,217,214,1) 0%,rgba(135,170,222,1) 100%); /* Chrome10-25,Safari5.1-6 */
-    background: linear-gradient(135deg, rgba(15,217,214,1) 0%,rgba(135,170,222,1) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#0fd9d6', endColorstr='#87aade',GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
-}
-    .proceed .container {
-        max-width: 1000px;
-        margin:auto;
-        padding:0 20px;
-    }
-    .proceed a {
-        margin-top:30px;
-        display: inline-block;
-        border:3px solid #fff;
-        padding:40px 60px;
+    .centeredButton {
         text-align: center;
-        font-size: 1.4rem;
-        text-decoration: none;
-        color:#fff;
-        border-radius: 100px;
+        clear: both;
     }
-    .proceed a:hover {
-        background:#fff;
-        color:#111;
+    .creatorCircle {
+        width: 150px;
+        margin: 0 auto 20px;
+    }
+    ul.creators p {
+        font-size: 1rem;
+        line-height: 1.5rem;
+        margin-top:10px;
+        color:#777;
     }
 
 
@@ -4512,10 +4535,25 @@ footer {
         max-width: 100%;
         padding-right:70px;
     }
-    .whatIsWantbrdText, .whatIsWantbrdImage, .whyWantbrdImage, .whyWantbrdText {
+    .whatIsWantbrdImage img {
+        display: block;
+        margin: auto;
+    }
+    .whatIsWantbrdImage {
+        margin-bottom:40px;
+    }
+    .whatIsWantbrdText, .whatIsWantbrdImage {
         width: 100%;
         float: none;
         min-height: 300px;
+        text-align: center;
+    }
+    .whyUseWantbrdImage {
+        display: none;
+    }
+    .whyUseWantbrdText {
+        text-align: left;
+        width: 100%;
     }
     .whyTextWrap, .whatTextWrap {
         padding:80px 30px;
@@ -4570,6 +4608,10 @@ footer {
     .searchWnt, .searchWeb {
         width: 100%;
         float: none;
+    }
+    .creatorInner {
+        font-size: 2.5rem;
+        line-height: 3.5rem;
     }
 }
 
@@ -4738,6 +4780,25 @@ footer {
 @media screen and (max-width: 730px) {
     .profileBoards {
         padding-top:40px;
+    }
+    ul.creators {
+        text-align: center;
+    }
+    ul.creators li {
+        float:none;
+        margin:0 auto 30px;
+        width: 100%;
+    }
+    ul.creators li:last-child {
+        float: none;
+        margin:0 auto;
+    }
+    .creatorFeedback {
+        margin-top: -80px;
+        background:#f9f9f9;
+        padding:120px 0 100px;
+        -webkit-clip-path: polygon(0 4%, 100% 0, 100% 100%, 0 100%);
+        clip-path: polygon(0 4%, 100% 0, 100% 100%, 0 100%);
     }
 }
 
@@ -4992,6 +5053,10 @@ footer {
     .profileBoardName a {
         font-size: 2rem;
         font-weight: lighter;
+    }
+    .creatorInner {
+        font-size: 2rem;
+        line-height: 3rem;
     }
 }
 

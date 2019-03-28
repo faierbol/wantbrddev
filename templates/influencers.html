@@ -14,74 +14,126 @@
 
 <section class="staticHeader influencer"></section>
 
-<section class="proceed">
-	<div class="container">
-		
-		<p>Wantbrd is a creator-centric community that gives you more time to <strong>focus on what you do best</strong>, creating.</p>
+<main class="creators">
 
-		{% if request.user.is_authenticated %}
-		<a href="{% url 'u:home' %}">
-		{% else %}
-		<a href="#loginModal" rel="modal:open">
-		{% endif %}
-		Claim your profile</a>
+	<section class="creatorBanner">
+		<div class="container">
+			
+			<div class="creatorText">
+				<div class="creatorCell">
+					<div class="creatorInner">
+						<p>Wantbrd is a <strong>creator-centric community</strong> that gives you more time to <strong>focus on what you do best</strong>, creating.</p>
+						
+						{% if request.user.is_authenticated %}
+						<a href="{% url 'u:home' %}">
+						{% else %}
+						<a href="#loginModal" rel="modal:open">
+						{% endif %}
+						Claim your profile</a>
 
-	</div>
-</section>
-
-<section class="whatIsWantbrd">
-	
-	<div class="whatIsWantbrdText match">
-		<div class="whatTextWrap">
-			<h1>What is Wantbrd?</h1>
-			<p>Wantbrd is a place to <strong>create and share shopable collections of your favourite products</strong> grouped into boards so that your followers can buy the things you use and recommend.</p>
-			<p>&nbsp;</p>
-			<p>You can even <strong>post videos</strong> with Wantbrd, allowing you to share the products used in the videos with your followers.</p>
-
-			{% if request.user.is_authenticated %}
-			<a href="{% url 'u:home' %}">
-			{% else %}
-			<a href="#loginModal" rel="modal:open">
-			{% endif %}
-			Get started! <i class="fal fa-thumbs-up"></i></a>
+					</div>
+				</div>
+			</div>
 
 		</div>
-	</div>
-
-	<div class="whatIsWantbrdImage match"></div>
-
-	<div class="clearfix"></div>
-
-</section>
+	</section>
 
 
-<section class="whyWantbrd">
+	<section class="whatIsWantbrd">
+		<div class="container">
+			
+			<div class="whatIsWantbrdImage">
+				<img src="{% static '' %}img/creator-screenshot.jpg">				
+			</div>
 
-	<div class="whyWantbrdText match">
-		<div class="whyTextWrap">
-			<h2>Why Wantbrd?</h2>
+			<div class="whatIsWantbrdText">
+				<h2>What is Wantbrd?</h2>
+				<p>Wantbrd is a place to create and share shopable collections of your favourite products grouped into boards, so your followers and view and buy the things you recommend.</p>
+				<p>&nbsp;</p>
+				<p>You can even post videos with Wantbrd, allowing you to share the prodcts used in the videos with your followers</p>
 
-			<ul class="fa-ul">
-				<li><span class="fa-li" ><i class="fal fa-check"></i></span>Always get asked about the things you use or recommend? Share your custom link to your Wantbrd anywhere.</li>
-				<li><span class="fa-li" ><i class="fal fa-check"></i></span>Make money using your own affiliate links, monetising your expertise easily.</li>
-				<li><span class="fa-li" ><i class="fal fa-check"></i></span>Creators of all kinds, from athletes to photographers, makeup artists to gamers, tech enthusiasts to stylists, and beyond.</li>
+				{% if request.user.is_authenticated %}
+				<a href="{% url 'u:home' %}" class="cbtn" >
+				{% else %}
+				<a href="#loginModal" class="cbtn" rel="modal:open">
+				{% endif %}
+				Claim your profile</a>
+
+			</div>		
+
+		</div>
+	</section>
+
+
+	<section class="whyUseWantbrd">
+		<div class="container">
+			
+			<div class="whyUseWantbrdText">
+				<h3>Why use Wantbrd?</h3>
+
+				<ul class="fa-ul">
+					<li><span class="fa-li" ><i class="fa fa-check-circle"></i></span> Always get asked about the things you use or recommend? <strong>Share your custom link to your Wantbrd anywhere.</strong></li>
+					<li><span class="fa-li" ><i class="fa fa-check-circle"></i></span> <strong>Make money using your own affiliate links</strong>, monetising your expertise easily.</li>
+					<li><span class="fa-li" ><i class="fa fa-check-circle"></i></span> <strong>Creators of all kinds</strong>, from athletes to photographers, makeup artists to gamers, tech enthusiasts to stylists, and beyond.</li>
+				</ul>
+
+				{% if request.user.is_authenticated %}
+				<a href="{% url 'u:home' %}" class="cbtn">
+				{% else %}
+				<a href="#loginModal"  class="cbtn" rel="modal:open">
+				{% endif %}
+				Claim your profile</a>
+
+			</div>
+
+			<div class="whyUseWantbrdImage">
+				<img src="{% static '' %}img/creator-iphone_c.png">
+			</div>
+
+		</div>
+	</section>
+
+
+	<section class="creatorFeedback">
+		<div class="container">
+			
+			<ul class="creators">
+				<li>
+					<div class="creatorCircle">
+						<div class="circle" style="background-image:url('https://wantbrd-assets.s3.amazonaws.com/media/user_files/2/picture/34091536_229288974523198_2112130118624215040_n.jpg');"></div>
+					</div>
+					<strong>Mia London</strong>
+					<span>Traveller</span>
+					<p>I needed a really user-friendly and quick way to share my recommendations with my followers, Wantbrd has allowed me to do this as well as interact with them. </p>
+				</li>
+				<li>
+					<div class="creatorCircle">
+						<div class="circle" style="background-image:url('https://wantbrd-assets.s3.amazonaws.com/media/user_files/87/picture/e6e19c44-031.jpg');"></div>
+					</div>
+					<strong>Daniel S Doran</strong>
+					<span>Surfer/Gamer</span>
+					<p>Finally a place I can share all my recommendations in one place, and it's so easy to use!</p>
+				</li>
+				<li>
+					<div class="creatorCircle">
+						<div class="circle" style="background-image:url('https://wantbrd-assets.s3.amazonaws.com/media/user_files/9/picture/d5019396-d06.jpg');"></div>
+					</div>
+					<strong>Zeb</strong>
+					<span>Tech Enthusiast</span>
+					<p>I often get asked what products I use or would recommend for certain setups, Wantbrd allows me to easily share these with my followers <em>and</em> use my own affiliate links.</p>
+				</li>
 			</ul>
 
-			{% if request.user.is_authenticated %}
-			<a href="{% url 'u:home' %}">
-			{% else %}
-			<a href="#loginModal" rel="modal:open">
-			{% endif %}
-				I'm ready! <i class="fal fa-hand-point-right"></i></a>
+			<div class="centeredButton">
+				<a class="cbtn" href="#">Get started!</a>
+			</div>
 
 		</div>
-	</div>
+	</section>
 
-	<div class="whyWantbrdImage match"></div>
+</main>
 
-	<div class="clearfix"></div>
 
-</section>
 
 
 {% endblock %}
