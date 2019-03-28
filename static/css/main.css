@@ -2302,7 +2302,7 @@ BOARD
 
 
 .addItem {
-    width: 75%;
+    width: 100%;
     margin: auto;
     background:#fff;
     -webkit-box-shadow: 0px 5px 73px -11px rgba(0,0,0,0.2);
@@ -2340,13 +2340,50 @@ BOARD
     .addItemContent {
         padding:30px;
     }
+    .addIntro {
+        text-align: center;
+        max-width: 800px;
+        margin: 0 auto 30px;
+        padding-bottom:30px;
+        border-bottom:1px solid #e9e9e9;
+    }
     .searchWnt {
         float: left;
-        width: 48%;
+        width: 35%;
+        margin-right: 3.5%;
+        text-align: center;
+        text-align: center;
     }
     .searchWeb {
-        float: right;
-        width: 48%;
+        float: left;
+        width: 35%;
+        text-align: center;
+        margin-right: 3.5%;
+        text-align: center;
+    }
+    .addSaved {
+        float: left;
+        width: 23%;
+        text-align: center;
+        text-align: center;
+    }
+    .addSaved a {
+        display: inline-block;
+        padding:12px 30px;
+        width: auto;
+        background:#dbdbdb;
+        text-decoration: none;
+        border-radius: 10px;
+    }
+    .addSaved a:hover {
+        background:#F97D1F;
+        color:#fff;
+    }
+    .smeth i {
+        display: block;
+        font-size: 3rem;
+        margin-bottom:10px;
+        color:#8680B2;
     }
     .addItemContent form {
         position: relative;
@@ -2628,7 +2665,7 @@ BOARD
     margin-bottom:20px;
 } 
     strong.formtitle {
-        margin-bottom:5px;
+        margin-bottom:15px;
         display: block;
     }
 
@@ -3247,7 +3284,8 @@ ITEM DETAILS
     background:#f7f7f7;
 }
     .itemDetails .panel {
-        padding:40px;
+        padding:0;
+        border:none;        
     }
     .popImage {
         width:40%;
@@ -4559,6 +4597,15 @@ footer {
         padding:80px 30px;
         float: none;
     }
+    .searchWnt, .searchWeb {
+        width: 100%;
+        float: none;
+    }
+    .addSaved {
+        width: 100%;
+        float: none;
+        margin-top:30px;
+    }
 }   
 
 @media screen and (max-width: 920px) {
@@ -4604,10 +4651,6 @@ footer {
     }
     .itemDetails .panel {
         padding:20px;
-    }
-    .searchWnt, .searchWeb {
-        width: 100%;
-        float: none;
     }
     .creatorInner {
         font-size: 2.5rem;

@@ -43,8 +43,15 @@
 
             {% if not ogimg or not output %}
 
-            <div class="searchWnt">
-                <strong class="formtitle">Search wantbrd for an item:</strong>
+            <div class="addIntro">
+                <p>Lets add an item to one of your boards. First select where we can find the item; you can search for the item on Wantbrd, enter the URL of a website or select one from your saved items.</p>
+            </div>
+
+            <div class="searchWnt smeth">
+                <strong class="formtitle">
+                    <i class="fa fa-search" aria-hidden="true"></i>
+                    Search wantbrd for an item:
+                </strong>
                 {% if board.id %}
                 <form method="GET" action="{% url 'b:add_item' board.id %}" id="finditem">
                 {% else %}
@@ -66,13 +73,24 @@
                 {% endif %}
             </div>
 
-            <div class="searchWeb">
-                <strong class="formtitle">Enter the URL where we can find your item:</strong>
+            <div class="searchWeb smeth">
+                <strong class="formtitle">
+                    <i class="fa fa-mouse-pointer" aria-hidden="true"></i>
+                    Enter a website address:
+                </strong>
             	<form method="POST" id="scrapeitem">
             		{% csrf_token %}
             		<input type="text" name="targeturl" placeholder="Enter url of the item" value="{{ url }}" class="scrapeUrl">
             		<button name="geturl" class="getItem">Get item</button>
             	</form>
+            </div>
+
+            <div class="addSaved smeth">
+                <strong class="formtitle">
+                    <i class="fa fa-bookmark" aria-hidden="true"></i>
+                    Add from your saved items:
+                </strong>
+                <a href="{% url 'b:edit_board' request.user.profile.get_saved_board %}">Click here</a>
             </div>
 
             <div class="clearfix"></div>
