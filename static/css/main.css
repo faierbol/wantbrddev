@@ -2806,7 +2806,7 @@ BOARD
         text-align: left;        
     }
     .discoveryMeta a.trendName {
-        line-height: 1;
+        line-height: 2rem;
         display: block;
         margin-bottom:15px;
     }
@@ -4471,9 +4471,6 @@ footer {
         margin-top:30px;
     }
     .discoveryItem {
-        width: 32%;
-        float: left;
-        margin-right: 2%;
         margin-bottom:30px;
         padding:20px;
         border-radius:3px;
@@ -4506,7 +4503,23 @@ footer {
     .wantResults {
         width: 100%;
     }
-
+    .infinite-item {
+        float: left;
+        width: 31%;
+        margin-right: 3.5%;
+    }
+    .infinite-item:nth-child(3n){
+        margin-right: 0;
+    }
+    .infinite-item:nth-child(3n+1){
+        clear: both;
+    }
+    .trendingItemName {
+        font-size: 1.3rem;
+    }
+    .discoveryMeta a.trendName {
+        line-height: 1.6rem;
+    }
 }
 
 @media screen and (max-width: 1000px) {
@@ -4916,19 +4929,20 @@ footer {
         display: table;
         clear: both;
     }
-    .discoveryItem {
-        width: 48.25%;
+    .infinite-item {
+        width: 47.5%;
+        margin-right: 5%;
     }
-    .discoveryItem:nth-child(3n){
-        margin-right: 3.5%;
+    .infinite-item:nth-child(3n){
+        margin-right: 5%;
     }
-    .discoveryItem:nth-child(3n+1){
+    .infinite-item:nth-child(3n+1){
         clear: none;
     }
-    .discoveryItem:nth-child(2n){
+    .infinite-item:nth-child(2n){
         margin-right: 0;
     }
-    .discoveryItem:nth-child(2n+1){
+    .infinite-item:nth-child(2n+1){
         clear: both;
     }
 }
@@ -5224,6 +5238,19 @@ footer {
         padding:20px 10px 20px 10px;
         margin-bottom:40px;
         border-bottom:1px solid #ebebeb;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .infinite-item {
+        width: 100%;
+        margin-right: 0
+    }
+    .infinite-item:nth-child(3n){
+        margin-right: 0;
+    }
+    .infinite-item:nth-child(2n+1){
+        clear: none;
     }
 }
 
