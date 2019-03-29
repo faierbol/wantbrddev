@@ -50,7 +50,7 @@
 				<h2>What is Wantbrd?</h2>
 				<p>Wantbrd is a place to create and share shopable collections of your favourite products grouped into boards, so your followers and view and buy the things you recommend.</p>
 				<p>&nbsp;</p>
-				<p>You can even post videos with Wantbrd, allowing you to share the prodcts used in the videos with your followers</p>
+				<p>You can even post videos with Wantbrd, allowing you to share the products used in the videos with your followers</p>
 
 				{% if request.user.is_authenticated %}
 				<a href="{% url 'u:home' %}" class="cbtn" >
@@ -125,7 +125,12 @@
 			</ul>
 
 			<div class="centeredButton">
-				<a class="cbtn" href="#">Get started!</a>
+				{% if request.user.is_authenticated %}
+				<a href="{% url 'u:home' %}" class="cbtn" >
+				{% else %}
+				<a href="#loginModal" class="cbtn" rel="modal:open">
+				{% endif %}
+				Claim your profile</a>
 			</div>
 
 		</div>
