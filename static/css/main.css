@@ -2339,11 +2339,10 @@ BOARD
         font-size: 2rem;
         margin-bottom:25px;
         /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#dc7e97+0,edb737+100 */
-        background: rgb(220,126,151); /* Old browsers */
-        background: -moz-linear-gradient(-45deg, rgba(220,126,151,1) 0%, rgba(237,183,55,1) 100%); /* FF3.6-15 */
-        background: -webkit-linear-gradient(-45deg, rgba(220,126,151,1) 0%,rgba(237,183,55,1) 100%); /* Chrome10-25,Safari5.1-6 */
-        background: linear-gradient(135deg, rgba(220,126,151,1) 0%,rgba(237,183,55,1) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-        filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#dc7e97', endColorstr='#edb737',GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
+        background: #f77c40;
+        background: -moz-linear-gradient(-45deg,#f77c40 0,#eb3b33 100%);
+        background: -webkit-linear-gradient(-45deg,#f77c40 0,#eb3b33 100%);
+        background: linear-gradient(135deg,#f77c40 0,#eb3b33 100%);
     }
     .addItemContent {
         padding:0 30px 30px 30px;

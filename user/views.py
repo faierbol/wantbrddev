@@ -433,7 +433,7 @@ def profile(request, username):
 	try:
 		username = username.lower()
 		user = get_object_or_404(User, username=username)
-		boards = Board.objects.filter(user=user.id).exclude()
+		boards = Board.objects.filter(user=user.id).order_by('-created')
 		the_boards = []
 		# get the tags for each board
 		for board in boards:
