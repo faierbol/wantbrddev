@@ -196,8 +196,8 @@
 
     	            		    <div class="trendingFooter">
     	            		        <span>
-    	            		        	{{ item.boardcount|add:"-1" }}
-    	            		        	{% if item.boardcount|add:"-1" == 1 %}Board{% else %}Boards{% endif %}
+    	            		        	{{ item.boardcount }}
+    	            		        	{% if item.boardcount == 1 %}Board{% else %}Boards{% endif %}
     	            		        </span>
     	            		        <span>
     	            		        	{{ item.itemcount }}
