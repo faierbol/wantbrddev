@@ -1506,6 +1506,14 @@ UPDATE ACCOUNT
         max-width: 700px;
         margin: auto;
     }
+    .fileuploader-item:after {
+        content: "Click the edit icon to crop this image and 'apply new picture' when done.";
+        margin-top:10px;
+        display: block;
+    }
+    .fileuploader-items .fileuploader-item .fileuploader-action {
+        color: #000 !important;
+    }
 
     /*** profile ***/
     #updateprofileform {

@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 {% load staticfiles %}
 {% load random_numbers %}
+{% load thumbnail %}
 
 {% block title %}
 	Update your profile | Wantbrd
@@ -23,12 +24,16 @@
 
 				<h1>Change profile picture</h1>
 
+				<p>Note: <em>Max image size 1.5mb</em></p>
+
 				<div id="croppic">
 					<a class="updateProfileImage" href="{% url 'update_profile' %}">
-					    {% if request.user.profile.picture %}
-					    <div class="circle" style="background-image:url('{{ request.user.profile.picture.url }}');"></div>
-					    {% else %}
-					    <div class="circle" style="background-image:url('{% static '' %}img/default-hero-{% random_int 1 4%}.jpg');"></div>
+						{% if request.user.profile.picture %}					
+						    {% thumbnail request.user.profile.picture "300x300" as im %}
+						    <div class="circle" style="background-image:url('{{ im.url }}');"></div>
+						    {% endthumbnail %}
+						    {% else %}
+						    <div class="circle" style="background-image:url('{% static '' %}img/default-hero-{% random_int 1 4%}.jpg');"></div>
 					    {% endif %}
 					</a>
 					<form method="POST" enctype="multipart/form-data">
@@ -41,8 +46,13 @@
 
 				<h1>Change profile background</h1>
 
+				<p>Note: <em>Max image size 1.5mb</em></p>
+				<p>&nbsp;</p>
+
 				{% if request.user.profile.background %}
-				<div class="currentHero" style="background-image:url('{{ request.user.profile.background.url  }}')"></div>
+					{% thumbnail request.user.profile.background "750x750" as im %}				
+					<div class="currentHero" style="background-image:url('{{ im.url  }}')"></div>
+					{% endthumbnail %}
 				{% else %}
 				<div class="currentHero" style="background-image:url('{% static 'img/profile-hero.jpg' %}')"></div>
 				{% endif %}
@@ -51,7 +61,7 @@
 					{% csrf_token %}
 				    <input type="file" name="bgfiles">	
 				    <input type="hidden" id="b64pic" name="b64pic" value="">	    
-				    <button class="btn large grey" name="changebackground" value="1">Apply new background</button>
+				    <button class="btn large grey" name="changebackground" value="1">Apply new picture</button>
 				</form>
 
 				<h1 style="margin-top:50px;">Edit profile</h1>

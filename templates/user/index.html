@@ -24,7 +24,9 @@
                 <div class="profileImageDetails clearfix match">
                     <div class="profileImage">
                         {% if profile.picture %}
-                        <div class="circle" style="background-image:url('{{ profile.picture.url }}');"></div>
+                        {% thumbnail profile.picture "200x200" as im %}
+                            <div class="circle" style="background-image:url('{{ im.url }}');"></div>
+                        {% endthumbnail %}
                         {% else %}
                         <div class="circle" style="background-image:url('{% static '' %}img/default-hero-{% random_int 1 4%}.jpg');"></div>
                         {% endif %}
@@ -42,7 +44,12 @@
                         <h3>{{ profile.user.get_full_name }}</h3>
                         {% endif %}
 
-                        <span class="usertype">{{ profile.pro_type }}</span>
+                        {% if profile.user_type == 'BUSINESS' %}
+                            <span class="usertype">BUSINESS</span>
+                        {% endif %}
+                        {% if profile.user_type == 'PRO' %}
+                            <span class="usertype">{{ profile.pro_type }}</span>
+                        {% endif %}
 
                         <div class="profileStats">
                             <p><a href="{% url 'u:profile_followers' profile.user.username %}">
