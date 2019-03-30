@@ -2732,6 +2732,14 @@ BOARD
         border:1px solid #ebebeb;
         position: relative;
         text-align: center;
+        text-decoration: none;
+        border-radius: 3px;
+    }
+    .foundItem:hover {
+        text-decoration: none;
+        -webkit-box-shadow: 0px 5px 73px -11px rgba(0,0,0,0.2);
+        -moz-box-shadow: 0px 5px 73px -11px rgba(0,0,0,0.2);
+        box-shadow: 0px 5px 73px -11px rgba(0,0,0,0.2);
     }
     .foundItem:nth-child(3n) {
         margin-right:0;        
@@ -2740,7 +2748,7 @@ BOARD
         clear: both;  
     }
     .foundItem h4 {
-        line-height: 1.2;
+        line-height: 1.4rem;
         margin:15px 0;
         text-align: center;
     }

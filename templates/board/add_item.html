@@ -228,16 +228,17 @@
 
             <p><strong>Not what you were looking for?</strong> No problem, search the internet for the item and paste the web address above.</p>
             <div class="foundItems">                
-                {% for itemconx in final_results %}                    
-                    <div class="foundItem match" rel="tooltip" title="Select this item">
-                        {{ itemconx }}
+                {% for itemconx in final_results %}
+                    {% if board.id %}
+                    <a class="foundItem addExistingItem match" rel="tooltip" title="Select this item" href="{% url 'b:add_existing_item' board.id itemconx.id %}">
+                    {% else %}
+                    <a class="foundItem addExistingItem match" rel="tooltip" title="Select this item" href="{% url 'b:add_existing_item_noboard' itemconx.id %}">
+                    {% endif %}
                         {% thumbnail itemconx.image "300x300" as im %}
-                            <a href="{% url 'b:add_existing_item' board.id itemconx.id %}" class="addExistingItem">
                                 <img src="{{ im.url }}">
-                            </a>
                         {% endthumbnail %}
                         <h4>{{ itemconx.item.item_name }}</h4>                        
-                    </div>
+                    </a>
                 {% endfor %}
                 <div class="clearfix"></div>
             </div>

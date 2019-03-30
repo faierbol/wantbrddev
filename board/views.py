@@ -609,6 +609,7 @@ def add_item(request, board_id):
 		board = get_object_or_404(Board, pk=board_id)
 	except:
 		board = None
+
 	user_boards = Board.objects.filter(user=request.user)
 	form = ItemForm()
 	url = ''
@@ -879,10 +880,14 @@ def add_item(request, board_id):
 
 ### add existing item
 def add_existing_item(request, board_id, itemconx_id):
+	try:
+		board = get_object_or_404(Board, pk=board_id)
+	except:
+		board = None
+
 	template = 'board/add_item.html'
 	itemconx = ItemConnection.objects.get(id=itemconx_id)
 	item_to_copy = Item.objects.get(pk=itemconx.item.id)
-	board = Board.objects.get(id=board_id)
 	ogimg = itemconx.image.url
 	page_title = itemconx.item.item_name
 	user_boards = Board.objects.filter(user=request.user)
