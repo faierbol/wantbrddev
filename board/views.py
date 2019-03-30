@@ -519,6 +519,11 @@ def view_item(request, username, board_name, item_id, item_slug):
 	if is_blocked(itemconx.board, request.user):
 		return redirect('home')	
 
+	# if item is in saved items board and is not current user
+	if itemconx.board.slug == 'your-saved-items':
+		if itemconx.board.user != request.user:
+			return redirect('home')			
+
 	# start the fun
 	userip = request.META['REMOTE_ADDR']
 	item_view, created = ItemView.objects.get_or_create(item_conx=itemconx, ip=userip)
