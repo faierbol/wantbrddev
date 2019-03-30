@@ -1111,8 +1111,8 @@ def search(request):
 	# boards
 	all_boards = False
 	board_results = []
-	board_search_tags = Board.objects.filter(tags__name__in=[search_term])
-	board_search_names = Board.objects.filter(board_name__icontains=search_term)
+	board_search_tags = Board.objects.filter(tags__name__in=[search_term]).exclude(slug='your-saved-items').exclude(private=True)
+	board_search_names = Board.objects.filter(board_name__icontains=search_term).exclude(slug='your-saved-items').exclude(private=True)
 	all_boards = board_search_tags | board_search_names
 	all_boards = all_boards.distinct()	
 	for board in all_boards:
@@ -1139,7 +1139,7 @@ def search(request):
 		user.items = []
 
 		# get all boards
-		boards = Board.objects.filter(user=user)
+		boards = Board.objects.filter(user=user).exclude(slug='your-saved-items').exclude(private=True)
 		# set board count
 		user.boardcount = boards.count()
 		# start the item count so we only get the initial display ones

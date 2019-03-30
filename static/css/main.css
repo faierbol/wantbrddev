@@ -4944,6 +4944,14 @@ footer {
     .infinite-item:nth-child(2n+1){
         clear: both;
     }
+    .addItemItem {
+        width: 100%;
+        float: none;
+        text-align: left;
+    }
+    .addItemItem:nth-child(even){
+        float: none;
+    }
 }
 
 @media screen and (max-width: 660px) {
