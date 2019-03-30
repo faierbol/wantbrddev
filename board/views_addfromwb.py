@@ -650,7 +650,11 @@ def add_item(request, board_id):
 				for existing_itemconx in final_results:
 					# does the item we're looking to add have the same Item_name as this existing one?
 					if itemconx.item.item_name == existing_itemconx.item.item_name:
-						pass
+						# does the item we're looking to add have more views than the existing one?
+						if itemconx.views > existing_itemconx.views:
+							# remove the old one, add the new one
+							final_results.remove(existing_itemconx)
+							final_results.append(itemconx)
 					# this is a unique item, add it to the list
 					else:
 						final_results.append(itemconx)

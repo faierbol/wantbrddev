@@ -230,6 +230,7 @@
             <div class="foundItems">                
                 {% for itemconx in final_results %}                    
                     <div class="foundItem match" rel="tooltip" title="Select this item">
+                        {{ itemconx }}
                         {% thumbnail itemconx.image "300x300" as im %}
                             <a href="{% url 'b:add_existing_item' board.id itemconx.id %}" class="addExistingItem">
                                 <img src="{{ im.url }}">
