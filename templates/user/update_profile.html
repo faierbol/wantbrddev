@@ -40,7 +40,7 @@
 						{% csrf_token %}
 					    <input type="file" name="files">
 					    <input type="hidden" id="b64image" name="b64image" value="">
-					    <button class="btn large grey" id="updatePpic" name="updatePpic" value="1">Apply new picture</button>
+					    <button class="btn large grey addNewPpic" id="updatePpic" name="updatePpic" value="1">Apply new picture</button>
 					</form>
 				</div>
 
@@ -61,7 +61,7 @@
 					{% csrf_token %}
 				    <input type="file" name="bgfiles">	
 				    <input type="hidden" id="b64pic" name="b64pic" value="">	    
-				    <button class="btn large grey" name="changebackground" value="1">Apply new picture</button>
+				    <button class="btn large grey addNewBg" name="changebackground" value="1">Apply new picture</button>
 				</form>
 
 				<h1 style="margin-top:50px;">Edit profile</h1>
@@ -208,6 +208,7 @@
 			},
 			onFileRead: function(item, listEl, parentEl, newInputEl, inputEl) {
 			    $('#b64image').val(item.reader.src);
+			    $('.addNewPpic').show();
 			},
 		});
 
@@ -239,6 +240,7 @@
 			},
 			onFileRead: function(item, listEl, parentEl, newInputEl, inputEl) {
 			    $('#b64pic').val(item.reader.src);
+			    $('.addNewBg').show();
 			},
 		});
 

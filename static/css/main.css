@@ -1564,6 +1564,9 @@ UPDATE ACCOUNT
     }
     #croppic {
         margin-bottom:40px;        
+    }
+    .addNewPpic, .addNewBg {
+        display: none;
     }    
     .fileuploader {
         padding:0;
