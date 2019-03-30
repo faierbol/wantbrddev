@@ -120,16 +120,16 @@
 
 	            		    <div class="trendingFooter">
 	            		        <span>
-	            		        	{{ user.boardcount|add:"-1" }}
-	            		        	{% if user.boardcount|add:"-1" == 1 %}Board{% else %}Boards{% endif %}
+	            		        	{{ user.boardcount| }}
+	            		        	{% if user.boardcount == 1 %}Board{% else %}Boards{% endif %}
 	            		        </span>
 	            		        <span>
 	            		        	{{ user.itemcount }}
-	            		        	{% if user.itemcount|add:"-1" == 1 %}Item{% else %}Items{% endif %}
+	            		        	{% if user.itemcount == 1 %}Item{% else %}Items{% endif %}
 	            		        </span>
 	            		        <span>
 	            		        	{{ user.viewscount }}
-	            		        	{% if user.viewscount|add:"-1" == 1 %}View{% else %}Views{% endif %}
+	            		        	{% if user.viewscount == 1 %}View{% else %}Views{% endif %}
 	            		        </span>
 	            		    </div>
 	            		</div>
