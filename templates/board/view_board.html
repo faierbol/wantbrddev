@@ -67,6 +67,7 @@ Check out {{ board.board_name }} by {{ board.user.username }}. Create your own w
                         {% else %}
                             <span>{{ board.user.get_full_name }}</span>
                         {% endif %}
+                        <span class="usertype">{{ board.user.profile.pro_type }}</span>
                     </a>
                 </div>
 

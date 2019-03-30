@@ -57,24 +57,38 @@
 				<h1 style="margin-top:50px;">Edit profile</h1>
 
 				<form method="POST" enctype="multipart/form-data" id="updateprofileform">
-				    {% csrf_token %}	    
+				    {% csrf_token %}	   
+
+				    <label>Account type</label>
+				    <p>{{ profile_form.user_type }}</p>
+
+				    <div class="pType" {% if request.user.profile.user_type == 'PRO' %} style="display: block;" {% endif %}>
+				    	<label>What industry applies to you? For example: Blogger, Public Figure, Photographer </label>
+				    	<p>{{ profile_form.pro_type }}</p>
+				    </div>
+
 				    <label>Your email address</label>
 				    <p>{{ user_form.email }}</p>
+				    
 				    <label>First name</label>
 				    <p>{{ user_form.first_name }}</p>
+				    
 				    <label>Last name</label>
 				    <p>{{ user_form.last_name }}</p>
+				    
 				    <label>About you</label>
 				    {{ profile_form.bio }}
 				    <span class="charsLeft"><span id="chars">{{remaining}}</span> characters remaining</span>
+				    
 				    <label>Country</label>
 				    <p>{{ profile_form.country }}</p>
+				    
 				    <label>Date of birth</label>
 				    <p>{{ profile_form.date_of_birth }}</p>
-<!-- 				    <label>Telephone number</label>
-				    <p>{{ profile_form.phone_number }}</p> -->
+
 				    <label>Your website</label>
 				    <p>{{ profile_form.website }}</p>
+
 				    <button class="btn grey large" type="submit" name="updateprofile" value="updateprofile">Update profile</button>
 				</form>
 

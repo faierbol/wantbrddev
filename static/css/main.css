@@ -826,6 +826,11 @@ HOME
             .trendingUserNames strong, .trendingUserNames span {
                 display: block;
             }
+            .boardUser .trendingUserNames span.usertype {
+                color:#999;
+                font-size: 0.75rem;
+                margin-top:5px;
+            }
             .trendingUserNames strong {
                 font-size:.8rem;
             }
@@ -1189,11 +1194,18 @@ PROFILE
             .profileDetails h3 {
                 font-size:3rem;
                 font-weight: lighter;
-                margin:0 0 20px 0;
+                margin: 0;
                 line-height: 1;
+            }
+            .usertype {
+                text-transform: uppercase;
+                font-weight: bold;
+                color:rgba(255,255,255,0.4);
+                letter-spacing: 1px;
             }
             .profileStats {
                 font-size:.9rem;
+                margin-top:20px;
             }
             .profileStats p {
                 display: inline-block;
@@ -1466,6 +1478,22 @@ UPDATE ACCOUNT
             position: relative;
             margin-right:20px;
         }
+    .pType {
+        display: none;
+        padding:20px;
+        margin-bottom:20px;
+        border-radius: 3px;
+        background:#fffae0;
+    }
+    #updateprofileform .pType p {
+        margin:0;
+        padding:0;
+        border-bottom:1px dotted #ccc;
+    }
+    #updateprofileform .pType p input {
+        background:none;
+        padding:20px 0;
+    }
     .profileRight {
         float: right;
         width: 47.5%;

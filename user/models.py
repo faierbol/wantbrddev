@@ -41,6 +41,23 @@ class Profile(models.Model):
         choices=GLOBAL_PRIVACY_CHOICES,
         default=ALL,
     )
+
+    PERSONAL = 'PERSONAL'
+    PRO = 'PRO'
+    BUSINESS = 'BUSINESS'
+    USER_TYPE_CHOICES = (
+        (PERSONAL, 'Personal'),
+        (PRO, 'Pro'),
+        (BUSINESS, 'Business'),
+    )
+    user_type = models.CharField(
+        max_length=8,
+        choices=USER_TYPE_CHOICES,
+        default=PERSONAL,
+    )
+
+    pro_type = models.CharField(default='', max_length=20, blank=True)    
+
     social_instagram = models.CharField(default='', max_length=500, blank=True)
     social_twitter = models.CharField(default='', max_length=500, blank=True)
     social_youtube = models.CharField(default='', max_length=500, blank=True)

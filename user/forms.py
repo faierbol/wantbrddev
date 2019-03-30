@@ -26,7 +26,7 @@ class UserForm(forms.ModelForm):
 class ProfileForm(forms.ModelForm):
 	class Meta:
 		model = Profile		
-		fields = ('bio', 'website', 'country', 'date_of_birth', 'phone_number')
+		fields = ('bio', 'website', 'country', 'date_of_birth', 'phone_number', 'user_type', 'pro_type')
 		widgets = {
 			'bio':forms.Textarea(attrs={'placeholder': 'Tell people about yourself', 'rows':20, 'cols':100}),
 			'website':forms.TextInput(attrs={'placeholder': 'Your website address'}),			

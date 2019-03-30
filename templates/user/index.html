@@ -41,6 +41,9 @@
                         {% else %}
                         <h3>{{ profile.user.get_full_name }}</h3>
                         {% endif %}
+
+                        <span class="usertype">{{ profile.pro_type }}</span>
+
                         <div class="profileStats">
                             <p><a href="{% url 'u:profile_followers' profile.user.username %}">
                                 <span>{{ no_followers }}</span>FOLLOWERS
