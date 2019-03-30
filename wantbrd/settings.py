@@ -32,7 +32,7 @@ MEDIA_DIR = os.path.join(BASE_DIR, 'media')
 SECRET_KEY = '3i22t4vm=tnjqp%w@ye^n=zo=z$12=f=)bi_sw0ij9a2mup(o-'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['127.0.0.1', '.herokuapp.com', '0.0.0.0', 'localhost', '.wantbrd.com']
 CORS_ORIGIN_ALLOW_ALL=True
@@ -192,7 +192,7 @@ STATICFILES_DIRS = [STATIC_DIR, ]
 # url definition for static files
 
 # ----------- ENABLE BELOW FOR LOCAL -----------
-STATIC_URL = '/static/'
+# STATIC_URL = '/static/'
 # ----------- ENABLE ABOVE FOR LOCAL -----------
 
 STATIC_ROOT = os.path.normpath(os.path.join(BASE_DIR, 'staticfiles'))
@@ -213,10 +213,10 @@ AWS_S3_OBJECT_PARAMETERS = {
 AWS_LOCATION = 'static'
 
 # ----------- DISABLE BELOW FOR LOCAL -----------
-#STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
-#STATIC_URL = "https://%s/%s/" % (AWS_S3_CUSTOM_DOMAIN, AWS_LOCATION)
-#SECURE_SSL_REDIRECT = True
-#SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+STATIC_URL = "https://%s/%s/" % (AWS_S3_CUSTOM_DOMAIN, AWS_LOCATION)
+SECURE_SSL_REDIRECT = True
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 # ----------- DISABLE ABOVE FOR LOCAL-----------
 
 DEFAULT_FILE_STORAGE = 'wantbrd.storage_backends.MediaStorage'  # <-- here is where we reference it
