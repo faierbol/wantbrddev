@@ -638,27 +638,8 @@ def add_item(request, board_id):
 				if is_blocked(found_itemconx.board, request.user):
 					pass				
 				else:					
-					# get the view count for the ItemConnection
-					found_itemconx.views = ItemView.objects.filter(item_conx=found_itemconx).count()				
-					# add the ItemConnection to our results list
 					item_results.append(found_itemconx)
-
-		# loop through all ItemConnections we have collected
-		for itemconx in item_results:
-			# check if we are the first item
-			if final_results:			
-				# loop through the existing items
-				for existing_itemconx in final_results:
-					# does the item we're looking to add have the same Item_name as this existing one?
-					if itemconx.item.item_name == existing_itemconx.item.item_name:
-						pass
-					# this is a unique item, add it to the list
-					else:
-						final_results.append(itemconx)
-			# we're the first, add it to the list
-			else:
-				final_results.append(itemconx)
-
+					break
 
 		if item_results:
 			results = 'yes'
@@ -669,8 +650,7 @@ def add_item(request, board_id):
 			'user_boards':user_boards,
 			'results':results,
 			'item_results':item_results,
-			'found_items':found_items,
-			'final_results':final_results
+			'final_results':item_results
 		}
 
 		return render(request, template, context_dict)
