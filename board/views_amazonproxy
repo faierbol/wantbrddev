@@ -677,27 +677,30 @@ def add_item(request, board_id):
 			domain = '{uri.scheme}://{uri.netloc}/'.format(uri=parsed_uri)
 
 			###### CASE: AMAZON
-			if domain == 'https://www.amazon.co.uk/' or domain == 'https://www.amazon.com/':
+			if domain == 'https://www.amazon.co.uk/':
 				modded_url = quote_plus(url)
 				user_agent = quote_plus('Mozilla/5.0 (compatible; GroupShareX/1.0; +http://www.google.com/bot.html)')
 				method = 'amazon'
-
-				# new method
-				with requests.Session() as s:
-					s.headers['User-Agent'] = user_agent
-					response = s.get(url)
-					soup = BeautifulSoup(response.text,"lxml")
+				try:
+					response = requests.get('https://api.proxycrawl.com/?token=' + jsapi + '&format=json&page_wait=3000&user_agent=' + user_agent + '&url=' + modded_url, timeout=30)	
+					parsed_json = response.json()
+					html = parsed_json['body']
+					soup = BeautifulSoup(html)				
 					page_title = soup.title.string
-					
-					image = [x['data-old-hires'] for x in soup.findAll('img', {'id': 'landingImage'})]
-					ogimg = image[0]
-					if ogimg:
-						method = 'amazon_hires'
-					else:
-						image = [x['src'] for x in soup.findAll('img', {'id': 'landingImage'})]
-						ogimg = image[0]
-						method = 'amazon_src'
 
+					data_old_highres = [x['data-old-hires'] for x in soup.findAll('img', {'id': 'landingImage'})]
+					ogimg = ''.join(data_old_highres)
+
+					if ogimg:
+						method = 'amazonsrc'
+
+					else:
+						amazon_src = [x['src'] for x in soup.findAll('img', {'id': 'landingImage'})]					
+						ogimg = ''.join(amazon_src)						
+						method = "amazonb64"
+
+				except:
+					pass
 
 			###### CASE: META_PARSER
 			else:				
@@ -792,7 +795,7 @@ def add_item(request, board_id):
 				'page_title':page_title,
 				'user_boards':user_boards,
 				'method':method,
-				'html':html,
+				'json':parsed_json,
 			}
 
 			return render(request, template, context_dict)

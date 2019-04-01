@@ -613,8 +613,6 @@ def add_item(request, board_id):
 	user_boards = Board.objects.filter(user=request.user)
 	form = ItemForm()
 	url = ''
-	timage = 'extracted image'
-	b64_apic = 'base64 text'
 	api = 'aaF7juZfhdnyptXo4Kjm6A'
 	jsapi = 'vBlWMcz5CXvV4A-YnXhhag'
 	proxy = 'no'
@@ -661,7 +659,7 @@ def add_item(request, board_id):
 
 		if 'geturl' in request.POST:
 
-			ogimg = 'None'
+			ogimg = False
 			og_img_meta = False
 			sizes = []
 			allimages = []
@@ -677,27 +675,14 @@ def add_item(request, board_id):
 			domain = '{uri.scheme}://{uri.netloc}/'.format(uri=parsed_uri)
 
 			###### CASE: AMAZON
-			if domain == 'https://www.amazon.co.uk/' or domain == 'https://www.amazon.com/':
-				modded_url = quote_plus(url)
-				user_agent = quote_plus('Mozilla/5.0 (compatible; GroupShareX/1.0; +http://www.google.com/bot.html)')
+			if domain == 'https://www.amazon.co.uk/':				
+				match = re.findall(r'(?:[/dp/]|$)([A-Z0-9]{10})', url)
+				asin = match[0]
+				amazon = AmazonAPI('AKIAJQ3A4NZLN3GNJ7GQ', 'p724SroySiGHYit+jKh8oKt4QuD4PxlIgjI+AqRI', 'wantbrd-21', region="UK")
+				product = amazon.lookup(ItemId=asin)
+				ogimg = product.large_image_url
+				page_title = product.title
 				method = 'amazon'
-
-				# new method
-				with requests.Session() as s:
-					s.headers['User-Agent'] = user_agent
-					response = s.get(url)
-					soup = BeautifulSoup(response.text,"lxml")
-					page_title = soup.title.string
-					
-					image = [x['data-old-hires'] for x in soup.findAll('img', {'id': 'landingImage'})]
-					ogimg = image[0]
-					if ogimg:
-						method = 'amazon_hires'
-					else:
-						image = [x['src'] for x in soup.findAll('img', {'id': 'landingImage'})]
-						ogimg = image[0]
-						method = 'amazon_src'
-
 
 			###### CASE: META_PARSER
 			else:				
@@ -790,9 +775,9 @@ def add_item(request, board_id):
 				'output':output,
 				'allimages':allimages,
 				'page_title':page_title,
+				'html':html,
 				'user_boards':user_boards,
 				'method':method,
-				'html':html,
 			}
 
 			return render(request, template, context_dict)
@@ -851,37 +836,13 @@ def add_item(request, board_id):
 				new_item_conx.item = new_item
 				if itook == True:
 					new_item_conx.image_owner = request.user.id
-				
 				if imgsrc == 'own':
 					b64pic = request.POST.get("b64pic")
 					new_item_conx.image = decode_base64_file(b64pic)
 					new_item_conx.img_own = True
 					new_item_conx.save()
-
-				if imgsrc == 'amazon':
-					b64pic = request.POST.get("amazonb64")
-
-					if b64pic.startswith('http'):
-						url = b64pic
-						if url.startswith('//'):
-							url = 'https:' + url					
-
-						resp = requests.get(url)
-						if resp.status_code != 200:
-							resp = requests.get('https://api.proxycrawl.com/?token=' + api + '&format=html&url=' + url, timeout=30)					
-							proxy = 'yes'
-						fp = BytesIO()
-						fp.write(resp.content)
-						full_file_name = url.split("/")[-1]
-						file_name = full_file_name[0:25]
-					else:
-						imgsrc = b64pic.replace(" ", "")
-						new_item_conx.image = decode_base64_file(imgsrc)
-						new_item_conx.save()					
-
 				else:
 					new_item_conx.image.save(file_name, files.File(fp))				
-
 				new_item_conx.original_purchase_url = original_url
 				new_item_conx.save()
 				form.save_m2m()					
@@ -890,7 +851,6 @@ def add_item(request, board_id):
 				
 
 	context_dict = {
-		'timage': timage,
 		'board':board,
 		'user_boards':user_boards
 	}

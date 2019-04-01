@@ -30,14 +30,14 @@
         {% if board.id %}
         <h3>Add an Item to <em>'{{ board.board_name }}'</em></h3>
         {% else %}
-        <h3>Add an Item</h3>
+        <h3>Add an Item </h3>
         {% endif %}
 
         {% if form.errors %}
             <h4>Please fix the following errors</h4>
             {{ form.errors }}
           </div>
-        {% endif %}
+        {% endif %}        
 
         <div class="addItemContent">
 
@@ -45,9 +45,12 @@
 
             <div class="addIntro">
                 <p>Lets add an item to one of your boards.</p>
+                <strong>{{ method }}</strong>
                 <p>&nbsp;</p>
                 <p>First select where we can find the item; you can search for the item here on Wantbrd or enter the URL of a website where we can find it. Alternatively you can <a href="{% url 'b:edit_board' request.user.profile.get_saved_board %}">add an item from your Saved Items board</a>.</p>
             </div>
+
+            {{html}}
 
             <div class="addItemsWrapper">
                 
@@ -105,6 +108,7 @@
 
             <section class="scrapeInfo">
                 {% if ogimg or output %}
+
             	<form method="POST" enctype="multipart/form-data">
             		{% csrf_token %}
             		<div id="addItemForm">
@@ -207,7 +211,7 @@
                         <label class="switch" for="itemactive"></label>
 
     	        		<input type="hidden" name="scrapedimg" value="" id="scrapedimg">
-    	        		<input type="hidden" name="imgsrc" value="web" id="imgsrc">
+                        <input type="hidden" name="imgsrc" value="web" id="imgsrc">
                         <input type="hidden" name="boardid" value="{{ board.id }}" id="board">
                         <input type="hidden" name="domain" value="{{ domain }}" id="domain">
                         <input type="hidden" name="copied_item" value="{{ itemconx.item }}">
