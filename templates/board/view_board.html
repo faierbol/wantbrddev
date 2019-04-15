@@ -13,7 +13,8 @@
 {% endblock %}
 
 {% block extrameta %}   
-    <meta property="og:url" content="https://www.wantbrd.com/b/{{itemconx.board.user.username}}/{{itemconx.board.slug}}/{{itemconx.id}}/{{itemconx.slug}}" />
+    {% url 'b:view_board' board.user.username board.slug %}
+    <meta property="og:url" content="https://www.wantbrd.com/b/{{ board.user.username }}/{{ board.slug }}" />    
     <meta property="og:title" content="{{ board.board_name }} by {{ board.user.username }} @ wantbrd.com" />
     <meta property="og:description" content="Sign up free and create your board at Wantbrd.com" />
 
