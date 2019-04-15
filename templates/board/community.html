@@ -16,22 +16,22 @@
 
 	<div class="profilePush"></div>
 
-	<div class="searchTerm">
+	<div class="searchTerm communityTitle">
 	    <div class="container">            
-	    	#{{ community.name }}
+	    	<div>{{ community.name }}</div>
+	    	<div class="communityHead"><i class="fas fa-users"></i> wantbrd communities</div>
+	    	<div class="communityDescription">
+	    		{{ community.description }}
+	    	</div>
 	    </div>
 	</div>
 
 	<section class="searchResults">
 	    <div class="container clearfix">
 
-	    	<div class="collectionDescription">
-	    		{{ community.description }}
-	    	</div>
-
 	        <div id="collectionItems">	        	
 				
-	        	{% for item in results %}
+	        	{% for item in results %}       		
 
 	        		<!-- if its a board -->
 	        		{% if item.board_name %}

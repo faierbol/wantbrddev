@@ -1072,19 +1072,31 @@ def collection(request, collection_slug):
 def community(request, community_slug):
 	template = 'board/community.html'
 	community = Community.objects.get(slug=community_slug)
-	term = community.tag
-	
-	# get items by tag
-	items = ItemConnection.objects.filter(tags__name__in=[term]).exclude(board__private=True)
-	# get boards by tag
-	boards = Board.objects.filter(tags__name__in=[term]).exclude(private=True)
+	terms = community.tag.split(",")
+	results = []
+	board_results = []
+	item_results = []
 
-	# collate and mix all results
-	results = list(items) + list(boards)
-	random.shuffle(results)
+	for term in terms:
+		items = ItemConnection.objects.filter(tags__name__in=[term]).exclude(board__private=True)
+		if items:
+			item_results.append(items)
+		boards = Board.objects.filter(tags__name__in=[term]).exclude(private=True)		
+		if boards:
+			board_results.append(boards)
+
+	mixed = board_results + item_results
+	random.shuffle(mixed)	
+	for items in mixed:
+		for x in items:
+			if x not in results:
+				results.append(x)
 
 	context_dict = {
-		'results':results,
+		'items': item_results,
+		'mixed': mixed,
+		'terms': terms,
+		'results': results,
 		'community': community,
 	}
 
