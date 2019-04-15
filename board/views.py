@@ -1075,22 +1075,33 @@ def community(request, community_slug):
 	terms = community.tag.split(",")
 	results = []
 	board_results = []
+	board_results_tmp = []
 	item_results = []
 
 	for term in terms:
 		items = ItemConnection.objects.filter(tags__name__in=[term]).exclude(board__private=True)
 		if items:
-			item_results.append(items)
-		boards = Board.objects.filter(tags__name__in=[term]).exclude(private=True)		
+			for item in items:
+				item_results.append(item)
+		boards = Board.objects.filter(tags__name__in=[term]).exclude(private=True)				
 		if boards:
-			board_results.append(boards)
+			for board in boards:
+				try:
+					if board.get_item_count() > 0 and not board.user_blocked(request.user):
+						board_results_tmp.append(board)
+				except:
+					pass
+			for board in board_results_tmp:
+				board.totalitems = board.get_item_count()
+				board.views = BoardView.objects.filter(board=board).count()
+				board.itemconxs = ItemConnection.objects.filter(board=board, active=True)[:3]
+				board_results.append(board)
 
 	mixed = board_results + item_results
 	random.shuffle(mixed)	
-	for items in mixed:
-		for x in items:
-			if x not in results:
-				results.append(x)
+	for item in mixed:
+		if item not in results:
+			results.append(item)
 
 	context_dict = {
 		'items': item_results,
