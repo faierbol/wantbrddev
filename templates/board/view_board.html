@@ -17,21 +17,13 @@
     <meta property="og:title" content="{{ board.board_name }} by {{ board.user.username }} @ wantbrd.com" />
     <meta property="og:description" content="Sign up free and create your board at Wantbrd.com" />
 
-    {% if board.hero %}
-    <meta property="og:image" content="{{board.hero.url}}" />
-    {% else %}    
-    <meta property="og:image" content="{% static '' %}img/default-hero-{% random_int 1 4%}.jpg" />
-    {% endif %}
+    <meta property="og:image" content="{{ items.0.image.url }}" />
 
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="{{ board.board_name }} by {{ board.user.username }} @ wantbrd.com">
     <meta name="twitter:description" content="Sign up free and create your board at Wantbrd.com">
 
-    {% if board.hero %}
-    <meta name="twitter:image" content="{{board.hero.url}}">
-    {% else %}    
-    <meta name="twitter:image" content="{% static '' %}img/default-hero-{% random_int 1 4%}.jpg" />
-    {% endif %}
+    <meta name="twitter:image" content="{{ items.0.image.url }}" />
 
 {% endblock %}
 
