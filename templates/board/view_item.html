@@ -10,14 +10,13 @@
 
 {% block extrameta %}	
 	<meta property="og:url" content="https://www.wantbrd.com/b/{{itemconx.board.user.username}}/{{itemconx.board.slug}}/{{itemconx.id}}/{{itemconx.slug}}" />
-	<meta property="og:title" content="{{ itemconx.item.item_name }} @wantbrd.com" />
-	<meta property="og:description" content="{{ itemconx.item_desc }}" />
+	<meta property="og:title" content="{{ itemconx.item.item_name }} @ wantbrd.com" />
+	<meta property="og:description" content="Sign up free and create your board at Wantbrd.com" />
 	<meta property="og:image" content="{{itemconx.image.url}}" />
 	<meta name="twitter:card" content="summary_large_image">
 	<meta name="twitter:title" content="{{ itemconx.item.item_name }}">
 	<meta name="twitter:description" content="Sign up free and create your board at wantbrd.com">
 	<meta name="twitter:image" content="{{ itemconx.image.url }}">
-
 {% endblock %}
 
 {% block extra-css %}

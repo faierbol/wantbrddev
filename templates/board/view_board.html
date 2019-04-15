@@ -9,7 +9,30 @@
 {% endblock %}
 
 {% block meta_description %}
-Check out {{ board.board_name }} by {{ board.user.username }}. Create your own wish list and share with friends and family. Take the guessing out of giving!
+    Check out {{ board.board_name }} by {{ board.user.username }}. Create your own wish list and share with friends and family. Take the guessing out of giving!
+{% endblock %}
+
+{% block extrameta %}   
+    <meta property="og:url" content="https://www.wantbrd.com/b/{{itemconx.board.user.username}}/{{itemconx.board.slug}}/{{itemconx.id}}/{{itemconx.slug}}" />
+    <meta property="og:title" content="{{ board.board_name }} @ wantbrd.com" />
+    <meta property="og:description" content="Sign up free and create your board at Wantbrd.com" />
+
+    {% if board.hero %}
+    <meta property="og:image" content="{{board.hero.url}}" />
+    {% else %}    
+    <meta property="og:image" content="{% static '' %}img/default-hero-{% random_int 1 4%}.jpg')" />
+    {% endif %}
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="{{ board.board_name }} @ wantbrd.com">
+    <meta name="twitter:description" content="Sign up free and create your board at Wantbrd.com">
+
+    {% if board.hero %}
+    <meta name="twitter:image" content="{{board.hero.url}}">
+    {% else %}    
+    <meta name="twitter:image" content="{% static '' %}img/default-hero-{% random_int 1 4%}.jpg')" />
+    {% endif %}
+
 {% endblock %}
 
 {% block extra-css %}
