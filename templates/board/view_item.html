@@ -8,9 +8,7 @@
 
 {% block meta_description %}View, discuss and share {{ itemconx.item.item_name }} and other items on Wantbrd.  Create your own wish list and share with friends and family. Take the guessing out of giving!{% endblock %}
 
-{% block extrameta %}
-	<meta name="twitter:site" content="@wantbrd" />
-	<!-- <meta name="twitter:creator" content="@nickbilton" /> -->
+{% block extrameta %}	
 	<meta property="og:url" content="https://www.wantbrd.com/b/{{itemconx.board.user.username}}/{{itemconx.board.slug}}/{{itemconx.id}}/{{itemconx.slug}}" />
 	<meta property="og:title" content="{{ itemconx.item.item_name }} @wantbrd.com" />
 	<meta property="og:description" content="{{ itemconx.item_desc }}" />
