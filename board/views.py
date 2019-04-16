@@ -1,5 +1,6 @@
 import requests, urllib, datetime, random, json, re
 from django.contrib import messages
+from django.core.mail import send_mail
 from django.template import RequestContext
 from django.shortcuts import render, redirect, get_object_or_404
 from django.core.files.storage import FileSystemStorage
@@ -1567,6 +1568,7 @@ def follow_user(request):
 		user = User.objects.get(pk=userid)
 		user.profile.make_connection(request)
 		response_data['result'] = 'User followed.'
+		send_mail('You did it!', 'My god, it worked', 'noreply@wantbrd.com', ['iamholdsworth@gmail.com'])
 		return HttpResponse(
 			json.dumps(response_data),
 			content_type="application/json"

@@ -1,6 +1,5 @@
 import datetime
 from django.db import models
-from django.core.mail import send_mail
 from django.contrib.auth.models import User
 from board.models import Board, BoardView, ItemView, ItemConnection
 from django.db.models.signals import post_save
@@ -195,12 +194,12 @@ class Profile(models.Model):
         if Connection.objects.filter(creator=request.user, following=self.user).exists():
             return False
         else:
-            send_mail('You did it!', 'My god, it worked', 'noreply@wantbrd.com', ['iamholdsworth@gmail.com'])
             Notification.create_follow_notify(request.user, self.user)
             new_connection = Connection.objects.create(
                 creator = request.user,
                 following = self.user,
             )            
+            send_mail('You did it!', 'My god, it worked', 'noreply@wantbrd.com', ['iamholdsworth@gmail.com'])
             return True
 
     def break_connection(self, request):        
