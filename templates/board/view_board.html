@@ -422,7 +422,8 @@
                                                         data-url="http://www.wantbrd.com/{% url 'b:view_item' board.user board.slug itemconx.id itemconx.slug %}"
                                                         data-text="Checkout this item I found on Wantbrd.com {{ itemconx.item.item_name }}"
                                                     ></a>
-                                                    <a href="" class="ssk ssk-icon ssk-pinterest"   
+                                                    <a href="" class="ssk ssk-icon ssk-pinterest"  
+                                                        data-image="{{ itemconx.image.url }}" 
                                                         data-url="https://www.wantbrd.com/{% url 'b:view_item' board.user board.slug itemconx.id itemconx.slug %}"
                                                     ></a>
                                                 </div>
