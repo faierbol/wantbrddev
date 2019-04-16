@@ -195,6 +195,7 @@ class Profile(models.Model):
         if Connection.objects.filter(creator=request.user, following=self.user).exists():
             return False
         else:
+            send_mail('You did it!', 'My god, it worked', 'noreply@wantbrd.com', ['iamholdsworth@gmail.com'])
             Notification.create_follow_notify(request.user, self.user)
             new_connection = Connection.objects.create(
                 creator = request.user,
