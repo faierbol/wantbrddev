@@ -1,5 +1,6 @@
 import datetime
 from django.db import models
+from django.core.mail import send_mail
 from django.contrib.auth.models import User
 from board.models import Board, BoardView, ItemView, ItemConnection
 from django.db.models.signals import post_save
@@ -199,6 +200,7 @@ class Profile(models.Model):
                 creator = request.user,
                 following = self.user,
             )            
+            send_mail('You did it!', 'My god, it worked', 'noreply@wantbrd.com', ['iamholdsworth@gmail.com'])
             return True
 
     def break_connection(self, request):        
