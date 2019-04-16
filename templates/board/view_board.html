@@ -20,7 +20,11 @@
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="{{ board.board_name }} by {{ board.user.username }} @ wantbrd.com">
     <meta name="twitter:description" content="Sign up free and create your board at Wantbrd.com">
-    <meta name="twitter:image" content="{{ items.0.image.url }}" />
+    {% if board.hero %}    
+        <meta name="twitter:image" content="{{ board.hero.url }}" />
+    {% else %}
+        <meta name="twitter:image" content="{{ items.0.image.url }}" />
+    {% endif %}
 
 {% endblock %}
 
