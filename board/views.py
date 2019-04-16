@@ -1568,7 +1568,7 @@ def follow_user(request):
 		user = User.objects.get(pk=userid)
 		user.profile.make_connection(request)
 		response_data['result'] = 'User followed.'
-		send_mail('You did it!', 'My god, it worked', 'noreply@wantbrd.com', ['iamholdsworth@gmail.com'])
+		
 		return HttpResponse(
 			json.dumps(response_data),
 			content_type="application/json"
