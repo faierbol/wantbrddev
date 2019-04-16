@@ -200,7 +200,6 @@ class Profile(models.Model):
                 creator = request.user,
                 following = self.user,
             )            
-            send_mail('You did it!', 'My god, it worked', 'noreply@wantbrd.com', ['iamholdsworth@gmail.com'])
             return True
 
     def break_connection(self, request):        
