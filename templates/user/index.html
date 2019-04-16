@@ -186,26 +186,24 @@
                                 <a class="toggle metalink" href="javascript:void(0);"><i class="fal fa-share"></i> Share</a>
                                 <div class="tip">
                                     <div class="ssk-group">
+
                                         <a href="" class="ssk ssk-icon ssk-facebook"
-                                            data-url="{{ request.build_absolute_uri }}"
-                                            data-text="Checkout {{ board.board_name }} by {{ board.user.username }}!"
+                                            data-url="https://www.wantbrd.com{% url 'b:view_board' board.user.username board.slug %}"
                                         ></a>
                                         <a href="" class="ssk ssk-icon ssk-twitter"
-                                            data-url="{{ request.build_absolute_uri }}"
+                                            data-url="http://www.wantbrd.com{% url 'b:view_board' board.user.username board.slug %}"
                                             data-text="Checkout {{ board.board_name }} by {{ board.user.username }}!"
                                         ></a>
-                                        <a href="" class="ssk ssk-icon ssk-google-plus"
-                                            data-url="{{ request.build_absolute_uri }}"
+                                        <a href="" class="ssk ssk-icon ssk-pinterest"  
                                             data-text="Checkout {{ board.board_name }} by {{ board.user.username }}!"
+                                            {% if board.hero %}
+                                                data-image="{{ board.hero.url }}" 
+                                            {% else %}
+                                                data-image="{% static '' %}img/default-hero-{% random_int 1 4%}.jpg" 
+                                            {% endif %}                                            
+                                            data-url="https://www.wantbrd.com{% url 'b:view_board' board.user.username board.slug %}"
                                         ></a>
-                                        <a href="" class="ssk ssk-icon ssk-pinterest"   
-                                            data-url="{{ request.build_absolute_uri }}"
-                                            data-text="Checkout {{ board.board_name }} by {{ board.user.username }}!"
-                                        ></a>
-                                        <a href="" class="ssk ssk-icon ssk-tumblr"
-                                            data-url="{{ request.build_absolute_uri }}"
-                                            data-text="Checkout {{ board.board_name }} by {{ board.user.username }}!"
-                                        ></a>
+
                                     </div>
                                 </div>
                             </div>
