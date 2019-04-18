@@ -1563,12 +1563,12 @@ def unlike_board(request):
 #### FOLLOW USER
 def follow_user(request):
 	if request.method == 'POST':
+		# send_mail('You did it!', 'My god, it worked', 'noreply@wantbrd.com', ['iamholdsworth@gmail.com'])
 		response_data = {}
 		userid = request.POST.get("userid")
 		user = User.objects.get(pk=userid)
 		user.profile.make_connection(request)
-		response_data['result'] = 'User followed.'
-		
+		response_data['result'] = 'User followed.'		
 		return HttpResponse(
 			json.dumps(response_data),
 			content_type="application/json"
