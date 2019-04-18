@@ -662,7 +662,7 @@ def add_item(request, board_id):
 
 		if 'geturl' in request.POST:
 
-			ogimg = 'None'
+			ogimg = None
 			og_img_meta = False
 			sizes = []
 			allimages = []
@@ -672,7 +672,7 @@ def add_item(request, board_id):
 			meta_image = False
 			html = ''
 			page = ''
-			method = 'scraped'
+			method = ''
 			url = request.POST.get("targeturl", "")
 			parsed_uri = urlparse(url)
 			domain = '{uri.scheme}://{uri.netloc}/'.format(uri=parsed_uri)
@@ -739,11 +739,11 @@ def add_item(request, board_id):
 							except:
 								pass
 
-						# try bs4 to find OG first
+						# try bs to find OG first
 						ogmeta = soup.find("meta",  property="og:image")
 						if ogmeta:
 							ogimg = ogmeta["content"]
-							method = 'bs4og'
+							method = 'scraped ogimage'
 
 						# otherwise just scrape whatever images we can find
 						else:
@@ -777,6 +777,7 @@ def add_item(request, board_id):
 											img_width, img_height = the_image.size
 											if img_width > 250:
 												output.append(imgurl)
+											method = 'scraped'
 										except:
 											pass
 					except:
@@ -789,11 +790,8 @@ def add_item(request, board_id):
 				'url':url,				
 				'ogimg':ogimg,				
 				'output':output,
-				'allimages':allimages,
 				'page_title':page_title,
 				'user_boards':user_boards,
-				'method':method,
-				'html':html,
 			}
 
 			return render(request, template, context_dict)
