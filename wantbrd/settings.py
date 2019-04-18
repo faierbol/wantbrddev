@@ -63,6 +63,7 @@ INSTALLED_APPS = [
     'threadedcomments',
     'corsheaders',
     'pwa',
+    'anymail',
 ]
 
 # pwa
@@ -192,7 +193,7 @@ STATICFILES_DIRS = [STATIC_DIR, ]
 # url definition for static files
 
 # ----------- ENABLE BELOW FOR LOCAL -----------
-#STATIC_URL = '/static/'
+# STATIC_URL = '/static/'
 # ----------- ENABLE ABOVE FOR LOCAL -----------
 
 STATIC_ROOT = os.path.normpath(os.path.join(BASE_DIR, 'staticfiles'))
@@ -230,6 +231,15 @@ LOGIN_REDIRECT_URL = '/checkstatus/'
 LOGOUT_REDIRECT_URL = 'home'
 
 # EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+EMAIL_BACKEND = "anymail.backends.mailgun.EmailBackend"
+DEFAULT_FROM_EMAIL = "hello@wantbrd.com"
+SERVER_EMAIL = "hello@wantbrd.com"
+
+ANYMAIL = {
+    "MAILGUN_API_KEY": "pubkey-c51ac9664db664b21a81b2a6fc818a28",
+    "MAILGUN_SENDER_DOMAIN": "mg.wantbrd.com",
+}
 
 EMAIL_HOST = 'smtp.mailgun.org'
 EMAIL_PORT = 5871

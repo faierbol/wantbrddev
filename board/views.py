@@ -34,6 +34,7 @@ def error_404(request, exception):
     data = {"name": "ThePythonDjango.com"}
     return render(request,'error_404.html', data)
 
+
 def error_500(request, exception):
     data = {"name": "ThePythonDjango.com"}
     return render(request,'error_500.html', data)
@@ -1489,6 +1490,10 @@ def search_user(request):
 #### LIKE AN ITEM
 def like_item(request):
 	if request.method == 'POST':
+
+		send_mail("Subject", "This is just a test (non HTML)", "hello@wantbrd.com",
+		          ["iamholdsworth@gmail.com"], html_message="<html>This is just a test</html>")
+
 		itemconx_id = request.POST.get("itemconx_id")						
 		response_data = {}
 		like_an_item(itemconx_id, request.user)		
@@ -1561,7 +1566,6 @@ def unlike_board(request):
 #### FOLLOW USER
 def follow_user(request):
 	if request.method == 'POST':
-		# send_mail('You did it!', 'My god, it worked', 'noreply@wantbrd.com', ['iamholdsworth@gmail.com'])
 		response_data = {}
 		userid = request.POST.get("userid")
 		user = User.objects.get(pk=userid)
