@@ -17,6 +17,7 @@ cssselect==1.0.3
 defusedxml==0.5.0
 dj-database-url==0.5.0
 Django==2.0.2
+django-anymail==6.0
 django-appconf==1.0.2
 django-autocomplete-light==3.3.0
 django-compressor==2.2
