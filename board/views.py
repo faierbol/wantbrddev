@@ -1490,10 +1490,6 @@ def search_user(request):
 #### LIKE AN ITEM
 def like_item(request):
 	if request.method == 'POST':
-
-		send_mail("Subject", "This is just a test (non HTML)", "hello@wantbrd.com",
-		          ["iamholdsworth@gmail.com"], html_message="<html>This is just a test</html>")
-
 		itemconx_id = request.POST.get("itemconx_id")						
 		response_data = {}
 		like_an_item(itemconx_id, request.user)		
