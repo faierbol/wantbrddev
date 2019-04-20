@@ -276,7 +276,7 @@ def update_profile(request):
 			"emails/account/account_updated.txt",
 			"emails/account/account_updated_body.html",
 			"emails/account/account_updated_body.txt",
-			request.user.email
+			request.user.email,
 			merge_data
 		)
 		
