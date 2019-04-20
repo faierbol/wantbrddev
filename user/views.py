@@ -303,6 +303,10 @@ def update_profile(request):
 				# send_mail('You did it!', 'My god, it worked', 'noreply@wantbrd.com', ['iamholdsworth@gmail.com'])
 				return HttpResponseRedirect(request.path_info)
 
+	send_mail("Test Mail", "This is a test text", "hello@wantbrd.com",
+	          ["iamholdsworth@gmail.com"], html_message="<html>This is a test HTML</html>")
+
+
 	return render(request, template, {
 		"userid": user.id,
 		"user_form": user_form,
