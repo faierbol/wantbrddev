@@ -265,6 +265,19 @@ def update_profile(request):
 
 	if request.method == "POST":
 
+		send_mail("""Your account details @ Wantbrd were updated", "Hey, we just wanted to let you know that your account details at wantbrd.com were recently updated.
+			If this was you then you can ignore this email, otherwise plesae login to your account ASAP and update your password. Feel free to contact us if you 
+					have any concerns.""", "hello@wantbrd.com",
+		          ["iamholdsworth@gmail.com"], html_message="""
+		          <html>
+		          	Hey, we just wanted to let you know that your account details at wantbrd.com were recently updated.<br>
+		          	<br>
+					If this was you then you can ignore this email, otherwise plesae login to your account ASAP and update your password. Feel free to contact us if you 
+					have any concerns.<br>
+					<br>
+					<strong>Wantbrd.com</strong>					
+		          </html>""")
+
 		if 'updatePpic' in request.POST:
 			b64image = request.POST.get("b64image")
 			form = ProfileImageForm(request.POST, instance=profile)
@@ -303,8 +316,6 @@ def update_profile(request):
 				# send_mail('You did it!', 'My god, it worked', 'noreply@wantbrd.com', ['iamholdsworth@gmail.com'])
 				return HttpResponseRedirect(request.path_info)
 
-	send_mail("Test Mail", "This is a test text", "hello@wantbrd.com",
-	          ["iamholdsworth@gmail.com"], html_message="<html>This is a test HTML</html>")
 
 
 	return render(request, template, {
