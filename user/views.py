@@ -1,6 +1,9 @@
 import datetime, base64, json
 from django.contrib import messages
 from django.core.mail import send_mail
+from django.core.mail import EmailMultiAlternatives
+from django.template import Context
+from django.template.loader import render_to_string
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib.auth import login, update_session_auth_hash
 from django.contrib.auth.forms import PasswordChangeForm
@@ -265,9 +268,18 @@ def update_profile(request):
 
 	if request.method == "POST":
 
-		send_mail("Your account details @ Wantbrd were updated", "Hey, we just wanted to let you know that your account details at wantbrd.com were recently updated. If this was you then you can ignore this email, otherwise plesae login to your account ASAP and update your password. Feel free to contact us if you have any concerns.", "hello@wantbrd.com",
-		          ["iamholdsworth@gmail.com"], html_message="<html>Hey, we just wanted to let you know that your account details at wantbrd.com were recently updated.<br><br>If this was you then you can ignore this email, otherwise plesae login to your account ASAP and update your password. Feel free to contact us if you have any concerns.<br><br><strong>Wantbrd.com</strong></html>")
-
+		merge_data = {
+    		'username': request.user,
+		}
+		send_an_email(
+			request,
+			"emails/account/account_updated.txt",
+			"emails/account/account_updated_body.html",
+			"emails/account/account_updated_body.txt",
+			request.user.email
+			merge_data
+		)
+		
 		if 'updatePpic' in request.POST:
 			b64image = request.POST.get("b64image")
 			form = ProfileImageForm(request.POST, instance=profile)

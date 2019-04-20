@@ -1,0 +1,4 @@
+Hey {{ username }}, {{ follower }} just started following your Wantbrd profile!
+
+Thanks for using Wantbrd!
+www.wantbrd.com

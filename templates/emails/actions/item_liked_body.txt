@@ -1,0 +1,4 @@
+Hey {{ username }}, someone just liked your item {{ item_name }}!
+
+Thanks for using Wantbrd!
+www.wantbrd.com

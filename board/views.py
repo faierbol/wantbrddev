@@ -1490,7 +1490,24 @@ def search_user(request):
 #### LIKE AN ITEM
 def like_item(request):
 	if request.method == 'POST':
-		itemconx_id = request.POST.get("itemconx_id")						
+
+		itemconx_id = request.POST.get("itemconx_id")
+		itemconx = ItemConnection.objects.get(id=itemconx_id)
+		item_name = itemconx.item.item_name
+
+		merge_data = {
+    		'item_name': item_name,
+    		'username': itemconx.board.user.username
+		}
+		send_an_email(
+			request,
+			"emails/actions/item_liked.txt",
+			"emails/actions/item_liked_body.html",
+			"emails/actions/item_liked_body.txt",
+			itemconx.board.user.email,
+			merge_data
+		)
+
 		response_data = {}
 		like_an_item(itemconx_id, request.user)		
 		response_data['result'] = 'Item was liked.'
@@ -1526,7 +1543,24 @@ def unlike_item(request):
 #### LIKE A BOARD
 def like_board(request):
 	if request.method == 'POST':
+
 		board_id = request.POST.get('board_id')
+		board = Board.objects.get(id=board_id)
+		board_name = board.board_name
+
+		merge_data = {
+    		'board_name': board_name,
+    		'username': board.user.username
+		}
+		send_an_email(
+			request,
+			"emails/actions/board_liked.txt",
+			"emails/actions/board_liked_body.html",
+			"emails/actions/board_liked_body.txt",
+			board.user.email,
+			merge_data
+		)
+	
 		response_data = {}
 		like_a_board(board_id, request.user)
 		response_data['result'] = 'Board was liked.'
@@ -1562,9 +1596,24 @@ def unlike_board(request):
 #### FOLLOW USER
 def follow_user(request):
 	if request.method == 'POST':
-		response_data = {}
+
 		userid = request.POST.get("userid")
 		user = User.objects.get(pk=userid)
+
+		merge_data = {
+    		'follower': request.user,
+    		'username': user.username
+		}
+		send_an_email(
+			request,
+			"emails/actions/new_follower.txt",
+			"emails/actions/new_follower_body.html",
+			"emails/actions/new_follower_body.txt",
+			user.email,
+			merge_data
+		)
+
+		response_data = {}
 		user.profile.make_connection(request)
 		response_data['result'] = 'User followed.'		
 		return HttpResponse(

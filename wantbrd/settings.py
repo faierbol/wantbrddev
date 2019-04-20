@@ -193,7 +193,7 @@ STATICFILES_DIRS = [STATIC_DIR, ]
 # url definition for static files
 
 # ----------- ENABLE BELOW FOR LOCAL -----------
-STATIC_URL = '/static/'
+# STATIC_URL = '/static/'
 # ----------- ENABLE ABOVE FOR LOCAL -----------
 
 STATIC_ROOT = os.path.normpath(os.path.join(BASE_DIR, 'staticfiles'))
@@ -237,7 +237,7 @@ DEFAULT_FROM_EMAIL = "hello@wantbrd.com"
 SERVER_EMAIL = "hello@wantbrd.com"
 
 ANYMAIL = {
-    "MAILGUN_API_KEY": "key-5f07b6e5e9220b6eabd50d284beb5e55",
+    "MAILGUN_API_KEY": config('MAILGUN_API_KEY')
     "MAILGUN_SENDER_DOMAIN": "mg.wantbrd.com",
 }
 

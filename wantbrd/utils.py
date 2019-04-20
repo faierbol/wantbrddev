@@ -5,7 +5,21 @@ from board.models import ItemLike, BoardLike, ItemConnection, ItemView, BoardVie
 from user.models import Notification
 from django.urls import reverse
 from django.contrib.staticfiles.templatetags.staticfiles import static
+from django.core.mail import send_mail
+from django.core.mail import EmailMultiAlternatives
+from django.template import Context
+from django.template.loader import render_to_string
 
+
+def send_an_email(request, tpl_subject, tpl_html, tpl_txt, recipient, merge_data):
+	subject = render_to_string(tpl_subject, merge_data, request=None, using=None)
+	text_body = render_to_string(tpl_txt, merge_data, request=None, using=None)
+	html_body = render_to_string(tpl_html, merge_data)
+
+	msg = EmailMultiAlternatives(subject=subject, from_email="Wantbrd<hello@wantbrd.com>",
+	                             to=[recipient], body=text_body)
+	msg.attach_alternative(html_body, "text/html")
+	msg.send()
 
 
 ### GET TRENDING ITEMS
