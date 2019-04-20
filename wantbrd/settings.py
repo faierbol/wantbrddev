@@ -237,7 +237,7 @@ DEFAULT_FROM_EMAIL = "hello@wantbrd.com"
 SERVER_EMAIL = "hello@wantbrd.com"
 
 ANYMAIL = {
-    "MAILGUN_API_KEY": "pubkey-c51ac9664db664b21a81b2a6fc818a28",
+    "MAILGUN_API_KEY": "key-5f07b6e5e9220b6eabd50d284beb5e55",
     "MAILGUN_SENDER_DOMAIN": "mg.wantbrd.com",
 }
 
