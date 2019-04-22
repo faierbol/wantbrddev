@@ -43,7 +43,7 @@ def error_500(request, exception):
 ##### GET HOME ITEMS
 def get_home_items(request):
 	
-	# trending_items = ajax_trending_items(request,120)
+	trending_items = ajax_trending_items(request,120)
 	trending_boards = ajax_trending_boards(request,240)
 	trending_users = ajax_trending_users(request,240)
 	communities = ajax_communities(request)
@@ -1226,6 +1226,15 @@ def search(request):
 	except:
 		tagfollowed = False
 
+	if not all_results:
+		trending_items = ajax_trending_items(request,140)
+		trending_boards = ajax_trending_boards(request,140)
+		trending_users = ajax_trending_users(request,140)
+		suggested = trending_boards + trending_users + trending_items
+		random.shuffle(suggested)
+	else:
+		suggested = []
+
 
 	context_dict = {
 		'search_term':search_term,
@@ -1234,7 +1243,8 @@ def search(request):
 		'all_results':all_results,
 		'user_count':user_count,
 		'item_count':item_count,
-		'board_count':board_count,		
+		'board_count':board_count,	
+		'suggested': suggested,	
 	}
 
 	return render(request, template, context_dict)
