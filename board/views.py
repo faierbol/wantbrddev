@@ -1227,9 +1227,9 @@ def search(request):
 		tagfollowed = False
 
 	if not all_results:
-		trending_items = ajax_trending_items(request,140)
-		trending_boards = ajax_trending_boards(request,140)
-		trending_users = ajax_trending_users(request,140)
+		trending_items = ajax_trending_items(request,30)
+		trending_boards = ajax_trending_boards(request,30)
+		trending_users = ajax_trending_users(request,30)
 		suggested = trending_boards + trending_users + trending_items
 		random.shuffle(suggested)
 	else:
@@ -1322,7 +1322,7 @@ def search_item(request):
 
 
 	if not all_results:
-		suggested = ajax_trending_items(request,140)
+		suggested = ajax_trending_items(request,30)
 	else:
 		suggested = []
 
@@ -1396,7 +1396,7 @@ def search_board(request):
 		tagfollowed = False
 
 	if not all_results:
-		suggested = ajax_trending_boards(request,140)
+		suggested = ajax_trending_boards(request,30)
 	else:
 		suggested = []
 
@@ -1498,7 +1498,7 @@ def search_user(request):
 
 
 	if not all_results:
-		suggested = ajax_trending_users(request,140)
+		suggested = ajax_trending_users(request,30)
 	else:
 		suggested = []
 
