@@ -1321,6 +1321,12 @@ def search_item(request):
 		tagfollowed = False
 
 
+	if not all_results:
+		suggested = ajax_trending_items(request,140)
+	else:
+		suggested = []
+
+
 	context_dict = {
 		'search_term':search_term,
 		'tag_term':tag_term,
@@ -1329,6 +1335,7 @@ def search_item(request):
 		'user_count':user_count,
 		'board_count':board_count,
 		'all_results':all_results,
+		'suggested': suggested
 	}
 
 	return render(request, template, context_dict)
@@ -1388,6 +1395,11 @@ def search_board(request):
 	except:
 		tagfollowed = False
 
+	if not all_results:
+		suggested = ajax_trending_boards(request,140)
+	else:
+		suggested = []
+
 
 	context_dict = {
 		'search_term':search_term,
@@ -1397,6 +1409,7 @@ def search_board(request):
 		'user_count':user_count,
 		'board_results':board_results,
 		'all_results':all_results,
+		'suggested': suggested
 	}
 
 	return render(request, template, context_dict)
@@ -1484,6 +1497,12 @@ def search_user(request):
 		tagfollowed = False
 
 
+	if not all_results:
+		suggested = ajax_trending_users(request,140)
+	else:
+		suggested = []
+
+
 	context_dict = {
 		'search_term':search_term,
 		'tag_term':tag_term,
@@ -1492,6 +1511,7 @@ def search_user(request):
 		'user_results':user_results,
 		'board_count':board_count,
 		'all_results':all_results,
+		'suggested': suggested
 	}
 
 	return render(request, template, context_dict)

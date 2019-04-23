@@ -3147,7 +3147,7 @@ BOARD
     color:#fff;
     font-size:2rem;
     font-weight: 300;
-    margin-bottom:40px;
+    /*margin-bottom:40px;*/
 }
     .searchTerm.communityTitle {
         font-size: 3.5rem;
@@ -3184,7 +3184,10 @@ BOARD
         color:#8488B9;
     }
     .searchResults .tabNav {
-        margin:30px 0;
+        padding:30px 0;
+        background: #fff;
+        border-bottom:1px solid #ebebeb;
+        margin-bottom:40px;
     }    
     .searchResults .trendingBoardHero {
         margin-top:0;
@@ -3203,7 +3206,11 @@ BOARD
     .noresults i {
         font-size: 5rem;
         margin-bottom:20px;
-        color:#999;
+        color:#8680B2;
+    }
+    .noresults p {
+        font-size: 1.2rem;
+        color:#8680B2;
     }
     .searchResults .featBox {
         width: 31%;

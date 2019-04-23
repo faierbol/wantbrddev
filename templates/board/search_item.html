@@ -35,43 +35,44 @@
 	</div>
 
 	<section class="searchResults">
+
+		<div class="tabNav">
+			<a href="{% url 'search' %}?kw={{search_term}}">
+				{% if all_results == 1 %}
+					{{ all_results }} <span>result</span>
+				{% else %}
+					{{ all_results }} <span>results</span>
+				{% endif %}
+			</a>
+		    <a href="{% url 'search_item' %}?kw={{search_term}}" class="tabOn">
+		    	{% if item_results|length == 1 %}
+		    		{{ item_results|length }} <span>item</span>
+		    	{% else %}
+		    		{{ item_results|length }} <span>items</span>
+		    	{% endif %}
+		    </a>
+		    <a href="{% url 'search_board' %}?kw={{search_term}}">
+		    	{% if board_count == 1 %}
+		    		{{ board_count }} <span>board</span>
+		    	{% else %}
+		    		{{ board_count }} <span>boards</span>
+		    	{% endif %}
+		    </a>                
+		    <a href="{% url 'search_user' %}?kw={{search_term}}">
+		    	{% if user_count == 1 %}
+		    		{{ user_count }} <span>user</span>
+		    	{% else %}
+		    		{{ user_count }} <span>users</span>
+		    	{% endif %}
+		    </a>
+		</div>
+
 	    <div class="container clearfix">
 	        
-	        <div class="tabNav">
-	        	<a href="{% url 'search' %}?kw={{search_term}}">
-	        		{% if all_results == 1 %}
-	        			{{ all_results }} <span>result</span>
-	        		{% else %}
-	        			{{ all_results }} <span>results</span>
-	        		{% endif %}
-	        	</a>
-	            <a href="{% url 'search_item' %}?kw={{search_term}}" class="tabOn">
-	            	{% if item_results|length == 1 %}
-	            		{{ item_results|length }} <span>item</span>
-	            	{% else %}
-	            		{{ item_results|length }} <span>items</span>
-	            	{% endif %}
-	            </a>
-	            <a href="{% url 'search_board' %}?kw={{search_term}}">
-	            	{% if board_count == 1 %}
-	            		{{ board_count }} <span>board</span>
-	            	{% else %}
-	            		{{ board_count }} <span>boards</span>
-	            	{% endif %}
-	            </a>                
-	            <a href="{% url 'search_user' %}?kw={{search_term}}">
-	            	{% if user_count == 1 %}
-	            		{{ user_count }} <span>user</span>
-	            	{% else %}
-	            		{{ user_count }} <span>users</span>
-	            	{% endif %}
-	            </a>
-	        </div>
+            {% if item_results %}
 
+		        <div id="searchItems">
 
-	        <div id="searchItems">	        	
-	        
-	            {% if item_results %}
 	            	{% for item in item_results %}
 
 	            		<div class="featBox trendingItem">
@@ -159,14 +160,66 @@
 
 	            	{% endfor %}
 	            	<div class="clearfix"></div>
-	            {% else %}
+	            </div>
 
-		            <div class="noresults">
-		            	<i class="fal fa-sad-cry"></i>
-		            	<p>Sorry, no items matched your search term.</p>
-		            </div>
+            {% else %}
 
-	            {% endif %}
+	            <div class="noresults">	            	
+	            	<i class="fal fa-sad-cry"></i>	            	
+					<p>Awww shucks, we couldn't find any results for you.</p>
+	            	<p>&nbsp;</p>	            	
+	            	<span>However we did find the following items, boards and users you may be interested in!</span>
+	            </div>
+
+	            <div id="searchItems">
+
+		            {% for item in suggested %}
+
+	            		<div class="featBox trendingItem">
+	            		    <div class="trendingItemItem">
+            		            <a href="{{ item.item_url }}""> 
+            		            	<img src="{{ item.item_image }}">
+            		            </a>
+	            		    </div>
+	            		    <div class="trendingItemName">
+
+	            		    	{% if item.item_name|length > 40 %}
+	            		    		<a href="{{ item.item_url }}">{{ item.item_name|slice:":40" }}
+	            		    			<u class="tooLong" rel="tooltip" title="{{ item.item_name }}">...</u>
+	            		    		</a>
+	            		    	{% else %}
+	            		    		<a href="{{ item.item_url }}">{{ item.item_name }}</a>
+	            		    	{% endif %}
+
+	            		        <div class="trendingItemMeta">
+
+	            		            Found in 
+	            		            <a href="{{ item.board_url }}">
+	            		            	{% if item.board_name|length > 30 %}
+	            		            		{{ item.board_name|slice:":30" }}<u class="tooLong" rel="tooltip" title="{{ item.board_name }}">...</u>
+	            		            	{% else %}
+	            		            		{{ item.board_name }}
+	            		            	{% endif %}
+	            		           	</a> 
+	            		           	
+	            		           	&nbsp;by
+	            		           	<a href="{{ item.user_url }}">
+										@{{ item.user }}
+	            		            </a>
+	            		        </div>
+	            		    </div>              
+	            		    <div class="trendingFooter">
+
+	                            <span><i class="fas fa-eye"></i> {{ item.item_views }}</span>
+
+	            		    </div>
+	            		</div>
+
+		            {% endfor %}
+
+	            </div>
+
+            {% endif %}
 
 
 	        </div>

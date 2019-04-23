@@ -35,44 +35,45 @@
 	</div>
 
 	<section class="searchResults">
+
+		<div class="tabNav">
+			<a href="{% url 'search' %}?kw={{search_term}}">
+				{% if all_results == 1 %}
+					{{ all_results }} <span>result</span>
+				{% else %}
+					{{ all_results }} <span>results</span>
+				{% endif %}
+			</a>
+		    <a href="{% url 'search_item' %}?kw={{search_term}}">
+		    	{% if item_count == 1 %}
+		    		{{ item_count }} <span>item</span>
+		    	{% else %}
+		    		{{ item_count }} <span>items</span>
+		    	{% endif %}
+		    </a>
+		    <a href="{% url 'search_board' %}?kw={{search_term}}">
+		    	{% if board_count == 1 %}
+		    		{{ board_count }} <span>board</span>
+		    	{% else %}
+		    		{{ board_count }} <span>boards</span>
+		    	{% endif %}
+		    </a>                
+		    <a href="{% url 'search_user' %}?kw={{search_term}}" class="tabOn">
+		    	{% if user_results|length == 1 %}
+		    		{{ user_results|length }} <span>user</span>
+		    	{% else %}
+		    		{{ user_results|length }} <span>users</span>
+		    	{% endif %}
+		    </a>
+		</div>
+
 	    <div class="container clearfix">
-	        
-	    	<div class="tabNav">
-	    		<a href="{% url 'search' %}?kw={{search_term}}">
-	    			{% if all_results == 1 %}
-	    				{{ all_results }} <span>result</span>
-	    			{% else %}
-	    				{{ all_results }} <span>results</span>
-	    			{% endif %}
-	    		</a>
-	    	    <a href="{% url 'search_item' %}?kw={{search_term}}">
-	    	    	{% if item_count == 1 %}
-	    	    		{{ item_count }} <span>item</span>
-	    	    	{% else %}
-	    	    		{{ item_count }} <span>items</span>
-	    	    	{% endif %}
-	    	    </a>
-	    	    <a href="{% url 'search_board' %}?kw={{search_term}}">
-	    	    	{% if board_count == 1 %}
-	    	    		{{ board_count }} <span>board</span>
-	    	    	{% else %}
-	    	    		{{ board_count }} <span>boards</span>
-	    	    	{% endif %}
-	    	    </a>                
-	    	    <a href="{% url 'search_user' %}?kw={{search_term}}" class="tabOn">
-	    	    	{% if user_results|length == 1 %}
-	    	    		{{ user_results|length }} <span>user</span>
-	    	    	{% else %}
-	    	    		{{ user_results|length }} <span>users</span>
-	    	    	{% endif %}
-	    	    </a>
-	    	</div>
+        	       
+            {% if user_results %}
 
-
-	        <div id="searchItems">
-	        
-	            {% if user_results %}
-	            	{% for user in user_results %}
+            	<div id="searchItems">
+            		
+            		{% for user in user_results %}
 
 	            		<div class="featBox trendingUser">
 	            		    <a class="trendingUserUser" href="{% url 'u:profile' user.username  %}">
@@ -120,7 +121,7 @@
 
 	            		    <div class="trendingFooter">
 	            		        <span>
-	            		        	{{ user.boardcount| }}
+	            		        	{{ user.boardcount }}
 	            		        	{% if user.boardcount == 1 %}Board{% else %}Boards{% endif %}
 	            		        </span>
 	            		        <span>
@@ -135,15 +136,91 @@
 	            		</div>
 
 	            	{% endfor %}
+
 	            	<div class="clearfix"></div>
-	            {% else %}
 
-    	            <div class="noresults">
-    	            	<i class="fal fa-sad-cry"></i>
-    	            	<p>Sorry, no items matched your search term.</p>
-    	            </div>	            	
+	            </div>
 
-	            {% endif %}
+            {% else %}
+
+	            <div class="noresults">	            	
+	            	<i class="fal fa-sad-cry"></i>	            	
+					<p>Awww shucks, we couldn't find any results for you.</p>
+	            	<p>&nbsp;</p>	            	
+	            	<span>However we did find the following items, boards and users you may be interested in!</span>
+	            </div>
+
+            	<div id="searchItems">
+
+		            {% for item in suggested %}
+
+	            		<div class="featBox trendingUser">
+	            		    <a class="trendingUserUser" href="{{ item.user_url }}">
+	            		        <div class="trendingUserUserWrap clearfix">
+	            		            <div class="trendingUserPic">
+	            		            	{% if item.user_pic %}
+	            		            	<div class="circle" style="background-image:url('{{ item.user_pic }}');"></div>
+	            		            	{% else %}
+	            		            	<div class="circle" style="background-image:url('{% static '' %}img/default-hero-{% random_int 1 4%}.jpg');"></div>
+	            		            	{% endif %}
+	            		            </div>
+	            		            <div class="trendingUserNames">
+
+	            		                {% if item.username|length > 30 %}
+	            		                	<strong>@{{ item.username|slice:":30" }}<u class="tooLong" rel="tooltip" title="{{ item.username }}">...</u></strong>
+	            		                {% else %}
+	            		                	<strong>@{{ item.username }}</strong>
+	            		                {% endif %}
+
+	            		                {% if item.get_full_name|length > 30 %}
+	            		                	<span>{{ item.get_full_name|slice:":30" }}<u class="tooLong" rel="tooltip" title="{{ item.get_full_name }}">...</u></span>
+	            		                {% else %}
+	            		                	<span>{{ item.get_full_name }}</span>
+	            		                {% endif %}
+
+	            		            </div>
+	            		        </div>
+	            		    </a>    	            		    
+
+	            		    {% if item.hero %}			            	            	
+	            		    	<a class="trendingUserHero" href="{{ item.user_url }}" style="background-image:url('{{ item.hero  }}')"></a>
+	            		    {% else %}
+	            		    	<a class="trendingUserHero" href="{{ item.user_url }}" style="background-image:url('{% static '' %}img/default-hero-{% random_int 1 4%}.jpg')"></a>
+	            		    {% endif %}
+
+	            		    <div class="trendingItems clearfix">	            		    	
+	            		    	{% for i in item.items %}
+	            		            <a style="background-image:url('{{ i.image }}');" href="{{ i.link }}"></a>
+	            		        {% endfor %}
+
+            		        	{% if item.items > 3 %}
+            		        		<a class="plusMore" href="{% url 'u:profile' item.username  %}">
+            		            		<div class="plusMoreNumber">+{{ item.itemcount|add:"-2" }}</div>
+            		            	</a>
+            		            {% else %}
+            		            	<div class="noitemspush"></div>
+            		           	{% endif %}
+	            		    </div>
+
+	            		    <div class="trendingFooter">
+	            		        <span>
+	            		        	{{ item.total_boards }}
+	            		        	{% if item.total_boards == 1 %}Board{% else %}Boards{% endif %}
+	            		        </span>
+	            		        <span>
+	            		        	{{ item.total_items }}
+	            		        	{% if item.total_items == 1 %}Item{% else %}Items{% endif %}
+	            		        </span>
+	            		    </div>		            		    
+
+	            		</div>
+
+		            {% endfor %}
+
+	        	</div>
+
+
+            {% endif %}
 
 	        </div>
 

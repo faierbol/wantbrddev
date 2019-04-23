@@ -36,43 +36,43 @@
 	</div>
 
 	<section class="searchResults">
+
+        <div class="tabNav">
+			<a href="{% url 'search' %}?kw={{search_term}}" class="tabOn">
+				{% if all_results|length == 1 %}
+					{{ all_results|length }} <span>result</span>
+				{% else %}
+					{{ all_results|length }} <span>results</span>
+				{% endif %}
+			</a>
+            <a href="{% url 'search_item' %}?kw={{search_term}}">
+            	{% if item_count == 1 %}
+            		{{ item_count }} <span>item</span>
+            	{% else %}
+            		{{ item_count }} <span>items</span>
+            	{% endif %}
+            </a>
+            <a href="{% url 'search_board' %}?kw={{search_term}}">
+            	{% if board_count == 1 %}
+            		{{ board_count }} <span>board</span>
+            	{% else %}
+            		{{ board_count }} <span>boards</span>
+            	{% endif %}
+            </a>                
+            <a href="{% url 'search_user' %}?kw={{search_term}}">
+            	{% if user_count == 1 %}
+            		{{ user_count }} <span>user</span>
+            	{% else %}
+            		{{ user_count }} <span>users</span>
+            	{% endif %}
+            </a>	            
+        </div>
+
 	    <div class="container clearfix">
+        
+            {% if all_results %}
 
-	        <div class="tabNav">
-				<a href="{% url 'search' %}?kw={{search_term}}" class="tabOn">
-					{% if all_results|length == 1 %}
-						{{ all_results|length }} <span>result</span>
-					{% else %}
-						{{ all_results|length }} <span>results</span>
-					{% endif %}
-				</a>
-	            <a href="{% url 'search_item' %}?kw={{search_term}}">
-	            	{% if item_count == 1 %}
-	            		{{ item_count }} <span>item</span>
-	            	{% else %}
-	            		{{ item_count }} <span>items</span>
-	            	{% endif %}
-	            </a>
-	            <a href="{% url 'search_board' %}?kw={{search_term}}">
-	            	{% if board_count == 1 %}
-	            		{{ board_count }} <span>board</span>
-	            	{% else %}
-	            		{{ board_count }} <span>boards</span>
-	            	{% endif %}
-	            </a>                
-	            <a href="{% url 'search_user' %}?kw={{search_term}}">
-	            	{% if user_count == 1 %}
-	            		{{ user_count }} <span>user</span>
-	            	{% else %}
-	            		{{ user_count }} <span>users</span>
-	            	{% endif %}
-	            </a>	            
-	        </div>
-
-
-	        <div id="searchItems">	        	
-	        
-	            {% if all_results %}
+            	<div id="searchItems">	        	
 
 	            	{% for item in all_results %}
 
@@ -299,17 +299,195 @@
 
 	            	{% endfor %}
 	            	<div class="clearfix"></div>
-	            {% else %}
 
-		            <div class="noresults">
-		            	<i class="fal fa-sad-cry"></i>
-		            	<p>Sorry we could not find any results for your search</p>
-		            	<p>Why not check out some of our trending boards, items and users below:</p>		            	
-		            </div>
+	            </div>
+	            
+			{% else %}
 
+	            <div class="noresults">	            	
+	            	<i class="fal fa-sad-cry"></i>	            	
+					<p>Awww shucks, we couldn't find any results for you.</p>
+	            	<p>&nbsp;</p>	            	
+	            	<span>However we did find the following items, boards and users you may be interested in!</span>
+	            </div>
+
+	            	<div id="searchItems">
+
+		            {% for item in suggested %}
+
+	            		{% if item.type == 'trending_board' %}
+
+			            	<div class="featBox trendingBoard">
+
+			            	    {% if item.hero %}
+			            	    <a class="trendingBoardHero" style="background-image:url('{{ item.hero }}');" href="{{ item.board_url }}">
+			            	    {% else %}    
+	            	    		<a class="trendingBoardHero" style="background-image:url('{% static '' %}img/default-hero-{% random_int 1 4%}.jpg');" href="{{ item.board_url }}">
+			            	    {% endif %}
+
+			            	        <div class="trendingBoardMeta">
+
+			            	        	{% if item.board_name|length > 30 %}
+			            	            	<strong>{{ item.board_name|slice:":30" }}<u class="tooLong" rel="tooltip" title="{{ item.board_name }}">...</u></strong>
+			            	            {% else %}
+			            	            	<strong>{{ item.board_name }}</strong>
+			            	            {% endif %}
+			            	            			            	            
+			            	        </div>
+			            	    </a>
+			            	    <div class="trendingItems clearfix">	
+
+			            	    	{% for i in item.items %}
+		            	    		    <a style="background-image:url('{{ i.image }}');" href="{{ i.link }}"></a>
+			            	        {% endfor %}		            	        
+			            	        
+			            	    </div>
+			            	    <a class="trendingUserUser" href="#">
+			            	        <div class="trendingUserUserWrap clearfix">
+			            	            <div class="trendingUserPic">
+
+			            	            	{% if item.user_pic %}			            	            	
+			            	            	    <div class="circle" style="background-image:url('{{ item.user_pic }}');"></div>
+			            	            	{% else %}
+			            	            	    <div class="circle" style="background-image:url('{% static '' %}img/default-hero-{% random_int 1 4%}.jpg');"></div>
+			            	            	{% endif %}
+
+			            	            </div>
+			            	            <div class="trendingUserNames">
+		            	            		{% if item.username|length > 30 %}
+		            	            	    	<strong>@{{ item.username|slice:":30" }}<u class="tooLong" rel="tooltip" title="{{ item.username }}">...</u></strong>
+		            	            	    {% else %}
+		            	            	    	<strong>@{{ item.username }}</strong>
+		            	            	    {% endif %}
+
+			            	                {% if item.full_name %}
+			            	                	{% if item.full_name|length > 40 %}
+			            	                		<span>{{ item.full_name|slice:":40" }}<u class="tooLong" rel="tooltip" title="{{ item.full_name }}">...</u></span>
+			            	                	{% else %}
+			            	                		<span>{{ item.full_name }}</span>
+			            	                	{% endif %}
+			            	                {% endif %}
+			            	            </div>
+			            	        </div>
+			            	    </a>
+			            	    <div class="trendingFooter">
+			            	        <span>{{ item.total_items }} {% if item.total_items > 1 or item.total_items == 0 %} Items {% else %} Item {% endif %}</span>
+			            	        <span>{{ item.views }} {% if item.views > 1 or item.views == 0 %} Views {% else %} View {% endif %}</span>
+			            	    </div>
+			            	</div>
+
+                		{% elif item.type == 'trending_item' %}
+
+    	            		<div class="featBox trendingItem">
+    	            		    <div class="trendingItemItem">
+	            		            <a href="{{ item.item_url }}""> 
+	            		            	<img src="{{ item.item_image }}">
+	            		            </a>
+    	            		    </div>
+    	            		    <div class="trendingItemName">
+
+    	            		    	{% if item.item_name|length > 40 %}
+    	            		    		<a href="{{ item.item_url }}">{{ item.item_name|slice:":40" }}
+    	            		    			<u class="tooLong" rel="tooltip" title="{{ item.item_name }}">...</u>
+    	            		    		</a>
+    	            		    	{% else %}
+    	            		    		<a href="{{ item.item_url }}">{{ item.item_name }}</a>
+    	            		    	{% endif %}
+
+    	            		        <div class="trendingItemMeta">
+
+    	            		            Found in 
+    	            		            <a href="{{ item.board_url }}">
+    	            		            	{% if item.board_name|length > 30 %}
+    	            		            		{{ item.board_name|slice:":30" }}<u class="tooLong" rel="tooltip" title="{{ item.board_name }}">...</u>
+    	            		            	{% else %}
+    	            		            		{{ item.board_name }}
+    	            		            	{% endif %}
+    	            		           	</a> 
+    	            		           	
+    	            		           	&nbsp;by
+    	            		           	<a href="{{ item.user_url }}">
+											@{{ item.user }}
+    	            		            </a>
+    	            		        </div>
+    	            		    </div>              
+    	            		    <div class="trendingFooter">
+
+    	                            <span><i class="fas fa-eye"></i> {{ item.item_views }}</span>
+
+    	            		    </div>
+    	            		</div>
+
+    	            	{% elif item.type == 'trending_user' %}
+
+		            		<div class="featBox trendingUser">
+		            		    <a class="trendingUserUser" href="{{ item.user_url }}">
+		            		        <div class="trendingUserUserWrap clearfix">
+		            		            <div class="trendingUserPic">
+		            		            	{% if item.user_pic %}
+		            		            	<div class="circle" style="background-image:url('{{ item.user_pic }}');"></div>
+		            		            	{% else %}
+		            		            	<div class="circle" style="background-image:url('{% static '' %}img/default-hero-{% random_int 1 4%}.jpg');"></div>
+		            		            	{% endif %}
+		            		            </div>
+		            		            <div class="trendingUserNames">
+
+		            		                {% if item.username|length > 30 %}
+		            		                	<strong>@{{ item.username|slice:":30" }}<u class="tooLong" rel="tooltip" title="{{ item.username }}">...</u></strong>
+		            		                {% else %}
+		            		                	<strong>@{{ item.username }}</strong>
+		            		                {% endif %}
+
+		            		                {% if item.get_full_name|length > 30 %}
+		            		                	<span>{{ item.get_full_name|slice:":30" }}<u class="tooLong" rel="tooltip" title="{{ item.get_full_name }}">...</u></span>
+		            		                {% else %}
+		            		                	<span>{{ item.get_full_name }}</span>
+		            		                {% endif %}
+
+		            		            </div>
+		            		        </div>
+		            		    </a>    	            		    
+
+    	            		    {% if item.hero %}			            	            	
+    	            		    	<a class="trendingUserHero" href="{{ item.user_url }}" style="background-image:url('{{ item.hero  }}')"></a>
+    	            		    {% else %}
+    	            		    	<a class="trendingUserHero" href="{{ item.user_url }}" style="background-image:url('{% static '' %}img/default-hero-{% random_int 1 4%}.jpg')"></a>
+    	            		    {% endif %}
+
+    	            		    <div class="trendingItems clearfix">	            		    	
+    	            		    	{% for i in item.items %}
+		            		            <a style="background-image:url('{{ i.image }}');" href="{{ i.link }}"></a>
+    	            		        {% endfor %}
+
+                		        	{% if item.items > 3 %}
+                		        		<a class="plusMore" href="{% url 'u:profile' item.username  %}">
+                		            		<div class="plusMoreNumber">+{{ item.itemcount|add:"-2" }}</div>
+                		            	</a>
+                		            {% else %}
+                		            	<div class="noitemspush"></div>
+                		           	{% endif %}
+    	            		    </div>
+
+    	            		    <div class="trendingFooter">
+    	            		        <span>
+    	            		        	{{ item.total_boards }}
+    	            		        	{% if item.total_boards == 1 %}Board{% else %}Boards{% endif %}
+    	            		        </span>
+    	            		        <span>
+    	            		        	{{ item.total_items }}
+    	            		        	{% if item.total_items == 1 %}Item{% else %}Items{% endif %}
+    	            		        </span>
+    	            		    </div>		            		    
+
+		            		</div>
+
+	            		{% endif %}
+
+		            {% endfor %}
+
+		        	</div>
 
 	            {% endif %}
-
 
 	        </div>
 
