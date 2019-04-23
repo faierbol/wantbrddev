@@ -303,7 +303,7 @@
 
                         {% if editable %}
                             <a href="{% url 'b:edit_item' board.slug itemconx.id itemconx.slug %}">
-                                {% thumbnail itemconx.image "300x300" as im %}
+                                {% thumbnail itemconx.image "300x600" as im %}
                                     <img src="{{ im.url }}" alt="{{ itemconx.item.item_name }}">
                                 {% endthumbnail %}
                             </a>
