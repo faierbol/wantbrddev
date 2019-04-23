@@ -3152,6 +3152,10 @@ BOARD
     .searchTerm.communityTitle {
         font-size: 3.5rem;
         line-height: 1;
+        margin-bottom:30px;
+    }
+    .searchTerm.collectionHeader {
+        margin-bottom:30px;
     }
     .searchTerm .communityHead {
         font-size: 1rem;
