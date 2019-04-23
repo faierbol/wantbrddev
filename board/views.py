@@ -1354,7 +1354,7 @@ def search_board(request):
 	all_items = []
 	items = Item.objects.filter(item_name__icontains=search_term)
 	for item in items:
-		item_conxs = ItemConnection.objects.filter(item=item, active=True).exclude(board__slug='your-saved-items')
+		item_conxs = ItemConnection.objects.filter(item=item, active=True).exclude(board__slug='your-saved-items').exclude(board__private=True)
 		for item in item_conxs:
 			if is_blocked(item.board, request.user):
 				pass
@@ -1428,7 +1428,7 @@ def search_user(request):
 	all_items = []
 	items = Item.objects.filter(item_name__icontains=search_term)
 	for item in items:
-		item_conxs = ItemConnection.objects.filter(item=item, active=True).exclude(board__slug='your-saved-items')
+		item_conxs = ItemConnection.objects.filter(item=item, active=True).exclude(board__slug='your-saved-items').exclude(board__private=True)
 		for item in item_conxs:
 			if is_blocked(item.board, request.user):
 				pass
@@ -1454,7 +1454,7 @@ def search_user(request):
 			if board.get_item_count() > 0:
 				board_results.append(board)
 	board_count = len(board_results)
-
+	
 
 	# users
 	user_results = False
