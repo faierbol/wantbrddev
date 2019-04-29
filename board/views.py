@@ -493,11 +493,19 @@ def view_board(request, username, board_name):
 		# if add to board
 		if 'addtoboard' in request.POST:
 			boardid = request.POST.get("board_id")
-			new_board_name = ''
+			new_board_name = request.POST.get("newBoardName")
 			itemconxid =  request.POST.get("itemconx_id")
 			itemconx = ItemConnection.copy_to_board(boardid, new_board_name, itemconxid, request)
-			messages.info(request, '"{0}" was added to the board, "{1}".'.format(itemconx.item.item_name, board.board_name))
-			return HttpResponseRedirect(request.path_info)
+
+			if itemconx == 'no name':
+				messages.info(request, 'You tried to add the item to a new board but didn not specifiy a name')
+
+			elif itemconx == 'name exists':
+				messages.info(request, 'You already have a board with this name')
+
+			else:
+				messages.info(request, '"{0}" was added to your chosen board'.format(itemconx.item.item_name))
+				return HttpResponseRedirect(request.path_info)
 
 	context_dict = {
 		'is_followed': is_followed,

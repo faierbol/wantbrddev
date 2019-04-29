@@ -286,6 +286,7 @@
                 {% endif %}
             {% endif %}
 
+
             <div id="boardItems">
                 
                 {% if editable and not board.slug == 'your-saved-items' %}
@@ -445,19 +446,21 @@
 
                                         <a href="#ex{{itemconx.id}}" class="metalink" rel="modal:open tooltip" title="Add to your board"><i class="fal fa-plus"></i></a>
                                         <div id="ex{{itemconx.id}}" class="modal">
-                                            <form method="POST" id="addtoboard-{{itemconx.id}}" name="addtoboard{{itemconx.id}}">
+                                            <form method="POST" id="addtoboard-{{itemconx.id}}" name="addtoboard{{itemconx.id}}" class="addtoboard">
                                                 {% csrf_token %}        
                                                 <h5>Add to your board</h5>
                                                 <p>Select which of your boards you would like to copy this item to:</p>
                                                 <select name="board_id" class="selectBoard">
+                                                        <option value="newBoard">Create a new board</option>
                                                     {% for board in user_boards %}
                                                         <option value="{{board.id}}">{{board.board_name}}</option>
-                                                    {% endfor %}
-                                                        <option value="newBoard">Create a new board</option>
+                                                    {% endfor %}                                                        
                                                 </select>
-                                                <div class="addNewBoard" style="display: none;">
-                                                    <input type="text" name="addNewBoard" placeholder="Name your new board">
-                                                </div>
+                                                <div class="addNewBoard">                                                    
+                                                    <input type="text" class="newboardname" name="addNewBoard" placeholder="Name your new board">
+                                                    <span class="entername" style="display: none; font-size: .8rem; font-style: italic;">Please enter a name</span>
+                                                    <input type="hidden" name="newBoardName" class="newBoardName" value="">
+                                                </div>                                                
                                                 <input type="hidden" name="itemconx_id" value="{{ itemconx.id }}">
                                                 <p><button class="btn orange" name="addtoboard">Add to board</button></p>
                                             </form>
@@ -742,7 +745,30 @@
                 $('.addNewBoard').show();
             } else {
                 $('.addNewBoard').hide();
+                $('.entername').hide();
             }
+        })
+
+        $('.newboardname').keyup(function(e) {
+            console.log(e.target.value);
+            $(this).nextAll('.newBoardName').val(e.target.value)
+        });
+
+        $('.addtoboard').submit(function(e){            
+            newboardname = $(this).find('input[name="addNewBoard"]').val()
+            neworold = $(this).find('.selectBoard').val()            
+            if (neworold == 'newBoard') {
+                if (newboardname == '') {
+                    e.preventDefault();
+                    $('.entername').show();
+                    console.log(neworold);
+                } else {
+                    return true
+                }
+            } else {
+                return true
+            }
+            
         })
 
     });

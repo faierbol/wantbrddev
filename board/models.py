@@ -6,6 +6,8 @@ from django.contrib.auth.models import User
 from django.shortcuts import get_object_or_404
 from taggit.managers import TaggableManager
 from django.template.defaultfilters import slugify
+from django.contrib import messages
+from django.http import HttpResponseRedirect, HttpResponse
 
 # Board Model
 def user_directory_path(instance, filename):
@@ -145,21 +147,25 @@ class ItemConnection(models.Model):
 		# if we're adding a new board
 		if boardid == 'newBoard':
 
-			#check the board name has not already been used
-			new_board_name = request.POST.get("addNewBoard")
-			user_boards = Board.objects.filter(user=request.user)
+			if new_board_name == '':
+				return "no name"
+				
+			else:			
+				#check the board name has not already been used
+				new_board_name = request.POST.get("addNewBoard")
+				user_boards = Board.objects.filter(user=request.user)
 
-			if user_boards.filter(board_name=new_board_name).exists():
-				messages.info(request, 'You already have a board with this name.')
-				return HttpResponseRedirect(request.path_info)
+				if user_boards.filter(board_name=new_board_name).exists():
+					return "name exists"
 
-			# if the name is not aready used by this user
-			else:
-				#create the board
-				board = Board.objects.create (
-					user = request.user,
-					board_name = new_board_name,
-				)
+				# if the name is not aready used by this user
+				else:
+					#create the board
+					board = Board.objects.create (
+						user = request.user,
+						board_name = new_board_name,
+					)
+					
 		# otherwise get the board that was selected
 		else:
 			board = Board.objects.get(pk=boardid)
