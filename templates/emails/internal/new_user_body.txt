@@ -1,1 +1,1 @@
-A new user ( {{ username }} )has registered on wantbrd.com, whoop!
+A new user ({{ username }}) has registered on wantbrd.com, whoop!
