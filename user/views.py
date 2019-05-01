@@ -246,6 +246,19 @@ def signup(request):
 			user = form.save();
 			user.username = user.username.lower();
 			user.save();
+
+			merge_data = {
+	    		'username': user.username,
+			}
+			send_an_email(
+				request,
+				"emails/internal/new_user.txt",
+				"emails/internal/new_user_body.html",
+				"emails/internal/new_user_body.txt",
+				'hello@wantbrd.com',
+				merge_data
+			)
+
 			login(request, user)
 			return redirect('initial')
 	else:

@@ -1,0 +1,1 @@
+A new user ( {{ username }} )has registered on wantbrd.com, whoop!
