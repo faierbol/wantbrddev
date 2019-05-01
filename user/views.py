@@ -247,7 +247,7 @@ def signup(request):
 			user.username = user.username.lower();
 			user.save();
 			login(request, user)
-			return redirect('u:home')
+			return redirect('initial')
 	else:
 		form = SignUpForm()
 	
@@ -255,6 +255,7 @@ def signup(request):
 
 
 ### Update profile
+@login_required
 def update_profile(request):
 	template = "user/update_profile.html"
 
@@ -330,6 +331,7 @@ def update_profile(request):
 	})
 
 
+@login_required
 def privacy_settings(request):
 	template = "user/privacy_settings.html"
 	user = request.user
@@ -678,11 +680,14 @@ def initial(request):
 			boards = Board.objects.filter(tags__name__in = tags_list).distinct()
 			for board in boards:
 				user = board.user
-				user.boardcount = Board.objects.filter(user=user).exclude(slug='your-saved-items').count()
-				user.itemcount = user.profile.get_user_item_count()
-				user.viewscount = user.profile.get_user_views()
-				user.the_tags = user.profile.get_user_tags()
-				users.append(user)			
+				if user in users:
+					pass
+				else:
+					user.boardcount = Board.objects.filter(user=user).exclude(slug='your-saved-items').count()
+					user.itemcount = user.profile.get_user_item_count()
+					user.viewscount = user.profile.get_user_views()
+					user.the_tags = user.profile.get_user_tags()				
+					users.append(user)
 
 		# after selecting users to follow
 		if request.POST.get("followall"):
@@ -706,6 +711,7 @@ def initial(request):
 	return render(request, template, context_dict)
 
 
+@login_required
 def my_notifications(request):
 
 	template = 'user/my_notifications.html'	
@@ -724,6 +730,7 @@ def my_notifications(request):
 	return render(request, template, context_dict)
 
 
+@login_required
 def my_awards(request):
 
 	template = 'user/my_awards.html'	
@@ -809,6 +816,7 @@ def my_awards(request):
 	return render(request, template, context_dict)
 
 
+@login_required
 def tags_followed(request):
 
 	template = 'user/tags_followed.html'
@@ -822,6 +830,7 @@ def tags_followed(request):
 	return render(request, template, context_dict)
 
 
+@login_required
 def follow_tag(request):
 	if request.method == 'POST':		
 		response_data = {}
@@ -845,6 +854,7 @@ def follow_tag(request):
 			content_type="application/json"
 		)
 
+@login_required
 def unfollow_tag(request):
 	if request.method == 'POST':		
 		response_data = {}
@@ -867,6 +877,7 @@ def unfollow_tag(request):
 			content_type="application/json"
 		)
 
+@login_required
 def unfollowtag(request):
 	if request.method == 'POST':		
 		response_data = {}
@@ -888,7 +899,7 @@ def unfollowtag(request):
 			content_type="application/json"
 		)
 
-
+@login_required
 def terms(request):
 	template = 'terms.html'
 	return render(request, template)
