@@ -19,7 +19,7 @@ def send_an_email(request, tpl_subject, tpl_html, tpl_txt, recipient, merge_data
 	msg = EmailMultiAlternatives(subject=subject, from_email="Wantbrd<hello@wantbrd.com>",
 	                             to=[recipient], body=text_body)
 	msg.attach_alternative(html_body, "text/html")
-	# msg.send()
+	msg.send()
 
 
 ### GET TRENDING ITEMS
