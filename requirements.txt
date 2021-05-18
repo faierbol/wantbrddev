@@ -51,7 +51,7 @@ oauthlib==2.0.6
 opengraph-py3==0.71
 parsel==1.4.0
 phonenumberslite==8.9.0
-Pillow==5.0.0
+Pillow==8.1.1
 psycopg2==2.7.4
 pyasn1==0.4.3
 pyasn1-modules==0.2.2
